@@ -79,6 +79,6 @@ class RegisterController extends Controller
             return redirect('admin');
         }
 
-        return redirect('customer');
+        return redirect('home');
     }
 }

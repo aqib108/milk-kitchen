@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Auth::routes();
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagement@permission');
     Route::get('/super','RoleManagement@assign');
     Route::get('/home', 'HomeController@index');
+    Route::get('/admin', 'AdminController@index');
 });
 
