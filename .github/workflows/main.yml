@@ -26,7 +26,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@2.0.0
       env:
         FTP_SERVER: ${{ secrets.ftp_host }}
-        FTP_USERNAME: ${{ secrets.ftp_name }}
+        FTP_USERNAME: ${{ secrets.ftp_username }}
         FTP_PASSWORD: ${{ secrets.ftp_password }}
         # LOCAL_DIR: build
         METHOD: sftp
