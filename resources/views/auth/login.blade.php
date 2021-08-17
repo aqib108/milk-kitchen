@@ -24,18 +24,18 @@
                                             </span>
                                         @enderror
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="images/Layer174.png" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer173.png')}}" class="img-fluid" alt="" style="height: 15px;"></span>
                                         </div>
                                     </div>
                                     <div class="form-group input-group">
-                                        <input id="password" type="password" class="form-control py-4 wrapper__input--border  @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                        <input id="password" type="password" class="form-control py-4 wrapper__input--border  @error('password') is-invalid @enderror" name="password" placeholder="Enter Password" required autocomplete="current-password">
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="images/Layer175.png" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer175.png')}}" class="img-fluid" alt=""></span>
                                         </div>
                                     </div>
                                     <div class="form-group d-flex align-items-center justify-content-center  margin-top-three">
@@ -47,7 +47,7 @@
                                         </div>
                                     @endif
                                     <div class="text-center margin__top-wrapper3">
-                                        <p class="account__title-wrapper"> <a class="register-wrapper" href="#"> Register Here</a></p>
+                                        <p class="account__title-wrapper"> <a class="register-wrapper" href="{{route('register')}}"> Register Here</a></p>
                                     </div>
                                 </form>
                             </div>
