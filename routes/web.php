@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['middleware' => 'auth'],function()
-{
+// Route::group(['middleware' => 'auth'],function()
+// {
 Route::get('/dashboard','HomeController@index')->name('dashboard');
 Route::get('/users','UserManagement@users')->name('Users');
 Route::get('/add-new-user','UserManagement@addNewUser');
@@ -35,8 +35,8 @@ Route::post('/create-permission','UserManagement@createPermission');
 Route::get('/editPermission/{id}','UserManagement@editPermission');
 Route::post('updatePermission/{id}','UserManagement@updatePermission');
 Route::get('/delete-permission/{id}','UserManagement@deletePermission');
-}
-);
+// }
+// );
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index');
