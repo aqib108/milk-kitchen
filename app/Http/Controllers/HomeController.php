@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
+use Auth;
+use App\Models\CustomerDetail;
+
 
 class HomeController extends Controller
 {
@@ -26,7 +29,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // dd($this->userRepo->all());
-        return view('customer.index');
+       $user = Auth::user()->id;
+       $customerDetail = CustomerDetail::where('user_id',$user)->first();
+        return view('customer.index',compact('user','customerDetail'));
     }
 }

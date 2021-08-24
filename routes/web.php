@@ -18,7 +18,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index');
     Route::get('/permission','RoleManagement@permission');
     Route::get('/super','RoleManagement@assign');
-    Route::get('/home', 'HomeController@index');
+
+    Route::group(['prefix' => 'home'], function () {
+        Route::get('/', 'HomeController@index')->name('index');
+        Route::resource('customer-detail','CustomerDetailController');
+    });
+
     Route::get('/admin', 'AdminController@index');
 });
 Auth::routes();

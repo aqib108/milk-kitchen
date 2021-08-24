@@ -20,8 +20,7 @@
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                             data-parent="#accordion">
                             <div class="card-body p-0">
-                                <form action="" method="POST">
-                                    @csrf
+                                <form id="customer-detail-info-form" method="POST"> @csrf
                                     <div class="form-container" style="height: 715px;">
                                         <div class="row">
                                             <div class="col-lg-6 border-riht-clr">
@@ -32,7 +31,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_name">Business Name <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('business_name') is-invalid @enderror" id="business_name" name="business_name"
-                                                            placeholder="Enter Business Name" required>
+                                                         value="@if($customerDetail == null){{old('business_name')}} @else {{$customerDetail->business_name}} @endif"  placeholder="Enter Business Name" required>
                                                         @error('business_name')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -42,7 +41,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_address_1">Address 1 <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('business_address_1') is-invalid @enderror" id="business_address_1" name="business_address_1"
-                                                            placeholder="Enter Business Address 1 etc." required>
+                                                        value="@if($customerDetail == null){{old('business_address_1')}} @else {{$customerDetail->business_address_1}} @endif" placeholder="Enter Business Address 1 etc." required>
                                                         @error('business_address_1')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -52,7 +51,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_address_2">Address 2 </label>
                                                         <input type="text" class="form-control @error('business_address_2') is-invalid @enderror" id="business_address_2" name="business_address_2"
-                                                            placeholder="Enter Business Address 2 etc." required>
+                                                        value="@if($customerDetail == null){{old('business_address_2')}} @else {{$customerDetail->business_address_2}} @endif" placeholder="Enter Business Address 2 etc.">
                                                         @error('business_address_2')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -61,8 +60,9 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
-                                                        <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id" required>
+                                                        <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
                                                             <option selected disabled>Select Country</option>
+                                                            <option value="1">Pakistan</option>
                                                         </select>
                                                         @error('business_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -72,8 +72,9 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
-                                                        <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id" required>
+                                                        <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
                                                             <option selected disabled>Select Region</option>
+                                                            <option value="2">Punjab</option>
                                                         </select>
                                                         @error('business_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -83,8 +84,9 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
-                                                        <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id" required>
+                                                        <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
                                                             <option selected disabled>Select City</option>
+                                                            <option value="3">Lahore</option>
                                                         </select>
                                                         @error('business_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -94,7 +96,8 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_phone_no">Phone No</label>
-                                                        <input type="number" class="form-control @error('business_phone_no') is-invalid @enderror" id="business_phone_no" name="business_phone_no" placeholder="Enter Phone No">
+                                                        <input type="text" class="form-control @error('business_phone_no') is-invalid @enderror" id="business_phone_no" name="business_phone_no" 
+                                                         placeholder="Enter Phone No" value="@if($customerDetail == null){{old('business_phone_no')}} @else {{$customerDetail->business_phone_no}} @endif">
                                                         @error('business_phone_no')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -103,7 +106,8 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_email">Email <span class="required-star">*</span></label>
-                                                        <input type="email" class="form-control @error('business_email') is-invalid @enderror" id="business_email" name="business_email" placeholder="Enter Business Email" required>
+                                                        <input type="email" class="form-control @error('business_email') is-invalid @enderror" id="business_email" name="business_email"
+                                                         value="@if($customerDetail == null){{old('business_email')}} @else {{$customerDetail->business_email}} @endif" placeholder="Enter Business Email" required>
                                                         @error('business_email')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -112,7 +116,8 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_contact_no">Contact No  <span class="required-star">*</span></label>
-                                                        <input type="number" class="form-control @error('business_contact_no') is-invalid @enderror" id="business_contact_no" name="business_contact_no" placeholder="Enter Business Contact No" required>
+                                                        <input type="text" class="form-control @error('business_contact_no') is-invalid @enderror" id="business_contact_no" name="business_contact_no"
+                                                            value="@if($customerDetail == null){{old('business_contact_no')}} @else {{$customerDetail->business_contact_no}} @endif"  placeholder="Enter Business Contact No" required>
                                                         @error('business_contact_no')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -129,7 +134,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_name">Delivery Name <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control  @error('delivery_name') is-invalid @enderror" id="delivery_name" name="delivery_name"
-                                                            placeholder="Enter Delivery Name" required>
+                                                            value="@if($customerDetail == null){{old('delivery_name')}} @else {{$customerDetail->delivery_name}} @endif" placeholder="Enter Delivery Name" required>
                                                         @error('delivery_name')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -139,7 +144,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_address_1">Address 1 <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('delivery_address_1') is-invalid @enderror" id="delivery_address_1" name="delivery_address_1"
-                                                            placeholder="Enter Delivery Address 1" required>
+                                                            value="@if($customerDetail == null){{old('delivery_address_1')}} @else {{$customerDetail->delivery_address_1}} @endif" placeholder="Enter Delivery Address 1" required>
                                                         @error('delivery_address_1')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -148,7 +153,8 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_address_2">Address 2 </label>
-                                                        <input type="text" class="form-control @error('delivery_address_2') is-invalid @enderror" id="delivery_address_2" name="delivery_address_2" placeholder="Enter Delivery Address 2">
+                                                        <input type="text" class="form-control @error('delivery_address_2') is-invalid @enderror" id="delivery_address_2" name="delivery_address_2"  value="@if($customerDetail == null){{old('delivery_address_2')}} @else {{$customerDetail->delivery_address_2}} @endif"
+                                                         placeholder="Enter Delivery Address 2">
                                                         @error('delivery_address_2')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -157,8 +163,9 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_country_id">Suburb <span class="required-star">*</span></label>
-                                                        <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id" required>
+                                                        <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
                                                             <option selected disabled>Select Country</option>
+                                                            <option value="1">Pakistan</option>
                                                         </select>
                                                         @error('delivery_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -168,8 +175,9 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
-                                                        <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id" required>
+                                                        <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
                                                             <option selected disabled>Select Region</option>
+                                                            <option value="2">Punjab</option>
                                                         </select>
                                                         @error('delivery_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -179,8 +187,9 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
-                                                        <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id" required>
+                                                        <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
                                                             <option selected disabled>Select City</option>
+                                                            <option value="3">Lahore</option>
                                                         </select>
                                                         @error('delivery_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -212,12 +221,15 @@
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label for="" class="label-wrapper-custm">Delivery Notes</label>
-                                                    <textarea class="form-control" id="" rows="3"></textarea>
+                                                    <textarea class="form-control" id="delivery_notes" name="delivery_notes" rows="3">@if($customerDetail == null){{old('delivery_notes')}}@else{{$customerDetail->delivery_notes}}@endif</textarea>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div style="float: right">
-                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        <input type="hidden" name="user_id" value="{{$user}}" id="user_id">
+                                        <div style="float: right" id="button">
+                                            @if($customerDetail == null)
+                                                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                            @endif
                                         </div>
                                     </div>
                                     @include('customer.modal')
@@ -399,3 +411,30 @@
         </div>
     </div>
 @endsection 
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            //Submit Form Function
+            $("#customer-detail-info-form").on("submit", function(event){
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    method: "POST",
+                    data: formData,
+                    url: '{{route('customer-detail.store')}}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        console.log(response);
+                        $('#submit').hide();
+                        if(response.success)
+                        {
+                            
+                        }
+                    },
+                }); 
+            });
+        });
+    </script>
+@endsection
