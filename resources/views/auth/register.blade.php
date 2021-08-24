@@ -36,7 +36,7 @@
                                             </span>
                                         @enderror
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="images/Layer174.png" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer174.png')}}" class="img-fluid" alt=""></span>
                                         </div>
                                     </div>
                                     <div class="form-group input-group">
@@ -47,7 +47,7 @@
                                             </span>
                                         @enderror
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="images/Layer174.png" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer173.png')}}" class="img-fluid" alt="" style="height: 15px;"></span>
                                         </div>
                                     </div>
                                     <div class="form-group input-group">
@@ -58,7 +58,7 @@
                                             </span>
                                         @enderror
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="images/Layer175.png" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer175.png')}}" class="img-fluid" alt=""></span>
                                         </div>
                                     </div>
                                     <div class="form-group input-group">
@@ -69,7 +69,7 @@
                                             </span>
                                         @enderror
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="images/Layer175.png" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer175.png')}}" class="img-fluid" alt=""></span>
                                         </div>
                                     </div>
                                     <!-- <div class="form-group">
@@ -82,7 +82,7 @@
                                         <button class="btn btn__signin-wrapper" type="submit">submit</button>
                                     </div>
                                     <div class="text-center margin__top-wrapper3">
-                                        <p class="account__title-wrapper"> <a class="register-wrapper" href="#"> Login Here</a></p>
+                                        <p class="account__title-wrapper"> <a class="register-wrapper" href="{{route('login')}}"> Login Here</a></p>
                                     </div>
                                 </form>
                             </div>

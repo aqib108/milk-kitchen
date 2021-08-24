@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+
 
 Route::group(['prefix' =>'admin','middleware' => 'auth'],function()
 {
@@ -38,3 +38,16 @@ Route::get('/delete-permission/{id}','UserManagement@deletePermission');
 }
 );
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', 'HomeController@index');
+    Route::get('/permission','RoleManagement@permission');
+    Route::get('/super','RoleManagement@assign');
+
+    Route::group(['prefix' => 'home'], function () {
+        Route::get('/', 'HomeController@index')->name('index');
+        Route::resource('customer-detail','CustomerDetailController');
+    });
+
+    Route::get('/admin', 'AdminController@index');
+});
+Auth::routes();

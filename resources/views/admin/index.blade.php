@@ -31,7 +31,7 @@
                                 style="color: black"> Total<br> Users </a></span>
                             <span class="info-box-number" id="industry_businesses"></span>
                             <div class="count tr_amount_image">
-                                <img src="{{url("public/images/pre_loader_gif.gif")}}" style="width: 35px;"/>
+                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                         </div>
                         <!-- /.info-box-content -->
@@ -46,7 +46,7 @@
                                 style="color: black">Total Skills</a></span>
                             <span class="info-box-number" id="skills"></span>
                             <div class="count tr_amount_image">
-                                <img src="{{url("public/images/pre_loader_gif.gif")}}" style="width: 35px;"/>
+                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                         </div>
                         <!-- /.info-box-content -->
@@ -61,7 +61,7 @@
                                 style="color: black">Total Products</a></span>
                             <span class="info-box-number" id="type_function"></span>
                             <div class="count tr_amount_image">
-                                <img src="{{url("public/images/pre_loader_gif.gif")}}" style="width: 35px;"/>
+                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                         </div>
                         <!-- /.info-box-content -->
@@ -76,7 +76,7 @@
                                 style="color: black">Total</a></span>
                             <span class="info-box-number" id="sub_types_level_1"></span>
                             <div class="count tr_amount_image">
-                                <img src="{{url("public/images/pre_loader_gif.gif")}}" style="width: 35px;"/>
+                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                         </div>
                         <!-- /.info-box-content -->
@@ -91,7 +91,7 @@
                                 style="color: black">Total </a></span>
                             <span class="info-box-number" id="sub_types_level_2"></span>
                             <div class="count tr_amount_image">
-                                <img src="{{url("public/images/pre_loader_gif.gif")}}" style="width: 35px;"/>
+                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                         </div>
                         <!-- /.info-box-content -->
@@ -105,7 +105,7 @@
                             <a href="" style="color: black">  Total</a> </span>
                             <span class="info-box-number" id="sub_types_level_3"></span>
                             <div class="count tr_amount_image">
-                                <img src="{{url("public/images/pre_loader_gif.gif")}}" style="width: 35px;"/>
+                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                     </div>
                     <!-- /.info-box-content -->

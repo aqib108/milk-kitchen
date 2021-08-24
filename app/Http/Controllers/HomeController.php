@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
-use DataTables;
-use App\Models\User;
+use Auth;
+use App\Models\CustomerDetail;
 
-use Yajra\DataTables\Html\Builder;
 
 class HomeController extends Controller
 {
@@ -28,6 +27,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-
-   
+    public function index()
+    {
+       $user = Auth::user()->id;
+       $customerDetail = CustomerDetail::where('user_id',$user)->first();
+        return view('customer.index',compact('user','customerDetail'));
+    }
 }
