@@ -1,0 +1,19 @@
+.checkbox-salutation {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+}
+
+.action_td {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.delete_btn {
+    background: transparent;
+    border: none;
+    color: red;
+}
+.delete_btn:focus{
+    outline: none;
+}
