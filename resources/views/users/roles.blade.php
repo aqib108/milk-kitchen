@@ -81,9 +81,9 @@
                                     <label class="form-label">Select permission's</label>
                                     <div class="d-flex">
                                         <select class="form-control" name="permissions[]" multiple style="width: 100%">
-                                            @foreach ($permission as $value)
-                                                <option value="{{ $value->id }}">
-                                                    {{ $value->name }}</option>
+                                            @foreach ($permissions as $value=>$permissions)
+                                                <option value="{{ $value }}">
+                                                    {{ $permissions }}</option>
                                             @endforeach
                                         </select>
                                     </div>

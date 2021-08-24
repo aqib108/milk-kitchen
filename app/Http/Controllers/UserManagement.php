@@ -73,17 +73,15 @@ class UserManagement extends Controller
     public function roles()
     {
         $role_permissions = Role::with('permissions')->get();
-                            $permission=Permission::all();
-        return view('users.roles',compact('role_permissions','permission'));
+                            $permissions=Permission::pluck('name')->all();
+        return view('users.roles',compact('role_permissions','permissions'));
     }
 
     public function editRole($id)
     {
         $role = Role::find($id);
         $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            ->all();
+        $rolePermissions=$role->permissions->pluck('id')->all();
         return view('users.editRoles',compact('role','permission','rolePermissions'));
     }
 
