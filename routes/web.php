@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['prefix' =>'admin','middleware' => 'auth'],function()
+Route::group(['middleware' => 'auth'],function()
 {
-    Route::get('/dashboard','HomeController@index')->name('dashboard');
+Route::get('/dashboard','HomeController@index')->name('dashboard');
 Route::get('/users','UserManagement@users')->name('Users');
 Route::get('/add-new-user','UserManagement@addNewUser');
 Route::post('/create-new-user','UserManagement@createNewUser');
