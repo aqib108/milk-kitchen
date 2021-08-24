@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
+use DataTables;
+use App\Models\User;
+
+use Yajra\DataTables\Html\Builder;
 
 class HomeController extends Controller
 {
@@ -24,9 +28,6 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        // dd($this->userRepo->all());
-        return view('customer.index');
-    }
+
+   
 }
