@@ -2,8 +2,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="javascript:void(0)" class="brand-link">
-        <img src="" alt="Logo" class="brand-image" style="opacity: .8">
-        <span class="brand-text font-weight-light">Milk Kitchen</span>
+        <img src="{{asset('admin-panel\images\logo2.png')}}" alt="Logo" class="brand-image" style="opacity: .8">
+        <!-- <span class="brand-text font-weight-light">Milk Kitchen</span> -->
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -15,7 +15,7 @@
             </div>
             <div class="info">
                 <a href="javascript:void(0)" class="d-block">
-                    Admin Name
+                @if (Auth::check()) {{ Auth::user()->name }} @endif
                 </a>
             </div>
         </div>
@@ -43,21 +43,36 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ url('permissions') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Add User</p>
+                                <p>Permissions</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{url('roles')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>List Users</p>
+                                <p>Roles</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('users') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Users</p>
                             </a>
                         </li>
                     </ul>
                 </li>  
             </ul>
         </nav>
+        <!-- <nav class="mt-2">
+        
+                    <a href="{{ route('logout') }}" class="btn btn-dark btn-flat w-100" onclick="event.preventDefault();
+                     document.getElementById('logout-form').submit();">Log Out </a>
+        
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+        </nav> -->
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
