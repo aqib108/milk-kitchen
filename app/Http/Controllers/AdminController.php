@@ -20,7 +20,7 @@ class AdminController extends Controller
         $this->middleware('auth');
         $this->userRepo = $userRepo;
     }
-    //
+    
     public function index()
     {
         return view('admin.index');
