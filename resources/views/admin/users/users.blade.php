@@ -74,7 +74,7 @@
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                ajax: "",
+                ajax: "{{route('user.index')}}",
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
@@ -90,50 +90,35 @@
                 }
             });
         });
-        // // Destory Role
-        // function deleteRole(id,event) {
-        //     var result = window.confirm('Are you sure you want to delete this Role?  This action cannot be undone. Proceed?');
-        //     if (result == false) {
-        //         e.preventDefault();
-        //     }else{
+        function changeStatus(id,status) {
+            var result = window.confirm('Are you sure you want to change status ?');
+            if (result == false) {
+                e.preventDefault();
+            }else{
 
-        //         $.ajax({
-        //             method: "POST",
-        //             url: "{{route('role.delete')}}",
-        //             data: {
-        //                 _token: $('meta[name="csrf-token"]').attr('content'),
-        //                 'id': id
-        //             },
-        //             success: function (response) {
-        //                 console.log(response)
-        //                 if(response.status == undefined)
-        //                 {
-        //                     Swal.fire({
-        //                         position: 'top-end',
-        //                         toast: true,
-        //                         showConfirmButton: false,
-        //                         timer: 2000,
-        //                         icon: 'error',
-        //                         title: response.message,
-        //                     });
-
-        //                 }
-        //                 else
-        //                 {
-        //                     Swal.fire({
-        //                         position: 'top-end',
-        //                         toast: true,
-        //                         showConfirmButton: false,
-        //                         timer: 2000,
-        //                         icon: 'success',
-        //                         title: response.message,
-        //                     });
-        //                     $('#Roles').DataTable().ajax.reload();
-        //                 }
-
-        //             }
-        //         });
-        //     }
-        // };
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('user.status')}}",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        'id': id,
+                        'status': status
+                    },
+                    success: function (response) {
+                        if(response.status)
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.message,
+                            });
+                            $('#users').DataTable().ajax.reload();
+                        }
+                    }
+                });
+            }
+        };
     </script>
 @endsection

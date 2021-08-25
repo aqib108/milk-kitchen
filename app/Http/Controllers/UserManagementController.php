@@ -16,12 +16,13 @@ class UserManagementController extends Controller
     public function users(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::all();
+            $data = User::where('id','!=',Auth::id())->get();
+            // dd($data);
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('role', function(User $data) {
                     $roles = \Auth::user()->getRoleNames();
-                    $role= $data->roles[0]->name;
+                    $role= $data->roles->pluck('name')->all();
                     return $role;
                 })
                 ->addColumn('status', function(User $data){
@@ -35,9 +36,14 @@ class UserManagementController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function(User $data){
-                    $btn = '<a onclick="deleteRole('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="javascript::void(0);" class="editPermission btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
-                    return $btn.' '.$btn2;
+                    if($data->status == 1){
+                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger">Suspend</a>';
+                    }
+                    else{
+                        $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
+                    }
+                    $btn2 = '<a href="'.route('user.edit',$data->id).'"class="editPermission btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
+                    return $status.' '.$btn2;
                 })
                 ->rawColumns(['action','status','role'])
                 ->make(true);
@@ -53,7 +59,17 @@ class UserManagementController extends Controller
         $user = User::find($id);
         $role = $user->roles->pluck('name');
         $roles = Role::all();
-        return view('users.editUser',compact('user','role','roles'));
+        return view('admin.users.editUser',compact('user','role','roles'));
+    }
+
+    public function status(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if ($user == null) {
+            return redirect()->back()->with('error', 'No Record Found To Delete.');
+        }
+        $user->update(['status'=> $request->input('status')]);
+        return response()->json(['status'=>'1','message'=>'Status Changed Successfully']);
     }
 
     public function updateUser(Request $request,int $id)
@@ -61,13 +77,13 @@ class UserManagementController extends Controller
         $user = User::find($id);
         $role = $request->role;
         $user->syncRoles($role);
-        return redirect('users');
+        return redirect()->route('user.index');
     }
 
     public function addNewUser()
     {
         $roles = Role::all();
-        return view('users.addUser',compact('roles'));
+        return view('admin.users.addUser',compact('roles'));
     }
 
     public function createNewUser(Request $request)
@@ -85,7 +101,7 @@ class UserManagementController extends Controller
         ]);
 
         $data->assignRole($request->role);
-        return redirect('users')->with('success','New User has been created!');
+        return redirect()->route('user.index')->with('success','New User has been created!');
     }
 
     public function deleteUser($id)
@@ -96,12 +112,13 @@ class UserManagementController extends Controller
 
     public function roles(Request $request)
     {
+        $permissions = Permission::pluck('name')->all();
         if ($request->ajax()) {
             $data = Role::with('permissions')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('permissions', function(Role $data) {
-                    $permissions = Permission::pluck('name')->all();
+                       $permissions=$data->permissions()->pluck('name')->all();
                     $printIT = "";
                     foreach ($permissions as $permission)
                     {
@@ -111,7 +128,7 @@ class UserManagementController extends Controller
                 })
                 ->addColumn('action', function(Role $data){
                     $btn = '<a onclick="deleteRole('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="javascript::void(0);" class="editPermission btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
+                    $btn2 = '<a href="'.route('role.edit',$data->id).'" class="btn btn-sm btn-primary">Edit</a>';
                     return $btn.' '.$btn2;
                 })
                 ->rawColumns(['action','permissions'])
@@ -119,7 +136,7 @@ class UserManagementController extends Controller
         }
 
 
-        return view('admin.users.roles');
+        return view('admin.users.roles',compact('permissions'));
     }
 
     public function editRole($id)
@@ -127,14 +144,17 @@ class UserManagementController extends Controller
         $role = Role::find($id);
         $permission = Permission::get();
         $rolePermissions=$role->permissions->pluck('id')->all();
-        return view('users.editRoles',compact('role','permission','rolePermissions'));
+        return view('admin.users.editRoles',compact('role','permission','rolePermissions'));
     }
 
     public function updateRoles(Request $request, $id)
     {
-        $role = Role::find($id);
+        $role = Role::findOrFail($id);
+        if ($role == null) {
+            return redirect()->back()->with('error', 'No Record Found To update.');
+        }
         $role->syncPermissions($request->input('permissions',[]));
-        return redirect('roles')->with('success','Role updated successfully');
+        return redirect()->route('role.index')->with('success','Role updated successfully');
     }
 
     public function deleteRole(Request $request)

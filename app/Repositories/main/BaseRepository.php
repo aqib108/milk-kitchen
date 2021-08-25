@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Main;
+namespace App\Repositories\main;
 
 // use JasonGuru\LaravelMakeRepository\Exceptions\GeneralException;
 use Illuminate\Database\Eloquent\Model;

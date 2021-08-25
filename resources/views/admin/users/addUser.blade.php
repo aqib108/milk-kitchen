@@ -13,7 +13,7 @@
                         <h5 class="card-title">Add New User</h5>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ url('create-new-user') }}">
+                        <form method="POST" action="{{ route('user.store') }}">
                             @csrf
                             <div class="row">
                                 <div class="col-md-12">
