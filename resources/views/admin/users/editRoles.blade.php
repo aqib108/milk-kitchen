@@ -13,7 +13,7 @@
                         <h5 class="card-title">Update Role</h5>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ url('updateRoles', $role->id) }}">
+                        <form method="POST" action="{{route('role.update', $role->id) }}">
                             @csrf
                             <div class="row">
                                 <div class="col-md-12">
