@@ -13,6 +13,15 @@ use Yajra\DataTables\DataTables;
 
 class UserManagementController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function users(Request $request)
     {
         if ($request->ajax()) {
