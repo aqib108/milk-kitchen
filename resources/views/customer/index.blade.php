@@ -261,13 +261,34 @@
                     <tbody class="week-container-tbl">
                         <tr>
                             <td class="table-td-wrapper" scope="row">Product 1</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td class="weekly"></td>
-                            <td class="weekly"></td>
+                            <td>
+                                <input id="monday" class="monday" type="number" name="monday" style="width: 80px;
+                                text-align: center;" value="">
+                            </td>
+                            <td>
+                                <input id="tuesday" class="tuesday" type="number" name="tuesday" style="width: 80px;
+                                text-align: center;">
+                            </td>
+                            <td>
+                                <input id="wednesday" class="wednesday" type="number" name="wednesday" style="width: 80px;
+                                text-align: center;">
+                            </td>
+                            <td>
+                                <input id="thursday" class="thursday" type="number" name="thursday" style="width: 80px;
+                                text-align: center;">
+                            </td>
+                            <td>
+                                <input id="friday" class="friday" type="number" name="friday" style="width: 80px;
+                                text-align: center;">
+                            </td>
+                            <td>
+                                <input id="weekly" class="weekly" type="number" style="width: 80px;
+                                text-align: center;" disabled>
+                            </td>
+                            <td>
+                                <input id="weekly" class="weekly" type="number" style="width: 80px;
+                                text-align: center;" disabled>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -282,7 +303,7 @@
                 <table class="table table-bordered mb-0">
                     <thead>
                         <tr>
-                            <th class="table-th-wrapper" scope="col"></th>
+                            <th class="table-th-wrapper" scope="col">Product Name</th>
                             <th class="table-th-wrapper" scope="col">Monday</th>
                             <th class="table-th-wrapper" scope="col">Tuesday</th>
                             <th class="table-th-wrapper" scope="col">Wednesday</th>
@@ -305,106 +326,6 @@
                             <td></td>
 
                         </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 2</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>5</td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 3</td>
-                            <td></td>
-                            <td>6</td>
-                            <td></td>
-                            <td></td>
-                            <td>4</td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 4</td>
-                            <td>4</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>8</td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 5</td>
-                            <td>2</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>9</td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 6</td>
-                            <td>3</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>5</td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 7</td>
-                            <td></td>
-                            <td>4</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>2</td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 8</td>
-                            <td></td>
-                            <td></td>
-                            <td>3</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>1</td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 9</td>
-                            <td>3</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>9</td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 10</dh>
-                            <td>3</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>1</td>
-
-                        </tr>
-
                     </tbody>
                 </table>
             </div>
@@ -434,6 +355,35 @@
                         }
                     },
                 }); 
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            // Monday
+            $('#monday').keyup(function() {
+                var dInputMo = this.value;
+                console.log(dInputMo);
+            });
+            // Tuesday
+            $('#tuesday').keyup(function() {
+                var dInputTu = this.value;
+                console.log(dInputTu);
+            });
+            // Wednesday
+            $('#wednesday').keyup(function() {
+                var dInputWe = this.value;
+                console.log(dInputWe);
+            });
+            // Thursday
+            $('#thursday').keyup(function() {
+                var dInputTh = this.value;
+                console.log(dInputTh);
+            });
+            // Friday
+            $('#friday').keyup(function() {
+                var dInputFr = this.value;
+                console.log(dInputFr);
             });
         });
     </script>
