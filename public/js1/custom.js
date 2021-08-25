@@ -8,7 +8,7 @@ $("body").on("click", ".editPermission", function() {
     });
     $.ajax({
         type: "get",
-        url: "editPermission/" + id,
+        url: "permissions/edit/" + id,
         dataType: "json",
         beforeSend: function() {
             $(".loader-wrapper").fadeIn("slow");
@@ -16,7 +16,7 @@ $("body").on("click", ".editPermission", function() {
         success: function(response) {
             console.log(response);
             $("#updatePermission .permission").val(response.permission);
-            $("#formID").attr("action", "updatePermission/" + id);
+            $("#formID").attr("action", "permissions/update/" + id);
             $("#updatePermission").modal("show");
         },
         error: function(response) {},
