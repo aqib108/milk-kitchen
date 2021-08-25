@@ -2,28 +2,28 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="javascript:void(0)" class="brand-link">
-        <img src="{{asset('admin-panel\images\logo2.png')}}" alt="Logo" class="brand-image" style="opacity: .8">
-        <!-- <span class="brand-text font-weight-light">Milk Kitchen</span> -->
+        <img src="" alt="Logo" class="brand-image" style="opacity: .8">
+        <span class="brand-text font-weight-light">Admin Panel</span>
     </a>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{asset('admin-panel/images/admin-placeholder.png')}}"
-                    class="img-circle elevation-2" alt="User Image">
+                <img  src="{{asset('public/admin/images/admin-placeholder.png')}}"
+                class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="javascript:void(0)" class="d-block">
-                @if (Auth::check()) {{ Auth::user()->name }} @endif
-                </a>
+                <a href="javascript:void(0)" class="d-block">Admin</a>
             </div>
         </div>
+
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
+                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href=""
                         class="nav-link">
@@ -31,7 +31,7 @@
                         <p>
                             Dashboard
                         </p>
-                    </a> 
+                    </a>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -43,36 +43,27 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ url('permissions') }}" class="nav-link">
+                            <a href="{{ route('user.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Users</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('permission.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Permissions</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('roles')}}" class="nav-link">
+                            <a href="{{ route('role.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Roles</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ url('users') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Users</p>
-                            </a>
-                        </li>
                     </ul>
-                </li>  
+                </li> 
             </ul>
         </nav>
-        <!-- <nav class="mt-2">
-        
-                    <a href="{{ route('logout') }}" class="btn btn-dark btn-flat w-100" onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();">Log Out </a>
-        
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-        </nav> -->
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

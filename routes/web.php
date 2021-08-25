@@ -13,41 +13,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-// Route::group(['middleware' => 'auth'],function()
-// {
-Route::get('/dashboard','HomeController@index')->name('dashboard');
-Route::get('/users','UserManagement@users')->name('Users');
-Route::get('/add-new-user','UserManagement@addNewUser');
-Route::post('/create-new-user','UserManagement@createNewUser');
-Route::get('/edit-User/{id}','UserManagement@editUser');
-Route::post('/updateUser/{id}','UserManagement@updateUser');
-Route::get('/delete-user/{id}','UserManagement@deleteUser');
-
-Route::get('/roles','UserManagement@roles');
-Route::post('/create-role','UserManagement@createRole');
-Route::get('/edit-role/{id}','UserManagement@editRole');
-Route::post('/updateRoles/{id}','UserManagement@updateRoles');
-Route::get('/delete-role/{id}','UserManagement@deleteRole');
-
-Route::get('/permissions','UserManagement@permissions');
-Route::post('/create-permission','UserManagement@createPermission');
-Route::get('/editPermission/{id}','UserManagement@editPermission');
-Route::post('updatePermission/{id}','UserManagement@updatePermission');
-Route::get('/delete-permission/{id}','UserManagement@deletePermission');
-// }
-// );
-
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', 'HomeController@index');
-    Route::get('/permission','RoleManagement@permission');
-    Route::get('/super','RoleManagement@assign');
+    Route::get('/permission','RoleManagementController@permission');
+    Route::get('/super','RoleManagementController@assign');
+
+    Route::group(['prefix' => 'admin'], function (){
+        Route::get('/', 'AdminController@index')->name('dashboard');
+        Route::group(['prefix' => 'users'], function (){
+            Route::get('/','UserManagementController@users')->name('user.index');
+            Route::get('/create','UserManagementController@addNewUser')->name('user.create');
+            Route::post('/create-new-user','UserManagementController@createNewUser');
+            Route::get('/edit/{id}','UserManagementController@editUser');
+            Route::post('/update/{id}','UserManagementController@updateUser');
+            Route::get('/delete/{id}','UserManagementController@deleteUser');
+
+        });
+        Route::group(['prefix' => 'permissions'], function (){
+            Route::get('/','UserManagementController@permissions')->name('permission.index');
+            Route::post('/store','UserManagementController@createPermission')->name('permission.store');
+            Route::get('/edit/{id}','UserManagementController@editPermission')->name('permission.edit');
+            Route::post('/update/{id}','UserManagementController@updatePermission')->name('permission.update');
+            Route::post('/delete', 'UserManagementController@deletePermission')->name('permission.delete');
+        });
+        Route::group(['prefix' => 'roles'], function (){
+            Route::get('/','UserManagementController@roles')->name('role.index');
+            Route::post('/create-role','UserManagementController@createRole');
+            Route::get('/edit-role/{id}','UserManagementController@editRole');
+            Route::post('/updateRoles/{id}','UserManagementController@updateRoles');
+            Route::post('/delete','UserManagementController@deleteRole')->name('role.delete');
+        });
+    });
 
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
-    });
-
-    Route::get('/admin', 'AdminController@index');
+    }); 
 });
 Auth::routes();

@@ -90,18 +90,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        // dd($request->all());
-        // $validator = \Validator::make($request->all(), [
-        //     'name' => 'required',
-        // ]);
-        
-        // if ($validator->fails()) {
-        //     return response()->json(['errors' => $validator->errors()->all()]);
-        // }
-    
-         dd($request->all());
-        //  $role->update($request->name());
-         $role->syncPermissions($request->permissions);
+        $role->syncPermissions($request->permissions);
         return response()->json(['success'=>'Role updated successfully']);
     }
 
@@ -113,16 +102,13 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        
-            Role::find($id)->delete();
-    
-            return response()->json(['success'=>'Role deleted successfully']);
+        Role::find($id)->delete();
+        return response()->json(['success'=>'Role deleted successfully']);
         
     }
 
     public function  get_all_roles(Request $request)
     {
-       
         if ($request->ajax()) {
             $data =Role::latest()->get();
             return Datatables::of($data)

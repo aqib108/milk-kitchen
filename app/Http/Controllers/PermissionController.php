@@ -14,7 +14,6 @@ class PermissionController extends Controller
     }
     public function  get_all_permissions(Request $request)
     {
-        
         if ($request->ajax()) {
             $data = Permission::latest()->get();
             return Datatables::of($data)
