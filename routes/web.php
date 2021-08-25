@@ -49,4 +49,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
     }); 
 });
+Route::get('/', 'HomeController@index');
 Auth::routes();

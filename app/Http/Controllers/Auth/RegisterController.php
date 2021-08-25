@@ -72,13 +72,4 @@ class RegisterController extends Controller
         ]);
         return $user->syncRoles('Customer');
     }
-    
-    protected function authenticated($request, $user)
-    {
-        if($user->role === 'Super Admin') {
-            return redirect('admin');
-        }
-
-        return redirect('home');
-    }
 }
