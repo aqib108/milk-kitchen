@@ -65,7 +65,7 @@
                 <!--Customers-->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-user-cog"></i>
+                        <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Customer's
                             <i class="right fas fa-angle-left"></i>
@@ -73,19 +73,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('user.index') }}" class="nav-link">
+                            <a href="{{ route('customer.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customer's</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('permission.index') }}" class="nav-link">
+                            <a href="{{ route('customer.customerGroup') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customer Group's</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('role.index') }}" class="nav-link">
+                            <a href="{{ route('customer.customerReport') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Report's</p>
                             </a>

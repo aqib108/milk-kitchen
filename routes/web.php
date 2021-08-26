@@ -42,6 +42,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/updateRoles/{id}','UserManagementController@updateRoles');
             Route::post('/delete','UserManagementController@deleteRole')->name('role.delete');
         });
+        Route::group(['prefix' => 'customer'], function (){
+            Route::get('/','CustomerController@customers')->name('customer.index');
+            Route::post('/store','CustomerController@createCustomer')->name('customer.store');
+            Route::post('/delete','CustomerController@deleteCustomer')->name('customer.delete');
+            Route::get('/customerEdit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
+            Route::post('/updateCustomer/{id}','CustomerController@updateCustomer');
+            Route::get('/customerGroup','CustomerController@customerGroup')->name('customer.customerGroup');
+            Route::get('/customerReport','CustomerController@customerReport')->name('customer.customerReport');
+        });
     });
 
     Route::group(['prefix' => 'home'], function () {
