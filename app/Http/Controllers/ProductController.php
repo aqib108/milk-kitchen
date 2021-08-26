@@ -10,7 +10,6 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
-
 class ProductController extends Controller
 {
     /**
@@ -136,7 +135,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, $id)
     {
         $product = Product::findOrFail($id);
-        if ($product == null) {
+        if ($product->isEmpty()) {
             return redirect()->back()->with('error', 'No Record Found To Update.');
         }
 
@@ -177,7 +176,7 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail((int)$request->id);
-            if ($product == null) {
+            if ($product->isEmpty()) {
                 return redirect()->back()->with('error', 'No Record Found To Delete.');
             }
 
@@ -192,7 +191,7 @@ class ProductController extends Controller
     public function status(Request $request)
     {
         $product = Product::findOrFail($request->id);
-        if ($product == null) {
+        if ($product->isEmpty()) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
         $product->update(['status'=> $request->input('status')]);

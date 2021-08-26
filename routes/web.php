@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');
     Route::get('/super','RoleManagementController@assign');
@@ -23,11 +22,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'users'], function (){
             Route::get('/','UserManagementController@users')->name('user.index');
             Route::get('/create','UserManagementController@addNewUser')->name('user.create');
-            Route::post('/create-new-user','UserManagementController@createNewUser');
-            Route::get('/edit/{id}','UserManagementController@editUser');
-            Route::post('/update/{id}','UserManagementController@updateUser');
-            Route::get('/delete/{id}','UserManagementController@deleteUser');
-
+            Route::post('/store','UserManagementController@createNewUser')->name('user.store');;
+            Route::get('/edit/{id}','UserManagementController@editUser')->name('user.edit');
+            Route::post('/update/{id}','UserManagementController@updateUser')->name('user.update');
+            Route::post('/status', 'UserManagementController@status')->name('user.status');
         });
         Route::group(['prefix' => 'permissions'], function (){
             Route::get('/','UserManagementController@permissions')->name('permission.index');
@@ -38,9 +36,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'roles'], function (){
             Route::get('/','UserManagementController@roles')->name('role.index');
-            Route::post('/create-role','UserManagementController@createRole');
-            Route::get('/edit-role/{id}','UserManagementController@editRole');
-            Route::post('/updateRoles/{id}','UserManagementController@updateRoles');
+            Route::post('/store','UserManagementController@createRole')->name('role.store');
+            Route::get('/edit/{id}','UserManagementController@editRole')->name('role.edit');
+            Route::post('/update/{id}','UserManagementController@updateRoles')->name('role.update');
             Route::post('/delete','UserManagementController@deleteRole')->name('role.delete');
         });
         Route::group(['prefix' => 'product'], function (){
@@ -60,3 +58,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
     }); 
 });
+Route::get('/', 'HomeController@index');
+Auth::routes();

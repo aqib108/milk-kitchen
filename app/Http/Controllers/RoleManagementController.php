@@ -13,6 +13,15 @@ class RoleManagementController extends Controller
 {
     //
     use HasRoles;
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $role = Role::create(['name' => 'Super Admin']);
