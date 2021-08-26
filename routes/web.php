@@ -51,6 +51,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/status','ProductController@status')->name('product.status');
             Route::post('/delete','ProductController@destroy')->name('product.destroy');
         });
+        Route::group(['prefix' => 'attributes'], function (){
+            Route::get('/','AttributesController@index')->name('attribute.index');
+            Route::get('/create','AttributesController@create')->name('attribute.create');
+            Route::post('/store','AttributesController@store')->name('attribute.store');
+            Route::get('/edit/{id}','AttributesController@edit')->name('attribute.edit');
+            Route::post('/update/{id}','AttributesController@update')->name('attribute.update');
+            Route::post('/status','AttributesController@status')->name('attribute.status');
+            Route::post('/delete','AttributesController@destroy')->name('attribute.destroy');
+        });
     });
 
     Route::group(['prefix' => 'home'], function () {

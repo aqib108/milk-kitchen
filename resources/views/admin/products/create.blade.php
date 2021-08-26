@@ -74,11 +74,10 @@
                                         <img src="" id="image" class="hidden w-25" />
                                     </div>
                                     <div class="form-group col-md-12 col-sm-6">
-                                        <label>Description <span class="required-star">*</span></label>
+                                        <label>Descriptions <span class="required-star">*</span></label>
                                         <textarea name="description" id="description" cols="15" rows="2"
                                             class="form-control text-area"
-                                            >{{ old('description') }}
-                                        </textarea>
+                                            >{{old('description')}}</textarea>
                                     </div>
                                 </div>
                             </div>
