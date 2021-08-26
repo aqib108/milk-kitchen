@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +13,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/migrate',function(){
+    $data = Artisan::call('migrate');
+    dd($data);
+});
+Route::get('/cache-clear', function(){
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+});
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');
     Route::get('/super','RoleManagementController@assign');
