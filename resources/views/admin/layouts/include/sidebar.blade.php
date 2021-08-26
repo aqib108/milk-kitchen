@@ -25,8 +25,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href=""
-                        class="nav-link">
+                    <a href="" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -61,7 +60,39 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <!--Customers-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>
+                            Customer's
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('customer.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Customer's</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('customer.customerGroup') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Customer Group's</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('customer.customerReport') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Report's</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li> 
+                <!--- End Customers-->
+                <!--- Stocks --->
                 <li  class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                        <i class="nav-icon fab fa-product-hunt"></i>
@@ -69,7 +100,7 @@
                             Manage Stocks
                             <i class="right fas fa-angle-left"></i>
                         </p>
-                    </a>
+                    </a> 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{route('product.index')}}" class="nav-link">
@@ -103,6 +134,27 @@
                         </li>
                     </ul>
                 </li>
+                <!--- End Stock --->
+                <!--Sales-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                            Sale's
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Reoccurring</p>
+
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!--- End sale --->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
