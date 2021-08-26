@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DistributorController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,6 +59,25 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/group','CustomerController@customerGroup')->name('customer.customerGroup');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
+        Route::group(['prefix' => 'distributor'], function (){
+            Route::get('/','DistributorController@index')->name('distributor.index');
+            Route::get('/create','DistributorController@create')->name('distributor.create');
+            Route::post('/store','DistributorController@store')->name('distributor.store');
+            Route::get('/edit/{id}','DistributorController@edit')->name('distributor.edit');
+            Route::get('/detail/{id}','DistributorController@show')->name('distributor.detail');
+            Route::post('/update/{id}','DistributorController@update')->name('distributor.update');
+            Route::post('/status','DistributorController@status')->name('distributor.status');
+            Route::post('/delete','DistributorController@destroy')->name('distributor.destroy');
+        });
+        Route::group(['prefix' => 'driver'], function (){
+            Route::get('/','DriverController@index')->name('driver.index');
+            Route::get('/create','DriverController@create')->name('driver.create');
+            Route::post('/store','DriverController@store')->name('driver.store');
+            Route::get('/edit/{id}','DriverController@edit')->name('driver.edit');
+            Route::get('/detail/{id}','DriverController@show')->name('driver.detail');
+            Route::post('/update/{id}','DriverController@update')->name('driver.update');
+            Route::post('/status','DriverController@status')->name('driver.status');
+            Route::post('/delete','DriverController@destroy')->name('driver.destroy');
         });
         Route::group(['prefix' => 'product'], function (){
             Route::get('/','ProductController@index')->name('product.index');
