@@ -2,8 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="javascript:void(0)" class="brand-link">
-        <img src="{{ asset('admin-panel/images/logo.png') }}" alt="Logo" class="brand-text font-weight-light"
-            style="opacity: .8">
+        <img src="{{asset('admin-panel/images/logo.png')}}" alt="Logo" class="brand-text font-weight-light" style="opacity: .8">
         {{-- <span class="brand-text font-weight-light">Admin Panel</span> --}}
     </a>
 
@@ -25,9 +24,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                 
                         <a href="{{route('dashboard')}}" class="nav-link">
-                         
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Dashboard
@@ -63,18 +60,12 @@
                         </li>
                     </ul>
                 </li>
-                <!--Customers-->
-                <li class="nav-item has-treeview">
+                 <!--Customers-->
+                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Customer's
-                        </p>
-                <li class="nav-item has-treeview">
-                    <a href="" class="nav-link">
-                        <i class="nav-icon fab fa-product-hunt"></i>
-                        <p>
-                            Manage Distributors
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -95,43 +86,10 @@
                             <a href="{{ route('customer.customerReport') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Report's</p>
-                        <li class="nav-item">
-                            <a href="{{route('distributor.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Distributors</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Reports</p>
                             </a>
                         </li>
                     </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="" class="nav-link">
-                        <i class="nav-icon fab fa-product-hunt"></i>
-                        <p>
-                            Manage Driver
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('driver.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Drivers</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Reports</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                </li> 
                 <!--- End Customers-->
                 <!--- Stocks --->
                 <li class="nav-item has-treeview">
@@ -144,13 +102,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('product.index') }}" class="nav-link">
+                            <a href="{{route('product.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Products</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('attribute.index') }}" class="nav-link">
+                            <a href="{{route('attribute.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Attributes</p>
                             </a>
@@ -176,6 +134,56 @@
                     </ul>
                 </li>
                 <!--- End Stock --->
+                <!--- Distributor --->
+                <li class="nav-item has-treeview">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <p>
+                            Manage Distributors
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('distributor.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Distributors</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Reports</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- End Distributor --->
+                <!--- Driver --->
+                <li class="nav-item has-treeview">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <p>
+                            Manage Driver
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('driver.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Drivers</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Reports</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
                 <!--Sales-->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -187,9 +195,10 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('sale.index') }}" class="nav-link">
+                            <a href="" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Reoccurring</p>
+
                             </a>
                         </li>
                     </ul>

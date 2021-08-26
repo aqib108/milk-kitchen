@@ -31,8 +31,8 @@ class DriverController extends Controller
                 })
                 ->addColumn('action', function(Driver $data){
                     $btn1 = '<a onclick="deleteDriver('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="'.route('distributor.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
-                     //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
+                    $btn2 = '<a href="'.route('driver.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
+                     //$btn3 = '<a href="'.route('driver.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     if($data->status == 1){
                         $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>';
                     }
@@ -45,7 +45,7 @@ class DriverController extends Controller
                 ->rawColumns(['action','status'])
                 ->make(true);
         }
-        return view('admin.distributor.index');
+        return view('admin.driver.index');
     }
 
     /**
@@ -55,7 +55,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-        return view('admin.distributor.create');
+        return view('admin.driver.create');
     }
 
     /**
@@ -67,7 +67,7 @@ class DriverController extends Controller
     public function store(DriverRequest $request)
     {
         $product = Driver::create($request->all());
-        return redirect()->route('distributor.index')->with('success', 'Record added successfully.');  
+        return redirect()->route('driver.index')->with('success', 'Record added successfully.');  
     }
 
     /**
@@ -106,7 +106,7 @@ class DriverController extends Controller
     public function update(Request $request, $id)
     {
         $product = Driver::find($id)->update($request->all());
-        return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
+        return redirect()->route('driver.index')->with('success', 'Record updated successfully.');
     }
 
     /**

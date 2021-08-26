@@ -31,8 +31,8 @@ class DistributorController extends Controller
                 })
                 ->addColumn('action', function(Distributor $data){
                     $btn1 = '<a onclick="deleteDistributor('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="'.route('driver.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
-                     //$btn3 = '<a href="'.route('driver.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
+                    $btn2 = '<a href="'.route('distributor.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
+                     //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     if($data->status == 1){
                         $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>';
                     }
@@ -45,7 +45,7 @@ class DistributorController extends Controller
                 ->rawColumns(['action','status'])
                 ->make(true);
         }
-        return view('admin.driver.index');
+        return view('admin.distributor.index');
     }
 
     /**
@@ -55,7 +55,7 @@ class DistributorController extends Controller
      */
     public function create()
     {
-        return view('admin.driver.create');
+        return view('admin.distributor.create');
     }
 
     /**
@@ -67,7 +67,7 @@ class DistributorController extends Controller
     public function store(DistributorRequest $request)
     {
         $product = Distributor::create($request->all());
-        return redirect()->route('driver.index')->with('success', 'Record added successfully.');  
+        return redirect()->route('distributor.index')->with('success', 'Record added successfully.');  
     }
 
     /**
@@ -89,12 +89,12 @@ class DistributorController extends Controller
      */
     public function edit($id)
     {
-        $driver = Distributor::findOrFail($id);
-        if ($driver == null) {
+        $distributor = Distributor::findOrFail($id);
+        if ($distributor == null) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
 
-        return view('admin.driver.edit',compact('driver'));
+        return view('admin.distributor.edit',compact('distributor'));
     }
 
     /**
@@ -107,7 +107,7 @@ class DistributorController extends Controller
     public function update(Request $request, $id)
     {
         $product = Distributor::find($id)->update($request->all());
-        return redirect()->route('driver.index')->with('success', 'Record updated successfully.');
+        return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
     }
 
     /**
