@@ -27,7 +27,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text"> <a href=""
+                            <span class="info-box-text"> <a href="{{route('user.index') }}"
                                 style="color: black"> Total<br> Users </a></span>
                             <span class="info-box-number" id="total_users"></span>
                             <div class="count tr_amount_image">
@@ -42,7 +42,7 @@
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text"><a href=""
+                            <span class="info-box-text"><a href="{{route('product.index')}}}"
                                 style="color: black">Total Products</a></span>
                             <span class="info-box-number" id="products"></span>
                             <div class="count tr_amount_image">
@@ -57,7 +57,7 @@
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-cog"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text"> <a href=""
+                            <span class="info-box-text"> <a href="{{route('distributor.index')}}"
                                 style="color: black">Total Distributor</a></span>
                             <span class="info-box-number" id="distributor"></span>
                             <div class="count tr_amount_image">
@@ -72,12 +72,12 @@
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text"><a href=""
+                            <span class="info-box-text"><a href="{{route('driver.index')}}"
                                 style="color: black">Total Drivers</a></span>
                             <span class="info-box-number" id="drivers"></span>
                             <div class="count tr_amount_image">
                                 <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
-                            </div>
+                            </div> 
                         </div>
                         <!-- /.info-box-content -->
                     </div>

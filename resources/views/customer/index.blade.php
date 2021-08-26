@@ -20,7 +20,11 @@
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                             data-parent="#accordion">
                             <div class="card-body p-0">
-                                <form id="customer-detail-info-form" method="POST"> @csrf
+                                @if($customerDetail == null)
+                                    <form id="customer-detail-info-form" method="POST"> @csrf   
+                                @else
+                                    <form id="customer-detail-info-form-update" method="POST">@csrf 
+                                @endif
                                     <div class="form-container" style="height: 715px;">
                                         <div class="row">
                                             <div class="col-lg-6 border-riht-clr">
@@ -31,7 +35,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_name">Business Name <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('business_name') is-invalid @enderror" id="business_name" name="business_name"
-                                                         value="@if($customerDetail == null){{old('business_name')}} @else {{$customerDetail->business_name}} @endif"  placeholder="Enter Business Name" required>
+                                                        value="@if($customerDetail == null){{old('business_name')}} @else {{$customerDetail->business_name}} @endif" placeholder="Enter Business Name" required>
                                                         @error('business_name')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -97,7 +101,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_phone_no">Phone No</label>
                                                         <input type="text" class="form-control @error('business_phone_no') is-invalid @enderror" id="business_phone_no" name="business_phone_no" 
-                                                         placeholder="Enter Phone No" value="@if($customerDetail == null){{old('business_phone_no')}} @else {{$customerDetail->business_phone_no}} @endif">
+                                                        placeholder="Enter Phone No" value="@if($customerDetail == null){{old('business_phone_no')}} @else {{$customerDetail->business_phone_no}} @endif">
                                                         @error('business_phone_no')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -107,7 +111,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_email">Email <span class="required-star">*</span></label>
                                                         <input type="email" class="form-control @error('business_email') is-invalid @enderror" id="business_email" name="business_email"
-                                                         value="@if($customerDetail == null){{old('business_email')}} @else {{$customerDetail->business_email}} @endif" placeholder="Enter Business Email" required>
+                                                        value="@if($customerDetail == null){{old('business_email')}} @else {{$customerDetail->business_email}} @endif" placeholder="Enter Business Email" required>
                                                         @error('business_email')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -154,7 +158,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_address_2">Address 2 </label>
                                                         <input type="text" class="form-control @error('delivery_address_2') is-invalid @enderror" id="delivery_address_2" name="delivery_address_2"  value="@if($customerDetail == null){{old('delivery_address_2')}} @else {{$customerDetail->delivery_address_2}} @endif"
-                                                         placeholder="Enter Delivery Address 2">
+                                                        placeholder="Enter Delivery Address 2">
                                                         @error('delivery_address_2')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -229,6 +233,8 @@
                                         <div style="float: right" id="button">
                                             @if($customerDetail == null)
                                                 <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                            @else
+                                                <button type="submit" id="update" class="btn btn-primary">Update</button>
                                             @endif
                                         </div>
                                     </div>
@@ -350,13 +356,34 @@
                     cache: false,
                     success: function (response) {
                         console.log(response);
-                        $('#submit').hide();
                         if(response.success)
                         {
-                            
+                            $('#submit').hide();
+                            $btn = '<button type="submit" id="update" class="btn btn-primary">Update</button>';
+                            $('#button').append( $btn);
                         }
                     },
                 }); 
+            });
+            //Update Form Function
+            $("#customer-detail-info-form-update").on("submit", function(event){
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    method: "POST",
+                    data: formData,
+                    url: 'home/customer-detail/1',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        console.log(response);
+                        if(response.success)
+                        {
+                        }
+                    },
+                }); 
+                
             });
         });
     </script>
