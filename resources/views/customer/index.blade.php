@@ -24,6 +24,7 @@
                                     <form id="customer-detail-info-form" method="POST"> @csrf   
                                 @else
                                     <form id="customer-detail-info-form-update" method="POST">@csrf 
+                                        @method('PUT')
                                 @endif
                                     <div class="form-container" style="height: 715px;">
                                         <div class="row">
@@ -66,7 +67,7 @@
                                                         <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
                                                         <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
                                                             <option selected disabled>Select Country</option>
-                                                            <option value="1">Pakistan</option>
+                                                            <option value="1" {{$customerDetail->business_country_id == 1?'selected':''}}>Pakistan</option>
                                                         </select>
                                                         @error('business_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -78,7 +79,7 @@
                                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
                                                             <option selected disabled>Select Region</option>
-                                                            <option value="2">Punjab</option>
+                                                            <option value="2"  {{$customerDetail->business_region_id == 2?'selected':''}}>Punjab</option>
                                                         </select>
                                                         @error('business_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -90,7 +91,7 @@
                                                         <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
                                                         <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
                                                             <option selected disabled>Select City</option>
-                                                            <option value="3">Lahore</option>
+                                                            <option value="3"  {{$customerDetail->business_city_id == 3 ?'selected':''}}>Lahore</option>
                                                         </select>
                                                         @error('business_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -169,7 +170,7 @@
                                                         <label class="label-wrapper-custm" for="delivery_country_id">Suburb <span class="required-star">*</span></label>
                                                         <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
                                                             <option selected disabled>Select Country</option>
-                                                            <option value="1">Pakistan</option>
+                                                            <option value="1" {{$customerDetail->delivery_country_id == 1 ?'selected':''}}>Pakistan</option>
                                                         </select>
                                                         @error('delivery_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -181,7 +182,7 @@
                                                         <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
                                                             <option selected disabled>Select Region</option>
-                                                            <option value="2">Punjab</option>
+                                                            <option value="2" {{$customerDetail->delivery_region_id == 2 ?'selected':''}}>Punjab</option>
                                                         </select>
                                                         @error('delivery_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -193,7 +194,7 @@
                                                         <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
                                                         <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
                                                             <option selected disabled>Select City</option>
-                                                            <option value="3">Lahore</option>
+                                                            <option value="3" {{$customerDetail->delivery_city_id == 3 ?'selected':''}}>Lahore</option>
                                                         </select>
                                                         @error('delivery_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -234,7 +235,7 @@
                                             @if($customerDetail == null)
                                                 <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                                             @else
-                                                <button type="submit" id="update" class="btn btn-primary">Update</button>
+                                                <button type="submit" id="update" class="btn btn-primary" data-id="{{ $user }}">Update</button>
                                             @endif
                                         </div>
                                     </div>
@@ -368,11 +369,17 @@
             //Update Form Function
             $("#customer-detail-info-form-update").on("submit", function(event){
                 event.preventDefault();
+                let id = $('#update').attr('data-id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
                 var formData = new FormData(this);
                 $.ajax({
-                    method: "POST",
+                    type: "POST",
                     data: formData,
-                    url: 'home/customer-detail/1',
+                    url: 'home/customer-detail/'+id,
                     processData: false,
                     contentType: false,
                     cache: false,
@@ -380,6 +387,14 @@
                         console.log(response);
                         if(response.success)
                         {
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.success,
+                            });
                         }
                     },
                 }); 

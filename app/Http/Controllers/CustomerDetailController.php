@@ -102,9 +102,31 @@ class CustomerDetailController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(CustomerDetailRequest $request,$id)
     {
-        dd($request->all(),$id);
+        $customerDetail = CustomerDetail::where('id',$id)->update([
+            'business_name' => $request->input('business_name'),
+            'business_address_1' => $request->input('business_address_1'),
+            'business_address_2' => $request->input('business_address_2'),
+            'business_country_id' => $request->input('business_country_id'),
+            'business_region_id' => $request->input('business_region_id'),
+            'business_city_id' => $request->input('business_city_id'),
+            'business_phone_no' => $request->input('business_phone_no'),
+            'business_email' => $request->input('business_email'),
+            'business_contact_no' => $request->input('business_contact_no'),
+            'delivery_name' => $request->input('delivery_name'),
+            'delivery_address_1' => $request->input('delivery_address_1'),
+            'delivery_address_2' => $request->input('delivery_address_2'),
+            'delivery_country_id' => $request->input('delivery_country_id'),
+            'delivery_region_id' => $request->input('delivery_region_id'),
+            'delivery_city_id' => $request->input('delivery_city_id'),
+            'delivery_notes' => $request->input('delivery_notes'),
+            ]);
+
+        return response()->json(['success'=>'Your Record Successfully Updated!.']);
+
+
+
        
     }
 
