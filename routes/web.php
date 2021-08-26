@@ -41,6 +41,16 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}','UserManagementController@updateRoles')->name('role.update');
             Route::post('/delete','UserManagementController@deleteRole')->name('role.delete');
         });
+        Route::group(['prefix' => 'product'], function (){
+            Route::get('/','ProductController@index')->name('product.index');
+            Route::get('/create','ProductController@create')->name('product.create');
+            Route::post('/store','ProductController@store')->name('product.store');
+            Route::get('/edit/{id}','ProductController@edit')->name('product.edit');
+            Route::get('/detail/{id}','ProductController@show')->name('product.detail');
+            Route::post('/update/{id}','ProductController@update')->name('product.update');
+            Route::post('/status','ProductController@status')->name('product.status');
+            Route::post('/delete','ProductController@destroy')->name('product.destroy');
+        });
     });
 
     Route::group(['prefix' => 'home'], function () {
