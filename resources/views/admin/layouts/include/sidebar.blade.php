@@ -2,7 +2,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="javascript:void(0)" class="brand-link">
-        <img src="{{asset('admin-panel/images/logo.png')}}" alt="Logo" class="brand-text font-weight-light" style="opacity: .8">
+        <img src="{{ asset('admin-panel/images/logo.png') }}" alt="Logo" class="brand-text font-weight-light"
+            style="opacity: .8">
         {{-- <span class="brand-text font-weight-light">Admin Panel</span> --}}
     </a>
 
@@ -24,10 +25,9 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <<<<<<< Updated upstream <a href="" class="nav-link">
-                        =======
+                 
                         <a href="{{route('dashboard')}}" class="nav-link">
-                            >>>>>>> Stashed changes
+                         
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Dashboard
@@ -144,13 +144,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('product.index')}}" class="nav-link">
+                            <a href="{{ route('product.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Products</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('attribute.index')}}" class="nav-link">
+                            <a href="{{ route('attribute.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Attributes</p>
                             </a>
@@ -187,10 +187,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('sale.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Reoccurring</p>
-
                             </a>
                         </li>
                     </ul>
