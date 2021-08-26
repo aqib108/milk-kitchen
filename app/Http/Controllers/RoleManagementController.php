@@ -24,18 +24,18 @@ class RoleManagementController extends Controller
     }
     public function index()
     {
-        $role = Role::create(['name' => 'Super Admin']);
-        $role = Role::create(['name' => 'Administrator']);
-        $role = Role::create(['name' => 'Manager']);
-        $role = Role::create(['name' => 'Accounting']);
-        $role = Role::create(['name' => 'Editor']);
+        $role = Role::create(['name' => 'Admin']);
+        $role = Role::create(['name' => 'Sales Member']);
+        $role = Role::create(['name' => 'Site Employee']);
+        $role = Role::create(['name' => 'Distributor']);
+        $role = Role::create(['name' => 'Driver']);
         $role = Role::create(['name' => 'Customer']);
     }
 
     public function permission()
     {
-        $role = Role::create(['name' => 'Super Admin']);
-        $role = Role::create(['name' => 'Administrator']);
+        $role = Role::create(['name' => 'Admin']);
+        $role = Role::create(['name' => 'Sales Member']);
         $permission = Permission::create(['name' => 'administrator_create']);
         $role->givePermissionTo($permission);
         $permission = Permission::create(['name' => 'administrator_show']);

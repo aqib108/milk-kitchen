@@ -19,7 +19,7 @@ class CreateAttributesTable extends Migration
             $table->float('size');
             $table->integer('quantity');
             $table->LongText('description');
-            $table->text('sku');
+            $table->text('sku')->nullable();
             $table->boolean('status')->default(TRUE);
             $table->timestamps();
         });
