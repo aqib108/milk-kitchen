@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'admin'], function (){
         Route::get('/', 'AdminController@index')->name('dashboard');
+        Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
         Route::group(['prefix' => 'users'], function (){
             Route::get('/','UserManagementController@users')->name('user.index');
             Route::get('/create','UserManagementController@addNewUser')->name('user.create');
