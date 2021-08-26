@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="{{asset('customer/css/bootstrap.min.css')}}" />
         <link rel="stylesheet" href="{{asset('customer/css/style.css')}}" />
         <link rel="stylesheet" href="{{asset('customer/css/font-awesome.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('admin-panel/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
     </head>
     <body>
         <section>
@@ -29,6 +30,8 @@
         <script src="{{asset('customer/js/bootstrap.min.js')}}"></script>
         <script src="{{asset('customer/js/index.js')}}"></script>
         <script src="{{asset('customer/js/fontawesome.js')}}"></script>
+        <script src="{{asset('admin-panel/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+
         @yield('scripts')
     </body>
 </html>
