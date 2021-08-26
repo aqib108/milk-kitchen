@@ -27,7 +27,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text"> <a href=""
+                            <span class="info-box-text"> <a href="{{route('user.index') }}"
                                 style="color: black"> Total<br> Users </a></span>
                             <span class="info-box-number" id="industry_businesses"></span>
                             <div class="count tr_amount_image">
@@ -57,7 +57,7 @@
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-cog"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text"> <a href=""
+                            <span class="info-box-text"> <a href="{{route('product.index') }}"
                                 style="color: black">Total Products</a></span>
                             <span class="info-box-number" id="type_function"></span>
                             <div class="count tr_amount_image">
@@ -69,46 +69,18 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-cog"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text"><a href=""
-                                style="color: black">Total</a></span>
-                            <span class="info-box-number" id="sub_types_level_1"></span>
+                            <span class="info-box-text"> <a href="{{route('distributor.index') }}"
+                                style="color: black">Total Distributors</a></span>
+                            <span class="info-box-number" id="type_function"></span>
                             <div class="count tr_amount_image">
                                 <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
                             </div>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users-cog"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text"><a href=""
-                                style="color: black">Total </a></span>
-                            <span class="info-box-number" id="sub_types_level_2"></span>
-                            <div class="count tr_amount_image">
-                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
-                            </div>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-briefcase"></i></span>
-                        <div class="info-box-content">
-                        <span class="info-box-text">
-                            <a href="" style="color: black">  Total</a> </span>
-                            <span class="info-box-number" id="sub_types_level_3"></span>
-                            <div class="count tr_amount_image">
-                                <img src="{{url("images/pre_loader_gif.gif")}}" style="width: 35px;"/>
-                            </div>
-                    </div>
-                    <!-- /.info-box-content -->
                 </div>
             </div>
             <!-- /.row -->
