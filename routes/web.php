@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +13,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/migrate',function(){
+    $data = Artisan::call('migrate');
+    dd($data);
+});
+Route::get('/cache-clear', function(){
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+});
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');
     Route::get('/super','RoleManagementController@assign');
@@ -22,11 +31,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'users'], function (){
             Route::get('/','UserManagementController@users')->name('user.index');
             Route::get('/create','UserManagementController@addNewUser')->name('user.create');
-            Route::post('/create-new-user','UserManagementController@createNewUser');
-            Route::get('/edit/{id}','UserManagementController@editUser');
-            Route::post('/update/{id}','UserManagementController@updateUser');
-            Route::get('/delete/{id}','UserManagementController@deleteUser');
-
+            Route::post('/store','UserManagementController@createNewUser')->name('user.store');;
+            Route::get('/edit/{id}','UserManagementController@editUser')->name('user.edit');
+            Route::post('/update/{id}','UserManagementController@updateUser')->name('user.update');
+            Route::post('/status', 'UserManagementController@status')->name('user.status');
         });
         Route::group(['prefix' => 'permissions'], function (){
             Route::get('/','UserManagementController@permissions')->name('permission.index');
@@ -37,19 +45,29 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'roles'], function (){
             Route::get('/','UserManagementController@roles')->name('role.index');
-            Route::post('/create-role','UserManagementController@createRole');
-            Route::get('/edit-role/{id}','UserManagementController@editRole');
-            Route::post('/updateRoles/{id}','UserManagementController@updateRoles');
+            Route::post('/store','UserManagementController@createRole')->name('role.store');
+            Route::get('/edit/{id}','UserManagementController@editRole')->name('role.edit');
+            Route::post('/update/{id}','UserManagementController@updateRoles')->name('role.update');
             Route::post('/delete','UserManagementController@deleteRole')->name('role.delete');
         });
         Route::group(['prefix' => 'customer'], function (){
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
             Route::post('/delete','CustomerController@deleteCustomer')->name('customer.delete');
-            Route::get('/customerEdit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
-            Route::post('/updateCustomer/{id}','CustomerController@updateCustomer');
-            Route::get('/customerGroup','CustomerController@customerGroup')->name('customer.customerGroup');
-            Route::get('/customerReport','CustomerController@customerReport')->name('customer.customerReport');
+            Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
+            Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
+            Route::get('/group','CustomerController@customerGroup')->name('customer.customerGroup');
+            Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
+        });
+        Route::group(['prefix' => 'product'], function (){
+            Route::get('/','ProductController@index')->name('product.index');
+            Route::get('/create','ProductController@create')->name('product.create');
+            Route::post('/store','ProductController@store')->name('product.store');
+            Route::get('/edit/{id}','ProductController@edit')->name('product.edit');
+            Route::get('/detail/{id}','ProductController@show')->name('product.detail');
+            Route::post('/update/{id}','ProductController@update')->name('product.update');
+            Route::post('/status','ProductController@status')->name('product.status');
+            Route::post('/delete','ProductController@destroy')->name('product.destroy');
         });
     });
 

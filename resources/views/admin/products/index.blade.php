@@ -1,5 +1,5 @@
 @extends('admin.layouts.admin')
-@section('title','List Of Users')
+@section('title','List Of Product')
 @section('styles')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 @endsection
@@ -10,13 +10,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Roles</h1>
+                    <h1>Products</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('user.create') }}" class="btn btn-primary pull-right"><i
-                                class="fas fa-fw fa-plus"></i>Add User</a>
+                            <a href="{{route('product.create')}}" class="btn btn-primary pull-right"><i
+                                class="fas fa-fw fa-plus"></i>Add Product</a>
                         </li>
                     </ol>
                 </div>
@@ -32,18 +32,17 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
-                                Users List (Total User's : <span id="countTotal">0</span>)
+                                Product's List (Total Product's : <span id="countTotal">0</span>)
                             </h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="users" class="table table-bordered table-striped">
+                            <table id="products" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
+                                        <th>Name </th>
+                                        <th>Price</th>
                                         <th>Status</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
@@ -70,16 +69,16 @@
     <script>
         var table;
         $(document).ready( function () {
-            table  = $('#users').DataTable({
+
+            table  = $('#products').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                ajax: "{{route('user.index')}}",
+                ajax: "",
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
-                    {data: 'role', name: 'role'},
+                    {data: 'price', name: 'price'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
@@ -90,6 +89,8 @@
                 }
             });
         });
+
+        // Change Status Product
         function changeStatus(id,status) {
             var result = window.confirm('Are you sure you want to change status ?');
             if (result == false) {
@@ -98,7 +99,7 @@
 
                 $.ajax({
                     method: "POST",
-                    url: "{{ route('user.status')}}",
+                    url: '{{ route('product.status') }}',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         'id': id,
@@ -114,8 +115,54 @@
                                 icon: 'success',
                                 title: response.message,
                             });
-                            $('#users').DataTable().ajax.reload();
+                            $('#products').DataTable().ajax.reload();
                         }
+                    }
+                });
+            }
+        };
+
+        // Destory Product
+        function deleteProduct(id,event) {
+            var result = window.confirm('Are you sure you want to delete this Product?  This action cannot be undone. Proceed?');
+            if (result == false) {
+                e.preventDefault();
+            }else{
+
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('product.destroy') }}",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        'id': id
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        if(response.status == undefined)
+                        {
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'error',
+                                title: response.message,
+                            });
+
+                        }
+                        else
+                        {
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.message,
+                            });
+                            $('#products').DataTable().ajax.reload();
+                        }
+
                     }
                 });
             }

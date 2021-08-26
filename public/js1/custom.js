@@ -46,7 +46,7 @@ $("body").on("click", ".editCustomer", function () {
             $("#updateCustomer .Cname").val(response.name);
             $("#updateCustomer .Cemail").val(response.email);
             // $("#updateCustomer .Cpassword").val(response.password);
-            $("#formID").attr("action", "customer/updateCustomer/" + id);
+            $("#formID").attr("action", "customer/update/" + id);
             $("#updateCustomer").modal("show");
         },
         error: function (response) {},

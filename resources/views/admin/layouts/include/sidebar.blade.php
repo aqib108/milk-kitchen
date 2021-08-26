@@ -11,8 +11,8 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('public/admin/images/admin-placeholder.png') }}" class="img-circle elevation-2"
-                    alt="User Image">
+                <img  src="{{asset('admin-panel/images/admin-placeholder.png')}}"
+                class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="javascript:void(0)" class="d-block">Admin</a>
@@ -61,14 +61,12 @@
                         </li>
                     </ul>
                 </li>
-
                 <!--Customers-->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Customer's
-                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
@@ -91,9 +89,51 @@
                             </a>
                         </li>
                     </ul>
+                </li> 
+                <!--- End Customers-->
+                <!--- Stocks --->
+                <li  class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                       <i class="nav-icon fab fa-product-hunt"></i>
+                        <p>
+                            Manage Stocks
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a> 
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('product.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Products</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Attributes</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Special pricing</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Purchase Orders</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Reports</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <!-- End Customers-->
-
+                <!--- End Stock --->
                 <!--Sales-->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -108,11 +148,12 @@
                             <a href="" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Reoccurring</p>
+
                             </a>
                         </li>
                     </ul>
                 </li>
-                <!-- End Sales-->
+                <!--- End sale --->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
