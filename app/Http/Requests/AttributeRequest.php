@@ -26,9 +26,8 @@ class AttributeRequest extends FormRequest
     {
         return [
             'product_id' => 'required',
-            'size' => 'required',
-            'quantity' => 'required',
-            'sku' => 'required',
+            'size' => 'required|numeric|between:0,99.99',
+            'quantity' => 'required|integer',
             'description' => 'required',
         ];
     }

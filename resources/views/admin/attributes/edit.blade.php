@@ -73,9 +73,9 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label>SKU <span class="required-star">*</span></label>
+                                        <label>SKU </label>
                                         <input type="text" maxlength="50" class="form-control @error('sku') is-invalid @enderror" name="sku"
-                                            value="{{$attribute->sku}}" placeholder="Enter SKU" required>
+                                            value="{{$attribute->sku}}" placeholder="Enter SKU 11-22-33-444-555">
                                         @error('sku')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

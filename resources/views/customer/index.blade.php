@@ -259,37 +259,39 @@
                         </tr>
                     </thead>
                     <tbody class="week-container-tbl">
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">Product 1</td>
-                            <td>
-                                <input id="monday" class="monday" type="number" name="monday" style="width: 80px;
-                                text-align: center;" value="">
-                            </td>
-                            <td>
-                                <input id="tuesday" class="tuesday" type="number" name="tuesday" style="width: 80px;
-                                text-align: center;">
-                            </td>
-                            <td>
-                                <input id="wednesday" class="wednesday" type="number" name="wednesday" style="width: 80px;
-                                text-align: center;">
-                            </td>
-                            <td>
-                                <input id="thursday" class="thursday" type="number" name="thursday" style="width: 80px;
-                                text-align: center;">
-                            </td>
-                            <td>
-                                <input id="friday" class="friday" type="number" name="friday" style="width: 80px;
-                                text-align: center;">
-                            </td>
-                            <td>
-                                <input id="weekly" class="weekly" type="number" style="width: 80px;
-                                text-align: center;" disabled>
-                            </td>
-                            <td>
-                                <input id="weekly" class="weekly" type="number" style="width: 80px;
-                                text-align: center;" disabled>
-                            </td>
-                        </tr>
+                        @foreach ($products as $product)
+                            <tr>
+                                <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
+                                <td>
+                                    <input id="monday-{{$product->id}}" class="monday" type="number" name="monday" style="width: 80px;
+                                    text-align: center;" value="">
+                                </td>
+                                <td>
+                                    <input id="tuesday-{{$product->id}}" class="tuesday" type="number" name="tuesday" style="width: 80px;
+                                    text-align: center;">
+                                </td>
+                                <td>
+                                    <input id="wednesday-{{$product->id}}" class="wednesday" type="number" name="wednesday" style="width: 80px;
+                                    text-align: center;">
+                                </td>
+                                <td>
+                                    <input id="thursday-{{$product->id}}" class="thursday" type="number" name="thursday" style="width: 80px;
+                                    text-align: center;">
+                                </td>
+                                <td>
+                                    <input id="friday-{{$product->id}}" class="friday" type="number" name="friday" style="width: 80px;
+                                    text-align: center;">
+                                </td>
+                                <td>
+                                    <input id="weekly-{{$product->id}}" class="weekly" type="number" style="width: 80px;
+                                    text-align: center;" disabled>
+                                </td>
+                                <td>
+                                    <input id="weekly-{{$product->id}}" class="weekly" type="number" style="width: 80px;
+                                    text-align: center;" disabled>
+                                </td>
+                            </tr> 
+                        @endforeach
                     </tbody>
                 </table>
             </div>
