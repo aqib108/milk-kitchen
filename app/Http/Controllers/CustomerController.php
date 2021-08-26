@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Customer;
+use App\Models\User;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -19,10 +19,10 @@ class CustomerController extends Controller
     public function customers(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::all();
+            $data = User::role('customer')->get(); 
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function(Customer $data){
+                ->addColumn('action', function(User $data){
                     $btn = '<a onclick="deleteCustomer('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="javascript::void(0);" class="editCustomer btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
                     return $btn.' '.$btn2;
@@ -41,19 +41,21 @@ class CustomerController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $data = Customer::create([
+        $data = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $data->assignRole('customer');
         return back()->with('success','New Customer Created!');
     }
 
     public function deleteCustomer(Request $request)
     {
         try {
-            $customer = Customer::findOrFail((int)$request->id);
-            if ($customer == null) {
+            $customer = User::findOrFail((int)$request->id);
+            if ($customer->isEmpty()) {
                 return redirect()->back()->with('error', 'No Record Found To Delete.');
             }
 
@@ -67,7 +69,7 @@ class CustomerController extends Controller
 
     public function editCustomer($id)
     {
-        $cus = Customer::find($id);
+        $cus = User::find($id);
         $response = array(
             'id' => $cus->id,
             'name' => $cus->name,
@@ -85,7 +87,7 @@ class CustomerController extends Controller
             'email' => 'required',
         ]);
         
-        $Customer = Customer::find($id);
+        $Customer = User::find($id);
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');
         $Customer->save();
@@ -100,10 +102,10 @@ class CustomerController extends Controller
    public function customerGroup(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::all();
+            $data = User::role('customer')->get(); 
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function(Customer $data){
+                ->addColumn('action', function(User $data){
                     $btn = '<a href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="javascript::void(0);" class="btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
                     return $btn.' '.$btn2;

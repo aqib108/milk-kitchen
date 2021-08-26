@@ -93,6 +93,26 @@
                     </ul>
                 </li>
                 <!-- End Customers-->
+
+                <!--Sales-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                            Sale's
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Reoccurring</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- End Sales-->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
