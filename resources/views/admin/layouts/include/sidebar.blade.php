@@ -2,8 +2,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="javascript:void(0)" class="brand-link">
-        <img src="" alt="Logo" class="brand-image" style="opacity: .8">
-        <span class="brand-text font-weight-light">Admin Panel</span>
+        <img src="{{asset('admin-panel/images/logo.png')}}" alt="Logo" class="brand-text font-weight-light" style="opacity: .8">
+        {{-- <span class="brand-text font-weight-light">Admin Panel</span> --}}
     </a>
 
     <!-- Sidebar -->
