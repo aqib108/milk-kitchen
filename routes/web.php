@@ -78,12 +78,16 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/status','AttributesController@status')->name('attribute.status');
             Route::post('/delete','AttributesController@destroy')->name('attribute.destroy');
         });
+        Route::group(['prefix' => 'sale'], function (){
+            Route::get('/','SaleController@reoccurring')->name('sale.index');
+        });
     });
 
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
     }); 
+
 });
 Route::get('/', 'HomeController@index');
 Auth::routes();
