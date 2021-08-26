@@ -209,7 +209,6 @@ font-family: 'Roboto-Regular';
 line-height: 43px;
 color: #76757a;
 font-weight: 500;
-]
 }
 .btn__signin-wrapper {
   font-size: 20px;
@@ -289,7 +288,7 @@ color: #94d60a;
 }
 
 .footer-wrapper-two {
-  background-color: #000000;
+  background-color: #757170;
   padding: 10px 0;
 }
 
@@ -319,7 +318,7 @@ color: #94d60a;
   align-self: center;
 }
 .logo-banner2{
-  background-color: #000000;
+  background-color: #757170;
   padding: 6px 0;
 }
 .heading-one-banner{

@@ -15,7 +15,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('user.create') }}" class="btn btn-primary pull-right"><i
+                            <a href="{{ route('user.create') }}" class="btn btn-primary custom-button pull-right"><i
                                 class="fas fa-fw fa-plus"></i>Add User</a>
                         </li>
                     </ol>

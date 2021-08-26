@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('product.index')}}" class="btn btn-dark">Back</a>
+                        <li class="breadcrumb-item"><a href="{{route('product.index')}}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
                         </li>
                     </ol>
                 </div>
