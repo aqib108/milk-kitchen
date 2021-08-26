@@ -59,7 +59,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/group','CustomerController@customerGroup')->name('customer.customerGroup');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
-        Route::group(['prefix' => 'distributor'], function (){
+        });
+            Route::group(['prefix' => 'distributor'], function (){
             Route::get('/','DistributorController@index')->name('distributor.index');
             Route::get('/create','DistributorController@create')->name('distributor.create');
             Route::post('/store','DistributorController@store')->name('distributor.store');
