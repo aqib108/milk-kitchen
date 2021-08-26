@@ -17,3 +17,62 @@
 .delete_btn:focus{
     outline: none;
 }
+.info-box .info-box-icon{
+    background-color: #2aaf03 !important;
+}
+.main-footer{
+    background-color: #757170 !important;
+    color: white !important;
+    font-size: 14px !important;
+}
+.navbar{
+    background-color: #757170 !important;
+    color: white !important;
+}
+.main-sidebar{
+    background-color: #757170 !important;
+    color: white !important;
+}
+.nav-sidebar .nav-link p{
+    color: white !important;
+}
+a{
+    text-decoration: none;
+    color: #757170;
+}
+.breadcrumb-item.active{
+    color: #757170;
+}
+/* .custom-button{
+    background-color: #95d60c !important;
+} */
+.page-item.active .page-link, .custom-button, .btn-primary{
+    background-color: #95d60c !important;
+    border-color: #95d60c;
+
+}
+.page-item.active .page-link:focus,.custom-button:focus,.custom-button:hover{
+    box-shadow: none !important;
+    outline: none !important;
+}
+.btn-primary:hover {
+    border-color: #95d60c !important;
+}
+.elevation-4{
+    box-shadow: none !important;
+}
+[class*=sidebar-dark-] .sidebar a {
+    color: #ffffff !important;
+}
+[class*=sidebar-dark] .brand-link{
+    border-bottom: 1px solid #f4f6f9 !important;
+}
+[class*=sidebar-dark] .user-panel {
+    border-bottom: 1px solid #f4f6f9 !important;
+}
+.card-primary:not(.card-outline)>.card-header{
+    background-color: #95d60c !important;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(255 255 255 / 93%) !important;
+}

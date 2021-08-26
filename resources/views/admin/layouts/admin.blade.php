@@ -16,6 +16,9 @@
     
         <title>Admin |&nbsp;@yield('title','Dashboard')</title>
         <link rel="shortcut icon" type="image/png" href="{{asset('admin-panel/images/favicon.png')}}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('admin-panel/favicon_io/favicon-32x32.png') }}">
+
+            <link rel="shortcut icon" href="{{ asset('admin-panel/favicon_io/favicon.ico') }}" />
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{{asset('admin-panel/plugins/fontawesome-free/css/all.min.css')}}">
         <!-- Ionicons -->
@@ -43,7 +46,7 @@
         <link rel="stylesheet" href="{{asset('admin-panel/plugins/select2/css/select2.min.css')}}">
         <link rel="stylesheet" href="{{asset('admin-panel/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
         <!-- Admin CSS -->
-        <link rel="stylesheet" href="{{asset('admin-panel.css')}}">
+        <link rel="stylesheet" href="{{asset('admin-panel/css/custom.css')}}">
         <!-- Toggel button!-->
         <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
             rel="stylesheet">
