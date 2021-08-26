@@ -67,6 +67,7 @@
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Customer's
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
