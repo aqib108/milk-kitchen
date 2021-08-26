@@ -176,7 +176,7 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail((int)$request->id);
-            if ($product->isEmpty()) {
+            if ($product == null) {
                 return redirect()->back()->with('error', 'No Record Found To Delete.');
             }
 
@@ -191,7 +191,7 @@ class ProductController extends Controller
     public function status(Request $request)
     {
         $product = Product::findOrFail($request->id);
-        if ($product->isEmpty()) {
+        if ($product == null) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
         $product->update(['status'=> $request->input('status')]);
