@@ -67,7 +67,7 @@
                                                         <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
                                                         <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
                                                             <option selected disabled>Select Country</option>
-                                                            <option value="1" {{$customerDetail->business_country_id == 1?'selected':''}}>Pakistan</option>
+                                                            <option value="1" {{ isset($customerDetail->business_country_id) &&$customerDetail->business_country_id == 1?'selected':''}}>Pakistan</option>
                                                         </select>
                                                         @error('business_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -79,7 +79,7 @@
                                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
                                                             <option selected disabled>Select Region</option>
-                                                            <option value="2"  {{$customerDetail->business_region_id == 2?'selected':''}}>Punjab</option>
+                                                            <option value="2"  {{ isset($customerDetail->business_region_id) && $customerDetail->business_region_id == 2?'selected':''}}>Punjab</option>
                                                         </select>
                                                         @error('business_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -91,7 +91,7 @@
                                                         <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
                                                         <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
                                                             <option selected disabled>Select City</option>
-                                                            <option value="3"  {{$customerDetail->business_city_id == 3 ?'selected':''}}>Lahore</option>
+                                                            <option value="3"  {{ isset($customerDetail->business_city_id) && $customerDetail->business_city_id == 3 ?'selected':''}}>Lahore</option>
                                                         </select>
                                                         @error('business_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -170,7 +170,7 @@
                                                         <label class="label-wrapper-custm" for="delivery_country_id">Suburb <span class="required-star">*</span></label>
                                                         <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
                                                             <option selected disabled>Select Country</option>
-                                                            <option value="1" {{$customerDetail->delivery_country_id == 1 ?'selected':''}}>Pakistan</option>
+                                                            <option value="1" {{ isset($customerDetail->delivery_country_id) && $customerDetail->delivery_country_id == 1 ?'selected':''}}>Pakistan</option>
                                                         </select>
                                                         @error('delivery_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -182,7 +182,7 @@
                                                         <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
                                                             <option selected disabled>Select Region</option>
-                                                            <option value="2" {{$customerDetail->delivery_region_id == 2 ?'selected':''}}>Punjab</option>
+                                                            <option value="2" {{ isset($customerDetail->delivery_region_id) && $customerDetail->delivery_region_id == 2 ?'selected':''}}>Punjab</option>
                                                         </select>
                                                         @error('delivery_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -194,7 +194,7 @@
                                                         <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
                                                         <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
                                                             <option selected disabled>Select City</option>
-                                                            <option value="3" {{$customerDetail->delivery_city_id == 3 ?'selected':''}}>Lahore</option>
+                                                            <option value="3" {{ isset($customerDetail->delivery_city_id) && $customerDetail->delivery_city_id == 3 ?'selected':''}}>Lahore</option>
                                                         </select>
                                                         @error('delivery_city_id')
                                                             <span class="invalid-feedback" role="alert">
