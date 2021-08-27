@@ -211,50 +211,6 @@
                 }
             });
         });
-        /// Destory Permission
-        function deleteCustomer(id, event) {
-            // alert(id);
-            var result = window.confirm(
-                'Are you sure you want to delete this Customer?  This action cannot be undone. Proceed?');
-            if (result == false) {
-                e.preventDefault();
-            } else {
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('customer.destroy') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id
-                    },
-                    success: function(response) {
-                        console.log(response)
-                        if (response.status == undefined) {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'error',
-                                title: response.message,
-                            });
-
-                        } else {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                            $('#Customer').DataTable().ajax.reload();
-                        }
-
-                    }
-                });
-            }
-        };
     </script>
 
 

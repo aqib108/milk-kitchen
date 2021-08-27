@@ -61,7 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/group','CustomerController@customerGroup')->name('customer.customerGroup');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
-            Route::post('/delete','CustomerController@deleteCustomer')->name('customer.destroy');
+            Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
         });
         Route::group(['prefix' => 'distributor'], function (){
             Route::get('/','DistributorController@index')->name('distributor.index');

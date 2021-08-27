@@ -26,7 +26,7 @@ class CustomerController extends Controller
               })
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
-                    $btn = '<a onclick="deleteCustomer('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+                    $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="javascript::void(0);" class="editCustomer btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
                     return $btn.' '.$btn2;
                     
@@ -60,11 +60,15 @@ class CustomerController extends Controller
         return redirect()->route('customer.index')->with('success','New Customer Created!');
     }
 
-    public function deleteCustomer(Request $request)
+    public function deleteCustomer($id)
     {
-        $customer = User::findOrFail($request->id);
+        $customer = User::findOrFail($id);
         $customer->delete();
-        return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
+        return response()->json(array(
+            'data' => true,
+            'message' => 'Customer Successfully Deleted',
+            'status' => 'success',
+        ));
     }
 
     public function editCustomer($id)
