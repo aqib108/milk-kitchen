@@ -22,7 +22,7 @@ class CustomerController extends Controller
             $data = User::role('customer')->get(); 
             return Datatables::of($data) 
             ->editColumn('created_at', function (User $data) {
-                return $data->created_at->format('d-m-Y'); 
+                return $data->created_at->format('d, M Y'); 
               })
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
@@ -100,7 +100,7 @@ class CustomerController extends Controller
             $data = User::role('customer')->get(); 
             return Datatables::of($data)
             ->editColumn('created_at', function (User $data) {
-                return $data->created_at->format('d-m-Y'); 
+                return $data->created_at->format('d, M Y'); 
               })
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
