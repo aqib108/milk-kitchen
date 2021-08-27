@@ -56,11 +56,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'customer'], function (){
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
-            Route::post('/delete','CustomerController@deleteCustomer')->name('customer.delete');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/group','CustomerController@customerGroup')->name('customer.customerGroup');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
+            Route::post('/delete','CustomerController@deleteCustomer')->name('customer.destroy');
         });
         Route::group(['prefix' => 'distributor'], function (){
             Route::get('/','DistributorController@index')->name('distributor.index');

@@ -40,7 +40,7 @@
                             <table id="Customer" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Customer Name</th>
                                         <th>Customer Email</th>
                                         <th>Created at</th>
@@ -180,8 +180,10 @@
                 serverSide: true,
                 ajax: "{{ route('customer.customerGroup') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
@@ -209,49 +211,6 @@
                 }
             });
         });
-        /// Destory Permission
-        function deleteCustomer(id, event) {
-            var result = window.confirm(
-                'Are you sure you want to delete this Customer?  This action cannot be undone. Proceed?');
-            if (result == false) {
-                e.preventDefault();
-            } else {
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('customer.delete') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id
-                    },
-                    success: function(response) {
-                        console.log(response)
-                        if (response.status == undefined) {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'error',
-                                title: response.message,
-                            });
-
-                        } else {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                            $('#Customer').DataTable().ajax.reload();
-                        }
-
-                    }
-                });
-            }
-        };
     </script>
 
 
