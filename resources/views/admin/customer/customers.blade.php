@@ -40,7 +40,7 @@
                             <table id="Customer" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Customer Name</th>
                                         <th>Customer Email</th>
                                         <th>Created At</th>
@@ -180,8 +180,7 @@
                 serverSide: true,
                 ajax: "{{ route('customer.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                    data: 'DT_RowIndex', name: 'DT_RowIndex',orderable: false, searchable: false
                     },
                     {
                         data: 'name',
@@ -211,6 +210,7 @@
         });
         /// Destory Permission
         function deleteCustomer(id, event) {
+            // alert(id);
             var result = window.confirm(
                 'Are you sure you want to delete this Customer?  This action cannot be undone. Proceed?');
             if (result == false) {
@@ -219,7 +219,7 @@
 
                 $.ajax({
                     method: "POST",
-                    url: "{{ route('customer.delete') }}",
+                    url: "{{ route('customer.destroy') }}",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         'id': id
