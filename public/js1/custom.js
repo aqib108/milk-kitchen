@@ -36,7 +36,7 @@ $("body").on("click", ".editCustomer", function () {
     });
     $.ajax({
         type: "get",
-        url: "customer/customerEdit/" + id,
+        url: "customer/edit/" + id,
         dataType: "json",
         beforeSend: function () {
             $(".loader-wrapper").fadeIn("slow");

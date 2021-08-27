@@ -20,12 +20,16 @@ class CustomerController extends Controller
     {
         if ($request->ajax()) {
             $data = User::role('customer')->get(); 
-            return Datatables::of($data)
+            return Datatables::of($data) 
+            ->editColumn('created_at', function (User $data) {
+                return $data->created_at->format('d-m-Y'); 
+              })
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
                     $btn = '<a onclick="deleteCustomer('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="javascript::void(0);" class="editCustomer btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
                     return $btn.' '.$btn2;
+                    
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -53,18 +57,9 @@ class CustomerController extends Controller
 
     public function deleteCustomer(Request $request)
     {
-        try {
-            $customer = User::findOrFail((int)$request->id);
-            if ($customer->isEmpty()) {
-                return redirect()->back()->with('error', 'No Record Found To Delete.');
-            }
-
-            $customer->delete();
-            return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
-
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 1, 'message' => 'The record could not be deleted.']);
-        }
+        $customer = User::findOrFail($request->id);
+        $customer->delete();
+        return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
     }
 
     public function editCustomer($id)
@@ -104,6 +99,9 @@ class CustomerController extends Controller
         if ($request->ajax()) {
             $data = User::role('customer')->get(); 
             return Datatables::of($data)
+            ->editColumn('created_at', function (User $data) {
+                return $data->created_at->format('d-m-Y'); 
+              })
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
                     $btn = '<a href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
