@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CustomerDetailRequest;
 use App\Repositories\CustomerDetailRepository;
 use App\Models\CustomerDetail;
+use Auth;
 
 class CustomerDetailController extends Controller
 {
@@ -104,7 +105,8 @@ class CustomerDetailController extends Controller
      */
     public function update(CustomerDetailRequest $request,$id)
     {
-        $customerDetail = CustomerDetail::where('id',$id)->update([
+        // dd($id);
+        $customerDetail = CustomerDetail::where('user_id',$id)->update([
             'business_name' => $request->input('business_name'),
             'business_address_1' => $request->input('business_address_1'),
             'business_address_2' => $request->input('business_address_2'),
@@ -122,7 +124,7 @@ class CustomerDetailController extends Controller
             'delivery_city_id' => $request->input('delivery_city_id'),
             'delivery_notes' => $request->input('delivery_notes'),
             ]);
-            
+        dd($customerDetail);
         return response()->json(['success'=>'Your Record Successfully Updated!.']);
 
 

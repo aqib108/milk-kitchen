@@ -37,11 +37,16 @@ class CustomerController extends Controller
         return view('admin.customer.customers');
     }
 
+    public function newCustomerCreate()
+    {
+        return view('admin.customer.createCustomer');
+    }
+
     public function createCustomer(Request $request)
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'ends_with:gmail.com,yahoo.com', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -52,7 +57,7 @@ class CustomerController extends Controller
         ]);
 
         $data->assignRole('customer');
-        return back()->with('success','New Customer Created!');
+        return redirect()->route('customer.index')->with('success','New Customer Created!');
     }
 
     public function deleteCustomer(Request $request)

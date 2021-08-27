@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'customer'], function (){
             Route::get('/','CustomerController@customers')->name('customer.index');
+            Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
@@ -109,7 +110,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
-        Route::post('/order','OrderController@order')->name('customer.order');
+        Route::post('/product-orders','HomeController@productOrders');
     }); 
 
 });

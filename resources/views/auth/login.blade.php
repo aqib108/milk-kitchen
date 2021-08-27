@@ -20,7 +20,7 @@
                                         <input class="form-control py-4 wrapper__input--border  @error('email') is-invalid @enderror" id="email" type="email" name="email" placeholder="Enter Email" required autocomplete="email" autofocus>
                                      
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer173.png')}}" class="img-fluid" alt="" style="height: 15px;"></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer-panel/images/Layer173.png')}}" class="img-fluid" alt="" style="height: 15px;"></span>
                                         </div>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
@@ -32,7 +32,7 @@
                                         <input id="password" type="password" class="form-control py-4 wrapper__input--border  @error('password') is-invalid @enderror" name="password" placeholder="Enter Password" required autocomplete="current-password">
                                      
                                         <div class="input-group-append">
-                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer/images/Layer175.png')}}" class="img-fluid" alt=""></span>
+                                            <span class="input-group-text bg-transparent wrapper__label--border" id="basic-addon2"><img src="{{asset('customer-panel/images/Layer175.png')}}" class="img-fluid" alt=""></span>
                                         </div>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">

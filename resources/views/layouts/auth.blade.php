@@ -10,6 +10,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Milk Kitchen</title>
+        <link rel="shortcut icon" type="image/png" href="{{asset('admin-panel/images/favicon.png')}}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('admin-panel/favicon_io/favicon-32x32.png') }}">
         <link rel="stylesheet" href="{{asset('customer-panel/css/bootstrap.css')}}" />
         <link rel="stylesheet" href="{{asset('customer-panel/css/bootstrap.min.css')}}" />
         <link rel="stylesheet" href="{{asset('customer-panel/css/style.css')}}" />
