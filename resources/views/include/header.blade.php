@@ -2,7 +2,7 @@
   <div class="container">
     <div class="flex-wraper">
       <div class="">
-        <img src="{{asset('customer/images/logo.png')}}" class="img-fluid" alt="">
+        <img src="{{asset('customer-panel/images/logo.png')}}" class="img-fluid" alt="">
       </div>
       <div>
         <h2 class="heading-one-banner">FOOD SERVICE PORTAL</h2>

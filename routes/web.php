@@ -23,6 +23,7 @@ Route::get('/cache-clear', function(){
     Artisan::call('route:clear');
     Artisan::call('view:clear');
 });
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');
     Route::get('/super','RoleManagementController@assign');
@@ -61,7 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
             Route::post('/delete','CustomerController@deleteCustomer')->name('customer.destroy');
         });
-            Route::group(['prefix' => 'distributor'], function (){
+        Route::group(['prefix' => 'distributor'], function (){
             Route::get('/','DistributorController@index')->name('distributor.index');
             Route::get('/create','DistributorController@create')->name('distributor.create');
             Route::post('/store','DistributorController@store')->name('distributor.store');

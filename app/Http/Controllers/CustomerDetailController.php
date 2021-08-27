@@ -122,7 +122,7 @@ class CustomerDetailController extends Controller
             'delivery_city_id' => $request->input('delivery_city_id'),
             'delivery_notes' => $request->input('delivery_notes'),
             ]);
-
+            
         return response()->json(['success'=>'Your Record Successfully Updated!.']);
 
 

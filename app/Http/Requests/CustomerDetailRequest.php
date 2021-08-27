@@ -25,14 +25,14 @@ class CustomerDetailRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id'  => 'required',
             'business_name' => 'required|string|max:150',
             'business_address_1' => 'required|string|max:300',
             'business_country_id' => 'required',
             'business_city_id'=> 'required',
             'business_region_id'=> 'required',
             'business_email' => 'required|email|max:150',
-            'business_contact_no'  => 'required|numeric|digits:11',
-            'user_id'  => 'required',
+            'business_contact_no' => 'required|min:11|max:14',
             'delivery_name' => 'required|string|max:150',
             'delivery_address_1' => 'required|string|max:300',
             'delivery_country_id' => 'required',
