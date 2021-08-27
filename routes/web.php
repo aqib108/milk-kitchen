@@ -110,6 +110,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
+        Route::post('/product-orders','HomeController@productOrders');
     }); 
 
 });

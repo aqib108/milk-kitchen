@@ -102,7 +102,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_phone_no">Phone No</label>
                                                         <input type="text" class="form-control @error('business_phone_no') is-invalid @enderror" id="business_phone_no" name="business_phone_no" 
-                                                        placeholder="Enter Phone No" value="@if($customerDetail == null){{old('business_phone_no')}} @else {{$customerDetail->business_phone_no}} @endif">
+                                                        placeholder="Enter Phone No" value="@if($customerDetail == null){{old('business_phone_no')}} @else{{$customerDetail->business_phone_no}}@endif">
                                                         @error('business_phone_no')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -252,7 +252,7 @@
                 <h2 class="heading-tbl">This Weeks Deliveries</h2>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered mb-0">
+                <table class="table table-bordered mb-0 weekly_standing_order">
                     <thead>
                         <tr>
                             <th class="table-th-wrapper" scope="col">Product Name</th>
@@ -267,36 +267,20 @@
                     </thead>
                     <tbody class="week-container-tbl">
                         @foreach ($products as $product)
-                            <tr>
+                            <tr class="week_days" data-p-id="{{$product->id}}">
                                 <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                                <td>
-                                    <input id="monday-{{$product->id}}" class="monday" type="number" name="monday" style="width: 80px;
-                                    text-align: center;" value="">
-                                </td>
-                                <td>
-                                    <input id="tuesday-{{$product->id}}" class="tuesday" type="number" name="tuesday" style="width: 80px;
-                                    text-align: center;">
-                                </td>
-                                <td>
-                                    <input id="wednesday-{{$product->id}}" class="wednesday" type="number" name="wednesday" style="width: 80px;
-                                    text-align: center;">
-                                </td>
-                                <td>
-                                    <input id="thursday-{{$product->id}}" class="thursday" type="number" name="thursday" style="width: 80px;
-                                    text-align: center;">
-                                </td>
-                                <td>
-                                    <input id="friday-{{$product->id}}" class="friday" type="number" name="friday" style="width: 80px;
-                                    text-align: center;">
-                                </td>
-                                <td>
-                                    <input id="weekly-{{$product->id}}" class="weekly" type="number" style="width: 80px;
-                                    text-align: center;" disabled>
-                                </td>
-                                <td>
-                                    <input id="weekly-{{$product->id}}" class="weekly" type="number" style="width: 80px;
-                                    text-align: center;" disabled>
-                                </td>
+                                @foreach ($weekDays as $item)
+                                    @php
+                                        $qnty = 0;
+                                        if($item->orderByUserID->isNotEmpty() && $item->orderByUserID[0]->product_id == $product->id){
+                                            $qnty = $item->orderByUserID[0]->quantity;
+                                        }
+                                    @endphp
+                                    <td>
+                                        <input id="{{ $item->name }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                        text-align: center;" value="{{ $qnty }}">
+                                    </td>
+                                @endforeach
                             </tr> 
                         @endforeach
                     </tbody>
@@ -345,6 +329,11 @@
     <!---- CUSTOMER FORM UPDATE AND STORE FUNCTION SCRIPT ----> 
     <script>
         $(document).ready(function(){
+            $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
             /// Phone Number
             $('#business_contact_no').mask('0000-0000000');
             //Submit Form Function
@@ -409,6 +398,43 @@
                 }); 
                 
             });
+            // Product Selection
+            $('body').on('change','.weekly_standing_order .week_days td input', function(){
+                let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
+                let day_id = $(this).attr('data-id');
+                let qnty = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        'day_id':day_id,
+                        'product_id':product_id,
+                        'qnty':qnty
+                    },
+                    url: 'home/product-orders',
+                    success: function (response) {
+                        if(response.status)
+                        {
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.message,
+                            });
+                        }else{
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'error',
+                                title: response.success,
+                            });
+                        }
+                    },
+                }); 
+            })
         });
     </script>
     <!---- PRODUCT SCRIPT ---->

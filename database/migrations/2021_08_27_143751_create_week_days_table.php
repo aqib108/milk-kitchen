@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDriversTable extends Migration
+class CreateWeekDaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateDriversTable extends Migration
      */
     public function up()
     {
-        Schema::create('drivers', function (Blueprint $table) {
-            $table->id();
+        Schema::create('week_days', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('name');
-            $table->string('email');
-            $table->string('phone');
-            $table->unsignedBigInteger('area_id')->default(null);
-            $table->unsignedBigInteger('route_id')->default(null);
-            $table->boolean('status')->default(true);
+            $table->tinyInteger('status')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ class CreateDriversTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('week_days');
     }
 }
