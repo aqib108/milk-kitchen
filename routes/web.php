@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
+        Route::post('/order','OrderController@order')->name('customer.order');
     }); 
 
 });
