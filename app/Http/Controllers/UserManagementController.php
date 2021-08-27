@@ -93,18 +93,12 @@ class UserManagementController extends Controller
 
     public function addNewUser()
     {
-        $roles = Role::all();
+        $roles = Role::where('name','!=','Customer')->get();
         return view('admin.users.addUser',compact('roles'));
     }
 
     public function createNewUser(UserRequest $request)
     {
-        // $validated = $request->validate([
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
-        // ]);
-
         $data = User::create([
             'name' => $request->name,
             'email' => $request->email,

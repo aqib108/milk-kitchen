@@ -63,3 +63,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<!---- validation ----->
+<script src="{{asset('customer-panel/jquery-validation/jquery.validate.min.js')}}"></script>
+<script src="{{asset('customer-panel/jquery-validation/additional-methods.min.js')}}"></script>
+
