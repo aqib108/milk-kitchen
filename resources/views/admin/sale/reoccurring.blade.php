@@ -40,7 +40,7 @@
                             <table id="Product" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name</th>
                                         <th>Price</th>
                                         <th>Status</th>
@@ -75,8 +75,10 @@
                 serverSide: true,
                 ajax: "{{ route('sale.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',

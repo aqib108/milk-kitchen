@@ -12,14 +12,14 @@
                 <div class="col-sm-6">
                     <h1>Customer Group's</h1>
                 </div>
-                <div class="col-sm-6">
+                {{-- <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <button class="btn btn-primary pull-right" data-bs-toggle="modal"
                                 data-bs-target="#addCustomer"><i class="fas fa-fw fa-plus"></i>Add Customer</button>
                         </li>
                     </ol>
-                </div>
+                </div> --}}
             </div>
         </div><!-- /.container-fluid -->
     </section>
