@@ -473,22 +473,15 @@
         $(function () {
             $.validator.setDefaults({
                 submitHandler: function () {
-                    alert( "Form successful submitted!" );
                 }
             });
             $('#customer-detail-info-form').validate({
                 rules: {
                     business_name: {
                         required: true,
-                        minlength: 6
                     },
                     business_address_1: {
                         required: true,
-                        minlength: 6
-                    },
-                    business_address_2: {
-                        required: true,
-                        minlength: 6
                     },
                     business_country_id: {
                         required: true,
@@ -509,15 +502,9 @@
                     },
                     delivery_name: {
                         required: true,
-                        minlength: 6
                     },
                     delivery_address_1: {
                         required: true,
-                        minlength: 6
-                    },
-                    delivery_address_2: {
-                        required: true,
-                        minlength: 6
                     },
                     delivery_country_id: {
                         required: true,
@@ -541,10 +528,6 @@
                         required: "Please enter a business address 1 123 etc.",
                         business_name: "Your Business Name Must Be 6 characters"
                     },
-                    business_address_2: {
-                        required: "Please enter a business address 2 123 etc.",
-                        business_name: "Your Business Name Must Be 6 characters"
-                    },
                     business_contact_no: {
                         required: "Please enter a phone number",
                         business_contact_no: "Your phone number must be at least 11 characters long "
@@ -556,10 +539,6 @@
                     delivery_address_1: {
                         required: "Please enter a delivery address 1 123 etc.",
                         delivery_address_1: "Your delivery Name Must Be 6 characters"
-                    },
-                    delivery_address_2: {
-                        required: "Please enter a delivery address 2 123 etc.",
-                        delivery_address_2: "Your delivery Name Must Be 6 characters"
                     },
                     terms: "Please accept our terms"
                 },
@@ -581,23 +560,15 @@
     <script>
          $(function () {
             $.validator.setDefaults({
-                submitHandler: function () {
-                    alert( "Form successful updated!" );
-                }
+                submitHandler: function () {}
             });
             $('#customer-detail-info-form-update').validate({
                 rules: {
                     business_name: {
                         required: true,
-                        minlength: 6
                     },
                     business_address_1: {
                         required: true,
-                        minlength: 6
-                    },
-                    business_address_2: {
-                        required: true,
-                        minlength: 6
                     },
                     business_country_id: {
                         required: true,
@@ -618,15 +589,9 @@
                     },
                     delivery_name: {
                         required: true,
-                        minlength: 6
                     },
                     delivery_address_1: {
                         required: true,
-                        minlength: 6
-                    },
-                    delivery_address_2: {
-                        required: true,
-                        minlength: 6
                     },
                     delivery_country_id: {
                         required: true,
@@ -650,10 +615,6 @@
                         required: "Please enter a business address 1 123 etc.",
                         business_name: "Your Business Name Must Be 6 characters"
                     },
-                    business_address_2: {
-                        required: "Please enter a business address 2 123 etc.",
-                        business_name: "Your Business Name Must Be 6 characters"
-                    },
                     business_contact_no: {
                         required: "Please enter a phone number",
                         business_contact_no: "Your phone number must be at least 11 characters long "
@@ -665,10 +626,6 @@
                     delivery_address_1: {
                         required: "Please enter a delivery address 1 123 etc.",
                         delivery_address_1: "Your delivery Name Must Be 6 characters"
-                    },
-                    delivery_address_2: {
-                        required: "Please enter a delivery address 2 123 etc.",
-                        delivery_address_2: "Your delivery Name Must Be 6 characters"
                     },
                     terms: "Please accept our terms"
                 },

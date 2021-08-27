@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class WeekDay extends Model
 {
@@ -16,6 +17,6 @@ class WeekDay extends Model
 
     public function orderByUserID()
     {
-        return $this->WeekDay()->where('user_id','=', 2);
+        return $this->WeekDay()->where('user_id','=', Auth::id());
     }
 }
