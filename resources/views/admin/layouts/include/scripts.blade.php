@@ -9,8 +9,8 @@
 </script>
 
 <script src="{{ asset('js1/app.js') }}"></script>
-<script src="{{ asset('js1/custom.js') }}"></script>
-<script src="{{ asset('js1/sweetalert.min.js') }}"></script>
+
+
 {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script> --}}
 <script src="https://cdn.datatables.net/datetime/1.1.0/js/dataTables.dateTime.min.js"></script>
 <script>
@@ -54,7 +54,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('admin-panel/dist/js/demo.js') }}"></script>
 <!-- SweetAlert2 -->
-{{-- <script src="{{ asset('admin-panel/plugins/sweetalert2/sweetalert2.min.js') }}"></script> --}}
+<script src="{{ asset('admin-panel/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script src="{{ asset('js/main.js') }}"></script>
 <!-- Toggel button !-->
@@ -64,6 +64,5 @@
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <!---- validation ----->
-<script src="{{asset('customer-panel/jquery-validation/jquery.validate.min.js')}}"></script>
-<script src="{{asset('customer-panel/jquery-validation/additional-methods.min.js')}}"></script>
-
+<script src="{{ asset('customer-panel/jquery-validation/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('customer-panel/jquery-validation/additional-methods.min.js') }}"></script>
