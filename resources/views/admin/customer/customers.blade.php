@@ -15,8 +15,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <button class="btn btn-primary pull-right" data-bs-toggle="modal"
-                                data-bs-target="#addCustomer"><i class="fas fa-fw fa-plus"></i>Add Customer</button>
+                            <a href="{{ route('customer.newCustomerCreate') }}" class="btn btn-primary pull-right"><i
+                                    class="fas fa-fw fa-plus"></i>Add Customer</a>
                         </li>
                     </ol>
                 </div>
@@ -60,12 +60,12 @@
             </div>
             <!-- /.row -->
             <!-- Add Permission Modal -->
-            <div class="modal fade" id="addCustomer" data-bs-backdrop="static" data-bs-keyboard="false"
+            {{-- <div class="modal fade" id="addCustomer" data-bs-backdrop="static" data-bs-keyboard="false"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Add New Permission</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Add New Customer</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form action="{{ route('customer.store') }}" method="POST">
@@ -73,8 +73,8 @@
                             <div class="modal-body">
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="name"
-                                        placeholder="Enter Customer Name...">
+                                    <input type="text" class="form-control" name="name" placeholder="Enter Customer Name..."
+                                        value="{{ old('name') }}" required>
                                     @error('name')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -83,7 +83,7 @@
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Email</label>
                                     <input type="text" class="form-control" name="email"
-                                        placeholder="Enter Customer Email...">
+                                        placeholder="Enter Customer Email..." value="{{ old('email') }}" required>
                                     @error('email')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -92,7 +92,7 @@
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Password</label>
                                     <input type="text" class="form-control" name="password"
-                                        placeholder="Enter Customer Password...">
+                                        placeholder="Enter Customer Password..." required>
                                     @error('password')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -101,7 +101,7 @@
                                 <div class="mb-3 error-placeholder">
                                     <label class="form-label">Confirm Password</label>
                                     <input type="text" class="form-control" name="password_confirmation"
-                                        placeholder="Enter Confirm Password...">
+                                        placeholder="Enter Confirm Password..." required>
                                     @error('confirm_password')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -114,7 +114,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- End Customer Model -->
             <!-- Update Customer Modal -->
             <div class="modal fade" id="updateCustomer" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -122,7 +122,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Update Permission</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Update Customer</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form id="formID" method="post">
@@ -180,7 +180,10 @@
                 serverSide: true,
                 ajax: "{{ route('customer.index') }}",
                 columns: [{
-                    data: 'DT_RowIndex', name: 'DT_RowIndex',orderable: false, searchable: false
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
