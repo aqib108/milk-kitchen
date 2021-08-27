@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Auth;
 use DB;
@@ -95,13 +96,13 @@ class UserManagementController extends Controller
         return view('admin.users.addUser',compact('roles'));
     }
 
-    public function createNewUser(Request $request)
+    public function createNewUser(UserRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        // $validated = $request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
+        // ]);
 
         $data = User::create([
             'name' => $request->name,
