@@ -20,7 +20,7 @@
                                     <div class="mb-3 error-placeholder">
                                         <label class="form-label">User Name</label>
                                         <input type="text" class="form-control" name="name"
-                                            placeholder="Enter User Name...">
+                                            placeholder="Enter User Name..." value="{{ old('name') }}">
                                         @error('name')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -29,7 +29,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3 error-placeholder">
                                         <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" name="email"
+                                        <input type="text" class="form-control" name="email" value="{{ old('email') }}"
                                             placeholder="Enter User Email...">
                                         @error('email')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -39,7 +39,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3 error-placeholder">
                                         <label class="form-label">Password</label>
-                                        <input type="password" class="form-control" name="password"
+                                        <input type="password" class="form-control" name="password" value="{{ old('password') }}"
                                             placeholder="Enter User Password...">
                                         @error('password')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -49,7 +49,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3 error-placeholder">
                                         <label class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" name="password_confirmation"
+                                        <input type="password" class="form-control" name="password_confirmation" value="{{ old('password_confirmation') }}" 
                                             placeholder="Enter password again...">
                                         @error('confirm_password')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -59,9 +59,9 @@
                                 <div class="col-md-12">
                                     <div class="mb-3 error-placeholder">
                                         <label class="form-label">Role's</label>
-                                        <select name="role" class="form-control" id="">
+                                        <select name="role" class="form-control" id="" >
                                             @foreach ($roles as $roll)
-                                                <option value="{{ $roll->name }}">{{ $roll->name }}</option>
+                                                <option value="{{ $roll->name }}"  selected="{{ old('roll->name') }}">{{ $roll->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
