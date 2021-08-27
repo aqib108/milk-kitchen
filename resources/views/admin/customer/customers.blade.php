@@ -43,7 +43,7 @@
                                         <th>Sr.No</th>
                                         <th>Customer Name</th>
                                         <th>Customer Email</th>
-                                        <th>Created At</th>
+                                        <th>Created at</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
                                 </thead>

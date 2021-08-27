@@ -40,7 +40,7 @@
                             <table id="Product" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name</th>
                                         <th>Price</th>
                                         <th>Status</th>
