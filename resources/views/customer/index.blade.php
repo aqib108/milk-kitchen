@@ -342,8 +342,11 @@
     </div>
 @endsection 
 @section('scripts')
+    <!---- CUSTOMER FORM UPDATE AND STORE FUNCTION SCRIPT ----> 
     <script>
         $(document).ready(function(){
+            /// Phone Number
+            $('#business_contact_no').mask('0000-0000000');
             //Submit Form Function
             $("#customer-detail-info-form").on("submit", function(event){
                 event.preventDefault();
@@ -356,12 +359,18 @@
                     contentType: false,
                     cache: false,
                     success: function (response) {
-                        console.log(response);
                         if(response.success)
                         {
                             $('#submit').hide();
-                            $btn = '<button type="submit" id="update" class="btn btn-primary">Update</button>';
-                            $('#button').append( $btn);
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.success,
+                            });
+                            location.reload();
                         }
                     },
                 }); 
@@ -402,6 +411,7 @@
             });
         });
     </script>
+    <!---- PRODUCT SCRIPT ---->
     <script>
         $(document).ready(function(){
             // Monday
@@ -428,6 +438,225 @@
             $('#friday').keyup(function() {
                 var dInputFr = this.value;
                 console.log(dInputFr);
+            });
+        });
+    </script>
+    <!---- SUBMIT FORM VALIDATION SCRIPT  ---->
+    <script>
+        // Submit Form
+        $(function () {
+            $.validator.setDefaults({
+                submitHandler: function () {
+                    alert( "Form successful submitted!" );
+                }
+            });
+            $('#customer-detail-info-form').validate({
+                rules: {
+                    business_name: {
+                        required: true,
+                        minlength: 6
+                    },
+                    business_address_1: {
+                        required: true,
+                        minlength: 6
+                    },
+                    business_address_2: {
+                        required: true,
+                        minlength: 6
+                    },
+                    business_country_id: {
+                        required: true,
+                    },
+                    business_region_id: {
+                        required: true,
+                    },
+                    business_city_id: {
+                        required: true,
+                    },
+                    business_email: {
+                        required: true,
+                        email: true,
+                    },
+                    business_contact_no: {
+                        required: true,
+                        minlength: 11
+                    },
+                    delivery_name: {
+                        required: true,
+                        minlength: 6
+                    },
+                    delivery_address_1: {
+                        required: true,
+                        minlength: 6
+                    },
+                    delivery_address_2: {
+                        required: true,
+                        minlength: 6
+                    },
+                    delivery_country_id: {
+                        required: true,
+                    },
+                    delivery_region_id: {
+                        required: true,
+                    },
+                    delivery_city_id: {
+                        required: true,
+                    },
+                    terms: {
+                        required: true
+                    },
+                },
+                messages: {
+                    business_name: {
+                        required: "Please enter a business name",
+                        business_name: "Your Business Name Must Be 6 characters"
+                    },
+                    business_address_1: {
+                        required: "Please enter a business address 1 123 etc.",
+                        business_name: "Your Business Name Must Be 6 characters"
+                    },
+                    business_address_2: {
+                        required: "Please enter a business address 2 123 etc.",
+                        business_name: "Your Business Name Must Be 6 characters"
+                    },
+                    business_contact_no: {
+                        required: "Please enter a phone number",
+                        business_contact_no: "Your phone number must be at least 11 characters long "
+                    },
+                    delivery_name: {
+                        required: "Please enter a delivery name",
+                        delivery_name: "Your delivery Name Must Be 6 characters"
+                    },
+                    delivery_address_1: {
+                        required: "Please enter a delivery address 1 123 etc.",
+                        delivery_address_1: "Your delivery Name Must Be 6 characters"
+                    },
+                    delivery_address_2: {
+                        required: "Please enter a delivery address 2 123 etc.",
+                        delivery_address_2: "Your delivery Name Must Be 6 characters"
+                    },
+                    terms: "Please accept our terms"
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+    <!----- UPDATE FORM VALIDATION SCRIPT ---->
+    <script>
+         $(function () {
+            $.validator.setDefaults({
+                submitHandler: function () {
+                    alert( "Form successful updated!" );
+                }
+            });
+            $('#customer-detail-info-form-update').validate({
+                rules: {
+                    business_name: {
+                        required: true,
+                        minlength: 6
+                    },
+                    business_address_1: {
+                        required: true,
+                        minlength: 6
+                    },
+                    business_address_2: {
+                        required: true,
+                        minlength: 6
+                    },
+                    business_country_id: {
+                        required: true,
+                    },
+                    business_region_id: {
+                        required: true,
+                    },
+                    business_city_id: {
+                        required: true,
+                    },
+                    business_email: {
+                        required: true,
+                        email: true,
+                    },
+                    business_contact_no: {
+                        required: true,
+                        minlength: 11
+                    },
+                    delivery_name: {
+                        required: true,
+                        minlength: 6
+                    },
+                    delivery_address_1: {
+                        required: true,
+                        minlength: 6
+                    },
+                    delivery_address_2: {
+                        required: true,
+                        minlength: 6
+                    },
+                    delivery_country_id: {
+                        required: true,
+                    },
+                    delivery_region_id: {
+                        required: true,
+                    },
+                    delivery_city_id: {
+                        required: true,
+                    },
+                    terms: {
+                        required: true
+                    },
+                },
+                messages: {
+                    business_name: {
+                        required: "Please enter a business name",
+                        business_name: "Your Business Name Must Be 6 characters"
+                    },
+                    business_address_1: {
+                        required: "Please enter a business address 1 123 etc.",
+                        business_name: "Your Business Name Must Be 6 characters"
+                    },
+                    business_address_2: {
+                        required: "Please enter a business address 2 123 etc.",
+                        business_name: "Your Business Name Must Be 6 characters"
+                    },
+                    business_contact_no: {
+                        required: "Please enter a phone number",
+                        business_contact_no: "Your phone number must be at least 11 characters long "
+                    },
+                    delivery_name: {
+                        required: "Please enter a delivery name",
+                        delivery_name: "Your delivery Name Must Be 6 characters"
+                    },
+                    delivery_address_1: {
+                        required: "Please enter a delivery address 1 123 etc.",
+                        delivery_address_1: "Your delivery Name Must Be 6 characters"
+                    },
+                    delivery_address_2: {
+                        required: "Please enter a delivery address 2 123 etc.",
+                        delivery_address_2: "Your delivery Name Must Be 6 characters"
+                    },
+                    terms: "Please accept our terms"
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
             });
         });
     </script>
