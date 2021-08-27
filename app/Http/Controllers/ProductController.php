@@ -135,7 +135,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, $id)
     {
         $product = Product::findOrFail($id);
-        if ($product->isEmpty()) {
+        if ($product == null) {
             return redirect()->back()->with('error', 'No Record Found To Update.');
         }
 
