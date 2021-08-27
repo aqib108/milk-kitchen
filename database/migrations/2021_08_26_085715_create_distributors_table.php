@@ -17,7 +17,7 @@ class CreateDistributorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->unsignedInteger('phone');
+            $table->string('phone');
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('region_id');

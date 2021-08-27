@@ -59,7 +59,7 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Phone <span class="required-star">*</span></label>
-                                        <input type="number"  class="form-control @error('phone') is-invalid @enderror" name="phone"
+                                        <input type="text"  class="form-control @error('phone') is-invalid @enderror" name="phone" maxlength="12"
                                             value="{{old('phone')}}" placeholder="Enter Phone Number" required>
                                         @error('phone')
                                             <span class="invalid-feedback" role="alert">
