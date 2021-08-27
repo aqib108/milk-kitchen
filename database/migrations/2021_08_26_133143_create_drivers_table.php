@@ -17,7 +17,7 @@ class CreateDriversTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->unsignedInteger('phone')->default(null);
+            $table->string('phone');
             $table->unsignedBigInteger('area_id')->default(null);
             $table->unsignedBigInteger('route_id')->default(null);
             $table->boolean('status')->default(true);
