@@ -9,6 +9,7 @@
 </script>
 
 <script src="{{ asset('js1/app.js') }}"></script>
+<script src="{{ asset('js1/custom.js') }}"></script>
 
 
 {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script> --}}
