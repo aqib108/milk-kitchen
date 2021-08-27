@@ -1,5 +1,5 @@
 @extends('admin.layouts.admin')
-@section('title','List Of Users')
+@section('title', 'List Of Users')
 @section('styles')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 @endsection
@@ -10,13 +10,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Roles</h1>
+                    <h1>User's</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <a href="{{ route('user.create') }}" class="btn btn-primary custom-button pull-right"><i
-                                class="fas fa-fw fa-plus"></i>Add User</a>
+                                    class="fas fa-fw fa-plus"></i>Add User</a>
                         </li>
                     </ol>
                 </div>
@@ -49,7 +49,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -60,7 +60,7 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-           
+
         </div>
         <!-- /.container-fluid -->
     </section>
@@ -69,44 +69,63 @@
 @section('scripts')
     <script>
         var table;
-        $(document).ready( function () {
-            table  = $('#users').DataTable({
+        $(document).ready(function() {
+            table = $('#users').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                ajax: "{{route('user.index')}}",
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
-                    {data: 'role', name: 'role'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ajax: "{{ route('user.index') }}",
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'role',
+                        name: 'role'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
-                drawCallback: function (response) {
+                drawCallback: function(response) {
 
                     $('#countTotal').empty();
                     $('#countTotal').append(response['json'].recordsTotal);
                 }
             });
         });
-        function changeStatus(id,status) {
+
+        function changeStatus(id, status) {
             var result = window.confirm('Are you sure you want to change status ?');
             if (result == false) {
                 e.preventDefault();
-            }else{
+            } else {
 
                 $.ajax({
                     method: "POST",
-                    url: "{{ route('user.status')}}",
+                    url: "{{ route('user.status') }}",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         'id': id,
                         'status': status
                     },
-                    success: function (response) {
-                        if(response.status)
-                        {
+                    success: function(response) {
+                        if (response.status) {
                             Swal.fire({
                                 position: 'center',
                                 showConfirmButton: false,

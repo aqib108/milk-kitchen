@@ -26,8 +26,9 @@ class UserManagementController extends Controller
     public function users(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::where('id','!=',Auth::id())->get();
-            // dd($data);
+            $data = User::where('id','!=',Auth::id())->whereHas('roles', function ($query) {
+                return $query->where('name','!=', 'Customer');
+            })->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('role', function(User $data) {
