@@ -1,119 +1,94 @@
 @extends('admin.layouts.admin')
 @section('page_title')
- Add User
+    Add New User
 @endsection
-@section('content')
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>User's</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('user.index')}}" class="btn btn-dark">Back</a>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <!-- left column -->
-                <div class="col-md-12">
-                    <!-- jquery validation -->
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Add User</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form action="{{route('user.store')}}" id="registrationForm" method="POST">
-                            {{ csrf_field() }}
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <label>Name <span class="required-star">*</span></label>
-                                        <input type="text" class="form-control  @error('name') is-invalid @enderror" id="firstName" name="name"
-                                            placeholder="Enter Name"  value="{{old('name')}}">
-                                        @error('name')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+@section('content')
+    <div class="container-fluid">
+        <h1 class="h3 mb-3">Add User</h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Add New User</h5>
+                    </div>
+                    <div class="card-body">
+                        <form  id="registrationForm" >
+                            @csrf
+                            <div class="row">
+                                <div class="form-group  col-md-12">
+                                    <div class="mb-3 error-placeholder">
+                                        <label class="form-label">User Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="name"
+                                            placeholder="Enter User Name...">
+                                            <div id="first-name-err" class="alert alert-danger"></div>
                                     </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <label>Email <span class="required-star">*</span></label>
-                                        <input type="email"  class="form-control @error('email') is-invalid @enderror" name="email" id="emailAddress" 
-                                        placeholder="Enter Email" value="{{old('email')}}">
-                                        @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="mb-3 error-placeholder">
+                                        <label class="form-label">Email</label>
+                                        <input type="text"  class="form-control" name="email" id="emailAddress" 
+                                            placeholder="Enter User Email...">
+                                            <div id="email-err" class="alert alert-danger"></div>
                                     </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <label>Role's <span class="required-star">*</span></label>
-                                        <select name="role" class="form-control @error('role') is-invalid @enderror" id="role">
-                                            <option selected disabled>Select Role</option>
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                </div>
+                                <div class="form-group  col-md-12">
+                                    <div class="mb-3 error-placeholder">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password"
+                                            placeholder="Enter User Password...">
+                                            <div id="password-err" class="alert alert-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="mb-3 error-placeholder">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" name="password_confirmation" id="confirmPassword" 
+                                            placeholder="Enter password again...">
+                                            <div id="confirm-password-err" class="alert alert-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3 error-placeholder">
+                                        <label class="form-label">Role's</label>
+                                        <select name="role" class="form-control" id="" >
+                                            @foreach ($roles as $roll)
+                                                <option value="{{ $roll->name }}"  selected="{{ old('roll->name') }}">{{ $roll->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('role')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label>Password <span class="required-star">*</span></label>
-                                        <input type="password" id="password" class="form-control" name="password"
-                                            placeholder="Enter Password">
-                                        @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
+                                </div>
+                                {{-- <div class="mb-3 error-placeholder">
+                                    <label class="form-label">Select2 Multiple</label>
+                                    <div class="d-flex">
+                                        <select class="form-control" name="validation-select2-multi" multiple
+                                            style="width: 100%">
+                                            <option value="pitons">Pitons</option>
+                                            <option value="cams">Cams</option>
+                                            <option value="nuts">Nuts</option>
+                                            <option value="bolts">Bolts</option>
+                                            <option value="stoppers">Stoppers</option>
+                                            <option value="sling">Sling</option>
+                                        </select>
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label>Confirm Password <span class="required-star">*</span></label>
-                                        <input id="password_confirm" type="password" class="form-control"
-                                            placeholder="Confirm Your Password" name="password_confirmation">
-                                        @error('password_confirmation')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
+                                </div> --}}
+                                <div class="col-md-12 ">
+                                    <div class="float-end">
+                                        {{-- <button class="btn btn-primary">Back</button> --}}
+                                        <button type="submit" class="btn btn-success">Save</button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
                         </form>
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!--/.col (left) -->
-                <!-- right column -->
-                <div class="col-md-6">
-
-                </div>
-                <!--/.col (right) -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        </div>
+    </div>
 @endsection
+
 @section('scripts')
+
     <script>
        
        document.getElementById("registrationForm").onsubmit=function(e){
@@ -138,8 +113,7 @@
                     contentType: false,
                     cache: false,
                     success: function (response) {
-                        console.log(response);
-                        if(response.success)
+                        if(response.status == "success")
                         {
                             $('#submit').hide();
                             Swal.fire({
@@ -148,14 +122,14 @@
                                 showConfirmButton: false,
                                 timer: 2000,
                                 icon: 'success',
-                                title: response.success,
+                                title: response.message,
                             });
-                            location.reload();
+                            setTimeout(function () {
+                                $(".alert-success").fadeOut("slow");
+                                window.location.href="{{ route('user.index') }}";
+                            }, 2000);
                         }
-                        else
-                        {
-                            alert(response.error);
-                        }
+                     
                     },
                 }); 
             
