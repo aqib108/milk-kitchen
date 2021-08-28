@@ -59,111 +59,6 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-            <!-- Add Permission Modal -->
-            {{-- <div class="modal fade" id="addCustomer" data-bs-backdrop="static" data-bs-keyboard="false"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Add New Customer</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form action="{{ route('customer.store') }}" method="POST">
-                            @csrf
-                            <div class="modal-body">
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter Customer Name..."
-                                        value="{{ old('name') }}" required>
-                                    @error('name')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Email</label>
-                                    <input type="text" class="form-control" name="email"
-                                        placeholder="Enter Customer Email..." value="{{ old('email') }}" required>
-                                    @error('email')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Password</label>
-                                    <input type="text" class="form-control" name="password"
-                                        placeholder="Enter Customer Password..." required>
-                                    @error('password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Confirm Password</label>
-                                    <input type="text" class="form-control" name="password_confirmation"
-                                        placeholder="Enter Confirm Password..." required>
-                                    @error('confirm_password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">Save Changes</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div> --}}
-            <!-- End Customer Model -->
-            <!-- Update Customer Modal -->
-            <div class="modal fade" id="updateCustomer" data-bs-backdrop="static" data-bs-keyboard="false"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Update Customer</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form id="formID" method="post">
-                            @csrf
-                            <div class="modal-body">
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control Cname" name="name"
-                                        placeholder="Enter Customer Name...">
-                                    @error('name')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Email</label>
-                                    <input type="text" class="form-control Cemail" name="email"
-                                        placeholder="Enter Customer Email...">
-                                    @error('email')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                {{-- <div class="mb-3 error-placeholder">
-                                    <label class="form-label">Password</label>
-                                    <input type="text" class="form-control Cpassword" name="password"
-                                        placeholder="Enter Customer Password...">
-                                    @error('password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div> --}}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">Update</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- End Update Customer Model -->
         </div>
         <!-- /.container-fluid -->
     </section>
@@ -216,35 +111,6 @@
     <script src="{{ asset('js1/sweetalert.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $("body").on("click", ".editCustomer", function() {
-                let id = $(this).attr("data-id");
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-                    }
-                });
-                $.ajax({
-                    type: "get",
-                    url: "customer/edit/" + id,
-                    dataType: "json",
-                    beforeSend: function() {
-                        $(".loader-wrapper").fadeIn("slow");
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        $("#updateCustomer .Cname").val(response.name);
-                        $("#updateCustomer .Cemail").val(response.email);
-                        // $("#updateCustomer .Cpassword").val(response.password);
-                        $("#formID").attr("action", "customer/update/" + id);
-                        $("#updateCustomer").modal("show");
-                    },
-                    error: function(response) {},
-                    complete: function() {
-                        $(".loader-wrapper").fadeOut("slow");
-                    }
-                });
-            });
-
             // Delete Records
             $("body").on("click", ".del_btn", function() {
                 let id = $(this).attr("data-id");
@@ -296,7 +162,4 @@
             });
         })
     </script>
-
 @endsection
-{{-- <script src="{{ asset('js1/sweetalert.min.js') }}"></script>
-<script src="{{ asset('js1/custom.js') }}"></script> --}}
