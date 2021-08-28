@@ -37,8 +37,7 @@ $("body").on("click", ".del_btn", function() {
         type: "warning",
         showDenyButton: true,
         showCancelButton: true,
-        confirmButtonText: `Yes, Deleted`,
-        denyButtonText: `Don't Delete`
+        confirmButtonText: `Yes, Deleted`
     }).then(result => {
         if (result.value) {
             $.ajaxSetup({
@@ -85,8 +84,6 @@ $("body").on("click", ".del_btn", function() {
                     );
                 }
             });
-        } else if (result.isDenied) {
-            Swal.fire("Not Deleted", "", "info");
         }
     });
 });
