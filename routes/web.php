@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'AdminController@index')->name('dashboard');
         Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
         Route::group(['prefix' => 'users'], function (){
+            Route::post('/checkEmail','UserManagementController@checkEmail')->name('user.checkEmail');
             Route::get('/','UserManagementController@users')->name('user.index');
             Route::get('/create','UserManagementController@addNewUser')->name('user.create');
             Route::post('/store','UserManagementController@createNewUser')->name('user.store');;
@@ -62,6 +63,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
         });
         Route::group(['prefix' => 'distributor'], function (){
+            Route::post('/checkEmail','DistributorController@checkEmail')->name('distributor.checkEmail');
             Route::get('/','DistributorController@index')->name('distributor.index');
             Route::get('/create','DistributorController@create')->name('distributor.create');
             Route::post('/store','DistributorController@store')->name('distributor.store');
@@ -72,6 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/delete','DistributorController@destroy')->name('distributor.destroy');
         });
         Route::group(['prefix' => 'driver'], function (){
+            Route::post('/checkEmail','DriverController@checkEmail')->name('driver.checkEmail');
             Route::get('/','DriverController@index')->name('driver.index');
             Route::get('/create','DriverController@create')->name('driver.create');
             Route::post('/store','DriverController@store')->name('driver.store');

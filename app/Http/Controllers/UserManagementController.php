@@ -10,6 +10,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Auth;
 use DB;
+use Validator;
 use Yajra\DataTables\DataTables;
 
 class UserManagementController extends Controller
@@ -95,6 +96,30 @@ class UserManagementController extends Controller
 
         return redirect()->route('user.index')->with('success','Your Record Sucessfully Updated!');
     }
+    public function checkEmail(Request $request)
+    {
+        $input = $request->only(['email']);
+
+        $request_data = [
+            'email' => 'required|email|unique:users,email|ends_with:.com',
+        ];
+
+        $validator = Validator::make($input, $request_data);
+
+        // json is null
+        if ($validator->fails()) {
+            $errors = json_decode(json_encode($validator->errors()), 1);
+            return response()->json([
+                'success' => false,
+                'message' => array_reduce($errors, 'array_merge', array()),
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'message' => 'The email is available'
+            ]);
+        }
+    }
 
     public function addNewUser()
     {
@@ -102,7 +127,7 @@ class UserManagementController extends Controller
         return view('admin.users.addUser',compact('roles'));
     }
 
-    public function createNewUser(UserRequest $request)
+    public function createNewUser(Request $request)
     {
         $data = User::create([
             'name' => $request->name,
