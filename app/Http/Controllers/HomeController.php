@@ -51,8 +51,8 @@ class HomeController extends Controller
         if($validate){
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => Auth::id(),
-                'day_id'     => $request->day_id],[
-                'product_id' => $request->product_id,
+                'day_id'     => $request->day_id,
+                'product_id' => $request->product_id],[
                 'quantity' => $request->qnty
             ]);
             if($data->wasRecentlyCreated){
