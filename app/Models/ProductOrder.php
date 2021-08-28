@@ -15,4 +15,19 @@ class ProductOrder extends Model
         'day_id',
         'quantity'
     ];
+
+    public function WeekDay()
+    {
+        return $this->hasMany(ProductOrder::class,'day_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

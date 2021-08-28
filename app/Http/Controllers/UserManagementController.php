@@ -48,7 +48,7 @@ class UserManagementController extends Controller
                 })
                 ->addColumn('action', function(User $data){
                     if($data->status == 1){
-                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger">Suspend</a>';
+                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger ">Suspend</a>';
                     }
                     else{
                         $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
@@ -59,17 +59,18 @@ class UserManagementController extends Controller
                 ->rawColumns(['action','status','role'])
                 ->make(true);
         }
-
-        // $users = 
-        // $roles = \Auth::user()->getRoleNames();
         return view('admin.users.users');
     }
 
     public function editUser($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+        if ($user == null) {
+            return redirect()->back()->with('error', 'No Record Found To Edit.');
+        }
+        $roles = Role::where('name','!=','Customer')->get();
         $role = $user->roles->pluck('name');
-        $roles = Role::all();
+
         return view('admin.users.editUser',compact('user','role','roles'));
     }
 
@@ -85,10 +86,14 @@ class UserManagementController extends Controller
 
     public function updateUser(Request $request,int $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+        if ($user == null) {
+            return redirect()->back()->with('error', 'No Record Found To Update.');
+        }
         $role = $request->role;
         $user->syncRoles($role);
-        return redirect()->route('user.index');
+
+        return redirect()->route('user.index')->with('success','Your Record Sucessfully Updated!');
     }
 
     public function addNewUser()
@@ -106,7 +111,7 @@ class UserManagementController extends Controller
         ]);
 
         $data->assignRole($request->role);
-        return redirect()->route('user.index')->with('success','New User has been created!');
+        return redirect()->route('user.index')->with('success','Your Record Has Been Created Successfully!');
     }
 
     public function deleteUser($id)
