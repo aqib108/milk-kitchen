@@ -272,13 +272,17 @@
                                 @foreach ($weekDays as $item)
                                     @php
                                         $qnty = 0;
-                                        if($item->orderByUserID->isNotEmpty() && $item->orderByUserID[0]->product_id == $product->id){
-                                            $qnty = $item->orderByUserID[0]->quantity;
+                                        if ($item->orderByUserID->isNotEmpty()){
+                                            foreach ($item->orderByUserID as $order){
+                                                if($order->product_id == $product->id){
+                                                    $qnty = $order->quantity;
+                                                }
+                                            }
                                         }
                                     @endphp
                                     <td>
                                         <input id="{{ $item->name }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                        text-align: center;" value="{{ $qnty }}">
+                                        text-align: center;" value="{{ $qnty }}" minlength="0">
                                     </td>
                                 @endforeach
                             </tr> 
@@ -403,37 +407,49 @@
                 let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
                 let day_id = $(this).attr('data-id');
                 let qnty = $(this).val();
-                $.ajax({
-                    type: "POST",
-                    data: {
-                        'day_id':day_id,
-                        'product_id':product_id,
-                        'qnty':qnty
-                    },
-                    url: 'home/product-orders',
-                    success: function (response) {
-                        if(response.status)
-                        {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                        }else{
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'error',
-                                title: response.success,
-                            });
-                        }
-                    },
-                }); 
+                if(qnty < 0){
+                    Swal.fire({
+                        position: 'top-end',
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        icon: 'error',
+                        title: 'Quantity should not be less than 0',
+                    });
+                    $(this).val(0);
+                }else{
+                    $.ajax({
+                        type: "POST",
+                        data: {
+                            'day_id':day_id,
+                            'product_id':product_id,
+                            'qnty':qnty
+                        },
+                        url: 'home/product-orders',
+                        success: function (response) {
+                            if(response.status)
+                            {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'success',
+                                    title: response.message,
+                                });
+                            }else{
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'error',
+                                    title: response.success,
+                                });
+                            }
+                        },
+                    }); 
+                }
             })
         });
     </script>
