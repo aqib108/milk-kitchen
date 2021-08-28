@@ -4,10 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Driver;
+use Validator;
 use App\Http\Requests\DriverRequest;
 use Yajra\DataTables\DataTables;
 class DriverController extends Controller
 {
+
+
+    public function checkEmail(Request $request)
+    {
+        $input = $request->only(['email']);
+
+        $request_data = [
+            'email' => 'required|email|unique:drivers,email|ends_with:.com',
+        ];
+
+        $validator = Validator::make($input, $request_data);
+
+        // json is null
+        if ($validator->fails()) {
+            $errors = json_decode(json_encode($validator->errors()), 1);
+            return response()->json([
+                'success' => false,
+                'message' => array_reduce($errors, 'array_merge', array()),
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'message' => 'The email is available'
+            ]);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -64,9 +92,11 @@ class DriverController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DriverRequest $request)
+    public function store(Request $request)
     {
+        return response()->json(['kk']);
         $product = Driver::create($request->all());
+       
         return redirect()->route('driver.index')->with('success', 'Record added successfully.');  
     }
 
