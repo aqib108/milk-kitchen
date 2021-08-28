@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 @section('page_title')
-    Add Customer
+    Edit Customer
 @endsection
 @section('content')
     <!-- Content Header (Page header) -->
@@ -29,11 +29,11 @@
                     <!-- jquery validation -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Add Customer</h3>
+                            <h3 class="card-title">Edit Customer</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('customer.store') }}" method="POST">
+                        <form action="{{ route('customer.update', $customer->id) }}" method="POST">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">
@@ -41,7 +41,7 @@
                                         <label>Name <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50"
                                             class="form-control @error('name') is-invalid @enderror" name="name"
-                                            value="{{ old('name') }}" placeholder="Enter Product Name" required>
+                                            value="{{ $customer->name }}" placeholder="Enter Product Name" required>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -52,40 +52,38 @@
                                         <label>Email <span class="required-star">*</span></label>
                                         <input type="email" maxlength="50"
                                             class="form-control @error('email') is-invalid @enderror" name="email"
-                                            value="{{ old('email') }}" placeholder="Enter Email " required>
+                                            value="{{ $customer->email }}" placeholder="Enter Email " required>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label>Password <span class="required-star">*</span></label>
-                                        <input type="password" maxlength="50"
-                                            class="form-control @error('password') is-invalid @enderror" name="password"
-                                            placeholder="Enter Password " required>
-                                        @error('password')
+                                    {{-- <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Old Password</label>
+                                        <input type="password" maxlength="50" class="form-control" name="old_password"
+                                            placeholder="Enter Old Password">
+                                        @error('old_password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label>Confirm Password <span class="required-star">*</span></label>
-                                        <input type="password" maxlength="50"
-                                            class="form-control @error('confirm_password') is-invalid @enderror"
-                                            name="password_confirmation" placeholder="Enter Again Password... " required>
-                                        @error('confirm_password')
+                                        <label>New Password</label>
+                                        <input type="password" maxlength="50" class="form-control" name="new_password"
+                                            placeholder="Enter New Password">
+                                        @error('new_password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>
