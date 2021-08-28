@@ -94,79 +94,80 @@
 
         // Change Status Driver
         function changeStatus(id,status) {
-            var result = window.confirm('Are you sure you want to change status ?');
-            if (result == false) {
-                e.preventDefault();
-            }else{
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('driver.status') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id,
-                        'status': status
-                    },
-                    success: function (response) {
-                        if(response.status)
-                        {
-                            Swal.fire({
-                                position: 'center',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
+            var result = 
+            Swal.fire({
+                title: "Are you sure change this Status?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change it!"
+            }).then(result => {
+                if (result.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ route('driver.status') }}",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id': id,
+                            'status': status
+                        },
+                        beforeSend: function() {
+                            swal.fire({
+                                title: "Please Wait..!",
+                                text: "Is working..",
                             });
-                            $('#drivers').DataTable().ajax.reload();
+                        },
+                        success: function (response) {
+                            if(response.status)
+                            {
+                                Swal.fire("Successfully Change Status!", "success");
+                                $('#drivers').DataTable().ajax.reload();
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }    
+            });
         };
-         // Destory Product
-         function deleteDriver(id,event) {
-            var result = window.confirm('Are you sure you want to delete this Driver?  This action cannot be undone. Proceed?');
-            if (result == false) {
-                e.preventDefault();
-            }else{
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('driver.destroy') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id,
-                    },
-                    success: function (response) {
-                        console.log(response)
-                        if(response.status == undefined)
-                        {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'error',
-                                title: response.message,
+        // Destory Product
+        function deleteDriver(id,event) {
+            var result = 
+            Swal.fire({
+                title: "Are you sure delete this Driver?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change it!"
+            }).then(result => {
+                if (result.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ route('driver.destroy') }}",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id': id,
+                        },
+                        beforeSend: function() {
+                            swal.fire({
+                                title: "Please Wait..!",
+                                text: "Is working..",
                             });
-
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            if(response.status)
+                            {
+                                Swal.fire("Successfully Deleted!", "success");
+                                $('#drivers').DataTable().ajax.reload();
+                               
+                            }
                         }
-                        else
-                        {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                            $('#drivers').DataTable().ajax.reload();
-                        }
-
-                    }
-                });
-            }
+                    });  
+                } 
+            });
         };
        
     </script>
