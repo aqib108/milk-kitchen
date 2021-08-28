@@ -60,14 +60,7 @@ $("body").on("click", ".del_btn", function() {
                     });
                 },
                 success: function(response) {
-                    swal.fire({
-                        title: "Deleted!",
-                        text: response.message,
-                        type: "success",
-                        showCancelButton: false,
-                        confirmButtonText: "OK",
-                        closeOnConfirm: false
-                    });
+                    Swal.fire("Deleted!", response.message, "success");
                 },
                 complete: function() {
                     swal.hideLoading();
