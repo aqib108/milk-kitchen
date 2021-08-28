@@ -116,5 +116,190 @@
 @section('scripts')
     <script>
        
+       document.getElementById("registrationForm").onsubmit=function(e){
+            firstNameValidation();
+            // lastNameValidation();
+            emailAddressValidation();
+            // mobileNumberValidation();
+            passwordValidation();
+            confirmPasswordValidation();
+
+            if(firstNameValidation()==true && 
+            emailAddressValidation() == true && 
+            passwordValidation()==true && 
+            confirmPasswordValidation()==true){    
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    method: "POST",
+                    data: formData,
+                    url: '{{route('user.store')}}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        console.log(response);
+                        if(response.success)
+                        {
+                            $('#submit').hide();
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.success,
+                            });
+                            location.reload();
+                        }
+                        else
+                        {
+                            alert(response.error);
+                        }
+                    },
+                }); 
+            
+            }
+}    
+       //  Name Validation
+        var firstName= document.getElementById("firstName");
+
+        var firstNameValidation=function(){
+
+        firstNameValue=firstName.value.trim(); 
+        validFirstName=/^[A-Za-z]+$/;
+        firstNameErr=document.getElementById('first-name-err');
+
+        if(firstNameValue=="")
+        {
+            firstNameErr.innerHTML="name is required";
+
+        }else if(!validFirstName.test(firstNameValue)){
+            firstNameErr.innerHTML="name must be string";
+        }else{
+            firstNameErr.innerHTML="";
+            return true;
+            
+        }
+        }
+
+        firstName.oninput=function(){
+        
+        firstNameValidation();
+        } 
+
+        // Email Address Validation
+ var emailAddress= document.getElementById("emailAddress");
+ var emailAddressValidation= function(){
+
+  emailAddressValue=emailAddress.value.trim(); 
+   validEmailAddress=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   emailAddressErr=document.getElementById('email-err');
+
+   if(emailAddressValue=="")
+   {
+    emailAddressErr.innerHTML="Email Address is required";
+
+   }else if(!validEmailAddress.test(emailAddressValue)){
+     emailAddressErr.innerHTML="Email Address must be in valid formate with @ symbol";
+   }else{
+     emailAddressErr.innerHTML="";
+     return true;
+   }
+
+ }
+
+emailAddress.oninput=function(){
+    var startTimer;
+    let email = $(this).val();
+    startTimer = setTimeout(checkEmail, 500, email);
+   emailAddressValidation();
+}
+
+
+        function checkEmail(email) {
+            emailAddressErr=document.getElementById('email-err');
+            $('#email-error').remove();
+            if (email.length > 1) {
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('user.checkEmail') }}",
+                    data: {
+                        email: email,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(data) {
+                        if (data.success == false) {
+                            emailAddressErr.innerHTML=data.message[0];
+                            // $('#email').after('<div id="email-err" class="text-danger" <strong>'+data.message[0]+'<strong></div>');
+                        } else {
+                            emailAddressErr.innerHTML=data.message;
+                            // $('#email').after('<div id="email-err" class="text-success" <strong>'+data.message+'<strong></div>');
+                        }
+
+                    }
+                });
+            } else {
+                $('#email').after('<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
+            }
+        }
+
+
+
+// Password Validation
+var password= document.getElementById("password");;
+
+var passwordValidation = function(){
+
+  passwordValue=password.value.trim(); 
+   validPassword=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+   
+   passwordErr=document.getElementById('password-err');
+
+   if(passwordValue=="")
+   {
+    passwordErr.innerHTML="Password is required";
+   }else if(!validPassword.test(passwordValue)){
+     passwordErr.innerHTML="Password must have at least one Uppercase, lowercase, digit, special characters & 8 characters";
+   }
+   else{
+     passwordErr.innerHTML="";
+     return true;
+   }
+}
+
+password.oninput=function(){
+
+   passwordValidation();
+
+ confirmPasswordValidation();
+   
+}
+
+// Confirm Password Validation
+var confirmPassword= document.getElementById("confirmPassword");;
+
+var confirmPasswordValidation=function(){
+   confirmPasswordValue=confirmPassword.value.trim(); 
+   
+   confirmPasswordErr=document.getElementById('confirm-password-err');
+   if(confirmPasswordValue==""){
+       confirmPasswordErr.innerHTML="Confirm Password is required";
+   }
+
+  else if(confirmPasswordValue!=password.value){
+     confirmPasswordErr.innerHTML="Confirm Password does not match";
+   }
+   else{
+     confirmPasswordErr.innerHTML="";
+     return true;
+   }
+}
+
+confirmPassword.oninput=function(){
+
+ confirmPasswordValidation();
+   
+}
     </script>
 @endsection
