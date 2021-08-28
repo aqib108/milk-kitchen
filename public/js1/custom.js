@@ -33,11 +33,12 @@ $("body").on("click", ".del_btn", function() {
     let tableName = $(this).attr("data-tab");
     Swal.fire({
         title: "Are you sure?",
-        text: "Do you want to delete it?",
-        type: "warning",
-        showDenyButton: true,
+        text: "You won't be able to revert this!",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: `Yes, Deleted`
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
     }).then(result => {
         if (result.value) {
             $.ajaxSetup({
@@ -64,7 +65,6 @@ $("body").on("click", ".del_btn", function() {
                         text: response.message,
                         type: "success",
                         showCancelButton: false,
-                        confirmButtonClass: "btn-primary",
                         confirmButtonText: "OK",
                         closeOnConfirm: false
                     });
