@@ -115,26 +115,11 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('role.index') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'permissions',
-                        name: 'permissions'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex',orderable: false,searchable: false},
+                    {data: 'name',name: 'name'},
+                    {data: 'permissions',name: 'permissions'},
+                    {data: 'action',name: 'action',orderable: false,searchable: false},
                 ],
                 drawCallback: function(response) {
 

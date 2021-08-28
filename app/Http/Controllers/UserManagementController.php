@@ -48,7 +48,7 @@ class UserManagementController extends Controller
                 })
                 ->addColumn('action', function(User $data){
                     if($data->status == 1){
-                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger">Suspend</a>';
+                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger ">Suspend</a>';
                     }
                     else{
                         $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
@@ -59,17 +59,18 @@ class UserManagementController extends Controller
                 ->rawColumns(['action','status','role'])
                 ->make(true);
         }
-
-        // $users = 
-        // $roles = \Auth::user()->getRoleNames();
         return view('admin.users.users');
     }
 
     public function editUser($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+        if ($user == null) {
+            return redirect()->back()->with('error', 'No Record Found To Edit.');
+        }
+        $roles = Role::where('name','!=','Customer')->get();
         $role = $user->roles->pluck('name');
-        $roles = Role::all();
+
         return view('admin.users.editUser',compact('user','role','roles'));
     }
 
@@ -85,10 +86,14 @@ class UserManagementController extends Controller
 
     public function updateUser(Request $request,int $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+        if ($user == null) {
+            return redirect()->back()->with('error', 'No Record Found To Update.');
+        }
         $role = $request->role;
         $user->syncRoles($role);
-        return redirect()->route('user.index');
+
+        return redirect()->route('user.index')->with('success','Your Record Sucessfully Updated!');
     }
 
     public function addNewUser()
@@ -106,14 +111,14 @@ class UserManagementController extends Controller
         ]);
 
         $data->assignRole($request->role);
-        return redirect()->route('user.index')->with('success','New User has been created!');
+        return redirect()->route('user.index')->with('success','Your Record Has Been Created Successfully!');
     }
 
-    public function deleteUser($id)
-    {
-        User::destroy($id);
-        return back()->with('success', 'User Successfully deleted.');
-    }
+    // public function deleteUser($id)
+    // {
+    //     User::destroy($id);
+    //     return back()->with('success', 'User Successfully deleted.');
+    // }
 
     public function roles(Request $request)
     {
@@ -147,7 +152,10 @@ class UserManagementController extends Controller
 
     public function editRole($id)
     {
-        $role = Role::find($id);
+        $role = Role::findOrFail($id);
+        if ($role == null) {
+            return redirect()->back()->with('error', 'No Record Found To Edit.');
+        }
         $permission = Permission::get();
         $rolePermissions=$role->permissions->pluck('id')->all();
         return view('admin.users.editRoles',compact('role','permission','rolePermissions'));
@@ -188,7 +196,6 @@ class UserManagementController extends Controller
 
     public function permissions(Request $request)
     {
-       
         if ($request->ajax()) {
             $data = Permission::all();
             return Datatables::of($data)
@@ -218,13 +225,17 @@ class UserManagementController extends Controller
 
     public function editPermission($id)
     {
-        $per = Permission::find($id);
-        $response = array(
+        $per = Permission::findOrFail($id);
+        if ($per == null) {
+            return redirect()->back()->with('error', 'No Record Found To Edit.');
+        }
+
+        $data = array(
             'id' => $per->id,
             'permission' => $per->name,
         );
 
-        return response()->json($response);
+        return response()->json($data);
     }
 
     public function updatePermission(Request $request, $id)
