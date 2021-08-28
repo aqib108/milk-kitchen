@@ -15,7 +15,11 @@ class CustomerController extends Controller
     {
         $this->middleware('auth');
     }
+    ///////////////////////////////
+    //***** Customer's *****//
+   //////////////////////////////
 
+   //Display all customers
     public function customers(Request $request)
     {
         if ($request->ajax()) {
@@ -26,8 +30,8 @@ class CustomerController extends Controller
               })
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
-                    $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
-                    // $btn2 = '<a href="javascript::void(0);" class="editCustomer btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
+                    $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" 
+                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="customer/edit/'.$data->id.'" class="btn btn-sm btn-primary">Edit</a>';
                     return $btn.' '.$btn2;
                     
@@ -38,11 +42,13 @@ class CustomerController extends Controller
         return view('admin.customer.customers');
     }
 
+    //Create Customer page
     public function newCustomerCreate()
     {
         return view('admin.customer.createCustomer');
     }
 
+    //Create New Customer
     public function createCustomer(Request $request)
     {
         $validated = $request->validate([
@@ -61,6 +67,7 @@ class CustomerController extends Controller
         return redirect()->route('customer.index')->with('success','New Customer Created!');
     }
 
+    //Delete Customer
     public function deleteCustomer($id)
     {
         $customer = User::findOrFail($id);
@@ -72,12 +79,14 @@ class CustomerController extends Controller
         ));
     }
 
+    //Edit Customer page
     public function editCustomer($id)
     {
         $customer = User::find($id);
         return view('admin.customer.editCustomer',compact('customer'));
     }
 
+    //Update Customer
     public function updateCustomer(Request $request,$id)
     {
         $this->validate($request, [

@@ -40,7 +40,6 @@ $("body").on("click", ".del_btn", function() {
         confirmButtonText: `Yes, Deleted`,
         denyButtonText: `Don't Delete`
     }).then(result => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.value) {
             $.ajaxSetup({
                 headers: {
