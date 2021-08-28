@@ -33,7 +33,7 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{route('distributor.store')}}" method="POST" enctype="multipart/form-data">
+                        <form id="registrationForm">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">
@@ -49,23 +49,15 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Email <span class="required-star">*</span></label>
-                                        <input type="text"  class="form-control @error('email') is-invalid @enderror" name="email"
+                                        <input type="text"  class="form-control @error('email') is-invalid @enderror" name="email" id="emailAddress"
                                             value="{{old('email')}}" placeholder="Enter Email Number" required>
-                                        @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            <div class="alert alert-danger" id="email-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Phone <span class="required-star">*</span></label>
-                                        <input type="text"  class="form-control @error('phone') is-invalid @enderror" name="phone"  maxlength="12"
+                                        <input type="text"  class="form-control @error('phone') is-invalid @enderror" name="phone" id="mobileNumber"  maxlength="12"
                                             value="{{old('phone')}}" placeholder="Enter Phone Number" required>
-                                        @error('phone')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            <div class="alert alert-danger" id="mobile-number-err"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label class="label-wrapper-custm" for="country_id">Suburb <span class="required-star">*</span></label>
@@ -127,29 +119,138 @@
 @endsection
 @section('scripts')
     <script>
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+             document.getElementById("registrationForm").onsubmit=function(e){
+            firstNameValidation();
+            // lastNameValidation();
+            emailAddressValidation();
+            mobileNumberValidation();
 
-                reader.onload = function (e) {
-                    $('#image').attr('src', e.target.result);
-                    $('#image').removeClass("hidden");
-                }
-                reader.readAsDataURL(input.files[0]);
+            if(firstNameValidation()==true && 
+            emailAddressValidation() == true && mobileNumberValidation() == true ){
+            
+            
+                event.preventDefault();
+                var formData = new FormData(this);
+                alert(formData);
+                $.ajax({
+                    method: "POST",
+                    data: formData,
+                    url: '{{route('distributor.store')}}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                       
+                        if(response.success)
+                        {
+                            $('#submit').hide();
+                            Swal.fire({
+                                position: 'top-end',
+                                toast: true,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                icon: 'success',
+                                title: response.success,
+                            });
+                            location.reload();
+                        }
+                        else
+                        {
+                            alert(response.error);
+                        }
+                    },
+                }); 
+            return false;
+            }
+}   
+
+      //  Name Validation
+      var firstName = document.getElementById("name");
+
+var firstNameValidation = function() {
+
+    firstNameValue = firstName.value.trim();
+    validFirstName = /^[A-Za-z]+$/;
+    firstNameErr = document.getElementById('first-name-err');
+
+    if (firstNameValue == "") {
+        firstNameErr.innerHTML = "name is required";
+
+    } 
+     else {
+        firstNameErr.innerHTML = "";
+        return true;
+
+    }
+}
+
+firstName.oninput = function() {
+
+    firstNameValidation();
+}
+
+ // Mobile Number Validation
+ var mobileNumber= document.getElementById("mobileNumber");
+
+var mobileNumberValidation = function(){
+
+  mobileNumberValue=mobileNumber.value.trim(); 
+  validMobileNumber=/^[0-9]*$/;
+  mobileNumberErr=document.getElementById('mobile-number-err');
+
+  if(mobileNumberValue=="")
+  {
+   mobileNumberErr.innerHTML="Mobile Number is required";
+
+  }else if(!validMobileNumber.test(mobileNumberValue)){
+    mobileNumberErr.innerHTML="Mobile Number must be a number";
+  }else if(mobileNumberValue.length!=10){
+
+     mobileNumberErr.innerHTML="Mobile Number must have 10 digits";
+  }
+  else{
+    mobileNumberErr.innerHTML="";
+    return true;
+  }
+
+}
+mobileNumber.oninput=function(){
+
+  mobileNumberValidation();
+}
+// Email Address Validation
+
+ var emailAddress= document.getElementById("emailAddress");;
+emailAddress.oninput=function(){
+    var startTimer;
+    let email = $(this).val();
+    startTimer = setTimeout(checkEmail, 500, email);
+}
+function checkEmail(email) {
+            emailAddressErr=document.getElementById('email-err');
+            $('#email-error').remove();
+            if (email.length > 1) {
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('distributor.checkEmail') }}",
+                    data: {
+                        email: email,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(data) {
+                        if (data.success == false) {
+                            emailAddressErr.innerHTML=data.message[0];
+                            // $('#email').after('<div id="email-err" class="text-danger" <strong>'+data.message[0]+'<strong></div>');
+                        } else {
+                            emailAddressErr.innerHTML=data.message;
+                            // $('#email').after('<div id="email-err" class="text-success" <strong>'+data.message+'<strong></div>');
+                        }
+
+                    }
+                });
+            } else {
+                $('#email').after('<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
             }
         }
-
-        $("#image_url").change(function () {
-            readURL(this);
-        });
-
-        // Get Input File Name
-        $('.custom-file input').change(function (e) {
-            var files = [];
-            for (var i = 0; i < $(this)[0].files.length; i++) {
-                files.push($(this)[0].files[i].name);
-            }
-            $(this).next('.custom-file-label').html(files.join(','));
-        });
     </script>
 @endsection
