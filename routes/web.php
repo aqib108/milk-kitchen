@@ -45,14 +45,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store','UserManagementController@createPermission')->name('permission.store');
             Route::get('/edit/{id}','UserManagementController@editPermission')->name('permission.edit');
             Route::post('/update/{id}','UserManagementController@updatePermission')->name('permission.update');
-            Route::post('/delete', 'UserManagementController@deletePermission')->name('permission.delete');
+            Route::delete('/delete/{id}', 'UserManagementController@deletePermission');
         });
         Route::group(['prefix' => 'roles'], function (){
             Route::get('/','UserManagementController@roles')->name('role.index');
             Route::post('/store','UserManagementController@createRole')->name('role.store');
             Route::get('/edit/{id}','UserManagementController@editRole')->name('role.edit');
             Route::post('/update/{id}','UserManagementController@updateRoles')->name('role.update');
-            Route::post('/delete','UserManagementController@deleteRole')->name('role.delete');
+            Route::delete('/delete/{id}','UserManagementController@deleteRole');
         });
         Route::group(['prefix' => 'customer'], function (){
             Route::get('/','CustomerController@customers')->name('customer.index');

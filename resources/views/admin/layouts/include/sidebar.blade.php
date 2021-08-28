@@ -67,7 +67,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
-                            Customer's
+                            Manage Customers
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -122,7 +122,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('order.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Purchase Orders</p>
                             </a>

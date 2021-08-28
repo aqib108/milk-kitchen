@@ -40,7 +40,7 @@
                             <table id="users" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
@@ -76,8 +76,10 @@
                 serverSide: true,
                 ajax: "{{ route('user.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
@@ -111,33 +113,40 @@
         });
 
         function changeStatus(id, status) {
-            var result = window.confirm('Are you sure you want to change status ?');
-            if (result == false) {
-                e.preventDefault();
-            } else {
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('user.status') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id,
-                        'status': status
-                    },
-                    success: function(response) {
-                        if (response.status) {
-                            Swal.fire({
-                                position: 'center',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                            $('#users').DataTable().ajax.reload();
-                        }
+            var result =
+                Swal.fire({
+                    title: "Are you sure change this Status?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('user.status') }}",
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id,
+                                'status': status
+                            },
+                            beforeSend: function() {
+                                swal.fire({
+                                    title: "Please Wait..!",
+                                    text: "Is working..",
+                                });
+                            },
+                            success: function(response) {
+                                if (response.status) {
+                                    Swal.fire("Successfully Change Status!", "success");
+                                    $('#users').DataTable().ajax.reload();
+                                }
+                            }
+                        });
                     }
                 });
-            }
         };
     </script>
 @endsection

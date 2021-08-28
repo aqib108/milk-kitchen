@@ -50,15 +50,6 @@ $("body").on("click", ".del_btn", function() {
                 type: "DELETE",
                 url: url + "/" + id,
                 dataType: "json",
-                beforeSend: function() {
-                    swal.fire({
-                        title: "Please Wait..!",
-                        text: "Is working..",
-                        onOpen: function() {
-                            swal.showLoading();
-                        }
-                    });
-                },
                 success: function(response) {
                     Swal.fire("Deleted!", response.message, "success");
                 },
