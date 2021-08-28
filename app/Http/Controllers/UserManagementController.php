@@ -136,7 +136,14 @@ class UserManagementController extends Controller
         ]);
 
         $data->assignRole($request->role);
-        return redirect()->route('user.index')->with('success','Your Record Has Been Created Successfully!');
+        if($data->wasRecentlyCreated){
+            $response = array(
+                'data' => [],
+                'message' => 'Data Successfully Added',
+                'status' => 'success',
+            );
+            return $response;
+        }
     }
 
     /**

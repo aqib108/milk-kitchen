@@ -92,8 +92,15 @@ class DistributorController extends Controller
      */
     public function store(DistributorRequest $request)
     {
-        $product = Distributor::create($request->all());
-        return redirect()->route('distributor.index')->with('success', 'Record added successfully.');  
+        $data = Distributor::create($request->all());
+        if($data->wasRecentlyCreated){
+            $response = array(
+                'data' => [],
+                'message' => 'Data Successfully Added',
+                'status' => 'success',
+            );
+            return $response;
+        }
     }
 
     /**
