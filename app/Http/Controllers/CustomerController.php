@@ -53,7 +53,7 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'ends_with:gmail.com,yahoo.com', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -91,7 +91,7 @@ class CustomerController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string',
-            'email' => 'required|email|ends_with:gmail.com,yahoo.com',
+            'email' => 'required|email',
         ]);
         
         $Customer = User::find($id);
