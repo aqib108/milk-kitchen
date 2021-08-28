@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Email <span class="required-star">*</span></label>
-                                        <input type="text"  class="form-control @error('email') is-invalid @enderror" name="email" id="emailAddress"
+                                        <input type="text"  class="form-control @error('email') is-invalid @enderror" name="email" id="email"
                                             value="{{old('email')}}" placeholder="Enter Email Number" required>
                                             <div class="alert alert-danger" id="email-err" class="alert alert-danger"></div>
                                     </div>
@@ -140,7 +140,7 @@
                     contentType: false,
                     cache: false,
                     success: function (response) {
-                       
+                        console.log(response);
                         if(response.success)
                         {
                             $('#submit').hide();
@@ -220,7 +220,7 @@ mobileNumber.oninput=function(){
 }
 // Email Address Validation
 
- var emailAddress= document.getElementById("emailAddress");;
+ var emailAddress= document.getElementById("email");;
 emailAddress.oninput=function(){
     var startTimer;
     let email = $(this).val();

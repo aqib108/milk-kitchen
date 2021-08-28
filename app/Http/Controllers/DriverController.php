@@ -94,8 +94,8 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json(['kk']);
-        $product = Driver::create($request->all());
+        
+         Driver::create($request->all());
        
         return redirect()->route('driver.index')->with('success', 'Record added successfully.');  
     }
