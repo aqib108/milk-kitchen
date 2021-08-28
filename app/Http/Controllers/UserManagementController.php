@@ -68,8 +68,8 @@ class UserManagementController extends Controller
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Edit.');
         }
-        $roles = Role::where('name','!=','Customer')->get();
         $role = $user->roles->pluck('name');
+        $roles = Role::where('name','!=','Customer')->get();
 
         return view('admin.users.editUser',compact('user','role','roles'));
     }
