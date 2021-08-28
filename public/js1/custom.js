@@ -60,10 +60,10 @@ $("body").on("click", ".del_btn", function() {
                         }
                     });
                 },
-                success: function(data) {
+                success: function(response) {
                     swal.fire({
                         title: "Deleted!",
-                        text: "Deleted Successfully",
+                        text: response.message,
                         type: "success",
                         showCancelButton: false,
                         confirmButtonClass: "btn-primary",
@@ -77,7 +77,7 @@ $("body").on("click", ".del_btn", function() {
                         .DataTable()
                         .ajax.reload();
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function() {
                     swal.hideLoading();
                     swal.fire(
                         "!Opps ",
