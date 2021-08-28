@@ -75,13 +75,34 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('user.index') }}",
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name',name: 'name'},
-                    { data: 'email',name: 'email' },
-                    {data: 'role',name: 'role'},
-                    { data: 'status',name: 'status'},
-                    {data: 'action',name: 'action',orderable: false,searchable: false},
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'role',
+                        name: 'role'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
                 drawCallback: function(response) {
 
@@ -92,40 +113,40 @@
         });
 
         function changeStatus(id, status) {
-            var result =  
-            Swal.fire({
-                title: "Are you sure change this Status?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: "{{ route('user.status') }}",
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id,
-                            'status': status
-                        },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                Swal.fire("Successfully Change Status!","success");
-                                $('#users').DataTable().ajax.reload();
+            var result =
+                Swal.fire({
+                    title: "Are you sure change this Status?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('user.status') }}",
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id,
+                                'status': status
+                            },
+                            beforeSend: function() {
+                                swal.fire({
+                                    title: "Please Wait..!",
+                                    text: "Is working..",
+                                });
+                            },
+                            success: function(response) {
+                                if (response.status) {
+                                    Swal.fire("Successfully Change Status!", "success");
+                                    $('#users').DataTable().ajax.reload();
+                                }
                             }
-                        }
-                    });  
-                }
-            });  
+                        });
+                    }
+                });
         };
     </script>
 @endsection
