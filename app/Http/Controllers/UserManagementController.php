@@ -114,17 +114,17 @@ class UserManagementController extends Controller
         return redirect()->route('user.index')->with('success','Your Record Has Been Created Successfully!');
     }
 
-    // public function deleteUser($id)
-    // {
-    //     User::destroy($id);
-    //     return back()->with('success', 'User Successfully deleted.');
-    // }
+    /**
+     *****************************************************************************
+     ************************** ROLES REQUEST ************************************
+     *****************************************************************************
+    */
 
     public function roles(Request $request)
     {
         $permissions = Permission::pluck('name')->all();
         if ($request->ajax()) {
-            $data = Role::with('permissions')->get();
+            $data = Role::with('permissions')->where('name','!=','Customer')->where('name','!=','Admin')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('permissions', function(Role $data) {
@@ -137,10 +137,8 @@ class UserManagementController extends Controller
                     return $printIT;
                 })
                 ->addColumn('action', function(Role $data){
-                    $btn = '<a data-id="'.$data->id.'" data-tab="Roles" data-url="roles/delete" 
-                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="'.route('role.edit',$data->id).'" class="btn btn-sm btn-primary">Edit</a>';
-                    return $btn.' '.$btn2;
+                    $btn = '<a href="'.route('role.edit',$data->id).'" class="btn btn-sm btn-primary">Edit</a>';
+                    return $btn;
                 })
                 ->rawColumns(['action','permissions'])
                 ->make(true);
@@ -167,32 +165,24 @@ class UserManagementController extends Controller
         if ($role == null) {
             return redirect()->back()->with('error', 'No Record Found To update.');
         }
-        $role->syncPermissions($request->input('permissions',[]));
+
+        $validated = $request->validate([
+            'permissions' => 'required|array'
+        ]);
+
+        $data = [
+            'permissions' =>$request->input('permissions',[]),
+        ];
+        $role->syncPermissions($data);
+
         return redirect()->route('role.index')->with('success','Role updated successfully');
     }
 
-    public function deleteRole($id)
-    {
-        $role = Role::findOrFail($id);
-        $role->delete();
-        return response()->json(array(
-            'data' => true,
-            'message' => 'Role Successfully Deleted',
-            'status' => 'success',
-        ));
-    }
-
-    public function createRole(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|unique:roles',
-        ]);
-
-        $role=Role::create(['name' => $request->name]);
-         
-        $role->syncPermissions($request->input('permissions',[]));
-        return back()->with('success', 'Role Successfully Created.');
-    }
+    /**
+     *****************************************************************************
+     ************************** PERMISSIONS REQUEST ******************************
+     *****************************************************************************
+    */
 
     public function permissions(Request $request)
     {
