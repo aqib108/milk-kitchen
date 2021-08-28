@@ -116,8 +116,8 @@ Add Product
                     contentType: false,
                     cache: false,
                     success: function (response) {
-                        console.log(response)
-                        if(response.data)
+                       
+                        if(response.status == "success")
                         {
                             $('#submit').hide();
                             Swal.fire({
@@ -126,9 +126,12 @@ Add Product
                                 showConfirmButton: false,
                                 timer: 2000,
                                 icon: 'success',
-                                title: response.success,
+                                title: response.message,
                             });
-                            // location.reload();
+                            setTimeout(function () {
+                                $(".alert-success").fadeOut("slow");
+                                window.location.href="{{ route('driver.index') }}";
+                            }, 2000);
                         }
                     },
                 }); 
