@@ -40,7 +40,7 @@
                             <table id="users" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>

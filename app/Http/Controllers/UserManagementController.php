@@ -137,7 +137,8 @@ class UserManagementController extends Controller
                     return $printIT;
                 })
                 ->addColumn('action', function(Role $data){
-                    $btn = '<a onclick="deleteRole('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+                    $btn = '<a data-id="'.$data->id.'" data-tab="Roles" data-url="roles/delete" 
+                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="'.route('role.edit',$data->id).'" class="btn btn-sm btn-primary">Edit</a>';
                     return $btn.' '.$btn2;
                 })
@@ -167,20 +168,15 @@ class UserManagementController extends Controller
         return redirect()->route('role.index')->with('success','Role updated successfully');
     }
 
-    public function deleteRole(Request $request)
+    public function deleteRole($id)
     {
-        try {
-            $role = Role::findOrFail((int)$request->id);
-            if ($role == null) {
-                return redirect()->back()->with('error', 'No Record Found To Delete.');
-            }
-
-            $role->delete();
-            return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
-
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 1, 'message' => 'The record could not be deleted.']);
-        }
+        $role = Role::findOrFail($id);
+        $role->delete();
+        return response()->json(array(
+            'data' => true,
+            'message' => 'Role Successfully Deleted',
+            'status' => 'success',
+        ));
     }
 
     public function createRole(Request $request)
@@ -203,7 +199,9 @@ class UserManagementController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function(Permission $data){
-                    $btn = '<a onclick="deletePermission('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+                    // $btn = '<a onclick="deletePermission('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+                    $btn = '<a data-id="'.$data->id.'" data-tab="Permission" data-url="permissions/delete" 
+                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="javascript::void(0);" class="editPermission btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
                     return $btn.' '.$btn2;
                 })
@@ -247,19 +245,14 @@ class UserManagementController extends Controller
         return redirect()->route('permission.index')->with('success','Permission updated successfully');
     }
 
-    public function deletePermission(Request $request)
+    public function deletePermission($id)
     {
-        try {
-            $permission = Permission::findOrFail((int)$request->id);
-            if ($permission == null) {
-                return redirect()->back()->with('error', 'No Record Found To Delete.');
-            }
-
-            $permission->delete();
-            return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
-
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 1, 'message' => 'The record could not be deleted.']);
-        }
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
+        return response()->json(array(
+            'data' => true,
+            'message' => 'Permission Successfully Deleted',
+            'status' => 'success',
+        ));
     }
 }
