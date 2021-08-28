@@ -103,9 +103,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/status','AttributesController@status')->name('attribute.status');
             Route::post('/delete','AttributesController@destroy')->name('attribute.destroy');
         });
-        Route::group(['prefix' => 'orders'], function (){
-            Route::get('/','OrderController@index')->name('order.index');
-        });
         Route::group(['prefix' => 'sale'], function (){
             Route::get('/','SaleController@reoccurring')->name('sale.index');
         });

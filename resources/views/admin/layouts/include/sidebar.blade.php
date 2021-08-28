@@ -67,7 +67,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
-                            Customer's
+                            Manage Customers
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
