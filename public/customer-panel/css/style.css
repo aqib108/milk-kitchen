@@ -150,6 +150,7 @@ textarea:focus {
 
 .bg-wrapper-light {
   background-color: #ededed;
+  height: 95.5vh;
 }
 
 .flex-wrapper-form {
