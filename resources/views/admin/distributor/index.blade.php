@@ -94,79 +94,79 @@
 
         // Change Status Distributor
         function changeStatus(id,status) {
-            var result = window.confirm('Are you sure you want to change status ?');
-            if (result == false) {
-                e.preventDefault();
-            }else{
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('distributor.status') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id,
-                        'status': status
-                    },
-                    success: function (response) {
-                        if(response.status)
-                        {
-                            Swal.fire({
-                                position: 'center',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
+            var result = 
+            Swal.fire({
+                title: "Are you sure Change this Status?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change it!"
+            }).then(result => {
+                if (result.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ route('distributor.status') }}",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id': id,
+                            'status': status
+                        },
+                        beforeSend: function() {
+                            swal.fire({
+                                title: "Please Wait..!",
+                                text: "Is working..",
                             });
-                            $('#distributors').DataTable().ajax.reload();
+                        },
+                        success: function (response) {
+                            if(response.status)
+                            {
+                                Swal.fire("Successfully Change Status!", "success");
+                                $('#distributors').DataTable().ajax.reload();
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }   
+            });
         };
-         // Destory Product
+        // Destory Product
          function deleteDistributor(id,event) {
-            var result = window.confirm('Are you sure you want to delete this Distributor?  This action cannot be undone. Proceed?');
-            if (result == false) {
-                e.preventDefault();
-            }else{
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('distributor.destroy') }}",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id,
-                    },
-                    success: function (response) {
-                        console.log(response)
-                        if(response.status == undefined)
-                        {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'error',
-                                title: response.message,
+            var result = 
+            Swal.fire({
+                title: "Are you sure delete this distributor?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change it!"
+            }).then(result => {
+                if (result.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ route('distributor.destroy') }}",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id': id,
+                        },
+                        beforeSend: function() {
+                            swal.fire({
+                                title: "Please Wait..!",
+                                text: "Is working..",
                             });
-
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            if(response.status)
+                            {
+                                Swal.fire("Successfully Deleted!", "success");
+                                $('#distributors').DataTable().ajax.reload(); 
+                            }
                         }
-                        else
-                        {
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                            $('#distributors').DataTable().ajax.reload();
-                        }
-
-                    }
-                });
-            }
+                    });  
+                }  
+            });
         };
        
     </script>
