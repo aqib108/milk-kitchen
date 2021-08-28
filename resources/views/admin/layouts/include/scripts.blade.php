@@ -55,7 +55,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('admin-panel/dist/js/demo.js') }}"></script>
 <!-- SweetAlert2 -->
-<script src="{{ asset('admin-panel/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('js1/sweetalert.min.js') }}"></script>
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script src="{{ asset('js/main.js') }}"></script>
 <!-- Toggel button !-->
