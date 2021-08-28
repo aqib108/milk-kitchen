@@ -40,7 +40,7 @@
                             <table id="users" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
@@ -76,8 +76,10 @@
                 serverSide: true,
                 ajax: "{{ route('user.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
