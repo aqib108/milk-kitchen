@@ -72,11 +72,7 @@ class CustomerController extends Controller
     {
         $customer = User::findOrFail($id);
         $customer->delete();
-        return response()->json(array(
-            'data' => true,
-            'message' => 'Customer Successfully Deleted',
-            'status' => 'success',
-        ));
+         
     }
 
     //Edit Customer page
