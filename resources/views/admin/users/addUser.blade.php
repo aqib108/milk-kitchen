@@ -240,7 +240,7 @@
                 passwordErr.innerHTML = "Password is required";
             } else if (!validPassword.test(passwordValue)) {
                 passwordErr.innerHTML =
-                    "Password must have at least one Uppercase, lowercase, digit, special characters & 8 characters";
+                    "Password must contain at least 8 Characters, including Uppercase, lowercase, numbers and special characters";
             } else {
                 passwordErr.innerHTML = "";
                 return true;
