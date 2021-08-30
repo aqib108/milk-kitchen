@@ -34,7 +34,7 @@ Add Product
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form  id="registrationForm" >
-                        {{ csrf_field() }}
+                    @csrf
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
@@ -103,7 +103,7 @@ Add Product
 <script>
          document.getElementById("registrationForm").onsubmit=function(e){
         
-            
+           
              
                 event.preventDefault();
                 var formData = new FormData(this);
@@ -111,12 +111,13 @@ Add Product
                 $.ajax({
                     method: "POST",
                     data: formData,
-                    url: '{{route('driver.store')}}',
+                    url: "{{route('driver.store')}}",
                     processData: false,
                     contentType: false,
                     cache: false,
                     success: function (response) {
-                        if(response.success)
+                       
+                        if(response.status == "success")
                         {
                             $('#submit').hide();
                             Swal.fire({
@@ -125,9 +126,12 @@ Add Product
                                 showConfirmButton: false,
                                 timer: 2000,
                                 icon: 'success',
-                                title: response.success,
+                                title: response.message,
                             });
-                            location.reload();
+                            setTimeout(function () {
+                                $(".alert-success").fadeOut("slow");
+                                window.location.href="{{ route('driver.index') }}";
+                            }, 2000);
                         }
                     },
                 }); 

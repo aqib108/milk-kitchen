@@ -39,17 +39,13 @@
                                 <div class="row">
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Name <span class="required-star">*</span></label>
-                                        <input type="text" maxlength="50" class="form-control @error('name') is-invalid @enderror" name="name"
+                                        <input type="text" maxlength="50" class="form-control @error('name') is-invalid @enderror" name="name" id="name"
                                             value="{{old('name')}}" placeholder="Enter Product Name" required>
-                                        @error('name')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            <div class="alert alert-danger" id="first-name-errr" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Email <span class="required-star">*</span></label>
-                                        <input type="text"  class="form-control @error('email') is-invalid @enderror" name="email" id="emailAddress"
+                                        <input type="text"  class="form-control @error('email') is-invalid @enderror" name="email" id="email"
                                             value="{{old('email')}}" placeholder="Enter Email Number" required>
                                             <div class="alert alert-danger" id="email-err" class="alert alert-danger"></div>
                                     </div>
@@ -120,18 +116,11 @@
 @section('scripts')
     <script>
              document.getElementById("registrationForm").onsubmit=function(e){
-            firstNameValidation();
-            // lastNameValidation();
-            emailAddressValidation();
-            mobileNumberValidation();
-
-            if(firstNameValidation()==true && 
-            emailAddressValidation() == true && mobileNumberValidation() == true ){
+        
             
             
                 event.preventDefault();
                 var formData = new FormData(this);
-                alert(formData);
                 $.ajax({
                     method: "POST",
                     data: formData,
@@ -140,8 +129,8 @@
                     contentType: false,
                     cache: false,
                     success: function (response) {
-                       
-                        if(response.success)
+                        console.log(response);
+                        if(response.status == "success")
                         {
                             $('#submit').hide();
                             Swal.fire({
@@ -150,9 +139,12 @@
                                 showConfirmButton: false,
                                 timer: 2000,
                                 icon: 'success',
-                                title: response.success,
+                                title: response.message,
                             });
-                            location.reload();
+                            setTimeout(function () {
+                                $(".alert-success").fadeOut("slow");
+                                window.location.href="{{ route('distributor.index') }}";
+                            }, 2000);
                         }
                         else
                         {
@@ -160,8 +152,7 @@
                         }
                     },
                 }); 
-            return false;
-            }
+            
 }   
 
       //  Name Validation
@@ -202,9 +193,7 @@ var mobileNumberValidation = function(){
   {
    mobileNumberErr.innerHTML="Mobile Number is required";
 
-  }else if(!validMobileNumber.test(mobileNumberValue)){
-    mobileNumberErr.innerHTML="Mobile Number must be a number";
-  }else if(mobileNumberValue.length!=10){
+  }else if(mobileNumberValue.length!=17){
 
      mobileNumberErr.innerHTML="Mobile Number must have 10 digits";
   }
@@ -220,7 +209,7 @@ mobileNumber.oninput=function(){
 }
 // Email Address Validation
 
- var emailAddress= document.getElementById("emailAddress");;
+ var emailAddress= document.getElementById("email");;
 emailAddress.oninput=function(){
     var startTimer;
     let email = $(this).val();

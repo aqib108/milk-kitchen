@@ -24,7 +24,11 @@ class AttributesController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('name', function(Attribute $data){
-                    $name = $data->product->name;
+                    if($data != null){
+                        $name = $data->product->name;
+                    }else{
+                       $name = "----";
+                    }
                     return $name;
                 })
                 ->addColumn('status', function(Attribute $data){
