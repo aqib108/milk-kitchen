@@ -16,11 +16,6 @@ class ProductOrder extends Model
         'quantity'
     ];
 
-    public function WeekDay()
-    {
-        return $this->hasMany(ProductOrder::class,'day_id');
-    }
-
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -29,5 +24,10 @@ class ProductOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function day()
+    {
+        return $this->belongsTo(WeekDay::class);
     }
 }

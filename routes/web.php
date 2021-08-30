@@ -31,6 +31,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function (){
         Route::get('/', 'AdminController@index')->name('dashboard');
         Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
+        Route::group(['as' => 'admin.'], function () {
+            Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
+            Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
+            Route::post('/check-password', 'AdminController@checkPassword')->name('check-password');
+            Route::post('/update-password', 'AdminController@updatePassword')->name('update-password');
+        });
         Route::group(['prefix' => 'users'], function (){
             Route::post('/checkEmail','UserManagementController@checkEmail')->name('user.checkEmail');
             Route::get('/','UserManagementController@users')->name('user.index');
@@ -107,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'order'], function (){
             Route::get('/','OrderController@index')->name('order.index');
+            Route::get('/detail/{id}','OrderController@show')->name('order.detail');
         });
         Route::group(['prefix' => 'sale'], function (){
             Route::get('/','SaleController@reoccurring')->name('sale.index');

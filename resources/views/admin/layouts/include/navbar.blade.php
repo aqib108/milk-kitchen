@@ -45,7 +45,7 @@
             <ul class="dropdown-menu w-25 ">
                 <!-- Menu Footer-->
                 <li>
-                    <a href="" class="btn btn-dark btn-flat w-100">Setting</a>
+                    <a href="{{route('admin.setting')}}" class="btn btn-dark btn-flat w-100">Setting</a>
                 </li>
                 <li>
                     <a href="{{ route('logout') }}" class="btn btn-dark btn-flat w-100" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out </a>
