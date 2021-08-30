@@ -30,7 +30,7 @@ class DistributorController extends Controller
         } else {
             return response()->json([
                 'success' => true,
-                'message' => 'The email is available'
+                'message' => "<span style='color:#95d60c;'>The email is available"
             ]);
         }
     }
