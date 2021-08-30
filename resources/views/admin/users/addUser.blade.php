@@ -41,27 +41,26 @@
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Name <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50" class="form-control" id="firstName" name="name"
-                                            value="{{ old('name') }}" placeholder="Enter Product Name" required>
+                                            value="{{ old('name') }}" placeholder="Enter Product Name">
                                         <div id="first-name-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Email <span class="required-star">*</span></label>
                                         <input type="email" maxlength="50" class="form-control" name="email"
-                                            value="{{ old('email') }}" placeholder="Enter User Email" id="emailAddress"
-                                            required>
+                                            value="{{ old('email') }}" placeholder="Enter User Email" id="emailAddress">
                                         <div id="email-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Password <span class="required-star">*</span></label>
                                         <input type="password" maxlength="50" class="form-control" id="password"
-                                            name="password" placeholder="Enter Password" required>
+                                            name="password" placeholder="Enter Password">
                                         <div id="password-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Confirm Password <span class="required-star">*</span></label>
                                         <input type="password" maxlength="50" class="form-control"
                                             name="password_confirmation" id="confirmPassword"
-                                            placeholder="Enter Again Password... " required>
+                                            placeholder="Enter Again Password... ">
                                         <div id="confirm-password-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
