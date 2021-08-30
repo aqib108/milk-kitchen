@@ -73,7 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','DistributorController@show')->name('distributor.detail');
             Route::post('/update/{id}','DistributorController@update')->name('distributor.update');
             Route::post('/status','DistributorController@status')->name('distributor.status');
-            Route::post('/delete','DistributorController@destroy')->name('distributor.destroy');
+            Route::delete('/delete/{id}','DistributorController@destroy');
         });
         Route::group(['prefix' => 'driver'], function (){
             Route::post('/checkEmail','DriverController@checkEmail')->name('driver.checkEmail');
@@ -84,7 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','DriverController@show')->name('driver.detail');
             Route::post('/update/{id}','DriverController@update')->name('driver.update');
             Route::post('/status','DriverController@status')->name('driver.status');
-            Route::post('/delete','DriverController@destroy')->name('driver.destroy');
+            Route::delete('/delete/{id}','DriverController@destroy');
         });
         Route::group(['prefix' => 'product'], function (){
             Route::get('/','ProductController@index')->name('product.index');
@@ -94,7 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','ProductController@show')->name('product.detail');
             Route::post('/update/{id}','ProductController@update')->name('product.update');
             Route::post('/status','ProductController@status')->name('product.status');
-            Route::post('/delete','ProductController@destroy')->name('product.destroy');
+            Route::delete('/delete/{id}','ProductController@destroy');
         });
         Route::group(['prefix' => 'attributes'], function (){
             Route::get('/','AttributesController@index')->name('attribute.index');

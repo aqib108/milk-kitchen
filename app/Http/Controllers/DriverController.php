@@ -58,7 +58,8 @@ class DriverController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function(Driver $data){
-                    $btn1 = '<a onclick="deleteDriver('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+                    $btn1 = '<a data-id="'.$data->id.'" data-tab="drivers" data-url="driver/delete" 
+                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="'.route('driver.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
                      //$btn3 = '<a href="'.route('driver.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     if($data->status == 1){
