@@ -15,7 +15,7 @@ class DistributorController extends Controller
         $input = $request->only(['email']);
 
         $request_data = [
-            'email' => 'required|email|unique:distributors,email|ends_with:.com',
+            'email' => 'required|email|unique:distributors,ends_with:.com',
         ];
 
         $validator = Validator::make($input, $request_data);
@@ -91,7 +91,7 @@ class DistributorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DistributorRequest $request)
+    public function store(Request $request)
     {
         $data = Distributor::create($request->all());
         if($data->wasRecentlyCreated){

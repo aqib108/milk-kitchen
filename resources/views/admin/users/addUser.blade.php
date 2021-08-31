@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Add New User</h1>
+                    <h1>Add User</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -30,30 +30,30 @@
                     <!-- jquery validation -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Add User</h3>
+                            <h3 class="card-title">Add New User</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
                         <form id="registrationForm">
-                            @csrf
+                            {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Name <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50" class="form-control" id="firstName" name="name"
-                                            value="{{ old('name') }}" placeholder="Enter Product Name">
+                                            value="{{ old('name') }}" placeholder="Enter User Name">
                                         <div id="first-name-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Email <span class="required-star">*</span></label>
-                                        <input type="email" maxlength="50" class="form-control" name="email"
-                                            value="{{ old('email') }}" placeholder="Enter User Email" id="emailAddress">
+                                        <input type="email" maxlength="50" class="form-control" id="emailAddress"
+                                            name="email" value="{{ old('email') }}" placeholder="Enter Email ">
                                         <div id="email-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Password <span class="required-star">*</span></label>
                                         <input type="password" maxlength="50" class="form-control" id="password"
-                                            name="password" placeholder="Enter Password">
+                                            name="password" placeholder="Enter Password ">
                                         <div id="password-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
@@ -139,6 +139,8 @@
                     },
                 });
 
+            } else {
+                return false;
             }
         }
         //  Name Validation
@@ -152,7 +154,6 @@
 
             if (firstNameValue == "") {
                 firstNameErr.innerHTML = "name is required";
-
             } else if (!validFirstName.test(firstNameValue)) {
                 firstNameErr.innerHTML = "name must be string";
             } else {
@@ -239,7 +240,7 @@
                 passwordErr.innerHTML = "Password is required";
             } else if (!validPassword.test(passwordValue)) {
                 passwordErr.innerHTML =
-                    "Password must contain at least 8 Characters, including Uppercase, lowercase, numbers and special characters";
+                    "Password must have at least one Uppercase, lowercase, digit, special characters & 8 characters";
             } else {
                 passwordErr.innerHTML = "";
                 return true;
