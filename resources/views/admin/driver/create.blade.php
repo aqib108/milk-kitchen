@@ -39,17 +39,17 @@ Add Product
                             <div class="row">
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <label>Name <span class="required-star">*</span></label>
-                                    <input type="text" maxlength="50" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Enter Product Name" required>
+                                    <input type="text" maxlength="50" class="form-control" name="name" id="name" placeholder="Enter Product Name">
                                     <div id="first-name-err" class="alert alert-danger"></div>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <label>Email <span class="required-star">*</span></label>
-                                    <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email"  placeholder="Enter Email Number" required>
+                                    <input type="text" class="form-control" name="email" id="email"  placeholder="Enter Email Number">
                                     <div class="alert alert-danger" id="email-err" class="alert alert-danger"></div>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <label>Phone <span class="required-star">*</span></label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" id="mobileNumber" maxlength="12"  placeholder="Enter Phone Number" required>
+                                    <input type="number" class="form-control @error('phone') is-invalid @enderror" name="phone" id="mobileNumber" maxlength="17"  placeholder="Enter Phone Number" >
                                     <div class="alert alert-danger" id="mobile-number-err"></div>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
@@ -101,9 +101,13 @@ Add Product
 @endsection
 @section('scripts')
 <script>
-         document.getElementById("registrationForm").onsubmit=function(e){
-        
-           
+          document.getElementById("registrationForm").onsubmit = function(e) {
+        event.preventDefault();
+        firstNameValidation();
+        emailAddressValidation();
+        mobileNumberValidation();
+        if (firstNameValidation() == true && mobileNumberValidation() == true && emailAddressValidation() == true)
+            {   
              
                 event.preventDefault();
                 var formData = new FormData(this);
@@ -135,6 +139,10 @@ Add Product
                         }
                     },
                 }); 
+            }
+            else{
+                return false;
+            }
 
             
 }    
@@ -146,11 +154,12 @@ Add Product
         firstNameValue = firstName.value.trim();
         validFirstName = /^[A-Za-z]+$/;
         firstNameErr = document.getElementById('first-name-err');
-
         if (firstNameValue == "") {
             firstNameErr.innerHTML = "name is required";
 
-        } 
+        }  else if (!validFirstName.test(firstNameValue)) {
+            firstNameErr.innerHTML = "name must be string";
+        }
          else {
             firstNameErr.innerHTML = "";
             return true;
@@ -175,20 +184,46 @@ Add Product
         if (mobileNumberValue == "") {
             mobileNumberErr.innerHTML = "Mobile Number is required";
 
-        }else {
-            mobileNumberErr.innerHTML = "";
-            return true;
         }
+        else if(mobileNumberValue.length<=10 || mobileNumberValue.length>=17){
+            mobileNumberErr.innerHTML="Mobile Number must have 10 to 17 digits";
+            }
+
+        else {
+        mobileNumberErr.innerHTML = "";
+        return true;
+    }
 
     }
     mobileNumber.oninput = function() {
 
         mobileNumberValidation();
     }
+
     // Email Address Validation
+      // Email Address Validation
+      var emailAddress = document.getElementById("emailAddress");
+    var emailAddressValidation = function() {
+
+        emailAddressValue = emailAddress.value.trim();
+        validEmailAddress = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        emailAddressErr = document.getElementById('email-err');
+
+        if (emailAddressValue == "") {
+            emailAddressErr.innerHTML = "Email Address is required";
+
+        } else if (!validEmailAddress.test(emailAddressValue)) {
+            emailAddressErr.innerHTML = "Email Address must be in valid formate with @ symbol";
+        } else {
+            emailAddressErr.innerHTML = "";
+            return true;
+        }
+
+    }
     var emailAddress = document.getElementById("email");
 
     emailAddress.oninput = function() {
+        emailAddressValidation();
         var startTimer;
         let email = $(this).val();
         startTimer = setTimeout(checkEmail, 500, email);     
@@ -216,8 +251,6 @@ Add Product
 
                 }
             });
-        } else {
-            $('#email').after('<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
         }
     }
 </script>
