@@ -55,15 +55,25 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/delete/{id}','UserManagementController@deleteRole');
         });
         Route::group(['prefix' => 'customer'], function (){
+
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
-            Route::get('/group','CustomerController@customerGroup')->name('customer.customerGroup');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
             Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
         });
+        Route::group(['prefix' => 'customer-group'], function (){
+
+            Route::get('/','CustomerGroupController@customerGroup')->name('customer-group.index');
+            Route::post('/store','CustomerGroupController@store')->name('customer-group.storeGroup');
+            Route::post('/status','CustomerGroupController@status')->name('customer-group.groupStatus');
+            Route::delete('/delete/{id}','CustomerGroupController@delete');
+            Route::get('/edit/{id}','CustomerGroupController@editGroup');
+            Route::post('/update/{id}','CustomerGroupController@updateGroup');
+        });
+
         Route::group(['prefix' => 'distributor'], function (){
             Route::post('/checkEmail','DistributorController@checkEmail')->name('distributor.checkEmail');
             Route::get('/','DistributorController@index')->name('distributor.index');
