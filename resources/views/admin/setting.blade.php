@@ -97,27 +97,26 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-        $('#current_password').keyup(function (e) { 
-            var current_password = $('#current_password').val();
-            $.ajax({
-                    method: "Post",
-                    url: '{{route('admin.check-password')}}',
-                    dataType:'html',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        'current_password': current_password,
-                    },
-                    success: function (response) {
-                        if(response == "false"){
-                            $("#check_current_password").html("<font color=red>Current Password is Incorrect</font>");
+            $('#current_password').keyup(function (e) { 
+                var current_password = $('#current_password').val();
+                $.ajax({
+                        method: "Post",
+                        url: '{{route('admin.check-password')}}',
+                        dataType:'html',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'current_password': current_password,
+                        },
+                        success: function (response) {
+                            if(response == "false"){
+                                $("#check_current_password").html("<font color=red>Current Password is Incorrect</font>");
+                            }
+                            else if (response == "true"){
+                                $("#check_current_password").html("<font color=green>Current Password is Correct</font>");
+                            }
                         }
-                        else if (response == "true"){
-                            $("#check_current_password").html("<font color=green>Current Password is Correct</font>");
-                        }
-                        // console.log(response);
-                    }
-                });
+                    });
+            });
         });
-    });
     </script>
 @endsection
