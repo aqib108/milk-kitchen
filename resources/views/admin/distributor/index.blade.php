@@ -1,5 +1,5 @@
 @extends('admin.layouts.admin')
-@section('title','List Of Distributor')
+@section('title', 'List Of Distributor')
 @section('styles')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 @endsection
@@ -15,8 +15,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{route('distributor.create')}}" class="btn btn-primary pull-right"><i
-                                class="fas fa-fw fa-plus"></i>Add Distributor</a>
+                            <a href="{{ route('distributor.create') }}" class="btn btn-primary pull-right"><i
+                                    class="fas fa-fw fa-plus"></i>Add Distributor</a>
                         </li>
                     </ol>
                 </div>
@@ -40,7 +40,7 @@
                             <table id="distributors" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name </th>
                                         <th>Email</th>
                                         <th>Phone</th>
@@ -49,7 +49,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -60,7 +60,7 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-           
+
         </div>
         <!-- /.container-fluid -->
     </section>
@@ -69,22 +69,43 @@
 @section('scripts')
     <script>
         var table;
-        $(document).ready( function () {
+        $(document).ready(function() {
 
-            table  = $('#distributors').DataTable({
+            table = $('#distributors').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                ajax: "{{route('distributor.index')}}",
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
-                    {data: 'phone', name: 'phone'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ajax: "{{ route('distributor.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
-                drawCallback: function (response) {
+                drawCallback: function(response) {
 
                     $('#countTotal').empty();
                     $('#countTotal').append(response['json'].recordsTotal);
@@ -93,81 +114,41 @@
         });
 
         // Change Status Distributor
-        function changeStatus(id,status) {
-            var result = 
-            Swal.fire({
-                title: "Are you sure Change this Status?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: "{{ route('distributor.status') }}",
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id,
-                            'status': status
-                        },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
-                        success: function (response) {
-                            if(response.status)
-                            {
-                                Swal.fire("Successfully Change Status!", "success");
-                                $('#distributors').DataTable().ajax.reload();
+        function changeStatus(id, status) {
+            var result =
+                Swal.fire({
+                    title: "Are you sure Change this Status?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('distributor.status') }}",
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id,
+                                'status': status
+                            },
+                            beforeSend: function() {
+                                swal.fire({
+                                    title: "Please Wait..!",
+                                    text: "Is working..",
+                                });
+                            },
+                            success: function(response) {
+                                if (response.status) {
+                                    Swal.fire("Successfully Change Status!", "success");
+                                    $('#distributors').DataTable().ajax.reload();
+                                }
                             }
-                        }
-                    });
-                }   
-            });
+                        });
+                    }
+                });
         };
-        // Destory Product
-         function deleteDistributor(id,event) {
-            var result = 
-            Swal.fire({
-                title: "Are you sure delete this distributor?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: "{{ route('distributor.destroy') }}",
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id,
-                        },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
-                        success: function (response) {
-                            console.log(response)
-                            if(response.status)
-                            {
-                                Swal.fire("Successfully Deleted!", "success");
-                                $('#distributors').DataTable().ajax.reload(); 
-                            }
-                        }
-                    });  
-                }  
-            });
-        };
-       
     </script>
 @endsection

@@ -1,5 +1,5 @@
 @extends('admin.layouts.admin')
-@section('title','List Of Product')
+@section('title', 'List Of Product')
 @section('styles')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 @endsection
@@ -15,8 +15,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{route('product.create')}}" class="btn btn-primary pull-right"><i
-                                class="fas fa-fw fa-plus"></i>Add Product</a>
+                            <a href="{{ route('product.create') }}" class="btn btn-primary pull-right"><i
+                                    class="fas fa-fw fa-plus"></i>Add Product</a>
                         </li>
                     </ol>
                 </div>
@@ -40,7 +40,7 @@
                             <table id="products" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Sr.No</th>
                                         <th>Name </th>
                                         <th>Price</th>
                                         <th>Status</th>
@@ -48,7 +48,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -59,7 +59,7 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-           
+
         </div>
         <!-- /.container-fluid -->
     </section>
@@ -68,21 +68,39 @@
 @section('scripts')
     <script>
         var table;
-        $(document).ready( function () {
+        $(document).ready(function() {
 
-            table  = $('#products').DataTable({
+            table = $('#products').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
                 ajax: "",
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'price', name: 'price'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'price',
+                        name: 'price'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
-                drawCallback: function (response) {
+                drawCallback: function(response) {
 
                     $('#countTotal').empty();
                     $('#countTotal').append(response['json'].recordsTotal);
@@ -91,80 +109,41 @@
         });
 
         // Change Status Product
-        function changeStatus(id,status) {
+        function changeStatus(id, status) {
             var result =
-            Swal.fire({
-                title: "Are you sure change this Status?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: '{{ route('product.status') }}',
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id,
-                            'status': status
-                        },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
-                        success: function (response) {
-                            if(response.status)
-                            {
-                                Swal.fire("Successfully Change Status!", "success");
-                                $('#products').DataTable().ajax.reload();
+                Swal.fire({
+                    title: "Are you sure change this Status?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: '{{ route('product.status') }}',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id,
+                                'status': status
+                            },
+                            beforeSend: function() {
+                                swal.fire({
+                                    title: "Please Wait..!",
+                                    text: "Is working..",
+                                });
+                            },
+                            success: function(response) {
+                                if (response.status) {
+                                    Swal.fire("Successfully Change Status!", "success");
+                                    $('#products').DataTable().ajax.reload();
+                                }
                             }
-                        }
-                    });
-                }
-            });     
-        };
-
-        // Destory Product
-        function deleteProduct(id,event) {
-            var result = 
-            Swal.fire({
-                title: "Are you sure delete this product?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: "{{ route('product.destroy') }}",
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id
-                        },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
-                        success: function (response) {
-                            console.log(response)
-                            if(response.status){
-                                Swal.fire("Successfully Deleted!", "success");
-                                $('#products').DataTable().ajax.reload();
-                            }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
         };
     </script>
 @endsection
