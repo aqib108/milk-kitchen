@@ -27,9 +27,8 @@ class CustomerDetailController extends Controller
      */
     public function index()
     {
-        //
+       //
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -124,7 +123,7 @@ class CustomerDetailController extends Controller
             'delivery_city_id' => $request->input('delivery_city_id'),
             'delivery_notes' => $request->input('delivery_notes'),
             ]);
-        dd($customerDetail);
+        // dd($customerDetail);
         return response()->json(['success'=>'Your Record Successfully Updated!.']);
 
 

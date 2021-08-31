@@ -66,8 +66,10 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
                                                         <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
-                                                            <option selected disabled>Select Country</option>
-                                                            <option value="1" {{ isset($customerDetail->business_country_id) &&$customerDetail->business_country_id == 1?'selected':''}}>Pakistan</option>
+                                                        <option selected disabled>Select Country</option>
+                                                        @foreach($countries as $country)                                        
+                                                            <option value="{{$country->id}}" {{ isset($customerDetail->business_country_id) && $customerDetail->business_country_id == $country->id?'selected':''}}>{{$country->name}}</option>
+                                                        @endforeach
                                                         </select>
                                                         @error('business_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -78,8 +80,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-                                                            <option selected disabled>Select Region</option>
-                                                            <option value="2"  {{ isset($customerDetail->business_region_id) && $customerDetail->business_region_id == 2?'selected':''}}>Punjab</option>
+                                                
                                                         </select>
                                                         @error('business_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -90,8 +91,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
                                                         <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                                            <option selected disabled>Select City</option>
-                                                            <option value="3"  {{ isset($customerDetail->business_city_id) && $customerDetail->business_city_id == 3 ?'selected':''}}>Lahore</option>
+                                                    
                                                         </select>
                                                         @error('business_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -170,7 +170,9 @@
                                                         <label class="label-wrapper-custm" for="delivery_country_id">Suburb <span class="required-star">*</span></label>
                                                         <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
                                                             <option selected disabled>Select Country</option>
-                                                            <option value="1" {{ isset($customerDetail->delivery_country_id) && $customerDetail->delivery_country_id == 1 ?'selected':''}}>Pakistan</option>
+                                                            @foreach($countries as $country)
+                                                            <option value="{{$country->id}}" {{ isset($customerDetail->delivery_country_id) && $customerDetail->delivery_country_id == $country->id ?'selected':''}}>{{$country->name}}</option>
+                                                        @endforeach
                                                         </select>
                                                         @error('delivery_country_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -181,8 +183,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                            <option selected disabled>Select Region</option>
-                                                            <option value="2" {{ isset($customerDetail->delivery_region_id) && $customerDetail->delivery_region_id == 2 ?'selected':''}}>Punjab</option>
+                                                           
                                                         </select>
                                                         @error('delivery_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -193,8 +194,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
                                                         <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                            <option selected disabled>Select City</option>
-                                                            <option value="3" {{ isset($customerDetail->delivery_city_id) && $customerDetail->delivery_city_id == 3 ?'selected':''}}>Lahore</option>
+                                                            
                                                         </select>
                                                         @error('delivery_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -658,5 +658,192 @@
                 }
             });
         });
+
+        //Business Country City States Function on change dropdown
+        $(document).ready(function() {
+                $('#business_country_id').on('change', function() {
+                var country_id = this.value;
+                $("#business_region_id").html('');
+                $.ajax({
+                url:"{{url('get-states-by-country-user')}}",
+                type: "POST",
+                data: {
+                country_id: country_id,
+                _token: '{{csrf_token()}}' 
+            },
+                        dataType : 'json',
+                        success: function(result){
+                        $('#business_region_id').html('<option value="">Select Region</option>'); 
+                        $.each(result.states,function(key,value){
+                        $("#business_region_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                        });
+                        $('#business_city_id').html('<option value="">Select Region First</option>'); 
+                     }
+               });
+           });    
+                        $('#business_region_id').on('change', function() {
+                        var state_id = this.value;
+                        $("#business_city_id").html('');
+                        $.ajax({
+                        url:"{{url('get-cities-by-state-user')}}",
+                        type: "POST",
+                        data: {
+                        state_id: state_id,
+                        _token: '{{csrf_token()}}' 
+                        },
+                        dataType : 'json',
+                        success: function(result){
+                        $('#business_city_id').html('<option value="">Select City</option>'); 
+                        $.each(result.cities,function(key,value){
+                        $("#business_city_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                    });
+                    }
+            });
+        });
+    });
+           //Delivery Country City States Function on change dropdown
+           $(document).ready(function() {
+                $('#delivery_country_id').on('change', function() {
+                var country_id = this.value;
+                $("#delivery_region_id").html('');
+                $.ajax({
+                url:"{{url('get-states-by-country-user')}}",
+                type: "POST",
+                data: {
+                country_id: country_id,
+                _token: '{{csrf_token()}}' 
+            },
+                        dataType : 'json',
+                        success: function(result){
+                        $('#delivery_region_id').html('<option value="">Select Region</option>'); 
+                        $.each(result.states,function(key,value){
+                        $("#delivery_region_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                        });
+                        $('#delivery_city_id').html('<option value="">Select Region First</option>'); 
+                     }
+               });
+           });    
+                        $('#delivery_region_id').on('change', function() {
+                        var state_id = this.value;
+                        $("#delivery_city_id").html('');
+                        $.ajax({
+                        url:"{{url('get-cities-by-state-user')}}",
+                        type: "POST",
+                        data: {
+                        state_id: state_id,
+                        _token: '{{csrf_token()}}' 
+                        },
+                        dataType : 'json',
+                        success: function(result){
+                        $('#delivery_city_id').html('<option value="">Select City</option>'); 
+                        $.each(result.cities,function(key,value){
+                        $("#delivery_city_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                    });
+                    }
+            });
+        });
+    });
+</script>
+<?php //echo "<pre>"; print_r($customerDetail); exit('da'); ?> 
+@if($customerDetail)
+<script>
+        //Business Country City States Function on load dropdown
+        $(document).ready(function() {
+    var country_id = {{$customerDetail->business_country_id}}
+    //  alert(country_id);
+        $("#business_region_id").html('');
+                    $.ajax({
+                    url:"{{url('get-states-by-country-user')}}",
+                    type: "POST",
+                    data: {
+                    country_id: country_id,
+                    _token: '{{csrf_token()}}' 
+              },
+                    dataType : 'json',
+                    success: function(result){
+        $('#business_region_id').html('<option value="">Select Region</option>'); 
+                    $.each(result.states,function(key,value){
+                        var selectedVal =  '';
+                        if(value.id == {{$customerDetail->business_region_id}} ){
+                            selectedVal =  'selected';
+                    }
+        $("#business_region_id").append('<option value="'+value.id+'" '+selectedVal+' >'+value.name+'</option>');
+    });
+}
+}); 
+//         //onload cities
+        var state_id = {{$customerDetail->business_region_id}};
+        $("#business_city_id").html('');
+        $.ajax({
+        url:"{{url('get-cities-by-state-user')}}",
+        type: "POST",
+        data: {
+        state_id: state_id,
+        _token: '{{csrf_token()}}' 
+        },
+        dataType : 'json',
+        success: function(result){
+        $('#business_city_id').html('<option value="">Select City</option>'); 
+            $.each(result.cities,function(key,value){
+                var selectedVal =  '';
+                if(value.id == {{$customerDetail->business_city_id}} ){
+                    selectedVal =  'selected';
+                }
+        $("#business_city_id").append('<option value="'+value.id+'" '+selectedVal+' >'+value.name+'</option>');
+        });
+        }
+        });
+    });
+
+
+//Delivery Country City States Function on load dropdown
+    $(document).ready(function() {
+    var country_id = {{$customerDetail->delivery_country_id}}
+    // alert(country_id);
+        $("#delivery_region_id").html('');
+                    $.ajax({
+                    url:"{{url('get-states-by-country-user')}}",
+                    type: "POST",
+                    data: {
+                    country_id: country_id,
+                    _token: '{{csrf_token()}}' 
+              },
+                    dataType : 'json',
+                    success: function(result){
+        $('#delivery_region_id').html('<option value="">Select Region</option>'); 
+                    $.each(result.states,function(key,value){
+                        var selectedVal =  '';
+                        if(value.id == {{$customerDetail->delivery_region_id}} ){
+                            selectedVal =  'selected';
+                    }
+        $("#delivery_region_id").append('<option value="'+value.id+'" '+selectedVal+' >'+value.name+'</option>');
+    });
+}
+}); 
+
+//         //onload cities
+        var state_id = {{$customerDetail->delivery_region_id}};
+        $("#delivery_city_id").html('');
+        $.ajax({
+        url:"{{url('get-cities-by-state-user')}}",
+        type: "POST",
+        data: {
+        state_id: state_id,
+        _token: '{{csrf_token()}}' 
+        },
+        dataType : 'json',
+        success: function(result){
+        $('#delivery_city_id').html('<option value="">Select City</option>'); 
+            $.each(result.cities,function(key,value){
+                var selectedVal =  '';
+                if(value.id == {{$customerDetail->delivery_city_id}} ){
+                    selectedVal =  'selected';
+                }
+        $("#delivery_city_id").append('<option value="'+value.id+'" '+selectedVal+' >'+value.name+'</option>');
+        });
+        }
+        });
+    });
     </script>
+    @endif   
 @endsection
