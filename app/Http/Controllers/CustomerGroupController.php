@@ -19,34 +19,30 @@ class CustomerGroupController extends Controller
        if ($request->ajax()) {
            $data = GroupCustomer::all(); 
            return Datatables::of($data)
-           ->editColumn('created_at', function (GroupCustomer $data) {
-               return $data->created_at->format('d, M Y'); 
-           })
-               ->addColumn('status', function(GroupCustomer $data){
-
-                   if($data->status == 1){
-                       $status = '<span class="badge badge-success">Active</span>';
-                   }
-                   else{
-                       $status = '<span class="badge badge-danger">Suspended</span>';
-                   }
-                   return $status;
-               })
-               ->addIndexColumn()
-               ->addColumn('action', function(GroupCustomer $data){
-                   $btn = '<a data-id="'.$data->id.'" data-tab="groupCustomer" data-url="customer-group/delete" 
-                   href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
-                   $btn2 = '<a href="javascript::void(0);" class="editGroup btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
-                   if($data->status == 1){
-                       $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger ">Suspend</a>';
-                   }
-                   else{
-                       $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
-                   }
-                   return $status.' '.$btn2.' '.$btn;
-               })
-               ->rawColumns(['action','status'])
-               ->make(true);
+            ->addColumn('status', function(GroupCustomer $data){
+                if($data->status == 1){
+                    $status = '<span class="badge badge-success">Active</span>';
+                }
+                else{
+                    $status = '<span class="badge badge-danger">Suspended</span>';
+                }
+                return $status;
+            })
+            ->addIndexColumn()
+            ->addColumn('action', function(GroupCustomer $data){
+                $btn = '<a data-id="'.$data->id.'" data-tab="groupCustomer" data-url="customer-group/delete" 
+                href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
+                $btn2 = '<a href="javascript::void(0);" class="editGroup btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
+                if($data->status == 1){
+                    $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger ">Suspend</a>';
+                }
+                else{
+                    $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
+                }
+                return $status.' '.$btn2.' '.$btn;
+            })
+            ->rawColumns(['action','status'])
+            ->make(true);
        }
        return view('admin.customer.customerGroup');
    }
