@@ -43,7 +43,7 @@ class CustomerGroupController extends Controller
                    else{
                        $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
                    }
-                   return $btn.' '.$btn2.' '.$status;
+                   return $status.' '.$btn2.' '.$btn;
                })
                ->rawColumns(['action','status'])
                ->make(true);
