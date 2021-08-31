@@ -134,6 +134,9 @@
                 }); 
             
             }
+            else{
+                return false;
+            }
 }    
        //  Name Validation
         var firstName= document.getElementById("firstName");
@@ -147,7 +150,6 @@
         if(firstNameValue=="")
         {
             firstNameErr.innerHTML="name is required";
-
         }else if(!validFirstName.test(firstNameValue)){
             firstNameErr.innerHTML="name must be string";
         }else{
