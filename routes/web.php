@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DistributorController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -112,6 +113,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
         Route::post('/product-orders','HomeController@productOrders');
     }); 
+    Route::post('get-states-by-country-user',[HomeController::class,'getState']);
+    Route::post('get-cities-by-state-user',[HomeController::class,'getCity']);
 
 });
 Route::get('/', 'HomeController@index');

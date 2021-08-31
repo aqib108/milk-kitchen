@@ -9,6 +9,9 @@ use App\Models\CustomerDetail;
 use App\Models\Product;
 use App\Models\WeekDay;
 use App\Models\ProductOrder;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 
 
 class HomeController extends Controller
@@ -36,8 +39,22 @@ class HomeController extends Controller
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
        $weekDays = WeekDay::with('orderByUserID')->get();
+       $data['countries'] = Country::get(["name","id"]);
+    //    return view('customer.index',$data);
     //    dd($weekDays);
-       return view('customer.index',compact('user','customerDetail','products','weekDays'));
+       return view('customer.index',compact('user','customerDetail','products','weekDays'),$data);
+    }
+    public function getState(Request $request)
+    {
+        $data['states'] = State::where("country_id",$request->country_id)
+                    ->get(["name","id"]);
+        return response()->json($data);
+    }
+    public function getCity(Request $request)
+    {
+        $data['cities'] = City::where("state_id",$request->state_id)
+                    ->get(["name","id"]);
+        return response()->json($data);
     }
 
     public function productOrders(Request $request)
