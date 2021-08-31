@@ -116,7 +116,7 @@ class UserManagementController extends Controller
         } else {
             return response()->json([
                 'success' => true,
-                'message' => 'The email is available'
+                'message' => "<span style='color:#95d60c;'>The email is available</span>"
             ]);
         }
     }
@@ -223,7 +223,6 @@ class UserManagementController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function(Permission $data){
-                    // $btn = '<a onclick="deletePermission('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
                     $btn = '<a data-id="'.$data->id.'" data-tab="Permission" data-url="permissions/delete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="javascript::void(0);" class="editPermission btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';

@@ -102,30 +102,7 @@ class CustomerController extends Controller
         return redirect()->route('customer.index')->with('success','Customer updated successfully');
     }
 
-    ///////////////////////////////
-    //*****Customer Group's*****//
-   //////////////////////////////
-
-   public function customerGroup(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = User::role('customer')->get(); 
-            return Datatables::of($data)
-            ->editColumn('created_at', function (User $data) {
-                return $data->created_at->format('d, M Y'); 
-              })
-                ->addIndexColumn()
-                ->addColumn('action', function(User $data){
-                    $btn = '<a href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="javascript::void(0);" class="btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
-                    return $btn.' '.$btn2;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-        return view('admin.customer.customerGroup');
-    }
-
+    //Customer reports
     public function customerReport()
     {
         return view('admin.customer.customerReport');

@@ -30,7 +30,7 @@ class DistributorController extends Controller
         } else {
             return response()->json([
                 'success' => true,
-                'message' => 'The email is available'
+                'message' => "<span style='color:#95d60c;'>The email is available"
             ]);
         }
     }
@@ -56,7 +56,8 @@ class DistributorController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function(Distributor $data){
-                    $btn1 = '<a onclick="deleteDistributor('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+                    $btn1 = '<a data-id="'.$data->id.'" data-tab="distributors" data-url="distributor/delete" 
+                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="'.route('distributor.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
                      //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     if($data->status == 1){
@@ -149,20 +150,15 @@ class DistributorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        try {
-            $product = Distributor::findOrFail((int)$request->id);
-            if (empty($product)) {
-                return redirect()->back()->with('error', 'No Record Found To Delete.');
-            }
-
-            $product->delete();
-            return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
-
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 1, 'message' => 'The record could not be deleted.']);
-        }
+        $product = Distributor::findOrFail($id);
+        $product->delete();
+        return response()->json(array(
+            'data' => true,
+            'message' => 'Distributor Successfully Deleted',
+            'status' => 'success',
+        ));
     }
     public function status(Request $request)
     {
