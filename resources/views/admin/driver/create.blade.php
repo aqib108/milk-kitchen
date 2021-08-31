@@ -152,7 +152,7 @@ Add Product
     var firstNameValidation = function() {
 
         firstNameValue = firstName.value.trim();
-        validFirstName = /^[A-Za-z]+$/;
+        validFirstName = /^\w+$/;
         firstNameErr = document.getElementById('first-name-err');
         if (firstNameValue == "") {
             firstNameErr.innerHTML = "name is required";

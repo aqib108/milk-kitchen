@@ -9,11 +9,39 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
+use Validator;
 class CustomerController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+
+
+    public function checkEmail(Request $request)
+    {
+        $input = $request->only(['email']);
+
+        $request_data = [
+            'email' => 'required|email|unique:customer_details,business_email|ends_with:.com',
+        ];
+
+        $validator = Validator::make($input, $request_data);
+
+        // json is null
+        if ($validator->fails()) {
+            $errors = json_decode(json_encode($validator->errors()), 1);
+            return response()->json([
+                'success' => false,
+                'message' => array_reduce($errors, 'array_merge', array()),
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'message' => 'The email is available'
+            ]);
+        }
     }
     ///////////////////////////////
     //***** Customer's *****//

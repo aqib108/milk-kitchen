@@ -147,12 +147,12 @@
 
         }
 
-        //  Name Validation
-        var firstName = document.getElementById("firstName");
-        var firstNameValidation = function() {
-            firstNameValue = firstName.value.trim();
-            validFirstName = /^[A-Za-z]+$/;
-            firstNameErr = document.getElementById('first-name-err');
+    //  Name Validation
+    var firstName = document.getElementById("firstName");
+    var firstNameValidation = function() {
+        firstNameValue = firstName.value.trim();
+        validFirstName = /^\w+$/;
+        firstNameErr = document.getElementById('first-name-err');
 
             if (firstNameValue == "") {
                 firstNameErr.innerHTML = "This field is  required";
