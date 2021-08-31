@@ -40,8 +40,9 @@ class HomeController extends Controller
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
        $weekDays = WeekDay::with('orderByUserID')->get();
        $data['countries'] = Country::get(["name","id"]);
-    //    return view('customer.index',$data);
-    //    dd($weekDays);
+       $data['regions'] = State::get(["name","id"]);
+       $data['cities'] = City::get(["name","id"]);
+
        return view('customer.index',compact('user','customerDetail','products','weekDays'),$data);
     }
     public function getState(Request $request)
