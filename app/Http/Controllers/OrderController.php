@@ -11,7 +11,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ProductOrder::with('WeekDay')->get();
+            $data = ProductOrder::orderBy('id','DESC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('productName', function(ProductOrder $data){
@@ -23,12 +23,22 @@ class OrderController extends Controller
                     return $name;
                 })
                 ->addColumn('action', function(ProductOrder $data){
-                    $btn = '<a href="" class="btn btn-primary btn-sm"> Detail </a>';
+                    $btn = '<a href="'.route('order.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     return $btn;
                 })
                 ->rawColumns(['action','productName'])
                 ->make(true);
         }
         return view('admin.orders.index');
+    }
+
+    public function show($id)
+    {
+        $order = ProductOrder::findOrFail($id);
+        if ($order == null) {
+            return redirect()->back()->with('error', 'No Record Found.');
+        }
+        
+        return view('admin.orders.detail',compact('order'));
     }
 }

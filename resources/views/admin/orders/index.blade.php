@@ -41,8 +41,8 @@
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>
-                                        <th>Product</th>
                                         <th>Customer</th>
+                                        <th>Product</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
                                 </thead>
@@ -76,8 +76,8 @@
                 ajax: "",
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex',orderable: false, searchable: false},
-                    {data: 'productName', name: 'productName'},
                     {data: 'customerName', name: 'customerName'},
+                    {data: 'productName', name: 'productName'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
                 drawCallback: function (response) {

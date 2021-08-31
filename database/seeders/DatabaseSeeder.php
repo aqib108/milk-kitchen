@@ -13,13 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(weekDays::class);
+        $this->call([CountrySeeder::class,StateSeeder::class,CitySeeder::class]);
         // \App\Models\User::factory(10)->create();
-        $this->call([
-
-            CountrySeeder::class,
-            StateSeeder::class,
-            CitySeeder::class,
-        
-        ]);
     }
 }
