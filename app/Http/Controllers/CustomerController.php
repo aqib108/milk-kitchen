@@ -16,15 +16,13 @@ class CustomerController extends Controller
     {
         $this->middleware('auth');
     }
-
-
-
+    
     public function checkEmail(Request $request)
     {
         $input = $request->only(['email']);
 
         $request_data = [
-            'email' => 'required|email|unique:customer_details,business_email|ends_with:.com',
+            'email' => 'required|email|unique:users,email|ends_with:.com',
         ];
 
         $validator = Validator::make($input, $request_data);
@@ -39,7 +37,7 @@ class CustomerController extends Controller
         } else {
             return response()->json([
                 'success' => true,
-                'message' => 'The email is available'
+                'message' => "<span style='color:#95d60c;'>The email is available</span>"
             ]);
         }
     }
