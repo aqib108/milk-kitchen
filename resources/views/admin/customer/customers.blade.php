@@ -69,7 +69,6 @@
     <script>
         var table;
         $(document).ready(function() {
-
             table = $('#Customer').DataTable({
                 responsive: true,
                 processing: true,

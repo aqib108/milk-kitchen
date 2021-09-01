@@ -86,3 +86,7 @@ a{
 .alert{
     padding: 0 !important;
 }
+.badge-success {
+    margin: 2px;
+    padding-bottom: 6px;
+}
