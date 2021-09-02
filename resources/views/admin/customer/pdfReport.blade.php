@@ -181,7 +181,6 @@
                             </tr>
                         </thead>
                         <tbody class="week-container-tbl">
-                            {{-- {{ dd($orders->pluck('quantity')) }} --}}
                             @foreach ($orders as $product)
                                 <tr class="week_days" data-p-id="{{ $product->product->id }}">
                                     <td class="table-td-wrapper" scope="row">{{ $product->product->name }}</td>

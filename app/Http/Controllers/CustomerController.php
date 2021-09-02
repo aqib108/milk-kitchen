@@ -12,17 +12,10 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use Yajra\DataTables\DataTables;
-use App\Models\CustomerDetail;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
-use App\Models\Product;
-use App\Models\WeekDay;
-use App\Models\ProductOrder;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
 use Validator;
 use PDF;
 class CustomerController extends Controller
