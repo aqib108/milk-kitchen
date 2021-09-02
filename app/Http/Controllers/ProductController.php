@@ -191,7 +191,8 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'No Record Found.');
         }
         $product->update(['status'=> $request->input('status')]);
-        return response()->json(['status'=>'1','message'=>'Status Changed Successfully']);
+        $status = $product->status;
+        return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
 
     }
 

@@ -124,7 +124,7 @@
                         });
                         setTimeout(function() {
                             $(".alert-success").fadeOut("slow");
-                            window.location.href = "{{ route('user.index') }}";
+                            window.location.href = "{{ route('customer.index') }}";
                         }, 2000);
                     }
 

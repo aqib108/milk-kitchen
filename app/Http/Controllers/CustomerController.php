@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Yajra\DataTables\DataTables;
+use App\Models\CustomerDetail;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
+use App\Models\Product;
+use App\Models\WeekDay;
+use App\Models\ProductOrder;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 use Validator;
 class CustomerController extends Controller
 {
@@ -24,7 +31,7 @@ class CustomerController extends Controller
         $input = $request->only(['email']);
 
         $request_data = [
-            'email' => 'required|email|unique:customer_details,business_email|ends_with:.com',
+            'email' => 'required|email|unique:users,email|ends_with:.com',
         ];
 
         $validator = Validator::make($input, $request_data);
@@ -51,23 +58,38 @@ class CustomerController extends Controller
     public function customers(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::role('customer')->get(); 
+            $data = User::all(); 
             return Datatables::of($data) 
             ->editColumn('created_at', function (User $data) {
                 return $data->created_at->format('d, M Y'); 
               })
                 ->addIndexColumn()
+                ->addColumn('view',function(User $data){
+                    $btn2 = '<a href="customer/detail/'.$data->id.'" class="btn btn-sm btn-primary">View</a>';
+                     return $btn2; 
+                })
                 ->addColumn('action', function(User $data){
                     $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="customer/edit/'.$data->id.'" class="btn btn-sm btn-primary">Edit</a>';
-                    return $btn.' '.$btn2;
-                    
+                    return $btn.' '.$btn2;    
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','view'])
                 ->make(true);
         }
         return view('admin.customer.customers');
+    }
+
+    public function viewCustomer(Request $request){
+        $user = Auth::user()->id;
+        $customerDetail = CustomerDetail::where('user_id',$request->id)->first();
+       $products = Product::orderBy('id','DESC')->where('status',1)->get();
+       $weekDays = WeekDay::with('orderByUserID')->get();
+       $data['countries'] = Country::get(["name","id"]);
+       $data['regions'] = State::get(["name","id"]);
+       $data['cities'] = City::get(["name","id"]);
+
+            return view('admin.customer.viewCustomer',compact('user','customerDetail','products','weekDays'),$data);
     }
 
     //Create Customer page
@@ -79,20 +101,20 @@ class CustomerController extends Controller
     //Create New Customer
     public function createCustomer(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
         $data = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        $data->assignRole('customer');
-        return redirect()->route('customer.index')->with('success','New Customer Created!');
+        if($data->wasRecentlyCreated){
+            $response = array(
+                'data' => [],
+                'message' => 'Data Successfully Added',
+                'status' => 'success',
+            );
+            return $response;        
+        }
     }
 
     //Delete Customer
@@ -120,8 +142,7 @@ class CustomerController extends Controller
         $this->validate($request, [
             'name' => 'required|string',
             'email' => 'required|email',
-        ]);
-        
+        ]); 
         $Customer = User::find($id);
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');

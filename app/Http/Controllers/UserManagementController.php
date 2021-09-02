@@ -82,7 +82,8 @@ class UserManagementController extends Controller
             return redirect()->back()->with('error', 'No Record Found To Delete.');
         }
         $user->update(['status'=> $request->input('status')]);
-        return response()->json(['status'=>'1','message'=>'Status Changed Successfully']);
+        $status = $user->status;
+        return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
     }
 
     public function updateUser(Request $request,int $id)
