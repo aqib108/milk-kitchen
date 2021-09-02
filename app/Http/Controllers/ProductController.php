@@ -33,8 +33,7 @@ class ProductController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function(Product $data){
-                    $btn1 = '<a data-id="'.$data->id.'" data-tab="products" data-url="product/delete" 
-                    href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
+                    $btn1 = '<a onclick="deleteProduct('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="'.route('product.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
                     $btn3 = '<a href="'.route('product.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     if($data->status == 1){
@@ -173,15 +172,20 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
-        return response()->json(array(
-            'data' => true,
-            'message' => 'Product Successfully Deleted',
-            'status' => 'success',
-        ));
+        try {
+            $product = Product::findOrFail((int)$request->id);
+            if ($product == null) {
+                return redirect()->back()->with('error', 'No Record Found To Delete.');
+            }
+
+            $product->delete();
+            return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 1, 'message' => 'The record could not be deleted.']);
+        }
     }
 
     public function status(Request $request)
@@ -193,8 +197,5 @@ class ProductController extends Controller
         $product->update(['status'=> $request->input('status')]);
         $status = $product->status;
         return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
-
     }
-
-
 }
