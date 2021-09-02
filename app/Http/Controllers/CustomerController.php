@@ -188,9 +188,4 @@ class CustomerController extends Controller
         // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','orders'));
         // return $pdf->download('disney.pdf');
     }
-
-    public function getSum($id)
-    {
-        return ProductOrder::where('product_id',$id)->sum('quantity');
-    }
 }
