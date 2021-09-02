@@ -162,12 +162,12 @@ class DistributorController extends Controller
     }
     public function status(Request $request)
     {
-        $product = Distributor::findOrFail($request->id);
-        if (empty($product)) {
+        $distributor = Distributor::findOrFail($request->id);
+        if (empty($distributor)) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
-        $product->update(['status'=> $request->input('status')]);
-        return response()->json(['status'=>'1','message'=>'Status Changed Successfully']);
-
+        $distributor->update(['status'=> $request->input('status')]);
+        $status = $distributor->status;
+        return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
     }
 }
