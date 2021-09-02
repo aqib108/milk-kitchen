@@ -181,7 +181,8 @@ class AttributesController extends Controller
             return redirect()->back()->with('error', 'No Record Found.');
         }
         $attribute->update(['status'=> $request->input('status')]);
-        return response()->json(['status'=>'1','message'=>'Status Changed Successfully']);
+        $status = $attribute->status;
+        return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
 
     }
 }

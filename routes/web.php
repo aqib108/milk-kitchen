@@ -111,7 +111,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','ProductController@show')->name('product.detail');
             Route::post('/update/{id}','ProductController@update')->name('product.update');
             Route::post('/status','ProductController@status')->name('product.status');
-            Route::delete('/delete/{id}','ProductController@destroy');
+            Route::post('/delete','ProductController@destroy')->name('product.destroy');
         });
         Route::group(['prefix' => 'attributes'], function (){
             Route::get('/','AttributesController@index')->name('attribute.index');
