@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
+            Route::get('/detail/{id}','CustomerController@viewCustomer')->name('customer.customerView');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
@@ -113,7 +114,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','ProductController@show')->name('product.detail');
             Route::post('/update/{id}','ProductController@update')->name('product.update');
             Route::post('/status','ProductController@status')->name('product.status');
-            Route::delete('/delete/{id}','ProductController@destroy');
+            Route::post('/delete','ProductController@destroy')->name('product.destroy');
         });
         Route::group(['prefix' => 'attributes'], function (){
             Route::get('/','AttributesController@index')->name('attribute.index');

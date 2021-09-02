@@ -10,7 +10,6 @@ use Auth;
 
 class CustomerDetailController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -20,6 +19,7 @@ class CustomerDetailController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +29,7 @@ class CustomerDetailController extends Controller
     {
        //
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -47,6 +48,7 @@ class CustomerDetailController extends Controller
      */
     public function store(CustomerDetailRequest $request)
     {
+        
         $CustomerDetail =  [
             'user_id' => $request->input('user_id'),
             'business_name' => $request->input('business_name'),

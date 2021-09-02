@@ -116,7 +116,6 @@
             var result =
                 Swal.fire({
                     title: "Are you sure change this Status?",
-                    text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -132,15 +131,14 @@
                                 'id': id,
                                 'status': status
                             },
-                            beforeSend: function() {
-                                swal.fire({
-                                    title: "Please Wait..!",
-                                    text: "Is working..",
-                                });
-                            },
                             success: function(response) {
-                                if (response.status) {
-                                    Swal.fire("Successfully Change Status!", "success");
+                                if(response.status == 1)
+                                    {
+                                        Swal.fire("Activated!", response.message, "success");
+                                        $('#users').DataTable().ajax.reload();
+                                    }
+                                else{
+                                    Swal.fire("Suspended!", response.message, "success");
                                     $('#users').DataTable().ajax.reload();
                                 }
                             }

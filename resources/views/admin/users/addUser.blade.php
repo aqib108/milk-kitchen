@@ -216,9 +216,6 @@ Add New User
             $('#email').after('<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
         }
     }
-
-
-
         // Password Validation
         var password = document.getElementById("password");;
 
