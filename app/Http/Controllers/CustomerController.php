@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\ProductOrder;
+use App\Models\CustomerDetail;
+use App\Models\WeekDay;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
 use Validator;
+use PDF;
 class CustomerController extends Controller
 {
     public function __construct()
@@ -17,6 +25,11 @@ class CustomerController extends Controller
         $this->middleware('auth');
     }
     
+    ///////////////////////////////
+    //***** Customer's *****//
+   //////////////////////////////
+
+    //Email validation's
     public function checkEmail(Request $request)
     {
         $input = $request->only(['email']);
@@ -41,9 +54,6 @@ class CustomerController extends Controller
             ]);
         }
     }
-    ///////////////////////////////
-    //***** Customer's *****//
-   //////////////////////////////
 
    //Display all customers
     public function customers(Request $request)
@@ -132,5 +142,33 @@ class CustomerController extends Controller
     public function customerReport()
     {
         return view('admin.customer.customerReport');
+    }
+
+    public function reports(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = User::role('customer')->get(); 
+            return Datatables::of($data) 
+                ->addIndexColumn()
+                ->addColumn('action', function(User $data){
+                    $btn = '<a href="generate-pdf/'.$data->id.'" class="btn btn-sm btn-info">View</a>';
+                    return $btn;
+                    
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.customer.report');
+    }
+
+    public function generatePDF($id)
+    {
+        $customer = CustomerDetail::where('user_id',$id)->with('user')->with('bcountry')->with('bstate')->with('bcity')->with('dcountry')->with('dstate')->with('dcity')->get();
+        // $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $orders = ProductOrder::where('user_id',$id)->with('product')->with('day')->get();      
+        return view('admin.customer.pdfReport',compact('customer','orders'));
+
+        // $pdf = PDF::loadView('admin.customer.pdfReport');
+        // return $pdf->download('customerReport.pdf');
     }
 }

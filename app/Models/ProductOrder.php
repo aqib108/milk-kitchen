@@ -30,4 +30,9 @@ class ProductOrder extends Model
     {
         return $this->belongsTo(WeekDay::class);
     }
+
+    public function customerDetail()
+    {
+        return $this->belongsTo(customerDetail::class, 'user_id', 'user_id');
+    }
 }
