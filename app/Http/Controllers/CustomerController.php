@@ -18,6 +18,7 @@ use Spatie\Permission\Models\Permission;
 use Auth;
 use Validator;
 use PDF;
+use DB;
 class CustomerController extends Controller
 {
     public function __construct()
@@ -161,13 +162,13 @@ class CustomerController extends Controller
     public function reports(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::role('customer')->get(); 
+            $nilai = DB::table('product_orders')->distinct()->pluck('user_id');
+            $data = User::whereIn('id',$nilai)->get();
             return Datatables::of($data) 
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
                     $btn = '<a href="generate-pdf/'.$data->id.'" class="btn btn-sm btn-info">View</a>';
-                    return $btn;
-                    
+                    return $btn; 
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -178,11 +179,18 @@ class CustomerController extends Controller
     public function generatePDF($id)
     {
         $customer = CustomerDetail::where('user_id',$id)->with('user')->with('bcountry')->with('bstate')->with('bcity')->with('dcountry')->with('dstate')->with('dcity')->get();
-        // $products = Product::orderBy('id','DESC')->where('status',1)->get();
-        $orders = ProductOrder::where('user_id',$id)->with('product')->with('day')->get();      
-        return view('admin.customer.pdfReport',compact('customer','orders'));
+        
+        $nilai = DB::table('product_orders')->where('user_id',$id)->distinct()->pluck('product_id');
+        $products = Product::whereIn('id',$nilai)->get();
+        $orders = ProductOrder::where('user_id',$id)->with('day')->get();  
+        return view('admin.customer.pdfReport',compact('customer','products','orders'));
 
-        // $pdf = PDF::loadView('admin.customer.pdfReport');
-        // return $pdf->download('customerReport.pdf');
+        // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','orders'));
+        // return $pdf->download('disney.pdf');
+    }
+
+    public function getSum($id)
+    {
+        return ProductOrder::where('product_id',$id)->sum('quantity');
     }
 }

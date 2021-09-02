@@ -177,49 +177,78 @@
                                 <th class="table-th-wrapper" scope="col">Price</th>
                                 <th class="table-th-wrapper" scope="col">Discount</th>
                                 <th class="table-th-wrapper" scope="col">Extention</th>
-
                             </tr>
                         </thead>
                         <tbody class="week-container-tbl">
-                            @foreach ($orders as $product)
-                                <tr class="week_days" data-p-id="{{ $product->product->id }}">
-                                    <td class="table-td-wrapper" scope="row">{{ $product->product->name }}</td>
+                            @foreach ($products as $pro)
+                                <tr class="week_days" data-p-id="{{ $pro->id }}">
+                                    <td class="table-td-wrapper" scope="row">{{ $pro->name }}</td>
                                     <td>
-                                        @if ($product->day->name == 'Monday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 1)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($product->day->name == 'Tuesday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 2)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($product->day->name == 'Wednesday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 3)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($product->day->name == 'Thursday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 4)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($product->day->name == 'Friday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 5)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($product->day->name == 'Saturday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 6)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($product->day->name == 'Sunday')
-                                            {{ $product->quantity }}
-                                        @else {{ '' }} @endif
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @if ($item->day->id == 7)
+                                                    {{ $item->quantity }}
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     </td>
-                                    <td></td>
+                                    <td>
+
+                                    </td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
