@@ -27,10 +27,7 @@
                 <div>
                     <h2 class="heading-one-banner">FOOD SERVICE PORTAL</h2>
                 </div>
-
             </div>
-
-
         </div>
     </section>
     <section class="pb-5">
@@ -40,8 +37,6 @@
                     <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
                 </div>
                 <div class="___class_+?10___">
-
-
                     <div class="form-container pt-4">
                         <div class="row">
                             <div class="col-lg-6 border-riht-clr">
@@ -136,15 +131,11 @@
                                         <div>
                                             <p class="label-wrapper-custm"> Period Covered</p>
                                             <span>-------------</span>
-
                                         </div>
-
-
                                     </div>
                                 </form>
                             </div>
                         </div>
-
                         <div class="row mb-40-wrapper">
                             <div class="col-lg-12">
                                 <div class="form-group">
@@ -250,7 +241,7 @@
                                         @php $total=0; @endphp
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @php   $total += $item->quantity @endphp
+                                                @php $total += $item->quantity @endphp
                                             @endif
                                         @endforeach
                                         {{ $total }}
@@ -259,7 +250,7 @@
                                         @php $price=0; @endphp
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @php   $price = $total * $item->product->price @endphp
+                                                @php $price = $total * $item->product->price @endphp
                                             @endif
                                         @endforeach
                                         {{ '$' . $price }}
@@ -268,7 +259,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @php   $discount = 10 @endphp
+                                                @php $discount = 10 @endphp
                                             @endif
                                         @endforeach
                                         {{ '$' . ($price / 100) * 1.5 }}
@@ -278,7 +269,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @php   $extention = 20 @endphp
+                                                @php $extention = 20 @endphp
                                             @endif
                                         @endforeach
                                         {{ $extention }}
@@ -308,7 +299,6 @@
                                 <td class="text-left-wrapper grand-total"> Total</td>
                                 <td class="text-right-wrapper grand-total-value">$10330.333</td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -339,17 +329,14 @@
     <script src="{{ asset('customer-panel/js/fontawesome.js') }}"></script>
     <script>
         $(document).ready(function() {
-
-            var sum = 0;
-            var dis = 0;
+            var sum = 0,
+                dis = 0;
             $(".price").each(function() {
                 sum += +$(this).val();
             });
-
             $(".discount").each(function() {
                 dis += +$(this).val();
             });
-
             var final = sum - dis;
             $('.totalprice').val('$' + final);
         });
