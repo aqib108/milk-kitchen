@@ -186,7 +186,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 1)
+                                                @if ($item->day->name == 'Monday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -195,7 +195,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 2)
+                                                @if ($item->day->name == 'Tuesday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -204,7 +204,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 3)
+                                                @if ($item->day->name == 'Wednesday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -213,7 +213,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 4)
+                                                @if ($item->day->name == 'Thursday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -222,7 +222,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 5)
+                                                @if ($item->day->name == 'Friday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -231,7 +231,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 6)
+                                                @if ($item->day->name == 'Saturday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -240,7 +240,7 @@
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
-                                                @if ($item->day->id == 7)
+                                                @if ($item->day->name == 'Sunday')
                                                     {{ $item->quantity }}
                                                 @endif
                                             @endif
@@ -271,8 +271,9 @@
                                                 @php   $discount = 10 @endphp
                                             @endif
                                         @endforeach
-                                        {{ $price / 5 }}
-                                        <input type="hidden" value="{{ $price / 5 }}" class="discount">
+                                        {{ '$' . ($price / 100) * 1.5 }}
+                                        <input type="hidden" value="{{ ($price / 100) * 1.5 }}"
+                                            class="discount">
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
