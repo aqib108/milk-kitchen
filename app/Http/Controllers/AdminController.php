@@ -29,7 +29,8 @@ class AdminController extends Controller
     
     public function index()
     {
-        return view('admin.index');
+        $user = Auth::user();
+        return view('admin.index',compact('user'));
     }
 
     public function mangeDashBoard()

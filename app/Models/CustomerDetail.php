@@ -28,4 +28,11 @@ class CustomerDetail extends Model
     'delivery_region_id',
     'delivery_notes',
   ];
+
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+
+
 }
