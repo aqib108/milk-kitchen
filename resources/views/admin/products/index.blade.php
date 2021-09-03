@@ -75,75 +75,82 @@
                 processing: true,
                 serverSide: true,
                 ajax: "",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'price',
-                        name: 'price'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                columns: [
+                    { data: 'DT_RowIndex',name: 'DT_RowIndex',orderable: false,searchable: false},
+                    { data: 'name',name: 'name'},
+                    { data: 'price',name: 'price'},
+                    { data: 'status',name: 'status'},
+                    { data: 'action',name: 'action',orderable: false,searchable: false},
                 ],
                 drawCallback: function(response) {
-
                     $('#countTotal').empty();
                     $('#countTotal').append(response['json'].recordsTotal);
                 }
             });
         });
-
         // Change Status Product
         function changeStatus(id, status) {
             var result =
-                Swal.fire({
-                    title: "Are you sure change this Status?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, Change it!"
-                }).then(result => {
-                    if (result.value) {
-                        $.ajax({
-                            method: "POST",
-                            url: '{{ route('product.status') }}',
-                            data: {
-                                _token: $('meta[name="csrf-token"]').attr('content'),
-                                'id': id,
-                                'status': status
-                            },
-                            beforeSend: function() {
-                                swal.fire({
-                                    title: "Please Wait..!",
-                                    text: "Is working..",
-                                });
-                            },
-                            success: function(response) {
-                                if (response.status) {
-                                    Swal.fire("Successfully Change Status!", "success");
-                                    $('#products').DataTable().ajax.reload();
-                                }
+            Swal.fire({
+                title: "Are you sure change this Status?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change it!"
+            }).then(result => {
+                if (result.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: '{{ route('product.status') }}',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id': id,
+                            'status': status
+                        },
+                        success: function(response) {
+                            if (response.status == 1) {
+                                Swal.fire("Active!", response.message, "success");
+                                $('#products').DataTable().ajax.reload();
+                            }else{
+                                Swal.fire("Inactive!", response.message, "success");
+                                $('#products').DataTable().ajax.reload();
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
+            });
+        };
+        // Destory Product
+        function deleteProduct(id,event) {
+            var result =
+            Swal.fire({
+                title: "Are you sure delete this product?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change it!"
+            }).then(result => {
+                if (result.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ route('product.destroy') }}",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            'id': id
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            if(response.status)
+                            {
+                                Swal.fire("Deleted!", response.message, "success");
+                                $('#products').DataTable().ajax.reload();
+                            }
+                        }
+                    });
+                }   
+            });
         };
     </script>
 @endsection

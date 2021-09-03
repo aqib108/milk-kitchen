@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 @section('page_title')
-    Add New User
+Add New User
 @endsection
 
 @section('content')
@@ -97,155 +97,152 @@
 
 @section('scripts')
 
-    <script>
-        document.getElementById("registrationForm").onsubmit = function(e) {
-            firstNameValidation();
-            // lastNameValidation();
-            emailAddressValidation();
-            // mobileNumberValidation();
-            passwordValidation();
-            confirmPasswordValidation();
+<script>
+    document.getElementById("registrationForm").onsubmit = function(e) {
+        firstNameValidation();
+        // lastNameValidation();
+        emailAddressValidation();
+        // mobileNumberValidation();
+        passwordValidation();
+        confirmPasswordValidation();
 
-            if (firstNameValidation() == true &&
-                emailAddressValidation() == true &&
-                passwordValidation() == true &&
-                confirmPasswordValidation() == true) {
-                event.preventDefault();
-                var formData = new FormData(this);
-                $.ajax({
-                    method: "POST",
-                    data: formData,
-                    url: '{{ route('user.store') }}',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function(response) {
-                        if (response.status == "success") {
-                            $('#submit').hide();
-                            Swal.fire({
-                                position: 'top-end',
-                                toast: true,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'success',
-                                title: response.message,
-                            });
-                            setTimeout(function() {
-                                $(".alert-success").fadeOut("slow");
-                                window.location.href = "{{ route('user.index') }}";
-                            }, 2000);
-                        }
-
-                    },
-                });
-
-            } else {
-                return false;
-            }
-        }
-        //  Name Validation
-        var firstName = document.getElementById("firstName");
-
-        var firstNameValidation = function() {
-
-            firstNameValue = firstName.value.trim();
-            validFirstName = /^[A-Za-z]+$/;
-            firstNameErr = document.getElementById('first-name-err');
-
-            if (firstNameValue == "") {
-                firstNameErr.innerHTML = "name is required";
-            } else if (!validFirstName.test(firstNameValue)) {
-                firstNameErr.innerHTML = "name must be string";
-            } else {
-                firstNameErr.innerHTML = "";
-                return true;
-
-            }
-        }
-
-        firstName.oninput = function() {
-
-            firstNameValidation();
-        }
-
-        // Email Address Validation
-        var emailAddress = document.getElementById("emailAddress");
-        var emailAddressValidation = function() {
-
-            emailAddressValue = emailAddress.value.trim();
-            validEmailAddress = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            emailAddressErr = document.getElementById('email-err');
-
-            if (emailAddressValue == "") {
-                emailAddressErr.innerHTML = "Email Address is required";
-
-            } else if (!validEmailAddress.test(emailAddressValue)) {
-                emailAddressErr.innerHTML = "Email Address must be in valid formate with @ symbol";
-            } else {
-                emailAddressErr.innerHTML = "";
-                return true;
-            }
-
-        }
-
-        emailAddress.oninput = function() {
-            var startTimer;
-            let email = $(this).val();
-            startTimer = setTimeout(checkEmail, 500, email);
-            emailAddressValidation();
-        }
-
-
-        function checkEmail(email) {
-            emailAddressErr = document.getElementById('email-err');
-            $('#email-error').remove();
-            if (email.length > 1) {
-                $.ajax({
-                    type: 'post',
-                    url: "{{ route('user.checkEmail') }}",
-                    data: {
-                        email: email,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(data) {
-                        if (data.success == false) {
-                            emailAddressErr.innerHTML = data.message[0];
-                            // $('#email').after('<div id="email-err" class="text-danger" <strong>'+data.message[0]+'<strong></div>');
-                        } else {
-                            emailAddressErr.innerHTML = data.message;
-                            // $('#email').after('<div id="email-err" class="text-success" <strong>'+data.message+'<strong></div>');
-                        }
-
+        if (firstNameValidation() == true &&
+            emailAddressValidation() == true &&
+            passwordValidation() == true &&
+            confirmPasswordValidation() == true) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                method: "POST",
+                data: formData,
+                url: '{{route('user.store')}}',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(response) {
+                    if (response.status == "success") {
+                        $('#submit').hide();
+                        Swal.fire({
+                            position: 'top-end',
+                            toast: true,
+                            showConfirmButton: false,
+                            timer: 2000,
+                            icon: 'success',
+                            title: response.message,
+                        });
+                        setTimeout(function() {
+                            $(".alert-success").fadeOut("slow");
+                            window.location.href = "{{ route('user.index') }}";
+                        }, 2000);
                     }
-                });
-            } else {
-                $('#email').after(
-                    '<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
-            }
+
+                },
+            });
+        } else {
+            return false;
         }
+    }
 
 
+    //  Name Validation
+    var firstName = document.getElementById("firstName");
+    var firstNameValidation = function() {
+        firstNameValue = firstName.value.trim();
+        // validFirstName = /^[A-Za-z]+$/;
+        validFirstName = /^\w+$/;
+        firstNameErr = document.getElementById('first-name-err');
 
+        if (firstNameValue == "") {
+            firstNameErr.innerHTML = "name is required";
+        } else if (!validFirstName.test(firstNameValue)) {
+            firstNameErr.innerHTML = " Username must contain only letters, numbers and underscores!";
+        } else {
+            firstNameErr.innerHTML = "";
+            return true;
+        }
+    }
+    firstName.oninput = function() {
+        firstNameValidation();
+    }
+
+    // Email Address Validation
+    var emailAddress = document.getElementById("emailAddress");
+    var emailAddressValidation = function() {
+        emailAddressValue = emailAddress.value.trim();
+        validEmailAddress = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        emailAddressErr = document.getElementById('email-err');
+
+        if (emailAddressValue == "") {
+            emailAddressErr.innerHTML = "Email Address is required";
+        } else if (!validEmailAddress.test(emailAddressValue)) {
+            emailAddressErr.innerHTML = "Email Address must be in valid formate with @ symbol";
+        } else {
+            emailAddressErr.innerHTML = "";
+            return true;
+        }
+    }
+
+    emailAddress.oninput = function() {
+        var startTimer;
+        let email = $(this).val();
+        startTimer = setTimeout(checkEmail, 500, email);
+        emailAddressValidation();
+    }
+
+
+    function checkEmail(email) {
+        emailAddressErr = document.getElementById('email-err');
+        $('#email-error').remove();
+        if (email.length > 1) {
+            $.ajax({
+                type: 'post',
+                url: "{{ route('user.checkEmail') }}",
+                data: {
+                    email: email,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(data) {
+                    if (data.success == false) {
+                        emailAddressErr.innerHTML = data.message[0];
+                        // $('#email').after('<div id="email-err" class="text-danger" <strong>'+data.message[0]+'<strong></div>');
+                    } else {
+                        emailAddressErr.innerHTML = data.message;
+                        // $('#email').after('<div id="email-err" class="text-success" <strong>'+data.message+'<strong></div>');
+                    }
+
+                }
+            });
+        } else {
+            $('#email').after('<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
+        }
+    }
         // Password Validation
         var password = document.getElementById("password");;
 
         var passwordValidation = function() {
+        passwordValue = password.value.trim();
+        re = /[0-9]/;  re1 = /[a-z]/;      re2 = /[A-Z]/;
+        passwordErr = document.getElementById('password-err');
 
-            passwordValue = password.value.trim();
-            validPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-
-            passwordErr = document.getElementById('password-err');
-
-            if (passwordValue == "") {
-                passwordErr.innerHTML = "Password is required";
-            } else if (!validPassword.test(passwordValue)) {
-                passwordErr.innerHTML =
-                    "Password must have at least one Uppercase, lowercase, digit, special characters & 8 characters";
-            } else {
-                passwordErr.innerHTML = "";
-                return true;
-            }
+        if (passwordValue == "") {
+            passwordErr.innerHTML = "Password is required";
+        } 
+        else if(!re.test(passwordValue)) {
+        passwordErr.innerHTML="Error: password must contain at least one number (0-9)!";
         }
+        else  if(!re1.test(passwordValue)) {
+            passwordErr.innerHTML="Error: password must contain at least one lowercase letter (a-z)!";
+            return false;
+        }
+        else  if(!re2.test(passwordValue)) {
+            passwordErr.innerHTML="Error: password must contain at least one uppercase letter (A-Z)!";
+            return false;
+        }
+       else {
+            passwordErr.innerHTML = "";
+            return true;
+        }
+    }
 
         password.oninput = function() {
 

@@ -10,7 +10,6 @@ use Auth;
 
 class CustomerDetailController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -20,6 +19,7 @@ class CustomerDetailController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +29,7 @@ class CustomerDetailController extends Controller
     {
        //
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -47,6 +48,7 @@ class CustomerDetailController extends Controller
      */
     public function store(CustomerDetailRequest $request)
     {
+        
         $CustomerDetail =  [
             'user_id' => $request->input('user_id'),
             'business_name' => $request->input('business_name'),
@@ -69,8 +71,7 @@ class CustomerDetailController extends Controller
 
         $customerDetail = CustomerDetail::create($CustomerDetail);
 
-        return response()->json(['success'=>'Your Record Added Successfully!.', 'customerDetail'=>$customerDetail]);
-        
+        return response()->json(['success'=>'Your Record Added Successfully!.', 'customerDetail'=>$customerDetail]);  
     }
 
     /**
@@ -104,7 +105,6 @@ class CustomerDetailController extends Controller
      */
     public function update(CustomerDetailRequest $request,$id)
     {
-        // dd($id);
         $customerDetail = CustomerDetail::where('user_id',$id)->update([
             'business_name' => $request->input('business_name'),
             'business_address_1' => $request->input('business_address_1'),
@@ -122,13 +122,9 @@ class CustomerDetailController extends Controller
             'delivery_region_id' => $request->input('delivery_region_id'),
             'delivery_city_id' => $request->input('delivery_city_id'),
             'delivery_notes' => $request->input('delivery_notes'),
-            ]);
-        // dd($customerDetail);
-        return response()->json(['success'=>'Your Record Successfully Updated!.']);
+        ]);
 
-
-
-       
+        return response()->json(['success'=>'Your Record Successfully Updated!.']);  
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Http\Requests\AttributeRequest;
 use App\Repositories\AttributeRepository;
 use App\Models\Attribute;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 
@@ -31,6 +32,13 @@ class AttributesController extends Controller
                     }
                     return $name;
                 })
+                ->addColumn('description', function(Attribute $data){
+
+                    $str = Str::limit($data->description, 100, '...');
+                    $description = strip_tags($str);
+                    return $description;
+
+                })
                 ->addColumn('status', function(Attribute $data){
                     if($data->status == 1){
                         $status = '<span class="badge badge-success">Active</span>';
@@ -52,7 +60,7 @@ class AttributesController extends Controller
 
                     return $btn1.' '.$btn2.' '.$status;
                 })
-                ->rawColumns(['action','status','name'])
+                ->rawColumns(['action','status','name','description'])
                 ->make(true);
         }
         return view('admin.attributes.index');
@@ -173,7 +181,8 @@ class AttributesController extends Controller
             return redirect()->back()->with('error', 'No Record Found.');
         }
         $attribute->update(['status'=> $request->input('status')]);
-        return response()->json(['status'=>'1','message'=>'Status Changed Successfully']);
+        $status = $attribute->status;
+        return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
 
     }
 }

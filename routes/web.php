@@ -32,6 +32,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function (){
         Route::get('/', 'AdminController@index')->name('dashboard');
         Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
+        Route::group(['as' => 'admin.'], function () {
+            Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
+            Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
+            Route::post('/check-password', 'AdminController@checkPassword')->name('check-password');
+            Route::post('/update-password', 'AdminController@updatePassword')->name('update-password');
+        });
         Route::group(['prefix' => 'users'], function (){
             Route::post('/checkEmail','UserManagementController@checkEmail')->name('user.checkEmail');
             Route::get('/','UserManagementController@users')->name('user.index');
@@ -56,10 +62,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/delete/{id}','UserManagementController@deleteRole');
         });
         Route::group(['prefix' => 'customer'], function (){
-
+            Route::post('/checkEmail','CustomerController@checkEmail')->name('customer.checkEmail');
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
+            Route::get('/detail/{id}','CustomerController@viewCustomer')->name('customer.customerView');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
@@ -105,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','ProductController@show')->name('product.detail');
             Route::post('/update/{id}','ProductController@update')->name('product.update');
             Route::post('/status','ProductController@status')->name('product.status');
-            Route::delete('/delete/{id}','ProductController@destroy');
+            Route::post('/delete','ProductController@destroy')->name('product.destroy');
         });
         Route::group(['prefix' => 'attributes'], function (){
             Route::get('/','AttributesController@index')->name('attribute.index');
@@ -118,6 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'order'], function (){
             Route::get('/','OrderController@index')->name('order.index');
+            Route::get('/detail/{id}','OrderController@show')->name('order.detail');
         });
         Route::group(['prefix' => 'sale'], function (){
             Route::get('/','SaleController@reoccurring')->name('sale.index');

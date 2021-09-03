@@ -99,7 +99,6 @@
             var result =
             Swal.fire({
                 title: "Are you sure change this Status?",
-                text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -115,16 +114,14 @@
                             'id': id,
                             'status': status
                         },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
                         success: function (response) {
-                            if(response.status)
+                            if(response.status == 1)
                             {
-                                Swal.fire("Successfully Change Status!", "success");
+                                Swal.fire("Active!", response.message, "success");
+                                $('#Arrtibutes').DataTable().ajax.reload();
+                            }
+                            else{
+                                Swal.fire("Inactive!", response.message, "success");
                                 $('#Arrtibutes').DataTable().ajax.reload();
                             }
                         }
@@ -139,7 +136,6 @@
             var result =
             Swal.fire({
                 title: "Are you sure delete this attribute?",
-                text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -154,17 +150,11 @@
                             _token: $('meta[name="csrf-token"]').attr('content'),
                             'id': id
                         },
-                        beforeSend: function() {
-                            swal.fire({
-                                title: "Please Wait..!",
-                                text: "Is working..",
-                            });
-                        },
                         success: function (response) {
                             console.log(response)
                             if(response.status)
                             {
-                                Swal.fire("Successfully Deleted!", "success");
+                                Swal.fire("Deleted!", response.message, "success");
                                 $('#Arrtibutes').DataTable().ajax.reload();
                             }
                         }
