@@ -81,14 +81,6 @@
                         data: 'email',
                         name: 'email'
                     },
-                    // {
-                    //     data: 'price',
-                    //     name: 'price'
-                    // },
-                    // {
-                    //     data: 'quantity',
-                    //     name: 'quantity'
-                    // },
                     {
                         data: 'action',
                         name: 'action',

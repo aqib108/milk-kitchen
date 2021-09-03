@@ -247,17 +247,50 @@
                                         @endforeach
                                     </td>
                                     <td>
-
+                                        @php $total=0; @endphp
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @php   $total += $item->quantity @endphp
+                                            @endif
+                                        @endforeach
+                                        {{ $total }}
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td id="price">
+                                        @php $price=0; @endphp
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @php   $price = $total * $item->product->price @endphp
+                                            @endif
+                                        @endforeach
+                                        {{ '$' . $price }}
+                                        <input type="hidden" value="{{ $price }}" class="price">
+                                    </td>
+                                    <td>
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @php   $discount = 10 @endphp
+                                            @endif
+                                        @endforeach
+                                        {{ $price / 5 }}
+                                        <input type="hidden" value="{{ $price / 5 }}" class="discount">
+                                    </td>
+                                    <td>
+                                        @foreach ($orders as $item)
+                                            @if ($pro->id == $item->product_id)
+                                                @php   $extention = 20 @endphp
+                                            @endif
+                                        @endforeach
+                                        {{ $extention }}
+                                    </td>
                                 </tr>
                             @endforeach
                             <tr>
                                 <td class="custom-colspan" colspan="10"></td>
                                 <td class="text-left-wrapper">Sub Total</td>
-                                <td class="text-right-wrapper">$1050.333</td>
+                                <td class="text-right-wrapper">
+                                    <input style="border:none;background:none;" class="text-center totalprice"
+                                        disabled="disabled" readonly>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="custom-colspan" colspan="10"></td>
@@ -303,6 +336,23 @@
     <script src="{{ asset('customer-panel/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('customer-panel/js/index.js') }}"></script>
     <script src="{{ asset('customer-panel/js/fontawesome.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+
+            var sum = 0;
+            var dis = 0;
+            $(".price").each(function() {
+                sum += +$(this).val();
+            });
+
+            $(".discount").each(function() {
+                dis += +$(this).val();
+            });
+
+            var final = sum - dis;
+            $('.totalprice').val('$' + final);
+        });
+    </script>
 </body>
 
 </html>

@@ -182,7 +182,7 @@ class CustomerController extends Controller
         
         $nilai = DB::table('product_orders')->where('user_id',$id)->distinct()->pluck('product_id');
         $products = Product::whereIn('id',$nilai)->get();
-        $orders = ProductOrder::where('user_id',$id)->with('day')->get();  
+        $orders = ProductOrder::where('user_id',$id)->with('day')->get(); 
         return view('admin.customer.pdfReport',compact('customer','products','orders'));
 
         // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','orders'));
