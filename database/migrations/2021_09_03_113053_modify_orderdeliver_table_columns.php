@@ -14,10 +14,13 @@ class ModifyOrderdeliverTableColumns extends Migration
     public function up()
     {
         Schema::table('order_deliverds', function (Blueprint $table) {
-               
+            $table->unsignedBigInteger('user_id')->change();   
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->change();
+            $table->unsignedBigInteger('product_id')->change();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->change();
+            $table->integer('day_id')->unsigned()->change();
             $table->foreign('day_id')->references('id')->on('week_days')->onDelete('cascade')->change();
+
         });
     }
 
