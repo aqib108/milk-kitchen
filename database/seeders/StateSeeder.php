@@ -13617,7 +13617,7 @@ class StateSeeder extends Seeder
                 ],
                 [
                     "id" => "2726",
-                    "name" => "North-West Frontier",
+                    "name" => "KPK",
                     "country_id" => "166"
                 ],
                 [

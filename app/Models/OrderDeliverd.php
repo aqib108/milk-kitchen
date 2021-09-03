@@ -5,16 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductOrder extends Model
+class OrderDeliverd extends Model
 {
     use HasFactory;
-
     protected $fillable =[
         'user_id',
         'product_id',
         'day_id',
         'quantity'
     ];
+
+    public function WeekDay()
+    {
+        return $this->hasMany(ProductOrder::class,'day_id');
+    }
 
     public function product()
     {
@@ -25,5 +29,4 @@ class ProductOrder extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }
