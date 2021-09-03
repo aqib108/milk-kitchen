@@ -246,7 +246,7 @@
                                         @endforeach
                                         {{ $total }}
                                     </td>
-                                    <td id="price">
+                                    <td>
                                         @php $price=0; @endphp
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
@@ -287,17 +287,20 @@
                             <tr>
                                 <td class="custom-colspan" colspan="10"></td>
                                 <td class="text-left-wrapper">Freight</td>
-                                <td class="text-right-wrapper">$109</td>
+                                <td class="text-right-wrapper">$0.00</td>
                             </tr>
                             <tr>
                                 <td class="custom-colspan" colspan="10"></td>
                                 <td class="text-left-wrapper">GST 15%</td>
-                                <td class="text-right-wrapper">$112</td>
+                                <td class="text-right-wrapper">$0.00</td>
                             </tr>
                             <tr>
                                 <td class="custom-colspan" colspan="10"></td>
                                 <td class="text-left-wrapper grand-total"> Total</td>
-                                <td class="text-right-wrapper grand-total-value">$10330.333</td>
+                                <td class="text-right-wrapper grand-total-value">
+                                    <input style="border:none;background:none;" class="text-center totalprice"
+                                        disabled="disabled" readonly>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -24,6 +24,7 @@ class UserManagementController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function users(Request $request)
     {
         if ($request->ajax()) {
@@ -176,8 +177,6 @@ class UserManagementController extends Controller
                 ->rawColumns(['action','permissions'])
                 ->make(true);
         }
-
-
         return view('admin.users.roles',compact('permissions'));
     }
 
@@ -203,9 +202,7 @@ class UserManagementController extends Controller
             'permissions' => 'required|array'
         ]);
 
-        $data = [
-            'permissions' =>$request->input('permissions',[]),
-        ];
+        $data = [ 'permissions' => $request->input('permissions',[]),];
         $role->syncPermissions($data);
 
         return redirect()->route('role.index')->with('success','Role updated successfully');
