@@ -85,14 +85,17 @@ class CustomerController extends Controller
     public function viewCustomer($id)
     {
         $customerID = $id;
-        $customerDetail = User::find($customerID);
+        $customer = User::find($customerID);
+        $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
         $products = Product::orderBy('id','DESC')->where('status',1)->get();
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
             $q->userDetail($customerID);
         }])->get();
+        $data['countries'] = Country::get(["name","id"]);
+        $data['regions'] = State::get(["name","id"]);
+        $data['cities'] = City::get(["name","id"]);
 
-
-        return view('admin.customer.viewCustomer',compact('customerID','customerDetail','products','weekDays'));
+        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
     }
 
     //Create Customer page
@@ -188,5 +191,42 @@ class CustomerController extends Controller
 
         // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','products','orders'));
         // return $pdf->download('customerReport.pdf');
+    }
+
+    public function productOrderAdmin(Request $request,$id)
+    {
+        $validate = $request->validate([
+            'day_id' => 'required',
+            'product_id' => 'required',
+            'qnty' => 'required',
+        ]);
+
+        $customerID = $id;
+        $customer = User::find($customerID);
+        
+        if($validate){
+            $data = ProductOrder::updateOrCreate([
+                'user_id'    => $customer->id,
+                'day_id'     => $request->day_id,
+                'product_id' => $request->product_id],[
+                'quantity' => $request->qnty,
+            ]);
+            if($data->wasRecentlyCreated){
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Your Order Successfully created',
+                ]);
+            }else{
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Your Order Successfully updated',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong, Please try again!',
+            ],401);
+        }
     }
 }
