@@ -306,7 +306,7 @@
                                             }
                                         @endphp
                                         <td>
-                                            <input id="{{ $item->name }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                            <input id="{{ $item->name }}" data-id-user="{{ $customerDetail->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                             text-align: center;" value="{{$qnty}}" minlength="0">
                                         </td>
                                     @endforeach
