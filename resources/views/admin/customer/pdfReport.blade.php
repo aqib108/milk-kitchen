@@ -42,74 +42,74 @@
                                 <div class="col-lg-6 border-riht-clr">
                                     <div>
                                         <h2 class="heading-inner-top">
-                                            @if (isset($customer[0]->business_name))
-                                                {{ $customer[0]->business_name }}@else{{ '' }}
-                                            @endif
+                                            @isset($customer[0]->business_name)
+                                                {{ $customer[0]->business_name }}
+                                            @endisset
                                         </h2>
                                     </div>
                                     <form class="custom-form">
                                         <div>
                                             <div>
                                                 <p class="label-wrapper-custm">Address 1</p>
-                                                <span>@if (isset($customer[0]->business_address_1)){{$customer[0]->business_address_1}}@else{{ '' }}@endif</span>
+                                                <span>@isset($customer[0]->business_address_1){{$customer[0]->business_address_1}}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Address 2 </p>
-                                                <span>@if (isset($customer[0]->business_address_2)){{ $customer[0]->business_address_2 }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->business_address_2){{ $customer[0]->business_address_2 }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Suburb</p>
-                                                <span>@if (isset($customer[0]->bcountry->name)){{ $customer[0]->bcountry->name }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->bcountry->name){{ $customer[0]->bcountry->name }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">City</p>
-                                                <span>@if (isset($customer[0]->bcity->name)){{ $customer[0]->bcity->name }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->bcity->name){{ $customer[0]->bcity->name }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Region</p>
-                                                <span>@if (isset($customer[0]->bstate->name)){{ $customer[0]->bstate->name }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->bstate->name){{ $customer[0]->bstate->name }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Phone</p>
-                                                <span>@if (isset($customer[0]->business_phone_no)){{ $customer[0]->business_phone_no }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->business_phone_no){{ $customer[0]->business_phone_no }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Email</p>
-                                                <span>@if (isset($customer[0]->business_email)){{ $customer[0]->business_email }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->business_email){{ $customer[0]->business_email }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Contact</p>
-                                                <span>@if (isset($customer[0]->business_contact_no)){{ $customer[0]->business_contact_no }}@else{{ '' }} @endif</span>
+                                                <span>@isset($customer[0]->business_contact_no){{ $customer[0]->business_contact_no }}@endisset</span>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="col-lg-6">
                                     <div>
-                                        <h2 class="heading-inner-top">@if (isset($customer[0]->delivery_name)){{ $customer[0]->delivery_name }}@else{{ '' }}@endif
+                                        <h2 class="heading-inner-top">@isset($customer[0]->delivery_name){{ $customer[0]->delivery_name }}@endisset
                                         </h2>
                                     </div>
                                     <form class="custom-form">
                                         <div>
                                             <div>
                                                 <p class="label-wrapper-custm">Address 1</p>
-                                                <span>@if (isset($customer[0]->delivery_address_1)){{ $customer[0]->delivery_address_1 }}@else{{ '' }}@endif</span>
+                                                <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Address 2 </p>
-                                                <span>@if (isset($customer[0]->delivery_address_2)){{ $customer[0]->delivery_address_2 }}@else{{ '' }}@endif</span>
+                                                <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Suburb</p>
-                                                <span>@if (isset($customer[0]->dcountry->name)){{ $customer[0]->dcountry->name }}@else{{ '' }}@endif</span>
+                                                <span>@isset($customer[0]->dcountry->name){{ $customer[0]->dcountry->name }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">City</p>
-                                                <span>@if (isset($customer[0]->dcity->name)){{ $customer[0]->dcity->name }}@else{{ '' }}@endif</span>
+                                                <span>@isset($customer[0]->dcity->name){{ $customer[0]->dcity->name }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">Region</p>
-                                                <span>@if (isset($customer[0]->dstate->name)){{ $customer[0]->dstate->name }}@else{{ '' }}@endif</span>
+                                                <span>@isset($customer[0]->dstate->name){{ $customer[0]->dstate->name }}@endisset</span>
                                             </div>
                                             <div>
                                                 <p class="label-wrapper-custm">GST Number:</p>
