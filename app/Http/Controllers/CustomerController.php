@@ -4,28 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Yajra\DataTables\DataTables;
+use App\Models\Product;
+use App\Models\ProductOrder;
 use App\Models\CustomerDetail;
+use App\Models\WeekDay;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
-use App\Models\Product;
-use App\Models\WeekDay;
-use App\Models\ProductOrder;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
 use Validator;
+use PDF;
+use DB;
 class CustomerController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
     }
+    
+    ///////////////////////////////
+    //***** Customer's *****//
+   //////////////////////////////
 
-
-
+    //Email validation's
     public function checkEmail(Request $request)
     {
         $input = $request->only(['email']);
@@ -46,13 +51,10 @@ class CustomerController extends Controller
         } else {
             return response()->json([
                 'success' => true,
-                'message' => 'The email is available'
+                'message' => "<span style='color:#95d60c;'>The email is available</span>"
             ]);
         }
     }
-    ///////////////////////////////
-    //***** Customer's *****//
-   //////////////////////////////
 
    //Display all customers
     public function customers(Request $request)
@@ -158,5 +160,35 @@ class CustomerController extends Controller
     public function customerReport()
     {
         return view('admin.customer.customerReport');
+    }
+
+    public function reports(Request $request)
+    {
+        if ($request->ajax()) {
+            $nilai = DB::table('product_orders')->distinct()->pluck('user_id');
+            $data = User::whereIn('id',$nilai)->get();
+            return Datatables::of($data) 
+                ->addIndexColumn()
+                ->addColumn('action', function(User $data){
+                    $btn = '<a href="generate-pdf/'.$data->id.'" class="btn btn-sm btn-info">View</a>';
+                    return $btn; 
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.customer.report');
+    }
+
+    public function generatePDF($id)
+    {
+        $customer = CustomerDetail::where('user_id',$id)->with('user')->with('bcountry')->with('bstate')->with('bcity')->with('dcountry')->with('dstate')->with('dcity')->get();
+        
+        $getCustomer = DB::table('product_orders')->where('user_id',$id)->distinct()->pluck('product_id');
+        $products = Product::whereIn('id',$getCustomer)->get();
+        $orders = ProductOrder::where('user_id',$id)->with('day')->get(); 
+        return view('admin.customer.pdfReport',compact('customer','products','orders'));
+
+        // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','products','orders'));
+        // return $pdf->download('customerReport.pdf');
     }
 }
