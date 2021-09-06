@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
             Route::get('/customerReport','CustomerController@reports')->name('customer.customer-report');
             Route::get('generate-pdf/{id}', 'CustomerController@generatePDF');
+            Route::post('/product-admin-orders/{id}','CustomerController@productOrderAdmin')->name('admin.customer-orders');
         });
         Route::group(['prefix' => 'customer-group'], function (){
 
@@ -139,6 +140,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
         Route::get('/past/order/{id}','HomeController@pastOrder')->name('customer.pastOrder');
         Route::post('/product-orders','HomeController@productOrders');
+       
     }); 
     Route::post('get-states-by-country-user',[HomeController::class,'getState']);
     Route::post('get-cities-by-state-user',[HomeController::class,'getCity']);
