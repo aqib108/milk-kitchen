@@ -168,7 +168,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $mo = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $mo = 0; @endphp
                                                 @endif
@@ -183,7 +183,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $tu = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $tu = 0; @endphp
                                                 @endif
@@ -198,7 +198,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $we = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $we = 0; @endphp
                                                 @endif
@@ -213,7 +213,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $thu = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $thu = 0; @endphp
                                                 @endif
@@ -228,7 +228,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $su = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $su = 0; @endphp
                                                 @endif
@@ -243,7 +243,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $sat = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $sat = 0; @endphp
                                                 @endif
@@ -258,7 +258,7 @@
                                                     @if ($item->quantity != '')
                                                         @php $sun = $item->quantity; @endphp
                                                     @endif
-                                                    @php break; @endphp
+                                                @break
                                                 @else
                                                     @php $sun = 0; @endphp
                                                 @endif
