@@ -32,109 +32,113 @@
     </section>
     <section class="pb-5">
         <div class="container">
-            <div>
-                <div class="text-center">
-                    <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
-                </div>
-                <div class="___class_+?10___">
-                    <div class="form-container pt-4">
-                        <div class="row">
-                            <div class="col-lg-6 border-riht-clr">
-                                <div>
-                                    <h2 class="heading-inner-top">{{ $customer[0]->business_name }}</h2>
-                                </div>
-                                <form class="custom-form">
+                <div>
+                    <div class="text-center">
+                        <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
+                    </div>
+                    <div class="___class_+?10___">
+                        <div class="form-container pt-4">
+                            <div class="row">
+                                <div class="col-lg-6 border-riht-clr">
                                     <div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Address 1</p>
-                                            <span>{{ $customer[0]->business_address_1 }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Address 2 </p>
-                                            <span>{{ $customer[0]->business_address_2 }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Suburb</p>
-                                            <span>{{ $customer[0]->bcountry->name }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">City</p>
-                                            <span>{{ $customer[0]->bcity->name }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Region</p>
-                                            <span>{{ $customer[0]->bstate->name }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Phone</p>
-                                            <span>{{ $customer[0]->business_phone_no }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Email</p>
-                                            <span>{{ $customer[0]->business_email }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Contact</p>
-                                            <span>+{{ $customer[0]->business_contact_no }}</span>
-                                        </div>
+                                        <h2 class="heading-inner-top">
+                                            @if (isset($customer[0]->business_name))?
+                                                {{ $customer[0]->business_name }}: {{ '' }}
+                                            @endif
+                                        </h2>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="col-lg-6">
-                                <div>
-                                    <h2 class="heading-inner-top">{{ $customer[0]->delivery_name }}
-                                    </h2>
+                                    <form class="custom-form">
+                                        <div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Address 1</p>
+                                                <span>@if (isset($customer[0]->business_address_1))?{{$customer[0]->business_address_1}}:{{ '' }}@endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Address 2 </p>
+                                                <span>@if (isset($customer[0]->business_address_2))?{{ $customer[0]->business_address_2 }}:{{ '' }} @endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Suburb</p>
+                                                <span>@if (isset($customer[0]->bcountry->name))?{{ $customer[0]->bcountry->name }}:{{ '' }} @endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">City</p>
+                                                <span>@if (isset($customer[0]->bcity->name))?{{ $customer[0]->bcity->name }}:{{ '' }} @endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Region</p>
+                                                <span>@if (isset($customer[0]->bstate->name))?{{ $customer[0]->bstate->name }}:{{ '' }} @endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Phone</p>
+                                                <span>@if (isset($customer[0]->business_phone_no))?{{ $customer[0]->business_phone_no }}:{{ '' }} @endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Email</p>
+                                                <span>@if (isset($customer[0]->business_email))?{{ $customer[0]->business_email }}:{{ '' }} @endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Contact</p>
+                                                <span>@if (isset($customer[0]->business_contact_no))?{{ $customer[0]->business_contact_no }}:{{ '' }} @endif</span>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <form class="custom-form">
+                                <div class="col-lg-6">
                                     <div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Address 1</p>
-                                            <span>{{ $customer[0]->delivery_address_1 }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Address 2 </p>
-                                            <span>{{ $customer[0]->delivery_address_2 }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Suburb</p>
-                                            <span>{{ $customer[0]->dcountry->name }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">City</p>
-                                            <span>{{ $customer[0]->dcity->name }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Region</p>
-                                            <span>{{ $customer[0]->dstate->name }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">GST Number:</p>
-                                            <span>33030400923</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Invoice Number</p>
-                                            <span>33030400923</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm"> Period Covered</p>
-                                            <span>-------------</span>
-                                        </div>
+                                        <h2 class="heading-inner-top">@if (isset($customer[0]->delivery_name))?{{ $customer[0]->delivery_name }}:{{ '' }}@endif
+                                        </h2>
                                     </div>
-                                </form>
+                                    <form class="custom-form">
+                                        <div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Address 1</p>
+                                                <span>@if (isset($customer[0]->delivery_address_1))?{{ $customer[0]->delivery_address_1 }}:{{ '' }}@endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Address 2 </p>
+                                                <span>@if (isset($customer[0]->delivery_address_2))?{{ $customer[0]->delivery_address_2 }}:{{ '' }}@endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Suburb</p>
+                                                <span>@if (isset($customer[0]->dcountry->name))?{{ $customer[0]->dcountry->name }}:{{ '' }}@endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">City</p>
+                                                <span>@if (isset($customer[0]->dcity->name))?{{ $customer[0]->dcity->name }}:{{ '' }}@endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Region</p>
+                                                <span>@if (isset($customer[0]->dstate->name))?{{ $customer[0]->dstate->name }}:{{ '' }}@endif</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">GST Number:</p>
+                                                <span>33030400923</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm">Invoice Number</p>
+                                                <span>33030400923</span>
+                                            </div>
+                                            <div>
+                                                <p class="label-wrapper-custm"> Period Covered</p>
+                                                <span>-------------</span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-40-wrapper">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="" class="label-wrapper-custm">Delivery Notes</label>
-                                    <div class="box1">
+                            <div class="row mb-40-wrapper">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="label-wrapper-custm">Delivery Notes</label>
+                                        <div class="box1">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <div>
                 <div>
                     <h2 class="heading-tbl">Related Deliveries</h2>
@@ -169,141 +173,140 @@
                                                         @php $mo = $item->quantity; @endphp
                                                     @endif
                                                 @break
-                                                @else
-                                                    @php $mo = 0; @endphp
-                                                @endif
+                                            @else
+                                                @php $mo = 0; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $mo }}
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @if ($item->day->name == 'Tuesday')
-                                                    @if ($item->quantity != '')
-                                                        @php $tu = $item->quantity; @endphp
-                                                    @endif
-                                                @break
-                                                @else
-                                                    @php $tu = 0; @endphp
-                                                @endif
+                                        @endif
+                            @endforeach
+                            {{ $mo }}
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @if ($item->day->name == 'Tuesday')
+                                            @if ($item->quantity != '')
+                                                @php $tu = $item->quantity; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $tu }}
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @if ($item->day->name == 'Wednesday')
-                                                    @if ($item->quantity != '')
-                                                        @php $we = $item->quantity; @endphp
-                                                    @endif
-                                                @break
-                                                @else
-                                                    @php $we = 0; @endphp
-                                                @endif
+                                        @break
+                                    @else
+                                        @php $tu = 0; @endphp
+                                    @endif
+                                @endif
+                                @endforeach
+                                {{ $tu }}
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @if ($item->day->name == 'Wednesday')
+                                            @if ($item->quantity != '')
+                                                @php $we = $item->quantity; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $we }}
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @if ($item->day->name == 'Thursday')
-                                                    @if ($item->quantity != '')
-                                                        @php $thu = $item->quantity; @endphp
-                                                    @endif
-                                                @break
-                                                @else
-                                                    @php $thu = 0; @endphp
-                                                @endif
+                                        @break
+                                    @else
+                                        @php $we = 0; @endphp
+                                    @endif
+                                @endif
+                                @endforeach
+                                {{ $we }}
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @if ($item->day->name == 'Thursday')
+                                            @if ($item->quantity != '')
+                                                @php $thu = $item->quantity; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $thu }}
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @if ($item->day->name == 'Friday')
-                                                    @if ($item->quantity != '')
-                                                        @php $su = $item->quantity; @endphp
-                                                    @endif
-                                                @break
-                                                @else
-                                                    @php $su = 0; @endphp
-                                                @endif
+                                        @break
+                                    @else
+                                        @php $thu = 0; @endphp
+                                    @endif
+                                @endif
+                                @endforeach
+                                {{ $thu }}
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @if ($item->day->name == 'Friday')
+                                            @if ($item->quantity != '')
+                                                @php $su = $item->quantity; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $su }}
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @if ($item->day->name == 'Saturday')
-                                                    @if ($item->quantity != '')
-                                                        @php $sat = $item->quantity; @endphp
-                                                    @endif
-                                                @break
-                                                @else
-                                                    @php $sat = 0; @endphp
-                                                @endif
+                                        @break
+                                    @else
+                                        @php $su = 0; @endphp
+                                    @endif
+                                @endif
+                                @endforeach
+                                {{ $su }}
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @if ($item->day->name == 'Saturday')
+                                            @if ($item->quantity != '')
+                                                @php $sat = $item->quantity; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $sat }}
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @if ($item->day->name == 'Sunday')
-                                                    @if ($item->quantity != '')
-                                                        @php $sun = $item->quantity; @endphp
-                                                    @endif
-                                                @break
-                                                @else
-                                                    @php $sun = 0; @endphp
-                                                @endif
+                                        @break
+                                    @else
+                                        @php $sat = 0; @endphp
+                                    @endif
+                                @endif
+                                @endforeach
+                                {{ $sat }}
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @if ($item->day->name == 'Sunday')
+                                            @if ($item->quantity != '')
+                                                @php $sun = $item->quantity; @endphp
                                             @endif
-                                        @endforeach
-                                        {{ $sun }}
-                                    </td>
-                                    <td>
-                                        @php $total=0; @endphp
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @php $total += $item->quantity @endphp
-                                            @endif
-                                        @endforeach
-                                        {{ $total }}
-                                    </td>
-                                    <td>
-                                        @php $price=0; @endphp
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @php $price = $total * $item->product->price @endphp
-                                            @endif
-                                        @endforeach
-                                        {{ '$' . $price }}
-                                        <input type="hidden" value="{{ $price }}" class="price">
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @php $discount = 10 @endphp
-                                            @endif
-                                        @endforeach
-                                        {{ '$' . ($price / 100) * 1.5 }}
-                                        <input type="hidden" value="{{ ($price / 100) * 1.5 }}"
-                                            class="discount">
-                                    </td>
-                                    <td>
-                                        @foreach ($orders as $item)
-                                            @if ($pro->id == $item->product_id)
-                                                @php $extention = 20 @endphp
-                                            @endif
-                                        @endforeach
-                                        {{ $extention }}
-                                    </td>
-                                </tr>
+                                        @break
+                                    @else
+                                        @php $sun = 0; @endphp
+                                    @endif
+                                @endif
+                                @endforeach
+                                {{ $sun }}
+                            </td>
+                            <td>
+                                @php $total=0; @endphp
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @php $total += $item->quantity @endphp
+                                    @endif
+                                @endforeach
+                                {{ $total }}
+                            </td>
+                            <td>
+                                @php $price=0; @endphp
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @php $price = $total * $item->product->price @endphp
+                                    @endif
+                                @endforeach
+                                {{ '$' . $price }}
+                                <input type="hidden" value="{{ $price }}" class="price">
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @php $discount = 10 @endphp
+                                    @endif
+                                @endforeach
+                                {{ '$' . ($price / 100) * 1.5 }}
+                                <input type="hidden" value="{{ ($price / 100) * 1.5 }}" class="discount">
+                            </td>
+                            <td>
+                                @foreach ($orders as $item)
+                                    @if ($pro->id == $item->product_id)
+                                        @php $extention = 20 @endphp
+                                    @endif
+                                @endforeach
+                                {{ $extention }}
+                            </td>
+                            </tr>
                             @endforeach
                             <tr>
                                 <td class="custom-colspan" colspan="10"></td>

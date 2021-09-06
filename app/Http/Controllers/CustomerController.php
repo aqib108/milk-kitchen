@@ -90,8 +90,7 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
             $q->userDetail($customerID);
         }])->get();
-
-        return view('admin.customer.viewCustomer',compact('customerID','customerDetail','products','weekDays'));
+        return view('admin.customer.viewCustomer',compact('customerID','customerDetail','products','weekDays'));   
     }
 
     //Create Customer page
