@@ -60,15 +60,15 @@ class CustomerController extends Controller
     public function customers(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::all(); 
+            $data = User::role('Customer')->get(); 
             return Datatables::of($data) 
             ->editColumn('created_at', function (User $data) {
                 return $data->created_at->format('d, M Y'); 
               })
                 ->addIndexColumn()
                 ->addColumn('view',function(User $data){
-                    $btn2 = '<a href="customer/detail/'.$data->id.'" class="btn btn-sm btn-primary">View</a>';
-                     return $btn2; 
+                    $btn2 = '<a href="'.route('customer.customerView',$data->id).'" class="btn btn-sm btn-primary">View</a>';
+                    return $btn2; 
                 })
                 ->addColumn('action', function(User $data){
                     $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" 
@@ -82,16 +82,19 @@ class CustomerController extends Controller
         return view('admin.customer.customers');
     }
 
-    public function viewCustomer(Request $request){
-        $user = Auth::user()->id;
-        $customerDetail = CustomerDetail::where('user_id',$request->id)->first();
-       $products = Product::orderBy('id','DESC')->where('status',1)->get();
-       $weekDays = WeekDay::with('orderByUserID')->get();
-       $data['countries'] = Country::get(["name","id"]);
-       $data['regions'] = State::get(["name","id"]);
-       $data['cities'] = City::get(["name","id"]);
+    public function viewCustomer($id)
+    {
+        $customerID = $id;
+        $customerDetail = CustomerDetail::where('user_id',$customerID)->first();
+        // $user = Auth::user()->id;
+        // $customerDetail = CustomerDetail::where('user_id',$request->id)->first();
+        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $weekDays = WeekDay::with('orderByUserID')->get();
+        // $data['countries'] = Country::get(["name","id"]);
+        // $data['regions'] = State::get(["name","id"]);
+        // $data['cities'] = City::get(["name","id"]);
 
-            return view('admin.customer.viewCustomer',compact('user','customerDetail','products','weekDays'),$data);
+        return view('admin.customer.viewCustomer',compact('customerID','customerDetail','products','weekDays'));
     }
 
     //Create Customer page

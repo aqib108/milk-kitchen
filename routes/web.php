@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
-            Route::get('/detail/{id}','CustomerController@viewCustomer')->name('customer.customerView');
+            Route::get('/view/{id}','CustomerController@viewCustomer')->name('customer.customerView');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
@@ -137,6 +137,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
+        Route::get('/past/order/{id}','HomeController@pastOrder')->name('customer.pastOrder');
         Route::post('/product-orders','HomeController@productOrders');
     }); 
     Route::post('get-states-by-country-user',[HomeController::class,'getState']);
