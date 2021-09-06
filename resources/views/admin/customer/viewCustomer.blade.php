@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h4>Customer Name: <b>{{$customerDetail->user->name}}</b></h4>
+                    <h4>Customer Name: <b>{{$customerDetail->name}}</b></h4>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">

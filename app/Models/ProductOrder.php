@@ -35,4 +35,8 @@ class ProductOrder extends Model
     {
         return $this->belongsTo(customerDetail::class, 'user_id', 'user_id');
     }
+    public function scopeUserDetail($query, $id)
+    {
+        return $query->where('user_id','=', $id);
+    }
 }
