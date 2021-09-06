@@ -212,6 +212,15 @@
                     </ul>
                 </li>
                 <!--- End sale --->
+
+                <li class="nav-item">
+                    <a href="{{ route('customer.customer-report') }}" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                            Customer Report
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

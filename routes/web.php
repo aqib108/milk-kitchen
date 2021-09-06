@@ -71,6 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
             Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
+            Route::get('/customerReport','CustomerController@reports')->name('customer.customer-report');
+            Route::get('generate-pdf/{id}', 'CustomerController@generatePDF');
         });
         Route::group(['prefix' => 'customer-group'], function (){
 

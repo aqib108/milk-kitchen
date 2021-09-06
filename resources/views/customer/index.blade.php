@@ -65,7 +65,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
-                                                        <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
+                                                        <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id" >
                                                         <option selected disabled>Select Country</option>
                                                         @foreach($countries as $country)                                        
                                                             <option value="{{$country->id}}" {{ isset($customerDetail->business_country_id) && $customerDetail->business_country_id == $country->id?'selected':''}}>{{$country->name}}</option>
