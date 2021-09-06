@@ -91,6 +91,7 @@ class CustomerController extends Controller
             $q->userDetail($customerID);
         }])->get();
 
+
         return view('admin.customer.viewCustomer',compact('customerID','customerDetail','products','weekDays'));
     }
 

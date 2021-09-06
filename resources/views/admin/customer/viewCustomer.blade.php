@@ -297,8 +297,8 @@
                                     @foreach ($weekDays as $item)
                                         @php
                                             $qnty = 0;
-                                            if ($item->orderByUserID->isNotEmpty()){
-                                                foreach ($item->orderByUserID as $order){
+                                            if ($item != null){
+                                                foreach ($item->WeekDay as $order){
                                                     if($order->product_id == $product->id){
                                                         $qnty = $order->quantity;
                                                     }
@@ -307,7 +307,7 @@
                                         @endphp
                                         <td>
                                             <input id="{{ $item->name }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                            text-align: center;" value="{{ $qnty }}" minlength="0">
+                                            text-align: center;" value="{{$qnty}}" minlength="0">
                                         </td>
                                     @endforeach
                                 </tr> 
