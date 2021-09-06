@@ -180,12 +180,12 @@ class CustomerController extends Controller
     {
         $customer = CustomerDetail::where('user_id',$id)->with('user')->with('bcountry')->with('bstate')->with('bcity')->with('dcountry')->with('dstate')->with('dcity')->get();
         
-        $nilai = DB::table('product_orders')->where('user_id',$id)->distinct()->pluck('product_id');
-        $products = Product::whereIn('id',$nilai)->get();
+        $getCustomer = DB::table('product_orders')->where('user_id',$id)->distinct()->pluck('product_id');
+        $products = Product::whereIn('id',$getCustomer)->get();
         $orders = ProductOrder::where('user_id',$id)->with('day')->get(); 
         return view('admin.customer.pdfReport',compact('customer','products','orders'));
 
-        // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','orders'));
-        // return $pdf->download('disney.pdf');
+        // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','products','orders'));
+        // return $pdf->download('customerReport.pdf');
     }
 }
