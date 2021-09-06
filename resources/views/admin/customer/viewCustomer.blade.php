@@ -294,7 +294,7 @@
                             @foreach ($products as $product)
                                 <tr class="week_days" data-p-id="{{$product->id}}">
                                     <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                                    @foreach ($weekDays as $item)
+                                    @foreach ($weeks as $item)
                                         @php
                                             $qnty = 0;
                                             if ($item->orderByUserID->isNotEmpty()){

@@ -19,4 +19,5 @@ class WeekDay extends Model
     {
         return $this->WeekDay()->where('user_id','=', Auth::id());
     }
+    
 }
