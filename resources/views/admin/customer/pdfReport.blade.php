@@ -41,15 +41,13 @@
                         <div class="row">
                             <div class="col-lg-6 border-riht-clr">
                                 <div>
-                                    <h2 class="heading-inner-top">{{ $customer[0]->business_name }}
-                                    </h2>
+                                    <h2 class="heading-inner-top">{{ $customer[0]->business_name }}</h2>
                                 </div>
                                 <form class="custom-form">
                                     <div>
                                         <div>
                                             <p class="label-wrapper-custm">Address 1</p>
                                             <span>{{ $customer[0]->business_address_1 }}</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm">Address 2 </p>
@@ -63,7 +61,6 @@
                                             <p class="label-wrapper-custm">City</p>
                                             <span>{{ $customer[0]->bcity->name }}</span>
                                         </div>
-
                                         <div>
                                             <p class="label-wrapper-custm">Region</p>
                                             <span>{{ $customer[0]->bstate->name }}</span>
@@ -72,7 +69,6 @@
                                             <p class="label-wrapper-custm">Phone</p>
                                             <span>{{ $customer[0]->business_phone_no }}</span>
                                         </div>
-
                                         <div>
                                             <p class="label-wrapper-custm">Email</p>
                                             <span>{{ $customer[0]->business_email }}</span>
@@ -80,7 +76,6 @@
                                         <div>
                                             <p class="label-wrapper-custm">Contact</p>
                                             <span>+{{ $customer[0]->business_contact_no }}</span>
-
                                         </div>
                                     </div>
                                 </form>
@@ -95,38 +90,30 @@
                                         <div>
                                             <p class="label-wrapper-custm">Address 1</p>
                                             <span>{{ $customer[0]->delivery_address_1 }}</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm">Address 2 </p>
                                             <span>{{ $customer[0]->delivery_address_2 }}</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm">Suburb</p>
                                             <span>{{ $customer[0]->dcountry->name }}</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm">City</p>
                                             <span>{{ $customer[0]->dcity->name }}</span>
-
                                         </div>
-
                                         <div>
                                             <p class="label-wrapper-custm">Region</p>
                                             <span>{{ $customer[0]->dstate->name }}</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm">GST Number:</p>
                                             <span>33030400923</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm">Invoice Number</p>
                                             <span>33030400923</span>
-
                                         </div>
                                         <div>
                                             <p class="label-wrapper-custm"> Period Covered</p>
@@ -178,64 +165,106 @@
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Monday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $mo = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $mo = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $mo }}
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Tuesday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $tu = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $tu = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $tu }}
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Wednesday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $we = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $we = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $we }}
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Thursday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $thu = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $thu = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $thu }}
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Friday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $su = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $su = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $su }}
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Saturday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $sat = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $sat = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $sat }}
                                     </td>
                                     <td>
                                         @foreach ($orders as $item)
                                             @if ($pro->id == $item->product_id)
                                                 @if ($item->day->name == 'Sunday')
-                                                    {{ $item->quantity }}
+                                                    @if ($item->quantity != '')
+                                                        @php $sun = $item->quantity; @endphp
+                                                    @endif
+                                                    @php break; @endphp
+                                                @else
+                                                    @php $sun = 0; @endphp
                                                 @endif
                                             @endif
                                         @endforeach
+                                        {{ $sun }}
                                     </td>
                                     <td>
                                         @php $total=0; @endphp
