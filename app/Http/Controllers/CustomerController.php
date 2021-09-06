@@ -85,14 +85,11 @@ class CustomerController extends Controller
     public function viewCustomer($id)
     {
         $customerID = $id;
-        $customerDetail = CustomerDetail::where('user_id',$customerID)->first();
-        // $user = Auth::user()->id;
-        // $customerDetail = CustomerDetail::where('user_id',$request->id)->first();
+        $customerDetail = User::find($customerID);
         $products = Product::orderBy('id','DESC')->where('status',1)->get();
-        $weekDays = WeekDay::with('orderByUserID')->get();
-        // $data['countries'] = Country::get(["name","id"]);
-        // $data['regions'] = State::get(["name","id"]);
-        // $data['cities'] = City::get(["name","id"]);
+        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
+            $q->userDetail($customerID);
+        }])->get();
 
         return view('admin.customer.viewCustomer',compact('customerID','customerDetail','products','weekDays'));
     }
