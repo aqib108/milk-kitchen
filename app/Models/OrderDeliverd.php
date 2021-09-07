@@ -13,7 +13,8 @@ class OrderDeliverd extends Model
         'product_order_id',
         'product_id',
         'day_id',
-        'quantity'
+        'quantity',
+        'price'
     ];
 
 }

@@ -43,21 +43,25 @@ class OrderDelivery extends Command
      */
     public function handle()
     {
-        $current_day = Carbon::Tomorrow()->format('l');
+        $current_day = Carbon::Today()->format('l');
         $day_id = WeekDay::where('name',$current_day)->pluck('id');
         $orders = ProductOrder::where('day_id',$day_id)->get();
-              
-      foreach($orders as $order){
-                $data = ([
-                    'user_id' => $order->user_id,
-                    'product_order_id' => $order->id,
-                    'product_id' => $order->product_id,
-                    'day_id' => $order->day_id,
-                    'quantity' => $order->quantity
-                ]);
-                OrderDeliverd::create($data);
-                // Log::info($data);
-        }
+        $productOrder = json_decode($orders, true);
+        
+        foreach($productOrder as $ord){
+            $productPrices = Product::where('id','=',$ord['product_id'])->first();
+            $productPrice = $productPrices->price;
+            $quantity = $ord['quantity'];
+            $price = $productPrice * $quantity;
 
+            $data = OrderDeliverd::updateOrCreate([
+                'user_id' => $ord['user_id'],
+                'product_order_id' => $ord['id'],
+                'product_id' => $ord['product_id'],
+                'day_id' => $ord['day_id']],[
+                'quantity' => $quantity,
+                'price' => $price
+            ]); 
+        }    
     }
 }
