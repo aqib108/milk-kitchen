@@ -37,7 +37,7 @@ class ProductController extends Controller
                         $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
                     }
                     else{
-                        $status = '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
+                        $status = '';
                     }
                     return $status;
                 })
