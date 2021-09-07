@@ -40,9 +40,15 @@
                             <table id="products" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Sr.No</th>
+                                        <th>#</th>
+                                        <th>Sku</th>
                                         <th>Name </th>
-                                        <th>Price</th>
+                                        <th>Pack Size</th>
+                                        <th>New</th>
+                                        <th>Active</th>
+                                        <th>Food Service</th>
+                                        <th>Retail</th>
+                                        <th>Consumer</th>
                                         <th>Status</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
@@ -75,12 +81,54 @@
                 processing: true,
                 serverSide: true,
                 ajax: "",
-                columns: [
-                    { data: 'DT_RowIndex',name: 'DT_RowIndex',orderable: false,searchable: false},
-                    { data: 'name',name: 'name'},
-                    { data: 'price',name: 'price'},
-                    { data: 'status',name: 'status'},
-                    { data: 'action',name: 'action',orderable: false,searchable: false},
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'sku',
+                        name: 'sku'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'pack_size',
+                        name: 'pack_size'
+                    },
+                    {
+                        data: 'new',
+                        name: 'new'
+                    },
+                    {
+                        data: 'active',
+                        name: 'active'
+                    },
+                    {
+                        data: 'f_saleable',
+                        name: 'f_saleable'
+                    },
+                    {
+                        data: 'r_saleable',
+                        name: 'r_saleable'
+                    },
+                    {
+                        data: 'c_saleable',
+                        name: 'c_saleable'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
                 drawCallback: function(response) {
                     $('#countTotal').empty();
@@ -91,66 +139,65 @@
         // Change Status Product
         function changeStatus(id, status) {
             var result =
-            Swal.fire({
-                title: "Are you sure change this Status?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: '{{ route('product.status') }}',
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id,
-                            'status': status
-                        },
-                        success: function(response) {
-                            if (response.status == 1) {
-                                Swal.fire("Active!", response.message, "success");
-                                $('#products').DataTable().ajax.reload();
-                            }else{
-                                Swal.fire("Inactive!", response.message, "success");
-                                $('#products').DataTable().ajax.reload();
+                Swal.fire({
+                    title: "Are you sure change this Status?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: '{{ route('product.status') }}',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id,
+                                'status': status
+                            },
+                            success: function(response) {
+                                if (response.status == 1) {
+                                    Swal.fire("Active!", response.message, "success");
+                                    $('#products').DataTable().ajax.reload();
+                                } else {
+                                    Swal.fire("Inactive!", response.message, "success");
+                                    $('#products').DataTable().ajax.reload();
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
         };
         // Destory Product
-        function deleteProduct(id,event) {
+        function deleteProduct(id, event) {
             var result =
-            Swal.fire({
-                title: "Are you sure delete this product?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Change it!"
-            }).then(result => {
-                if (result.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: "{{ route('product.destroy') }}",
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            'id': id
-                        },
-                        success: function (response) {
-                            console.log(response)
-                            if(response.status)
-                            {
-                                Swal.fire("Deleted!", response.message, "success");
-                                $('#products').DataTable().ajax.reload();
+                Swal.fire({
+                    title: "Are you sure delete this product?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('product.destroy') }}",
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id
+                            },
+                            success: function(response) {
+                                console.log(response)
+                                if (response.status) {
+                                    Swal.fire("Deleted!", response.message, "success");
+                                    $('#products').DataTable().ajax.reload();
+                                }
                             }
-                        }
-                    });
-                }   
-            });
+                        });
+                    }
+                });
         };
     </script>
 @endsection
