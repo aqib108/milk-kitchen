@@ -14,5 +14,18 @@ class Product extends Model
         'image_url',
         'status',
         'description',
+        'sku',
+        'new',
+        'pack_size',
+        'active',
+        'f_ctn_price',
+        'f_bottle_price',
+        'f_saleable',
+        'r_ctn_price',
+        'r_bottle_price',
+        'r_saleable',
+        'c_ctn_price',
+        'c_bottle_price',
+        'c_saleable',
     ];
 }
