@@ -372,11 +372,7 @@
                 $.ajax({
                     type: "POST",
                     data: formData,
-                    url: "{{route('customer-detail.update',$customer->id)}}",
-                    processData: false,
-                    contentType: false,
                     cache: false,
-                    success: function (response) {
                         console.log(response);
                         if(response.success)
                         {
@@ -399,8 +395,6 @@
                 let day_id = $(this).attr('data-id');
                 let qnty = $(this).val();
                 if(qnty < 0){
-                    Swal.fire({
-                        position: 'top-end',
                         toast: true,
                         showConfirmButton: false,
                         timer: 2000,
@@ -451,7 +445,6 @@
         //Business Country City States Function on change dropdown
         $(document).ready(function() {
             $('#business_country_id').on('change', function() {
-                var country_id = this.value;
                 $("#business_region_id").html('');
                 $.ajax({
                     url:"{{url('get-states-by-country-user')}}",
