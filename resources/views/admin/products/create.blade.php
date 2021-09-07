@@ -76,7 +76,7 @@
                                         @enderror
                                         <img src="" id="image" class="hidden w-25" />
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>Sku<span class="required-star">*</span></label>
                                         <input type="number" maxlength="50"
                                             class="form-control @error('sku') is-invalid @enderror" name="sku"
@@ -87,7 +87,7 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>New<span class="required-star">*</span></label>
                                         <select name="new" class="form-control @error('new') is-invalid @enderror" id="">
                                             <option value="1">Yes</option>
@@ -99,7 +99,7 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>Pack Size<span class="required-star">*</span></label>
                                         <input type="number" maxlength="50"
                                             class="form-control @error('pack_size') is-invalid @enderror" name="pack_size"
@@ -110,7 +110,7 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>Active<span class="required-star">*</span></label>
                                         <select name="active" class="form-control @error('active') is-invalid @enderror"
                                             id="">
@@ -130,7 +130,7 @@
                                     </div>
                                     <div class="form-group col-md-12">
                                         <table class="table table-sm table-bordered">
-                                            <tr class="table-active">
+                                            <tr style="background-color:#95d60c !important;color:white;">
                                                 <th>Heading</th>
                                                 <th>CTN Price</th>
                                                 <th>Bottle Price</th>
@@ -140,22 +140,24 @@
                                                 <td>Food Service</td>
                                                 <td><input type="number" class="form-control" name="f_ctn_price"></td>
                                                 <td><input type="number" class="form-control" name="f_bottle_price"></td>
-                                                <td><input type="checkbox" value="1" class="form-control"
-                                                        name="f_saleable"></td>
+                                                <td><input style="height:20px;margin-top:7px;" type="checkbox" value="1"
+                                                        class="form-control" name="f_saleable"></td>
                                             </tr>
                                             <tr>
                                                 <td>Retail</td>
                                                 <td><input type="number" class="form-control" name="r_ctn_price"></td>
                                                 <td><input type="number" class="form-control" name="r_bottle_price"></td>
-                                                <td><input type="checkbox" value="1" class="form-control"
-                                                        name="r_saleable"></td>
+                                                <td><input style="height:20px;margin-top:7px;" type="checkbox" value="1"
+                                                        style="font-size:10px;" class="form-control" name="r_saleable">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Consumer</td>
                                                 <td><input type="number" class="form-control" name="c_ctn_price"></td>
                                                 <td><input type="number" class="form-control" name="c_bottle_price"></td>
-                                                <td><input type="checkbox" class="form-control" value="1"
-                                                        name="c_saleable"></td>
+                                                <td><input style="height:20px;margin-top:7px;" type="checkbox"
+                                                        class="form-control" value="1" name="c_saleable">
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>
