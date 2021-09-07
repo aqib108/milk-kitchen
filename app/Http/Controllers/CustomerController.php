@@ -182,8 +182,11 @@ class CustomerController extends Controller
         
         $getCustomer = ProductOrder::where('user_id',$id)->distinct()->pluck('product_id');
         $products = Product::whereIn('id',$getCustomer)->get();
-        $orders = ProductOrder::where('user_id',$id)->with('day')->get(); 
-        return view('admin.customer.pdfReport',compact('customer','products','orders'));
+        // $orders = ProductOrder::where('user_id',$id)->with('day')->get();
+        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
+            $q->userDetail($customerID);
+        }])->get(); 
+        return view('admin.customer.pdfReport',compact('customer','products','weekDays'));
 
         // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','products','orders'));
         // return $pdf->download('customerReport.pdf');
