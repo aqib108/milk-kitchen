@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/customerReport','CustomerController@reports')->name('customer.customer-report');
             Route::get('generate-pdf/{id}', 'CustomerController@generatePDF');
             Route::post('/product-admin-orders/{id}','CustomerController@productOrderAdmin')->name('admin.customer-orders');
+            Route::get('/past-orders/{id}','CustomerController@pastOrder')->name('customer.past-orders');
         });
         Route::group(['prefix' => 'customer-group'], function (){
 

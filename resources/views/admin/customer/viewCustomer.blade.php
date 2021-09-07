@@ -42,7 +42,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_name">Business Name <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('business_name') is-invalid @enderror" id="business_name" name="business_name"
-                                                        value="{{$customerDetail->business_name}}" placeholder="Enter Business Name">
+                                                        value="{{isset($customerDetail->business_name) ? $customerDetail->business_name:''}}" placeholder="Enter Business Name">
                                                         @error('business_name')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -52,7 +52,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_address_1">Address 1 <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('business_address_1') is-invalid @enderror" id="business_address_1" name="business_address_1"
-                                                        value="{{$customerDetail->business_address_1}}" placeholder="Enter Business Address 1 etc.">
+                                                        value="{{isset($customerDetail->business_address_1) ? $customerDetail->business_address_1:''}}" placeholder="Enter Business Address 1 etc.">
                                                         @error('business_address_1')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -62,7 +62,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_address_2">Address 2 </label>
                                                         <input type="text" class="form-control @error('business_address_2') is-invalid @enderror" id="business_address_2" name="business_address_2"
-                                                        value="{{$customerDetail->business_address_2}}" placeholder="Enter Business Address 2 etc.">
+                                                        value="{{isset($customerDetail->business_address_2) ? $customerDetail->business_address_2:''}}" placeholder="Enter Business Address 2 etc.">
                                                         @error('business_address_2')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -86,9 +86,10 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
+                                                            <option selected disabled>Select Region</option>
                                                             @foreach($regions as $region)
                                                                 <option value="{{$region->id}}"
-                                                                    {{$customerDetail->business_region_id == $region->id ? "selected":""}}>{{$region->name}}
+                                                                    {{ isset($customerDetail->business_region_id) && $customerDetail->business_region_id == $region->id ? "selected":""}}>{{$region->name}}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -101,8 +102,9 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
                                                         <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
+                                                            <option selected disabled>Select City</option>
                                                             @foreach($cities as $city)
-                                                                <option value="{{$city->id}}" {{$customerDetail->business_city_id == $city->id ? "selected":""}}>
+                                                                <option value="{{$city->id}}" {{isset($customerDetail->business_city_id) && $customerDetail->business_city_id == $city->id ? "selected":""}}>
                                                                     {{$city->name}}</option>
                                                             @endforeach
                                                         </select>
@@ -115,7 +117,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_phone_no">Phone No</label>
                                                         <input type="text" class="form-control @error('business_phone_no') is-invalid @enderror" id="business_phone_no" name="business_phone_no" 
-                                                        placeholder="Enter Phone No" value="{{$customerDetail->business_phone_no}}">
+                                                        placeholder="Enter Phone No" value="{{isset($customerDetail->business_phone_no) ? $customerDetail->business_phone_no:''}}">
                                                         @error('business_phone_no')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -125,7 +127,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_email">Email <span class="required-star">*</span></label>
                                                         <input type="email" class="form-control @error('business_email') is-invalid @enderror" id="business_email" name="business_email"
-                                                        value="{{$customerDetail->business_email}}" placeholder="Enter Business Email">
+                                                        value="{{isset($customerDetail->business_email) ? $customerDetail->business_email:''}}" placeholder="Enter Business Email">
                                                         @error('business_email')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -135,7 +137,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_contact_no">Contact No  <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('business_contact_no') is-invalid @enderror" id="business_contact_no" name="business_contact_no"
-                                                            value="{{$customerDetail->business_contact_no}}"  placeholder="Enter Business Contact No">
+                                                            value="{{isset($customerDetail->business_contact_no) ? $customerDetail->business_contact_no:''}}"  placeholder="Enter Business Contact No">
                                                         @error('business_contact_no')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -152,7 +154,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_name">Delivery Name <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control  @error('delivery_name') is-invalid @enderror" id="delivery_name" name="delivery_name"
-                                                            value="{{$customerDetail->delivery_name}}" placeholder="Enter Delivery Name">
+                                                            value="{{isset($customerDetail->delivery_name) ? $customerDetail->delivery_name:''}}" placeholder="Enter Delivery Name">
                                                         @error('delivery_name')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -162,7 +164,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_address_1">Address 1 <span class="required-star">*</span></label>
                                                         <input type="text" class="form-control @error('delivery_address_1') is-invalid @enderror" id="delivery_address_1" name="delivery_address_1"
-                                                            value="{{$customerDetail->delivery_address_1}}" placeholder="Enter Delivery Address 1">
+                                                            value="{{isset($customerDetail->delivery_address_1) ? $customerDetail->delivery_address_1:''}}" placeholder="Enter Delivery Address 1">
                                                         @error('delivery_address_1')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -171,7 +173,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_address_2">Address 2 </label>
-                                                        <input type="text" class="form-control @error('delivery_address_2') is-invalid @enderror" id="delivery_address_2" name="delivery_address_2"  value="{{$customerDetail->delivery_address_2}}"
+                                                        <input type="text" class="form-control @error('delivery_address_2') is-invalid @enderror" id="delivery_address_2" name="delivery_address_2"  value="{{isset($customerDetail->delivery_address_2) ? $customerDetail->delivery_address_2:''}}"
                                                         placeholder="Enter Delivery Address 2">
                                                         @error('delivery_address_2')
                                                             <span class="invalid-feedback" role="alert">
@@ -196,10 +198,10 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                           
+                                                            <option selected disabled>Select Region</option>
                                                             @foreach($regions as $region)
                                                                 <option value="{{$region->id}}"
-                                                                    {{$customerDetail->delivery_region_id == $region->id ? "selected":""}}>{{$region->name}}
+                                                                    {{isset($customerDetail->delivery_region_id) && $customerDetail->delivery_region_id == $region->id ? "selected":""}}>{{$region->name}}
                                                                 </option>
                                                             @endforeach
                                                            
@@ -213,12 +215,11 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
                                                         <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                         
+                                                            <option selected disabled>Select City</option>
                                                             @foreach($cities as $city)
-                                                                <option value="{{$city->id}}" {{$customerDetail->delivery_city_id == $city->id ? "selected":""}}>
+                                                                <option value="{{$city->id}}" {{isset($customerDetail->delivery_city_id) && $customerDetail->delivery_city_id == $city->id ? "selected":""}}>
                                                                     {{$city->name}}</option>
                                                             @endforeach
-                                                            
                                                         </select>
                                                         @error('delivery_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -229,7 +230,7 @@
                                                     <div class="form-group col-md-6 p-0">
                                                         <label class="label-wrapper-custm" for="">Past order</label>
                                                         <div class="form-inner-section">
-                                                            <a href="{{route('customer.pastOrder',$customerID)}}">view</a>
+                                                            <a href="{{route('customer.past-orders',$customer->id)}}">view</a>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6 p-0">
@@ -245,7 +246,7 @@
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label for="" class="label-wrapper-custm">Delivery Notes</label>
-                                                    <textarea class="form-control" id="delivery_notes" name="delivery_notes" rows="3">{{$customerDetail->delivery_notes}}</textarea>
+                                                    <textarea class="form-control" id="delivery_notes" name="delivery_notes" rows="3">{{isset($customerDetail->delivery_notes) ? $customerDetail->delivery_notes:''}}</textarea>
                                                 </div>
                                                 <input type="hidden" name="user_id" value="{{$customerID}}" id="user_id">
                                                 <div class="custom-button mt-4 " style="float: right;">
@@ -294,7 +295,7 @@
                                             }
                                         @endphp
                                         <td>
-                                            <input id="{{ $item->name }}" data-id-user="{{ $customerDetail->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                            <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                             text-align: center;" value="{{$qnty}}" minlength="0">
                                         </td>
                                     @endforeach

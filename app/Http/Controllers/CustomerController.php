@@ -98,6 +98,11 @@ class CustomerController extends Controller
         return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
     }
 
+    public function pastOrder($id)
+    {
+        return view('admin.customer.past-order');
+    }
+
     //Create Customer page
     public function newCustomerCreate()
     {
