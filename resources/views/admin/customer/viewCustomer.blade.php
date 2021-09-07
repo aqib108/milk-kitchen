@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h4>Customer Name: <b>{{$customerDetail->name}}</b></h4>
+                    <h4>Customer Name: <b>{{$customer->name}}</b></h4>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -249,7 +249,7 @@
                                                 </div>
                                                 <input type="hidden" name="user_id" value="{{$customerID}}" id="user_id">
                                                 <div class="custom-button mt-4 " style="float: right;">
-                                                    <button type="submit" id="update" class="btn btn-primary  px-4 mb-0" data-id="{{ $customerID }}">Update</button>
+                                                    <button type="submit" id="update" class="btn btn-primary  px-4 mb-0">Update</button>
                                                 </div>
                                             </div>
                                         </div> 
@@ -372,11 +372,7 @@
                 $.ajax({
                     type: "POST",
                     data: formData,
-                    url: 'home/customer-detail/'+id,
-                    processData: false,
-                    contentType: false,
                     cache: false,
-                    success: function (response) {
                         console.log(response);
                         if(response.success)
                         {
@@ -393,6 +389,55 @@
                 });   
             });
 
+            // Product Selection
+            $('body').on('change','.weekly_standing_order .week_days td input', function(){
+                let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
+                let day_id = $(this).attr('data-id');
+                let qnty = $(this).val();
+                if(qnty < 0){
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        icon: 'error',
+                        title: 'Quantity should not be less than 0',
+                    });
+                    $(this).val(0);
+                }else{
+                    $.ajax({
+                        type: "POST",
+                        data: {
+                            'day_id':day_id,
+                            'product_id':product_id,
+                            'qnty':qnty
+                        },
+                        url: "{{route('admin.customer-orders',$customer->id)}}",
+                        success: function (response) {
+                            if(response.status)
+                            {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'success',
+                                    title: response.message,
+                                });
+                            }else{
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'error',
+                                    title: response.success,
+                                });
+                            }
+                        },
+                    }); 
+                }
+            })
+
+
         });
     </script>
     <!---- BUSINESS AND DELIVERY DETAIL COUNTRY,STATE,CITY SCRIPT ---->
@@ -400,7 +445,6 @@
         //Business Country City States Function on change dropdown
         $(document).ready(function() {
             $('#business_country_id').on('change', function() {
-                var country_id = this.value;
                 $("#business_region_id").html('');
                 $.ajax({
                     url:"{{url('get-states-by-country-user')}}",
