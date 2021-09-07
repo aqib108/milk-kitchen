@@ -139,7 +139,7 @@
                 <!--- Distributor --->
                 <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
-                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <i class="nav-icon fas fa-truck"></i>
                         <p>
                             Manage Distributors
                             <i class="right fas fa-angle-left"></i>
@@ -164,7 +164,7 @@
                 <!--- Driver --->
                 <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
-                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <i class="nav-icon fas fa-motorcycle"></i>
                         <p>
                             Manage Driver
                             <i class="right fas fa-angle-left"></i>
@@ -189,7 +189,7 @@
                 <!--Sales-->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-clock"></i>
+                        <i class="nav-icon fab fa-salesforce"></i>
                         <p>
                             Sale's
                             <i class="right fas fa-angle-left"></i>
@@ -212,6 +212,15 @@
                     </ul>
                 </li>
                 <!--- End sale --->
+
+                <li class="nav-item">
+                    <a href="{{ route('customer.customer-report') }}" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                            Customer Report
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

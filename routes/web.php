@@ -66,11 +66,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
-            Route::get('/detail/{id}','CustomerController@viewCustomer')->name('customer.customerView');
+            Route::get('/view/{id}','CustomerController@viewCustomer')->name('customer.customerView');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
             Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
+            Route::get('/customerReport','CustomerController@reports')->name('customer.customer-report');
+            Route::get('generate-pdf/{id}', 'CustomerController@generatePDF');
+            Route::post('/product-admin-orders/{id}','CustomerController@productOrderAdmin')->name('admin.customer-orders');
+            Route::get('/past-orders/{id}','CustomerController@pastOrder')->name('customer.past-orders');
         });
         Route::group(['prefix' => 'customer-group'], function (){
 
@@ -135,7 +139,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('customer-detail','CustomerDetailController');
+        Route::get('/past/order/{id}','HomeController@pastOrder')->name('customer.pastOrder');
         Route::post('/product-orders','HomeController@productOrders');
+       
     }); 
     Route::post('get-states-by-country-user',[HomeController::class,'getState']);
     Route::post('get-cities-by-state-user',[HomeController::class,'getCity']);

@@ -28,4 +28,35 @@ class CustomerDetail extends Model
     'delivery_region_id',
     'delivery_notes',
   ];
+
+  public function bcountry()
+  {
+      return $this->belongsTo(Country::class,'business_country_id', 'id');
+  }
+  public function bstate()
+  {
+      return $this->belongsTo(State::class,'business_region_id', 'id');
+  }
+  public function bcity()
+  {
+      return $this->belongsTo(City::class,'business_city_id', 'id');
+  }
+
+  public function dcountry()
+  {
+      return $this->belongsTo(Country::class,'delivery_country_id', 'id');
+  }
+  public function dstate()
+  {
+      return $this->belongsTo(State::class,'delivery_region_id', 'id');
+  }
+  public function dcity()
+  {
+      return $this->belongsTo(City::class,'delivery_city_id', 'id');
+  }
+
+  public function user()
+  {
+    return $this->belongsTo(User::class,'user_id', 'id');
+  }
 }

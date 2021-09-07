@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductOrder extends Model
 {
     use HasFactory;
-
+    protected $table = 'product_orders';
     protected $fillable =[
         'user_id',
         'product_id',
@@ -29,5 +29,14 @@ class ProductOrder extends Model
     public function day()
     {
         return $this->belongsTo(WeekDay::class);
+    }
+
+    public function customerDetail()
+    {
+        return $this->belongsTo(customerDetail::class, 'user_id', 'user_id');
+    }
+    public function scopeUserDetail($query, $id)
+    {
+        return $query->where('user_id','=', $id);
     }
 }

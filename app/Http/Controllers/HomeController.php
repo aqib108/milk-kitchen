@@ -12,6 +12,7 @@ use App\Models\ProductOrder;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use Carbon\Carbon;
 
 
 class HomeController extends Controller
@@ -66,12 +67,13 @@ class HomeController extends Controller
             'product_id' => 'required',
             'qnty' => 'required',
         ]);
+        
         if($validate){
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => Auth::id(),
                 'day_id'     => $request->day_id,
                 'product_id' => $request->product_id],[
-                'quantity' => $request->qnty
+                'quantity' => $request->qnty,
             ]);
             if($data->wasRecentlyCreated){
                 return response()->json([
@@ -91,4 +93,14 @@ class HomeController extends Controller
             ],401);
         }
     }
+    
+    public  function pastOrder($id)
+    {
+        // $order = ProductOrder::with('orderByUserID')->whereDate('created_at','>=', today()->startOfWeek()->subWeeks(10))->get();
+        // dd($order);
+
+        return view('customer.order-history');
+    }
+
+
 }
