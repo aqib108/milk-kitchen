@@ -117,7 +117,7 @@ class CustomerController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        $data->assignRole('Customer');
         if($data->wasRecentlyCreated){
             $response = array(
                 'data' => [],

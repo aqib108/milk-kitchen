@@ -217,11 +217,6 @@
                                             <input type="hidden" value="{{ $price }}" class="price">
                                         </td>
                                         <td>
-                                            @foreach ($orders as $item)
-                                                @if ($pro->id == $item->product_id)
-                                                    @php $discount = 10 @endphp
-                                                @endif
-                                            @endforeach
                                             {{ '$' . ($price / 100) * 1.5 }}
                                             <input type="hidden" value="{{ ($price / 100) * 1.5 }}"
                                                 class="discount">
