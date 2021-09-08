@@ -9,6 +9,7 @@ use App\Models\CustomerDetail;
 use App\Models\Product;
 use App\Models\WeekDay;
 use App\Models\ProductOrder;
+use App\Models\OrderDeliverd;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
@@ -48,15 +49,15 @@ class HomeController extends Controller
     }
     public function getState(Request $request)
     {
-        $data['states'] = State::where("country_id",$request->country_id)
-                    ->get(["name","id"]);
-        return response()->json($data);
+        // dd($request->all());
+        $regions = State::where('country_id',$request->country_id)->get(['name','id']);
+        return ['regions' =>$regions];
     }
     public function getCity(Request $request)
     {
-        $data['cities'] = City::where("state_id",$request->state_id)
-                    ->get(["name","id"]);
-        return response()->json($data);
+        // dd($request->all());
+        $cities = City::where('state_id',$request->state_id)->get(['name','id']);
+        return ['cities' =>$cities];
     }
 
     public function productOrders(Request $request)
@@ -96,11 +97,15 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        // $order = ProductOrder::with('orderByUserID')->whereDate('created_at','>=', today()->startOfWeek()->subWeeks(10))->get();
-        // dd($order);
+        $order = OrderDeliverd::where('user_id',$id)->whereDate('created_at','>=', today()->startOfWeek()->subWeeks(10))->get();
+        // foreach($order as $ord){
+        //     $day =  $ord['day_id'];
+        //     $day_id = WeekDay::where('id', $day)->pluck('id');
+        //     $product = $ord['product_id'];
+        //     $product_id = Product::where('id',$product)->pluck('id');
+        //     $pastorder = $ord->where('day_id',$day_id)->where('product_id',$product_id)->whereDate('created_at','>=', today()->startOfWeek()->subWeeks(10))->get();
+        // }
 
-        return view('customer.order-history');
+        return view('customer.order-history',compact('order'));
     }
-
-
 }

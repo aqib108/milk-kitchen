@@ -218,7 +218,7 @@ class ProductController extends Controller
 
         if ($request->image_url != NULL || $request->has('image_url')) {
 
-            $productImageDirectory = 'product';
+            $productImageDirectory = 'products';
             if ($request->hasFile('image_url')) {
                 $rules = [
                 'image_url' => 'nullable|mimes:jpeg,jpg,png|max:10000',

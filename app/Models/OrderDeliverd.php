@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class OrderDeliverd extends Model
 {
@@ -13,7 +14,17 @@ class OrderDeliverd extends Model
         'product_order_id',
         'product_id',
         'day_id',
-        'quantity'
+        'quantity',
+        'price'
     ];
 
+    public function WeekDay()
+    {
+        return $this->hasMany(ProductOrder::class,'day_id','id');
+    }
+
+    public function orderByUserID()
+    {
+        return $this->WeekDay()->where('user_id','=', Auth::id());
+    }
 }
