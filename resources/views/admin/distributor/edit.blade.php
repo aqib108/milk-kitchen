@@ -33,9 +33,8 @@
                         <!-- form start -->
                         <form action="{{route('distributor.update',[$distributor->id])}}" method="POST">
                             {{ csrf_field() }}
-                           
                             <div class="card-body">
-                            <div class="row">
+                                <div class="row">
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Name <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50" class="form-control @error('name') is-invalid @enderror" name="name"
@@ -67,36 +66,46 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
-                                            <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
-                        
-                                                <option value="1" selected>Pakistan</option>
-                                            </select>
-                                            @error('business_country_id')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                    </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
-                                        <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-        
-                                            <option value="2" selected>Punjab</option>
+                                        <label class="label-wrapper-custm" for="country_id">Suburb <span class="required-star">*</span>
+                                        </label>
+                                        <select name="country_id" id="country_id" class="form-control @error('country_id') is-invalid @enderror">
+                                            <option value="" selected disabled>Select Country</option>
+                                            @foreach ($countries as $country)
+                                            <option @if ($country->id == $distributor->country_id) selected @endif
+                                                value="{{$country->id}}">{{$country->name}}</option>
+                                            @endforeach
                                         </select>
-                                        @error('business_region_id')
+                                        @error('country_id')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
-                                        <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                          
-                                            <option value="3" selected>Lahore</option>
+                                        <label class="label-wrapper-custm" for="region_id">Region <span class="required-star">*</span></label>
+                                        <select name="region_id" id="region_id" class="form-control  @error('region_id') is-invalid @enderror">
+                                            <option value="" selected disabled> Select State</option>
+                                            @foreach ($states->where('country_id',$distributor->country_id) as $state)
+                                                <option @if ($state->id == $distributor->region_id) selected @endif
+                                                    value="{{$state->id}}">{{$state->name}}</option>
+                                            @endforeach
                                         </select>
-                                        @error('business_city_id')
+                                        @error('region_id')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                                        <label class="label-wrapper-custm" for="city_id">City <span class="required-star">*</span></label>
+                                        <select name="city_id" id="city_id" class="form-control  @error('city_id') is-invalid @enderror">
+                                            <option value="" selected disabled> Select City</option>
+                                            @foreach ($cities->where('state_id',$distributor->region_id) as $city)
+                                                <option @if ($city->id == $distributor->city_id) selected @endif
+                                                    value="{{$city->id}}">{{$city->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('city_id')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -126,29 +135,57 @@
 @endsection
 @section('scripts')
     <script>
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+        // GET STATES FOR SELECTED COUNTRY
+        $('#country_id').on('change', function () {
+            var country_id = $('#country_id').find(":selected").val();
+            var option = '';
+            $('#region_id').prop('disabled', false);
 
-                reader.onload = function (e) {
-                    $('#image').attr('src', e.target.result);
-                    $('#image').removeClass("hidden");
+            $.ajax({
+                method: "POST",
+                url: "{{route('getRegions')}}",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    'country_id': country_id
+                },
+                success: function (response) {
+
+                    $('#region_id').empty();
+                    $('#region_id').append(' <option value="" selected disabled>Select Region</option>');
+
+                    response.regions.forEach(function (item, index) {
+                        option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                        $('#region_id').append(option);
+                    });
+
                 }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        $("#image_url").change(function () {
-            readURL(this);
+            });
         });
+        // GET STATES FOR SELECTED COUNTRY
+        $('#region_id').on('change', function () {
+            var state_id = $('#region_id').find(":selected").val();
+            var option = '';
+            $('#city_id').prop('disabled', false);
 
-        // Get Input File Name
-        $('.custom-file input').change(function (e) {
-            var files = [];
-            for (var i = 0; i < $(this)[0].files.length; i++) {
-                files.push($(this)[0].files[i].name);
-            }
-            $(this).next('.custom-file-label').html(files.join(','));
+            $.ajax({
+                method: "POST",
+                url: "{{route('getCitiesByRegion')}}",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    'state_id': state_id
+                },
+                success: function (response) {
+
+                    $('#city_id').empty();
+                    $('#city_id').append(' <option value="" selected disabled>Select City</option>');
+
+                    response.cities.forEach(function (item, index) {
+                        option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                        $('#city_id').append(option);
+                    });
+
+                }
+            });
         });
     </script>
 @endsection

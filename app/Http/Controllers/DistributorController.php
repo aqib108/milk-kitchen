@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Distributor;
 use App\Http\Requests\DistributorRequest;
 use Yajra\DataTables\DataTables;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 use Validator;
 class DistributorController extends Controller
 {
@@ -82,7 +85,8 @@ class DistributorController extends Controller
      */
     public function create()
     {
-        return view('admin.distributor.create');
+        $countries = Country::where('status', '1')->get();
+        return view('admin.distributor.create',compact('countries'));
     }
 
     /**
@@ -127,8 +131,11 @@ class DistributorController extends Controller
         if ($distributor == null) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
+        $countries = Country::where('status','1')->orderby('name','ASC')->get();
+        $states = State::where('status','1')->orderby('name','ASC')->get();
+        $cities = City::where('status','1')->orderby('name','ASC')->get();
 
-        return view('admin.distributor.edit',compact('distributor'));
+        return view('admin.distributor.edit',compact('distributor','countries','states','cities'));
     }
 
     /**
