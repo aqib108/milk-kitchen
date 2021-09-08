@@ -19,14 +19,16 @@
             </thead>
             <tbody class="week-container-tbl">
                 @foreach ($order as $item)
-                <tr>
-                   
-                        <td class="table-td-wrapper" scope="row">{{$item->created_at}}</td>
+                    <tr>
+                        <td class="table-td-wrapper" scope="row">
+                            @foreach ($item->orderByUserID as $week)
+                                {{$week->created_at}}
+                            @endforeach 
+                        </td>
                         <td></td>
                         <td></td>
                         <td></td> 
-                    
-                </tr>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

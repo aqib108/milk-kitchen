@@ -97,7 +97,7 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        $order = OrderDeliverd::where('user_id',$id)->whereDate('created_at','>=', today()->startOfWeek()->subWeeks(10))->get();
+        $order = Product::with('orderByUserID')->get();
         // foreach($order as $ord){
         //     $day =  $ord['day_id'];
         //     $day_id = WeekDay::where('id', $day)->pluck('id');

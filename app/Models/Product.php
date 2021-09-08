@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Product extends Model
 {
@@ -28,4 +29,14 @@ class Product extends Model
         'c_bottle_price',
         'c_saleable',
     ];
+
+    public function product()
+    {
+       return $this->hasMany(OrderDeliverd::class,'product_id');
+    }
+
+    public function orderByUserID()
+    {
+        return $this->product()->where('user_id','=', Auth::id());
+    }
 }
