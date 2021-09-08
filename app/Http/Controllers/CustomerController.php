@@ -188,7 +188,6 @@ class CustomerController extends Controller
     public function generatePDF($id)
     {
         $customer = CustomerDetail::where('user_id',$id)->with('user')->with('bcountry')->with('bstate')->with('bcity')->with('dcountry')->with('dstate')->with('dcity')->get();
-        
         $getCustomer = ProductOrder::where('user_id',$id)->distinct()->pluck('product_id');
         $products = Product::whereIn('id',$getCustomer)->get();
         $orders = ProductOrder::where('user_id',$id)->get();

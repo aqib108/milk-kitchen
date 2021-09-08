@@ -142,7 +142,7 @@
                                                         value="{{ $product->f_bottle_price }}" name="f_bottle_price">
                                                 </td>
                                                 <td class="text-center"><input type="checkbox" value="1"
-                                                        class="form-control" name="f_saleable" data-size="sm"
+                                                        class="form-control" name="f_saleable" data-size="xs"
                                                         data-toggle="toggle"
                                                         @isset($product->f_saleable){{ 'checked' }}@endisset></td>
                                                 </tr>
@@ -154,7 +154,7 @@
                                                             value="{{ $product->r_bottle_price }}" name="r_bottle_price">
                                                     </td>
                                                     <td class="text-center"><input type="checkbox" value="1"
-                                                            class="form-control" name="r_saleable" data-size="sm"
+                                                            class="form-control" name="r_saleable" data-size="xs"
                                                             data-toggle="toggle"
                                                             @isset($product->r_saleable){{ 'checked' }}@endisset></td>
                                                     </tr>
@@ -166,7 +166,7 @@
                                                                 value="{{ $product->c_bottle_price }}" name="c_bottle_price">
                                                         </td>
                                                         <td class="text-center"><input type="checkbox" class="form-control"
-                                                                value="1" name="c_saleable" data-size="sm" data-toggle="toggle"
+                                                                value="1" name="c_saleable" data-size="xs" data-toggle="toggle"
                                                                 @isset($product->c_saleable){{ 'checked' }}@endisset></td>
                                                         </tr>
                                                     </table>
