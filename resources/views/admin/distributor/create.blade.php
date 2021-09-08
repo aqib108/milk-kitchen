@@ -58,29 +58,34 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label class="label-wrapper-custm" for="country_id">Suburb <span
-                                                class="required-star">*</span></label>
-                                        <select name="country_id" class="form-control" id="country_id">
-                                            <option selected disabled>Select Country</option>
-                                            <option value="1">Pakistan</option>
+                                            class="required-star">*</span>
+                                        </label>
+                                        <select name="country_id" id="country_id" class="form-control @error('country_id') is-invalid @enderror">
+                                            <option value="" disabled selected>Select Country</option>
+                                            @foreach($countries as $country)
+                                                <option
+                                                    value="{{$country->id}}" {{(old('country_id') == $country->id)? "selected" : ""}} >{{$country->name}}</option>
+                                            @endforeach
                                         </select>
                                         <div class="alert alert-danger" id="country-err"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label class="label-wrapper-custm" for="region_id">Region <span
-                                                class="required-star">*</span></label>
-                                        <select name="region_id" class="form-control" id="region_id">
-                                            <option selected disabled>Select Region</option>
-                                            <option value="2">Punjab</option>
+                                            class="required-star">*</span>
+                                        </label>
+                                        <select name="region_id" id="region_id" class="form-control @error('region_id') is-invalid @enderror" required disabled>
+                                            <option value="" disabled selected>Select Region</option>
                                         </select>
                                         <div class="alert alert-danger" id="region-err"></div>
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label class="label-wrapper-custm" for="city_id">City <span
-                                                class="required-star">*</span></label>
-                                        <select name="city_id" class="form-control" id="city_id">
-                                            <option selected disabled>Select City</option>
-                                            <option value="3">Lahore</option>
+                                            class="required-star">*</span>
+                                        </label>
+                                        <select name="city_id" id="city_id" class="form-control @error('city_id') is-invalid @enderror"  disabled>
+                                            <option value="" disabled selected>Select City</option>
                                         </select>
+                                      
                                         <div class="alert alert-danger" id="city-err"></div>
                                     </div>
                                 </div>
@@ -146,13 +151,12 @@
             }
 
         }
-
-    //  Name Validation
-    var firstName = document.getElementById("firstName");
-    var firstNameValidation = function() {
-        firstNameValue = firstName.value.trim();
-        validFirstName = /^\w+$/;
-        firstNameErr = document.getElementById('first-name-err');
+        //  Name Validation
+        var firstName = document.getElementById("firstName");
+        var firstNameValidation = function() {
+            firstNameValue = firstName.value.trim();
+            validFirstName = /^\w+$/;
+            firstNameErr = document.getElementById('first-name-err');
 
             if (firstNameValue == "") {
                 firstNameErr.innerHTML = "This field is  required";
@@ -171,8 +175,6 @@
             firstNameValidation();
         }
         // Mobile Number Validation
-
-
         var mobileNumberValidation = function() {
             var mobileNumber = $('#mobileNumber').val();
             validMobileNumber = /^[0-9]*$/;
@@ -212,7 +214,6 @@
             }
 
         }
-
         var emailAddress = document.getElementById("emailAddress");;
         emailAddress.oninput = function() {
             emailAddressValidation();
@@ -220,7 +221,6 @@
             let email = $(this).val();
             startTimer = setTimeout(checkEmail, 500, email);
         }
-
         function checkEmail(email) {
             emailAddressErr = document.getElementById('email-err');
             $('#email-error').remove();
@@ -243,5 +243,60 @@
                 });
             }
         }
+    </script>
+    <script>
+        // GET STATES FOR SELECTED COUNTRY
+        $('#country_id').on('change', function () {
+            var country_id = $('#country_id').find(":selected").val();
+            var option = '';
+            $('#region_id').prop('disabled', false);
+
+            $.ajax({
+                method: "POST",
+                url: "{{route('getRegions')}}",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    'country_id': country_id
+                },
+                success: function (response) {
+
+                    $('#region_id').empty();
+                    $('#region_id').append(' <option value="" selected disabled>Select Region</option>');
+
+                    response.regions.forEach(function (item, index) {
+                        option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                        $('#region_id').append(option);
+                    });
+
+                }
+            });
+        });
+
+        // GET STATES FOR SELECTED COUNTRY
+        $('#region_id').on('change', function () {
+            var state_id = $('#region_id').find(":selected").val();
+            var option = '';
+            $('#city_id').prop('disabled', false);
+
+            $.ajax({
+                method: "POST",
+                url: "{{route('getCitiesByRegion')}}",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    'state_id': state_id
+                },
+                success: function (response) {
+
+                    $('#city_id').empty();
+                    $('#city_id').append(' <option value="" selected disabled>Select City</option>');
+
+                    response.cities.forEach(function (item, index) {
+                        option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                        $('#city_id').append(option);
+                    });
+
+                }
+            });
+        });
     </script>
 @endsection
