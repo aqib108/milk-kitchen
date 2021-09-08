@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function (){
         Route::get('/', 'AdminController@index')->name('dashboard');
         Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
+        
         Route::group(['as' => 'admin.'], function () {
             Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
             Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
@@ -85,7 +86,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}','CustomerGroupController@editGroup');
             Route::post('/update/{id}','CustomerGroupController@updateGroup');
         });
-
         Route::group(['prefix' => 'distributor'], function (){
             Route::post('/checkEmail','DistributorController@checkEmail')->name('distributor.checkEmail');
             Route::get('/','DistributorController@index')->name('distributor.index');
@@ -141,11 +141,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
         Route::get('/past/order/{id}','HomeController@pastOrder')->name('customer.pastOrder');
         Route::post('/product-orders','HomeController@productOrders');
-       
     }); 
-    Route::post('get-states-by-country-user',[HomeController::class,'getState']);
-    Route::post('get-cities-by-state-user',[HomeController::class,'getCity']);
-
 });
+//// GENERAL ROUTES
+Route::post('/get-regions','HomeController@getState')->name('getRegions');
+Route::post('/get-cities','HomeController@getCity')->name('getCitiesByRegion');
 Route::get('/', 'HomeController@index');
 Auth::routes();
