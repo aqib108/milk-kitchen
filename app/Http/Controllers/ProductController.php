@@ -32,6 +32,51 @@ class ProductController extends Controller
                     }
                     return $status;
                 })
+                ->addColumn('new', function(Product $data){
+                    if($data->new == 1){
+                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+                    }
+                    else{
+                        $status = '';
+                    }
+                    return $status;
+                })
+                ->addColumn('active', function(Product $data){
+                    if($data->active == 1){
+                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+                    }
+                    else{
+                        $status = '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
+                    }
+                    return $status;
+                })
+                ->addColumn('f_saleable', function(Product $data){
+                    if($data->f_saleable == 1){
+                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+                    }
+                    else{
+                        $status = '';
+                    }
+                    return $status;
+                })
+                ->addColumn('r_saleable', function(Product $data){
+                    if($data->r_saleable == 1){
+                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+                    }
+                    else{
+                        $status = '';
+                    }
+                    return $status;
+                })
+                ->addColumn('c_saleable', function(Product $data){
+                    if($data->c_saleable == 1){
+                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+                    }
+                    else{
+                        $status = '';
+                    }
+                    return $status;
+                })
                 ->addColumn('action', function(Product $data){
                     $btn1 = '<a onclick="deleteProduct('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<a href="'.route('product.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
@@ -45,7 +90,7 @@ class ProductController extends Controller
 
                     return $btn1.' '.$btn2.' '.$btn3.' '.$status;
                 })
-                ->rawColumns(['action','status'])
+                ->rawColumns(['action','status','new','active','f_saleable','r_saleable','c_saleable'])
                 ->make(true);
         }
         return view('admin.products.index');
@@ -73,6 +118,19 @@ class ProductController extends Controller
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'description' => $request->input('description'),
+            'sku' => $request->input('sku'),
+            'new' => $request->input('new'),
+            'pack_size' => $request->input('pack_size'),
+            'active' => $request->input('active'),
+            'f_ctn_price' => $request->input('f_ctn_price'),
+            'f_bottle_price' => $request->input('f_bottle_price'),
+            'f_saleable' => $request->input('f_saleable'),
+            'r_ctn_price' => $request->input('r_ctn_price'),
+            'r_bottle_price' => $request->input('r_bottle_price'),
+            'r_saleable' => $request->input('r_saleable'),
+            'c_ctn_price' => $request->input('c_ctn_price'),
+            'c_bottle_price' => $request->input('c_bottle_price'),
+            'c_saleable' => $request->input('c_saleable'),
         ];
 
         $product = Product::create($productData);
@@ -143,11 +201,24 @@ class ProductController extends Controller
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'description' => $request->input('description'),
+            'sku' => $request->input('sku'),
+            'new' => $request->input('new'),
+            'pack_size' => $request->input('pack_size'),
+            'active' => $request->input('active'),
+            'f_ctn_price' => $request->input('f_ctn_price'),
+            'f_bottle_price' => $request->input('f_bottle_price'),
+            'f_saleable' => $request->input('f_saleable'),
+            'r_ctn_price' => $request->input('r_ctn_price'),
+            'r_bottle_price' => $request->input('r_bottle_price'),
+            'r_saleable' => $request->input('r_saleable'),
+            'c_ctn_price' => $request->input('c_ctn_price'),
+            'c_bottle_price' => $request->input('c_bottle_price'),
+            'c_saleable' => $request->input('c_saleable'),
         ];
 
         if ($request->image_url != NULL || $request->has('image_url')) {
 
-            $productImageDirectory = 'product';
+            $productImageDirectory = 'products';
             if ($request->hasFile('image_url')) {
                 $rules = [
                 'image_url' => 'nullable|mimes:jpeg,jpg,png|max:10000',
@@ -163,7 +234,7 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('product.index')->with('success', 'Record updated successfully.');
+        return redirect()->route('product.index')->with('success', 'Product updated successfully.');
     }
 
     /**

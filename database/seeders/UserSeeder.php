@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use DB;
+use App\Models\User;
+use Spatie\Permission\Traits\HasRoles;
 class UserSeeder extends Seeder
 {
+    use HasRoles;
     /**
      * Run the database seeds.
      *
@@ -13,13 +15,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        $user = User::create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
             'status' => '1',
-            'created_at' =>\DB::raw('CURRENT_TIMESTAMP'),
-            'updated_at' =>\DB::raw('CURRENT_TIMESTAMP'),
         ]);
+        return $user->syncRoles('Admin');
     }
 }

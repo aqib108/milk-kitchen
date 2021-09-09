@@ -18,12 +18,18 @@
                 </tr>
             </thead>
             <tbody class="week-container-tbl">
-                <tr>
-                    <td class="table-td-wrapper" scope="row"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                @foreach ($order as $item)
+                    <tr>
+                        <td class="table-td-wrapper" scope="row">
+                            @foreach ($item->orderByUserID as $week)
+                                {{$week->created_at}}
+                            @endforeach 
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td> 
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

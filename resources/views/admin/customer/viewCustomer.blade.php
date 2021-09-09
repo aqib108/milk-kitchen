@@ -363,17 +363,20 @@
             //Update Form Function
             $("#customer-detail-info-form-update").on("submit", function(event){
                 event.preventDefault();
-                let id = $('#update').attr('data-id');
                 $.ajaxSetup({
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
                     }
                 });
                 var formData = new FormData(this);
                 $.ajax({
                     type: "POST",
                     data: formData,
+                    url: "{{route('customer-detail.update',$customer->id)}}",
+                    processData: false,
+                    contentType: false,
                     cache: false,
+                    success: function (response) {
                         console.log(response);
                         if(response.success)
                         {
@@ -389,13 +392,14 @@
                     },
                 });   
             });
-
             // Product Selection
             $('body').on('change','.weekly_standing_order .week_days td input', function(){
                 let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
                 let day_id = $(this).attr('data-id');
                 let qnty = $(this).val();
                 if(qnty < 0){
+                    Swal.fire({
+                        position: 'top-end',
                         toast: true,
                         showConfirmButton: false,
                         timer: 2000,
@@ -437,94 +441,106 @@
                     }); 
                 }
             })
+            //Business Country City States Function on change dropdown
+            $('#business_country_id').on('change', function () {
+                var country_id = $('#business_country_id').find(":selected").val();
+                var option = '';
+                $('#business_region_id').prop('disabled', false);
 
+                $.ajax({
+                    method: "POST",
+                    url: "{{route('getRegions')}}",
+                    data: {
+                        _token: $('meta[name="csrf_token"]').attr('content'),
+                        'country_id': country_id
+                    },
+                    success: function (response) {
 
-        });
-    </script>
-    <!---- BUSINESS AND DELIVERY DETAIL COUNTRY,STATE,CITY SCRIPT ---->
-    <script>
-        //Business Country City States Function on change dropdown
-        $(document).ready(function() {
-            $('#business_country_id').on('change', function() {
-                $("#business_region_id").html('');
-                $.ajax({
-                    url:"{{url('get-states-by-country-user')}}",
-                    type: "POST",
-                    data: {
-                        country_id: country_id,
-                        _token: '{{csrf_token()}}' 
-                    },
-                    dataType : 'json',
-                    success: function(result){
-                        $('#business_region_id').html('<option value="">Select Region</option>'); 
-                        $.each(result.states,function(key,value){
-                            $("#business_region_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                        $('#business_region_id').empty();
+                        $('#business_region_id').append(' <option value="" selected disabled>Select Region</option>');
+
+                        response.regions.forEach(function (item, index) {
+                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                            $('#business_region_id').append(option);
                         });
-                        $('#business_city_id').html('<option value="">Select Region First</option>'); 
-                    }
-                });
-            });    
-            $('#business_region_id').on('change', function() {
-                var state_id = this.value;
-                $("#business_city_id").html('');
-                $.ajax({
-                    url:"{{url('get-cities-by-state-user')}}",
-                    type: "POST",
-                    data: {
-                        state_id: state_id,
-                        _token: '{{csrf_token()}}' 
-                    },
-                    dataType : 'json',
-                    success: function(result){
-                        $('#business_city_id').html('<option value="">Select City</option>'); 
-                        $.each(result.cities,function(key,value){
-                            $("#business_city_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-                        });
+
                     }
                 });
             });
-        });
-        //Delivery Country City States Function on change dropdown
-        $(document).ready(function() {
-            $('#delivery_country_id').on('change', function() {
-                var country_id = this.value;
-                $("#delivery_region_id").html('');
+            $('#business_region_id').on('change', function () {
+                var state_id = $('#business_region_id').find(":selected").val();
+                var option = '';
+                $('#business_city_id').prop('disabled', false);
                 $.ajax({
-                    url:"{{url('get-states-by-country-user')}}",
-                    type: "POST",
+                    method: "POST",
+                    url: "{{route('getCitiesByRegion')}}",
                     data: {
-                        country_id: country_id,
-                        _token: '{{csrf_token()}}' 
+                        _token: $('meta[name="csrf_token"]').attr('content'),
+                        'state_id': state_id
                     },
-                    dataType : 'json',
-                    success: function(result){
-                        $('#delivery_region_id').html('<option value="">Select Region</option>'); 
-                        $.each(result.states,function(key,value){
-                            $("#delivery_region_id").append('<option value="'+value.id+'">'+value.name+'</option>');
+                    success: function (response) {
+
+                        $('#business_city_id').empty();
+                        $('#business_city_id').append(' <option value="" selected disabled>Select City</option>');
+
+                        response.cities.forEach(function (item, index) {
+                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                            $('#business_city_id').append(option);
                         });
-                        $('#delivery_city_id').html('<option value="">Select Region First</option>'); 
-                    }
-                });
-            });    
-            $('#delivery_region_id').on('change', function() {
-                var state_id = this.value;
-                $("#delivery_city_id").html('');
-                $.ajax({
-                    url:"{{url('get-cities-by-state-user')}}",
-                    type: "POST",
-                    data: {
-                        state_id: state_id,
-                        _token: '{{csrf_token()}}' 
-                    },
-                    dataType : 'json',
-                    success: function(result){
-                        $('#delivery_city_id').html('<option value="">Select City</option>'); 
-                        $.each(result.cities,function(key,value){
-                            $("#delivery_city_id").append('<option value="'+value.id+'">'+value.name+'</option>');
-                        });
+
                     }
                 });
             });
+            //Delivery Country City States Function on change dropdown
+            $('#delivery_country_id').on('change', function () {
+                var country_id = $('#delivery_country_id').find(":selected").val();
+                var option = '';
+                $('#delivery_region_id').prop('disabled', false);
+
+                $.ajax({
+                    method: "POST",
+                    url: "{{route('getRegions')}}",
+                    data: {
+                        _token: $('meta[name="csrf_token"]').attr('content'),
+                        'country_id': country_id
+                    },
+                    success: function (response) {
+
+                        $('#delivery_region_id').empty();
+                        $('#delivery_region_id').append(' <option value="" selected disabled>Select Region</option>');
+
+                        response.regions.forEach(function (item, index) {
+                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                            $('#delivery_region_id').append(option);
+                        });
+
+                    }
+                });
+            }); 
+            $('#delivery_region_id').on('change', function () {
+                var state_id = $('#delivery_region_id').find(":selected").val();
+                var option = '';
+                $('#delivery_city_id').prop('disabled', false);
+                $.ajax({
+                    method: "POST",
+                    url: "{{route('getCitiesByRegion')}}",
+                    data: {
+                        _token: $('meta[name="csrf_token"]').attr('content'),
+                        'state_id': state_id
+                    },
+                    success: function (response) {
+
+                        $('#delivery_city_id').empty();
+                        $('#delivery_city_id').append(' <option value="" selected disabled>Select City</option>');
+
+                        response.cities.forEach(function (item, index) {
+                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
+                            $('#delivery_city_id').append(option);
+                        });
+
+                    }
+                });
+            });  
         });
     </script>
 @endsection
