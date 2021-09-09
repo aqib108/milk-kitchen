@@ -99,13 +99,10 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        $orders = Product::with('orderByUserID')->whereDate('created_at', '>=', today()->startOfWeek()->subWeeks(10))->get();
-        $weekData = [];
-        foreach ($orders as $order) {
-            $w = $order->created_at->week; // use the week number as our array key
-            $weekData[$w] = $order;
-        }
-        dd($weekData);
+        $orders = Product::with('orderByUserID')->get()->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->format('W'); // grouping by weeks
+        });
+        dd($orders);
 
         return view('customer.order-history',compact('weekData'));
     }
