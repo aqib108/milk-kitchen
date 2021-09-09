@@ -2,10 +2,7 @@
 @section('title', 'List Of Customer')
 @section('styles')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('customer-panel/css/bootstrap.css') }}" />
-    <link rel="stylesheet" href="{{ asset('customer-panel/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('customer-panel/css/style.css') }}" />
-    <link rel="stylesheet" href="{{ asset('customer-panel/css/font-awesome.min.css') }}" />
 @endsection
 @section('content')
 
@@ -269,10 +266,7 @@
 
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="{{ asset('customer-panel/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('customer-panel/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('customer-panel/js/index.js') }}"></script>
-    <script src="{{ asset('customer-panel/js/fontawesome.js') }}"></script>
     <script>
         $(document).ready(function() {
             var sum = 0,
