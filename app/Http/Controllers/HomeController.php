@@ -44,7 +44,9 @@ class HomeController extends Controller
        $data['countries'] = Country::where('status',1)->orderby('name','ASC')->get();
        $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
        $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
-
+       $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
+       $data['dcities'] = City::where('status','1')->where('state_id',$customerDetail->delivery_region_id)->get();
+       
        return view('customer.index',compact('user','customerDetail','products','weekDays'),$data);
     }
     public function getState(Request $request)
