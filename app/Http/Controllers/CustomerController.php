@@ -92,8 +92,8 @@ class CustomerController extends Controller
             $q->userDetail($customerID);
         }])->get();
         $data['countries'] = Country::get(["name","id"]);
-        $data['regions'] = State::get(["name","id"]);
-        $data['cities'] = City::get(["name","id"]);
+        $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
+        $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
 
         return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
     }
