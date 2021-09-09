@@ -46,7 +46,9 @@ class OrderDelivery extends Command
         $current_day = Carbon::Tomorrow()->format('l');
         $day_id = WeekDay::where('name',$current_day)->pluck('id');
         $orders = ProductOrder::where('day_id',$day_id)->get();
-              
+            // $orders = $orders[0];
+            // $productID = $orders->product_id;
+            // Log::info($productID); exit;  
       foreach($orders as $order){
                 $data = ([
                     'user_id' => $order->user_id,
