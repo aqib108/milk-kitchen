@@ -99,15 +99,11 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        $order = Product::with('orderByUserID')->get();
-        // foreach($order as $ord){
-        //     $day =  $ord['day_id'];
-        //     $day_id = WeekDay::where('id', $day)->pluck('id');
-        //     $product = $ord['product_id'];
-        //     $product_id = Product::where('id',$product)->pluck('id');
-        //     $pastorder = $ord->where('day_id',$day_id)->where('product_id',$product_id)->whereDate('created_at','>=', today()->startOfWeek()->subWeeks(10))->get();
-        // }
+        $orders = Product::with('orderByUserID')->get()->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->format('W'); // grouping by weeks
+        });
+        dd($orders);
 
-        return view('customer.order-history',compact('order'));
+        return view('customer.order-history',compact('weekData'));
     }
 }
