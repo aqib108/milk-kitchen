@@ -1,34 +1,37 @@
-@extends('admin.layouts.admin')
-@section('title', 'List Of Customer')
-@section('styles')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ************************************************************************ !-->
+    <!-- ****                                                              **** !-->
+    <!-- ****       ¤ Designed and Developed by  LEADconcept               **** !-->
+    <!-- ****               http://www.leadconcept.com                     **** !-->
+    <!-- ****                                                              **** !-->
+    <!-- ************************************************************************ !-->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milk Kitchen</title>
     <link rel="stylesheet" href="{{ asset('customer-panel/css/bootstrap.css') }}" />
     <link rel="stylesheet" href="{{ asset('customer-panel/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('customer-panel/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('customer-panel/css/font-awesome.min.css') }}" />
-@endsection
-@section('content')
+</head>
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>FOOD SERVICE PORTAL</h1>
+<body>
+    <section class="logo-banner2">
+        <div class="container">
+            <div class="flex-wraper">
+                <div class="___class_+?3___">
+                    <img src="{{ asset('customer-panel/images/logo.png') }}" class="img-fluid" alt="">
                 </div>
-                <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('customer.customer-report') }}" class="btn btn-dark">Back</a>
-                        </li>
-                    </ol>
+                <div>
+                    <h2 class="heading-one-banner">FOOD SERVICE PORTAL</h2>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
+    <section class="pb-5">
+        <div class="container">
             <div>
                 <div class="text-center">
                     <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
@@ -259,16 +262,26 @@
                     </div>
                 </div>
             </div>
-                <!-- /.col -->
-            <br>
         </div>
-        <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-@endsection
-
-@section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <footer class="footer-wrapper-two">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text__center-main">
+                    <div>
+                        <p class="m-0 ">© Copyright 2021 Milk Kitchen . All rights reserved </p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right text__center-main">
+                    <div>
+                        <p class="m-0">Designed & Developed by <a href="https://leadconcept.com/"
+                                target="_blank">LEADconcept</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('customer-panel/js/bootstrap.js') }}"></script>
     <script src="{{ asset('customer-panel/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('customer-panel/js/index.js') }}"></script>
@@ -287,4 +300,6 @@
             $('.totalprice').val('$' + final);
         });
     </script>
-@endsection
+</body>
+
+</html>
