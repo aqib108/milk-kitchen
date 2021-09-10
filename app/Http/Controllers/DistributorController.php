@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Distributor;
+use App\Models\Warehouse;
 use App\Http\Requests\DistributorRequest;
+use App\Http\Requests\WarehouseRequest;
 use Yajra\DataTables\DataTables;
 use App\Models\Country;
 use App\Models\State;
@@ -44,12 +46,13 @@ class DistributorController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Distributor::orderBy('id','DESC')->get();
+        // $data = Warehouse::orderBy('id','DESC')->get();
         if ($request->ajax()) {
-            $data = Distributor::orderBy('id','DESC')->get();
+            $data = Warehouse::orderBy('id','DESC')->get();
+            // dd($data);
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('status', function(Distributor $data){
+                ->addColumn('status', function(Warehouse $data){
                     if($data->status == 1){
                         $status = '<span class="badge badge-success">Active</span>';
                     }
@@ -58,10 +61,10 @@ class DistributorController extends Controller
                     }
                     return $status;
                 })
-                ->addColumn('action', function(Distributor $data){
+                ->addColumn('action', function(Warehouse $data){
                     $btn1 = '<a data-id="'.$data->id.'" data-tab="distributors" data-url="distributor/delete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="'.route('distributor.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
+                    $btn2 = '<button data-id="'.$data->id.'" class="btn btn-sm btn-primary edit" >Edit</button>';
                      //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
                     if($data->status == 1){
                         $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>';
@@ -95,17 +98,10 @@ class DistributorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WarehouseRequest $request)
     {
-        $data = Distributor::create($request->all());
-        if($data->wasRecentlyCreated){
-            $response = array(
-                'data' => [],
-                'message' => 'Data Successfully Added',
-                'status' => 'success',
-            );
-            return $response;
-        }
+        $data = Warehouse::updateOrCreate(['name'=>$request->warehouse_name]);
+        return redirect()->route('distributor.index');
     }
 
     /**
@@ -147,7 +143,7 @@ class DistributorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Distributor::find($id)->update($request->all());
+        $product = Warehouse::find($id)->update(['name' => $request->warehouse_name]);
         return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
     }
 
@@ -159,7 +155,7 @@ class DistributorController extends Controller
      */
     public function destroy($id)
     {
-        $product = Distributor::findOrFail($id);
+        $product = Warehouse::findOrFail($id);
         $product->delete();
         return response()->json(array(
             'data' => true,
@@ -169,12 +165,26 @@ class DistributorController extends Controller
     }
     public function status(Request $request)
     {
-        $distributor = Distributor::findOrFail($request->id);
+        $distributor = Warehouse::findOrFail($request->id);
         if (empty($distributor)) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
         $distributor->update(['status'=> $request->input('status')]);
         $status = $distributor->status;
         return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
+    }
+
+
+    public function getWarehouse(Request $request)
+    {
+        $request->validate([
+            'id'=> 'required'
+        ]);
+        $warehouse = Warehouse::findOrFail($request->id);
+        return response()->json([
+            'html' => view('admin.distributor.edit', compact('warehouse'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);
+
     }
 }
