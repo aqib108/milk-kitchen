@@ -95,8 +95,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/detail/{id}','DistributorController@show')->name('distributor.detail');
             Route::post('/update/{id}','DistributorController@update')->name('distributor.update');
             Route::post('/status','DistributorController@status')->name('distributor.status');
+            Route::get('/getWarehouse','DistributorController@getWarehouse')->name('distributor.getdata');
             Route::delete('/delete/{id}','DistributorController@destroy');
+            Route::resource('region','RegionController');
         });
+
         Route::group(['prefix' => 'driver'], function (){
             Route::post('/checkEmail','DriverController@checkEmail')->name('driver.checkEmail');
             Route::get('/','DriverController@index')->name('driver.index');

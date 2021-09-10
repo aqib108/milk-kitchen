@@ -66,7 +66,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Add New Group</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            <button type="button" class="btn btn-close" data-bs-dismiss="modal"
                                 aria-label="Close">x</button>
                         </div>
                         <form action="{{ route('customer-group.storeGroup') }}" method="POST">
