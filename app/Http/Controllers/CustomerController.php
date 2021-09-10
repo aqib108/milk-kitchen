@@ -91,30 +91,34 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
             $q->userDetail($customerID);
         }])->get();
-        $data['countries'] = Country::get(["name","id"]);
-        if ($customerDetail->business_region_id != NULL) {
-            $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
-        } else {
-            $data['regions'] = NULL;
-        }
-        if ($customerDetail->business_city_id != NULL) {
-            $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
-        }else {
-            $data['cities'] = NULL;
-        } 
-        if ($customerDetail->delivery_region_id != NULL) {
 
-            $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
+        $countries = Country::get(["name","id"]);
+
+        if ($customerDetail != NULL) {
+            $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
         } else {
-            $data['dregions'] = NULL;
-        }
-        if ($customerDetail->delivery_city_id != NULL) {
-            $data['dcities'] = City::where('status','1')->where('state_id',$customerDetail->delivery_region_id)->get();
-        } else {
-            $data['dcities'] = NULL;
+            $regions = null;
         }
 
-        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
+        if ($customerDetail != NULL) {
+            $cities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->business_region_id)->get();
+        } else {
+            $cities = null;
+        }
+
+        if ($customerDetail != NULL) {
+            $dregions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->delivery_country_id)->get();
+        } else {
+            $dregions = null;
+        }
+
+        if ($customerDetail != NULL) {
+            $dcities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->delivery_region_id)->get();
+        } else {
+            $dcities = null;
+        }
+
+        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','regions','cities','countries','dregions','dcities'));
     }
 
     public function pastOrder($id)

@@ -42,30 +42,32 @@ class HomeController extends Controller
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
        $weekDays = WeekDay::with('orderByUserID')->get();
-       $data['countries'] = Country::where('status',1)->orderby('name','ASC')->get();
-       if ($customerDetail->business_region_id != NULL) {
-            $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
+       $countries = Country::where('status',1)->orderby('name','ASC')->get();
+       if ($customerDetail != NULL) {
+            $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
         } else {
-            $data['regions'] = NULL;
+            $regions = null;
         }
-        if ($customerDetail->business_city_id != NULL) {
-            $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
-        }else {
-            $data['cities'] = NULL;
-        } 
-        if ($customerDetail->delivery_region_id != NULL) {
 
-            $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
+        if ($customerDetail != NULL) {
+            $cities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->business_region_id)->get();
         } else {
-            $data['dregions'] = NULL;
+            $cities = null;
         }
-        if ($customerDetail->delivery_city_id != NULL) {
-            $data['dcities'] = City::where('status','1')->where('state_id',$customerDetail->delivery_region_id)->get();
+
+        if ($customerDetail != NULL) {
+            $dregions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->delivery_country_id)->get();
         } else {
-            $data['dcities'] = NULL;
+            $dregions = null;
+        }
+
+        if ($customerDetail != NULL) {
+            $dcities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->delivery_region_id)->get();
+        } else {
+            $dcities = null;
         }
        
-       return view('customer.index',compact('user','customerDetail','products','weekDays'),$data);
+       return view('customer.index',compact('user','customerDetail','products','weekDays','regions','cities','countries','dregions','dcities'));
     }
     public function getState(Request $request)
     {

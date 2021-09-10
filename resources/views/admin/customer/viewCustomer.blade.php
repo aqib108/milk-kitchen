@@ -86,12 +86,17 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-                                                            <option selected disabled>Select Region</option>
-                                                            @foreach($regions as $region)
-                                                                <option value="{{$region->id}}"
-                                                                    {{ isset($customerDetail->business_region_id) && $customerDetail->business_region_id == $region->id ? "selected":""}}>{{$region->name}}
-                                                                </option>
-                                                            @endforeach
+                                                            
+                                                            @if($customerDetail != null)
+                                                                @foreach($regions as $region)
+                                                                    <option value="{{$region->id}}"
+                                                                        {{ isset($customerDetail->business_region_id) && $customerDetail->business_region_id == $region->id ? "selected":""}}>{{$region->name}}
+                                                                    </option>
+                                                                @endforeach
+                                                            @else
+                                                                <option selected disabled>Select Region</option>
+                                                            @endif
+
                                                         </select>
                                                         @error('business_region_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -102,11 +107,16 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
                                                         <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                                            <option selected disabled>Select City</option>
-                                                            @foreach($cities as $city)
-                                                                <option value="{{$city->id}}" {{isset($customerDetail->business_city_id) && $customerDetail->business_city_id == $city->id ? "selected":""}}>
-                                                                    {{$city->name}}</option>
-                                                            @endforeach
+                                                            
+                                                            @if($customerDetail != null)
+                                                                @foreach($cities as $city)
+                                                                    <option value="{{$city->id}}" {{isset($customerDetail->business_city_id) && $customerDetail->business_city_id == $city->id ? "selected":""}}>
+                                                                        {{$city->name}}</option>
+                                                                @endforeach
+                                                            @else
+                                                                <option selected disabled>Select City</option>
+                                                            @endif
+
                                                         </select>
                                                         @error('business_city_id')
                                                             <span class="invalid-feedback" role="alert">
@@ -198,12 +208,17 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
                                                         <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                            <option selected disabled>Select Region</option>
-                                                            @foreach($dregions as $region)
-                                                                <option value="{{$region->id}}"
-                                                                    {{isset($customerDetail->delivery_region_id) && $customerDetail->delivery_region_id == $region->id ? "selected":""}}>{{$region->name}}
-                                                                </option>
-                                                            @endforeach
+                                                            
+                                                            @if($customerDetail != null)
+                                                                @foreach($dregions as $region)
+                                                                    <option value="{{$region->id}}"
+                                                                        {{isset($customerDetail->delivery_region_id) && $customerDetail->delivery_region_id == $region->id ? "selected":""}}>{{$region->name}}
+                                                                    </option>
+                                                                @endforeach
+                                                            @else
+                                                                <option selected disabled>Select Region</option>
+                                                            @endif
+
                                                            
                                                         </select>
                                                         @error('delivery_region_id')
@@ -215,11 +230,15 @@
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
                                                         <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                            <option selected disabled>Select City</option>
-                                                            @foreach($dcities as $city)
-                                                                <option value="{{$city->id}}" {{isset($customerDetail->delivery_city_id) && $customerDetail->delivery_city_id == $city->id ? "selected":""}}>
-                                                                    {{$city->name}}</option>
-                                                            @endforeach
+                                                            @if($customerDetail != null)
+                                                                @foreach($dcities as $city)
+                                                                    <option value="{{$city->id}}" {{isset($customerDetail->delivery_city_id) && $customerDetail->delivery_city_id == $city->id ? "selected":""}}>
+                                                                        {{$city->name}}</option>
+                                                                @endforeach
+                                                            @else
+                                                                <option selected disabled>Select City</option>
+                                                            @endif
+
                                                         </select>
                                                         @error('delivery_city_id')
                                                             <span class="invalid-feedback" role="alert">
