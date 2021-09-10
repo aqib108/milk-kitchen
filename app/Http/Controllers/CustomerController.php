@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\ProductOrder;
+use App\Models\OrderDeliverd;
 use App\Models\CustomerDetail;
 use App\Models\WeekDay;
 use App\Models\Country;
@@ -15,6 +16,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Carbon\Carbon;
 use Auth;
 use Validator;
 use PDF;
@@ -91,35 +93,40 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
             $q->userDetail($customerID);
         }])->get();
-        $data['countries'] = Country::get(["name","id"]);
-        if(isset($customerDetail->business_country_id)){
-            $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
-        }else{
-            $data['regions'] = State::where('status','1')->get();
-        }
-        if(isset($customerDetail->business_region_id)){
-            $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
-        }else{
-            $data['cities'] = City::where('status','1')->get();
-        }
-        if(isset($customerDetail->delivery_country_id)){
-            $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
-        }else{
-            $data['dregions'] = State::where('status','1')->get();
-
-        }
-        if(isset($customerDetail->delivery_region_id)){
-            $data['dcities'] = City::where('status','1')->where('state_id',$customerDetail->delivery_region_id)->get();
-        }else{
-            $data['dcities'] = City::where('status','1')->get();
+        $countries = Country::get(["name","id"]);
+        if ($customerDetail != NULL) {
+            $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
+        } else {
+            $regions = null;
         }
 
-        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
+        if ($customerDetail != NULL) {
+            $cities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->business_region_id)->get();
+        } else {
+            $cities = null;
+        }
+
+        if ($customerDetail != NULL) {
+            $dregions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->delivery_country_id)->get();
+        } else {
+            $dregions = null;
+        }
+
+        if ($customerDetail != NULL) {
+            $dcities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->delivery_region_id)->get();
+        } else {
+            $dcities = null;
+        }
+        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','regions','cities','countries','dregions','dcities'));
+        // return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
     }
 
     public function pastOrder($id)
     {
-        return view('admin.customer.past-order');
+        $orders = OrderDeliverd::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
+        });
+        return view('admin.customer.past-order',compact('orders'));
     }
 
     //Create Customer page

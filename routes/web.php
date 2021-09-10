@@ -150,6 +150,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
         Route::get('/past/order/{id}','HomeController@pastOrder')->name('customer.pastOrder');
         Route::post('/product-orders','HomeController@productOrders');
+        Route::get('/customer-delivery-details','HomeController@deliveryDetails')->name('customer.deliveryDetails');
     }); 
 });
 //// GENERAL ROUTES
