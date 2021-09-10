@@ -3,34 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\RegionRequest;
-use App\Models\Region;
+use App\Models\Zone;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\Region;
 use App\Models\City;
 use App\Models\Warehouse;
 use Yajra\DataTables\DataTables;
-
-class RegionController extends Controller
+class ZoneController extends Controller
 {
-    //
-    public function __constructor()
-    {
-        $this->middleware('auth');
-    }
-
     public function index(Request $request)
     {
+    
         // $data = Warehouse::orderBy('id','DESC')->get();
         if ($request->ajax()) {
-            $data = Region::
-            join('states','states.id','regions.region_id')
-            ->join('warehouses','warehouses.id','regions.warehouse_id')
-            ->select('regions.*','warehouses.name as warehouse_name','states.name as state_name')->get();
-            // dd($data);
+            $data = Zone::
+            join('regions','regions.id','zones.region_id')
+            ->join('states','states.id','regions.region_id')
+           ->select('zones.*','states.name as state_name')->get();
+           
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('status', function(Region $data){
+                ->addColumn('status', function(Zone $data){
                     if($data->status == 1){
                         $status = '<span class="badge badge-success">Active</span>';
                     }
@@ -39,16 +33,21 @@ class RegionController extends Controller
                     }
                     return $status;
                 })
-                ->addColumn('action', function(Region $data){
-                    $btn1 = '<a data-id="'.$data->id.'" data-tab="distributors" data-url="region/delete" 
+                ->addColumn('action', function(Zone $data){
+                    $btn1 = '<a data-id="'.$data->id.'" data-tab="distributors" data-url="zone/delete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<button data-id="'.$data->id.'" class="btn btn-sm btn-primary region_edit" >Edit</button>';
+                    $btn2 = '<button data-id="'.$data->id.'" class="btn btn-sm btn-primary zone_edit" >Edit</button>';
                      //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
-                
+                    if($data->status == 1){
+                        $status = '<a onclick="changeZoneStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>';
+                    }
+                    else{
+                        $status = '<a onclick="changeZoneStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success" style ="margin-top:5px;">Activate</a>';
+                    }
 
-                    return $btn2.'  '.$btn1;
+                    return $btn2.'  '.$status.' '.$btn1;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','status'])
                 ->make(true);
         }
         $countries = Country::where('status', '1')->get();
@@ -59,7 +58,7 @@ class RegionController extends Controller
         return view('admin.distributor.index',compact('countries','regions','warehouses'));
     }
 
-       /**
+          /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -67,13 +66,12 @@ class RegionController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Region::updateOrCreate($request->except('_token'));
-        return redirect()->route('region.index');
+        $data = Zone::create($request->except('_token'));
+        return redirect()->route('zone.index');
     }
-
     public function destroy($id)
     {
-        $product = Region::findOrFail($id);
+        $product = Zone::findOrFail($id);
         $product->delete();
         return response()->json(array(
             'data' => true,
@@ -82,30 +80,9 @@ class RegionController extends Controller
         ));
     }
 
-    public function getRegion(Request $request)
+    public function zonestatus(Request $request)
     {
-        $request->validate([
-            'id'=> 'required'
-        ]);
-        $region=Region::findOrFail($request->id);
-        $countries = Country::where('status', '1')->get();
-        $states = State::where('status', '1')->get();
-        $warehouses= Warehouse::all();
-        return response()->json([
-            'html' => view('admin.distributor.region_edit', compact('region','states','warehouses','countries'))->render()
-            ,200, ['Content-Type' => 'application/json']
-        ]);
-
-    }
-
-    public function update(Request $request, $id)
-    {
-        $product = Region::find($id)->update($request->except('_token'));
-        return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
-    }
-    public function regionstatus(Request $request)
-    {
-        $distributor = Region::findOrFail($request->id);
+        $distributor = Zone::findOrFail($request->id);
         if (empty($distributor)) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
@@ -114,5 +91,27 @@ class RegionController extends Controller
         return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
     }
 
+    public function getZone(Request $request)
+    {
+        $request->validate([
+            'id'=> 'required'
+        ]);
+        $zone=Zone::findOrFail($request->id);
+        $countries = Country::where('status', '1')->get();
+        $states = State::where('status', '1')->get();
+        $regions = Region::
+        join('states','states.id','regions.region_id')
+        ->select('regions.id','states.name as name')->get();
+        return response()->json([
+            'html' => view('admin.distributor.zone_edit', compact('zone','states','regions','countries'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);
 
+    }
+
+    public function update(Request $request, $id)
+    {
+        $product = Zone::find($id)->update($request->except('_token'));
+        return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
+    }
 }

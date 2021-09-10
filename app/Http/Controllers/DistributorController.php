@@ -11,6 +11,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use App\Models\Region;
 use Validator;
 class DistributorController extends Controller
 {
@@ -78,7 +79,13 @@ class DistributorController extends Controller
                 ->rawColumns(['action','status'])
                 ->make(true);
         }
-        return view('admin.distributor.index');
+        $countries = Country::where('status', '1')->get();
+          $warehouses= Warehouse::all();
+          $regions = Region::
+          join('states','states.id','regions.region_id')
+          ->select('regions.id','states.name as name')->get();
+          // dd($data);
+        return view('admin.distributor.index',compact('countries','regions','warehouses'));
     }
 
     /**
@@ -130,7 +137,7 @@ class DistributorController extends Controller
         $countries = Country::where('status','1')->orderby('name','ASC')->get();
         $states = State::where('status','1')->orderby('name','ASC')->get();
         $cities = City::where('status','1')->orderby('name','ASC')->get();
-
+      
         return view('admin.distributor.edit',compact('distributor','countries','states','cities'));
     }
 
