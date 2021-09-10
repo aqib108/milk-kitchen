@@ -18,10 +18,9 @@
                     </tr>
                 </thead>
                 <tbody class="week-container-tbl">
-                    @foreach ($weekData as $week)
+                    @foreach ($orders as $order)
                         <tr>
                             <td class="table-td-wrapper" scope="row">
-                              
                             </td>
                             <td></td>
                             <td></td>
