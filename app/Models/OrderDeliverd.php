@@ -17,4 +17,20 @@ class OrderDeliverd extends Model
         'quantity',
         'price'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id','id');
+    }
+
+    public function scopeWeekDetail($query,$arr)
+    {
+        // dd($arr-);
+        return $query->whereBetween('created_at',[$arr->created_at->subDays(6),$arr->created_at])->get();
+    }
+    
+    public function scopeUserDetail($query, $id)
+    {
+        return $query->where('user_id','=', $id);
+    }
 }
