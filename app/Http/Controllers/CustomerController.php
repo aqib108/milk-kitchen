@@ -92,26 +92,26 @@ class CustomerController extends Controller
             $q->userDetail($customerID);
         }])->get();
         $data['countries'] = Country::get(["name","id"]);
-        if(isset($customerDetail->business_country_id)){
+        if ($customerDetail->business_region_id != NULL) {
             $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
-        }else{
-            $data['regions'] = State::where('status','1')->get();
+        } else {
+            $data['regions'] = NULL;
         }
-        if(isset($customerDetail->business_region_id)){
+        if ($customerDetail->business_city_id != NULL) {
             $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
-        }else{
-            $data['cities'] = City::where('status','1')->get();
-        }
-        if(isset($customerDetail->delivery_country_id)){
-            $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
-        }else{
-            $data['dregions'] = State::where('status','1')->get();
+        }else {
+            $data['cities'] = NULL;
+        } 
+        if ($customerDetail->delivery_region_id != NULL) {
 
+            $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
+        } else {
+            $data['dregions'] = NULL;
         }
-        if(isset($customerDetail->delivery_region_id)){
+        if ($customerDetail->delivery_city_id != NULL) {
             $data['dcities'] = City::where('status','1')->where('state_id',$customerDetail->delivery_region_id)->get();
-        }else{
-            $data['dcities'] = City::where('status','1')->get();
+        } else {
+            $data['dcities'] = NULL;
         }
 
         return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
