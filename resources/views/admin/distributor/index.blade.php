@@ -15,8 +15,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('distributor.create') }}" class="btn btn-primary pull-right"><i
-                                    class="fas fa-fw fa-plus"></i>Add Distributor</a>
+                            <button class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#addWarehouse"
+                                class="btn btn-primary pull-right"><i class="fas fa-fw fa-plus"></i>Add Distributor</button>
                         </li>
                     </ol>
                 </div>
@@ -24,7 +24,7 @@
         </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
+    <!-- Warehouse content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -42,8 +42,6 @@
                                     <tr>
                                         <th>Sr.No</th>
                                         <th>Name </th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
                                         <th>Status</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
@@ -64,6 +62,139 @@
         </div>
         <!-- /.container-fluid -->
     </section>
+    {{-- Models Warehouse --}}
+    <!-- Add Customer Group Modal -->
+    <div class="modal fade" id="addWarehouse" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Warehouse</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <form action="{{ route('distributor.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3 error-placeholder">
+                            <label class="form-label">Warehouse Name</label>
+                            <input type="text" class="form-control" name="warehouse_name"
+                                placeholder="Enter Warehouse Name..." required>
+                            @error('warehouse_name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End  Model -->
+    
+    <!-- Update Warehouse  Modal -->
+    <div class="modal fade" id="updateWarehouse" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Warehouse</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="form">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Update Warehouse Model -->
+     <!-- Regions content -->
+     <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Distributor's List (Total Distributor's : <span id="countTotal">0</span>)
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="distributors" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No</th>
+                                        <th>Name </th>
+                                        <th>Status</th>
+                                        <th class="no-sort" style="width: 200px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    {{-- Models Warehouse --}}
+    <!-- Add Customer Group Modal -->
+    <div class="modal fade" id="addWarehouse" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Warehouse</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <form action="{{ route('distributor.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3 error-placeholder">
+                            <label class="form-label">Warehouse Name</label>
+                            <input type="text" class="form-control" name="warehouse_name"
+                                placeholder="Enter Warehouse Name..." required>
+                            @error('warehouse_name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End  Model -->
+    <!-- Update Warehouse  Modal -->
+    <div class="modal fade" id="updateWarehouse" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Warehouse</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="form">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Update Warehouse Model -->
     <!-- /.content -->
 @endsection
 @section('scripts')
@@ -85,14 +216,6 @@
                     {
                         data: 'name',
                         name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'phone',
-                        name: 'phone'
                     },
                     {
                         data: 'status',
@@ -134,12 +257,10 @@
                                 'status': status
                             },
                             success: function(response) {
-                                if(response.status == 1)
-                                    {
-                                        Swal.fire("Active!", response.message, "success");
-                                        $('#distributors').DataTable().ajax.reload();
-                                    }
-                                else{
+                                if (response.status == 1) {
+                                    Swal.fire("Active!", response.message, "success");
+                                    $('#distributors').DataTable().ajax.reload();
+                                } else {
                                     Swal.fire("Inactive!", response.message, "success");
                                     $('#distributors').DataTable().ajax.reload();
                                 }
@@ -148,5 +269,21 @@
                     }
                 });
         };
+
+        $('body').on('click', '.edit', function() {
+            let id = $(this).attr('data-id');
+            $.ajax({
+                method: "GET",
+                url: "{{ route('distributor.getdata') }}",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    'id': id
+                },
+                success: function(response) {
+                    $('body').find('#updateWarehouse .form').html(response.html);
+                    $('#updateWarehouse').modal('show');
+                }
+            });
+        });
     </script>
 @endsection
