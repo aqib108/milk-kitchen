@@ -19,5 +19,10 @@ class WeekDay extends Model
     {
         return $this->WeekDay()->where('user_id','=', Auth::id());
     }
+
+    public function orderDelivered()
+    {
+        return $this->hasMany(OrderDeliverd::class,'day_id','id');
+    }
     
 }

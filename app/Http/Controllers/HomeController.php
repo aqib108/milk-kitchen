@@ -41,25 +41,27 @@ class HomeController extends Controller
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
-       $weekDays = WeekDay::with('orderByUserID')->get();
+       $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user){
+                        $q->userDetail($user);
+                    }])->get();
        $data['countries'] = Country::where('status',1)->orderby('name','ASC')->get();
-       if ($customerDetail->business_region_id != NULL) {
+       if (isset($customerDetail->business_region_id)) {
             $data['regions'] = State::where('status','1')->where('country_id',$customerDetail->business_country_id)->get();
         } else {
             $data['regions'] = NULL;
         }
-        if ($customerDetail->business_city_id != NULL) {
+        if (isset($customerDetail->business_city_id)) {
             $data['cities'] = City::where('status','1')->where('state_id',$customerDetail->business_region_id)->get();
         }else {
             $data['cities'] = NULL;
         } 
-        if ($customerDetail->delivery_region_id != NULL) {
+        if (isset($customerDetail->delivery_region_id)) {
 
             $data['dregions'] = State::where('status','1')->where('country_id',$customerDetail->delivery_country_id)->get();
         } else {
             $data['dregions'] = NULL;
         }
-        if ($customerDetail->delivery_city_id != NULL) {
+        if (isset($customerDetail->delivery_city_id)) {
             $data['dcities'] = City::where('status','1')->where('state_id',$customerDetail->delivery_region_id)->get();
         } else {
             $data['dcities'] = NULL;
@@ -117,11 +119,27 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        $orders = Product::with('orderByUserID')->get()->groupBy(function($date) {
+        $orders = OrderDeliverd::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
             return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
         });
-        dd($orders);
-        
         return view('customer.order-history',compact('orders'));
+    }
+
+    public function deliveryDetails(Request $request)
+    {
+        $request->validate([
+            'id'=>'required'
+        ]);
+        $orderDetail = OrderDeliverd::find($request->id);
+        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $weekDays = WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+                        $q->userDetail($orderDetail->user_id);
+                    }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                        $q->weekDetail($orderDetail);
+                    }])->get();
+        return response()->json([
+            'html' => view('customer.specific_week_delivery', compact('weekDays','products'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);
     }
 }
