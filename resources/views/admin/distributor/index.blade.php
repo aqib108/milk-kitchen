@@ -631,7 +631,6 @@
 
     $('body').on('click', '.region_edit', function() {
         let id = $(this).attr('data-id');
-        alert(id);
         $.ajax({
             method: "GET",
             url: "{{ route('region.getdata') }}",

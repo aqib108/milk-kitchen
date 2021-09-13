@@ -34,7 +34,7 @@ class ZoneController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function(Zone $data){
-                    $btn1 = '<a data-id="'.$data->id.'" data-tab="distributors" data-url="zone/delete" 
+                    $btn1 = '<a data-id="'.$data->id.'" data-tab="zones" data-url="zone/delete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<button data-id="'.$data->id.'" class="btn btn-sm btn-primary zone_edit" >Edit</button>';
                      //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
@@ -75,7 +75,7 @@ class ZoneController extends Controller
         $product->delete();
         return response()->json(array(
             'data' => true,
-            'message' => 'Distributor Successfully Deleted',
+            'message' => 'Zone Successfully Deleted',
             'status' => 'success',
         ));
     }

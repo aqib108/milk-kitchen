@@ -99,11 +99,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/delete/{id}','DistributorController@destroy');
         });
         Route::resource('region','RegionController');
+        Route::delete('region/delete/{id}','RegionController@destroy');
         Route::post('/regionstatus','RegionController@regionstatus')->name('region.status');
         Route::get('/getRegion','RegionController@getRegion')->name('region.getdata');
 
         Route::resource('zone','ZoneController');
         Route::post('/zonestatus','ZoneController@zonestatus')->name('zone.status');
+        Route::delete('zone/delete/{id}','ZoneController@destroy');
         Route::get('/getZone','ZoneController@getZone')->name('zone.getdata');
 
         Route::group(['prefix' => 'driver'], function (){
