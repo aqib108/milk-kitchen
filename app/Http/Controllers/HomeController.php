@@ -41,7 +41,9 @@ class HomeController extends Controller
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
-       $weekDays = WeekDay::with('orderByUserID')->get();
+       $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user){
+                    $q->userDetail($user);
+                    }])->get();
        $countries = Country::where('status',1)->orderby('name','ASC')->get();
        if ($customerDetail != NULL) {
             $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
@@ -119,11 +121,27 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        $orders = Product::with('orderByUserID')->get()->groupBy(function($date) {
+        $orders = OrderDeliverd::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
             return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
         });
-        dd($orders);
-        
         return view('customer.order-history',compact('orders'));
+    }
+
+    public function deliveryDetails(Request $request)
+    {
+        $request->validate([
+            'id'=>'required'
+        ]);
+        $orderDetail = OrderDeliverd::find($request->id);
+        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $weekDays = WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+                        $q->userDetail($orderDetail->user_id);
+                    }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                        $q->weekDetail($orderDetail);
+                    }])->get();
+        return response()->json([
+            'html' => view('customer.specific_week_delivery', compact('weekDays','products'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);
     }
 }

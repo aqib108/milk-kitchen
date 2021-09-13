@@ -97,8 +97,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/status','DistributorController@status')->name('distributor.status');
             Route::get('/getWarehouse','DistributorController@getWarehouse')->name('distributor.getdata');
             Route::delete('/delete/{id}','DistributorController@destroy');
-            Route::resource('region','RegionController');
         });
+        Route::resource('region','RegionController');
+        Route::post('/regionstatus','RegionController@regionstatus')->name('region.status');
+        Route::get('/getRegion','RegionController@getRegion')->name('region.getdata');
+
+        Route::resource('zone','ZoneController');
+        Route::post('/zonestatus','ZoneController@zonestatus')->name('zone.status');
+        Route::get('/getZone','ZoneController@getZone')->name('zone.getdata');
 
         Route::group(['prefix' => 'driver'], function (){
             Route::post('/checkEmail','DriverController@checkEmail')->name('driver.checkEmail');
@@ -144,6 +150,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer-detail','CustomerDetailController');
         Route::get('/past/order/{id}','HomeController@pastOrder')->name('customer.pastOrder');
         Route::post('/product-orders','HomeController@productOrders');
+        Route::get('/customer-delivery-details','HomeController@deliveryDetails')->name('customer.deliveryDetails');
     }); 
 });
 //// GENERAL ROUTES

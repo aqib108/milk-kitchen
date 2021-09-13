@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\ProductOrder;
+use App\Models\OrderDeliverd;
 use App\Models\CustomerDetail;
 use App\Models\WeekDay;
 use App\Models\Country;
@@ -15,6 +16,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Carbon\Carbon;
 use Auth;
 use Validator;
 use PDF;
@@ -91,9 +93,7 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
             $q->userDetail($customerID);
         }])->get();
-
         $countries = Country::get(["name","id"]);
-
         if ($customerDetail != NULL) {
             $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
         } else {
@@ -117,13 +117,16 @@ class CustomerController extends Controller
         } else {
             $dcities = null;
         }
-
         return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','regions','cities','countries','dregions','dcities'));
+        // return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
     }
 
     public function pastOrder($id)
     {
-        return view('admin.customer.past-order');
+        $orders = OrderDeliverd::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
+        });
+        return view('admin.customer.past-order',compact('orders'));
     }
 
     //Create Customer page
