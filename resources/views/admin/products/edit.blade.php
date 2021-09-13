@@ -137,9 +137,9 @@
                                             <tr>
                                                 <td>Food Service</td>
                                                 <td><input type="number" class="form-control"
-                                                        value="{{ $product->f_ctn_price }}" name="f_ctn_price"></td>
+                                                        value="{{ $product->f_ctn_price }}" name="f_ctn_price" min="0"></td>
                                                 <td><input type="number" class="form-control"
-                                                        value="{{ $product->f_bottle_price }}" name="f_bottle_price">
+                                                        value="{{ $product->f_bottle_price }}" name="f_bottle_price" min="0">
                                                 </td>
                                                 <td class="text-center"><input type="checkbox" value="1"
                                                         class="form-control" name="f_saleable" data-size="xs"
@@ -149,9 +149,9 @@
                                                 <tr>
                                                     <td>Retail</td>
                                                     <td><input type="number" class="form-control"
-                                                            value="{{ $product->r_ctn_price }}" name="r_ctn_price"></td>
+                                                            value="{{ $product->r_ctn_price }}" name="r_ctn_price" min="0"></td>
                                                     <td><input type="number" class="form-control"
-                                                            value="{{ $product->r_bottle_price }}" name="r_bottle_price">
+                                                            value="{{ $product->r_bottle_price }}" name="r_bottle_price" min="0">
                                                     </td>
                                                     <td class="text-center"><input type="checkbox" value="1"
                                                             class="form-control" name="r_saleable" data-size="xs"
@@ -161,9 +161,9 @@
                                                     <tr>
                                                         <td>Consumer</td>
                                                         <td><input type="number" class="form-control"
-                                                                value="{{ $product->c_ctn_price }}" name="c_ctn_price"></td>
+                                                                value="{{ $product->c_ctn_price }}" name="c_ctn_price" min="0"></td>
                                                         <td><input type="number" class="form-control"
-                                                                value="{{ $product->c_bottle_price }}" name="c_bottle_price">
+                                                                value="{{ $product->c_bottle_price }}" name="c_bottle_price" min="0">
                                                         </td>
                                                         <td class="text-center"><input type="checkbox" class="form-control"
                                                                 value="1" name="c_saleable" data-size="xs" data-toggle="toggle"

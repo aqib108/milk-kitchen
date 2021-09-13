@@ -138,23 +138,23 @@
                                             </tr>
                                             <tr>
                                                 <td>Food Service</td>
-                                                <td><input type="number" class="form-control" name="f_ctn_price"></td>
-                                                <td><input type="number" class="form-control" name="f_bottle_price"></td>
+                                                <td><input type="number" class="form-control" name="f_ctn_price" min="0"></td>
+                                                <td><input type="number" class="form-control" name="f_bottle_price" min="0"></td>
                                                 <td class="text-center"><input type="checkbox" class="form-control"
                                                         value="1" name="f_saleable" data-size="xs" data-toggle="toggle">
                                             </tr>
                                             <tr>
                                                 <td>Retail</td>
-                                                <td><input type="number" class="form-control" name="r_ctn_price"></td>
-                                                <td><input type="number" class="form-control" name="r_bottle_price"></td>
+                                                <td><input type="number" class="form-control" name="r_ctn_price" min="0"></td>
+                                                <td><input type="number" class="form-control" name="r_bottle_price" min="0"></td>
                                                 <td class="text-center"><input type="checkbox" class="form-control"
                                                         value="1" name="r_saleable" data-size="xs" data-toggle="toggle">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Consumer</td>
-                                                <td><input type="number" class="form-control" name="c_ctn_price"></td>
-                                                <td><input type="number" class="form-control" name="c_bottle_price"></td>
+                                                <td><input type="number" class="form-control" name="c_ctn_price" min="0"></td>
+                                                <td><input type="number" class="form-control" name="c_bottle_price" min="0"></td>
                                                 <td class="text-center"><input type="checkbox" class="form-control"
                                                         value="1" name="c_saleable" data-size="xs" data-toggle="toggle">
                                                 </td>
