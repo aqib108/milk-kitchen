@@ -46,9 +46,9 @@
                                         <th>Pack Size</th>
                                         <th>New</th>
                                         <th>Active</th>
-                                        <th>Food Service</th>
+                                        {{-- <th>Food Service</th>
                                         <th>Retail</th>
-                                        <th>Consumer</th>
+                                        <th>Consumer</th> --}}
                                         <th>Status</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
@@ -107,18 +107,18 @@
                         data: 'active',
                         name: 'active'
                     },
-                    {
-                        data: 'f_saleable',
-                        name: 'f_saleable'
-                    },
-                    {
-                        data: 'r_saleable',
-                        name: 'r_saleable'
-                    },
-                    {
-                        data: 'c_saleable',
-                        name: 'c_saleable'
-                    },
+                    // {
+                    //     data: 'f_saleable',
+                    //     name: 'f_saleable'
+                    // },
+                    // {
+                    //     data: 'r_saleable',
+                    //     name: 'r_saleable'
+                    // },
+                    // {
+                    //     data: 'c_saleable',
+                    //     name: 'c_saleable'
+                    // },
                     {
                         data: 'status',
                         name: 'status'

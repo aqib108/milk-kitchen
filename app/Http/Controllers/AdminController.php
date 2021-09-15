@@ -73,7 +73,6 @@ class AdminController extends Controller
     public function updatePassword(Request $request)
     {
         $user = Auth::user();
-
         $rules = [
             'current_password' => 'required',
             'new_password' => 'required|min:6|max:32',
@@ -89,13 +88,13 @@ class AdminController extends Controller
         if (Hash::check($data['current_password'],$user->password)) {
             if ($data['new_password'] == $data['confirm_password']) {
                 User::where('id',$user->id)->update(['password'=>bcrypt($data['new_password'])]);
-               return redirect()->back()->with(['message' => 'Password Has Been Updated Successfully!']);
+               return redirect()->back()->with(['success' => 'Password Has Been Updated Successfully!']);
             } else {
-               return redirect()->back()->with(['error_message' => 'New Password & Confirm Password NOT MATCH']);
+               return redirect()->back()->with(['error' => 'New Password & Confirm Password NOT MATCH']);
             }
             
         } else {
-           return redirect()->back()->with(['error_message' => 'Your Current Password is INCORRECT']);
+           return redirect()->back()->with(['error' => 'Your Current Password is INCORRECT']);
         }
         return redirect()->back();
     }

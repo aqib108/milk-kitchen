@@ -134,90 +134,72 @@
                                                 <th>Bottle Price</th>
                                                 <th>Saleable in the market</th>
                                             </tr>
-                                            <tr>
-                                                <td>Food Service</td>
-                                                <td><input type="number" class="form-control"
-                                                        value="{{ $product->f_ctn_price }}" name="f_ctn_price"></td>
-                                                <td><input type="number" class="form-control"
-                                                        value="{{ $product->f_bottle_price }}" name="f_bottle_price">
-                                                </td>
-                                                <td class="text-center"><input type="checkbox" value="1"
-                                                        class="form-control" name="f_saleable" data-size="xs"
-                                                        data-toggle="toggle"
-                                                        @isset($product->f_saleable){{ 'checked' }}@endisset></td>
-                                                </tr>
+                                            @foreach ($services as $serv)
                                                 <tr>
-                                                    <td>Retail</td>
-                                                    <td><input type="number" class="form-control"
-                                                            value="{{ $product->r_ctn_price }}" name="r_ctn_price"></td>
-                                                    <td><input type="number" class="form-control"
-                                                            value="{{ $product->r_bottle_price }}" name="r_bottle_price">
+                                                    <td>{{ $serv->groups->group_name }}</td>
+                                                    <td><input type="hidden" value="{{ $serv->groups->id }}"
+                                                            name="group_id[]">
+                                                            <input type="hidden" value="{{ $serv->id }}"
+                                                            name="service_id[]">
+                                                        <input type="number" value="{{ $serv->ctn_price }}"
+                                                            class="form-control" name="ctn_price[]" min="0">
                                                     </td>
-                                                    <td class="text-center"><input type="checkbox" value="1"
-                                                            class="form-control" name="r_saleable" data-size="xs"
-                                                            data-toggle="toggle"
-                                                            @isset($product->r_saleable){{ 'checked' }}@endisset></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Consumer</td>
-                                                        <td><input type="number" class="form-control"
-                                                                value="{{ $product->c_ctn_price }}" name="c_ctn_price"></td>
-                                                        <td><input type="number" class="form-control"
-                                                                value="{{ $product->c_bottle_price }}" name="c_bottle_price">
-                                                        </td>
-                                                        <td class="text-center"><input type="checkbox" class="form-control"
-                                                                value="1" name="c_saleable" data-size="xs" data-toggle="toggle"
-                                                                @isset($product->c_saleable){{ 'checked' }}@endisset></td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- /.card-body -->
-                                        <div class="card-footer">
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </div>
-                                    </form>
+                                                    <td><input type="number" value="{{ $serv->bottle_price }}"
+                                                            class="form-control" name="bottle_price[]" min="0"></td>
+                                                    <td class="text-center"><input type="checkbox" class="form-control"
+                                                            value="1" name="saleable[]" data-size="xs" data-toggle="toggle"
+                                                            @if ($serv->saleable == 1){{ 'checked' }}@endif>
+                                                </tr>
+                                            @endforeach
+                                        </table>
+                                    </div>
                                 </div>
-                                <!-- /.card -->
                             </div>
-                            <!--/.col (left) -->
-                            <!-- right column -->
-                            <div class="col-md-6">
-
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
-                            <!--/.col (right) -->
-                        </div>
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </section>
-                <!-- /.content -->
-            @endsection
-            @section('scripts')
-                <script>
-                    function readURL(input) {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!--/.col (left) -->
+                <!-- right column -->
+                <div class="col-md-6">
 
-                            reader.onload = function(e) {
-                                $('#image').attr('src', e.target.result);
-                                $('#image').removeClass("hidden");
-                            }
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+@endsection
+@section('scripts')
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-                    $("#image_url").change(function() {
-                        readURL(this);
-                    });
+                reader.onload = function(e) {
+                    $('#image').attr('src', e.target.result);
+                    $('#image').removeClass("hidden");
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-                    // Get Input File Name
-                    $('.custom-file input').change(function(e) {
-                        var files = [];
-                        for (var i = 0; i < $(this)[0].files.length; i++) {
-                            files.push($(this)[0].files[i].name);
-                        }
-                        $(this).next('.custom-file-label').html(files.join(','));
-                    });
-                </script>
-            @endsection
+        $("#image_url").change(function() {
+            readURL(this);
+        });
+
+        // Get Input File Name
+        $('.custom-file input').change(function(e) {
+            var files = [];
+            for (var i = 0; i < $(this)[0].files.length; i++) {
+                files.push($(this)[0].files[i].name);
+            }
+            $(this).next('.custom-file-label').html(files.join(','));
+        });
+    </script>
+@endsection
