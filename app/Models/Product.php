@@ -35,6 +35,11 @@ class Product extends Model
        return $this->hasMany(OrderDeliverd::class,'product_id');
     }
 
+    public function services()
+    {
+        return $this->hasMany(Service::class,'product_id','id');
+    }
+
     public function orderByUserID()
     {
         return $this->product()->where('user_id','=', Auth::id());
