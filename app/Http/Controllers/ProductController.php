@@ -138,7 +138,7 @@ class ProductController extends Controller
             ];
             Service::create($data);
         }
-
+        
         return redirect()->route('product.index')->with('success', 'Record added successfully.');  
     }
 
@@ -169,7 +169,7 @@ class ProductController extends Controller
     {
         $groups = GroupCustomer::all();
         $product = Product::findOrFail($id);
-        $services = Service::where('product_id',$id)->with('groups')->get();
+        $services = Service::where('product_id',$id)->get();
         // dd($services);
         if ($product == null) {
             return redirect()->back()->with('error', 'No Record Found.');
@@ -234,8 +234,6 @@ class ProductController extends Controller
             $ctns = isset($ctn[$idx]) ? ($ctn[$idx]) : 0;
             $bottles = isset($bottle[$idx]) ? ($bottle[$idx]) : 0;
             $saleables = isset($saleable[$idx]) ? ($saleable[$idx]) : 0;
-
-            $ser = Service::findOrFail($service);
             
             $update = [
             'product_id' => $product->id,
@@ -244,7 +242,15 @@ class ProductController extends Controller
             'bottle_price' => $bottles,
             'saleable' => $saleables,
             ];
-            $ser->update($update);
+            if($service == 0)
+            {
+                Service::create($update);
+            }
+            else
+            {
+                $ser = Service::findOrFail($service);
+                $ser->update($update);
+            }
         }
         return redirect()->route('product.index')->with('success', 'Product updated successfully.');
     }

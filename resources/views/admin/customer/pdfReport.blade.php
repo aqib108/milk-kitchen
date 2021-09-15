@@ -211,7 +211,7 @@
                                             <input type="hidden" value="{{ $price }}" class="price">
                                         </td>
                                         <td>
-                                            {{ '$' . ($price / 100) * 1.5 }}
+                                            {{ '$' . ($price / 100) * 10 }}
                                             <input type="hidden" value="{{ ($price / 100) * 1.5 }}"
                                                 class="discount">
                                         </td>
@@ -229,7 +229,7 @@
                                     <td class="custom-colspan" colspan="10"></td>
                                     <td class="text-left-wrapper">Sub Total</td>
                                     <td class="text-right-wrapper">
-                                        <input style="border:none;background:none;" class="text-center totalprice"
+                                        <input style="border:none;background:none;" class="text-center subtotal"
                                             disabled="disabled" readonly>
                                     </td>
                                 </tr>
@@ -241,7 +241,12 @@
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
                                     <td class="text-left-wrapper">GST 15%</td>
-                                    <td class="text-right-wrapper">$0.00</td>
+                                    <td class="text-right-wrapper">
+                                        {{ '$' . ($price * 15) / 100 }}
+                                            <input type="hidden" value="{{ ($price * 15) / 100 }}"
+                                                class="gst">
+                                    </td>
+                                    
                                 </tr>
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
@@ -277,7 +282,12 @@
             $(".discount").each(function() {
                 dis += +$(this).val();
             });
-            var final = sum - dis;
+
+            var gst = $('.gst').val();
+            var f = sum - dis;
+            $('.subtotal').val('$' + f);
+
+            var final =parseFloat(f)+parseFloat(gst);
             $('.totalprice').val('$' + final);
         });
     </script>
