@@ -179,7 +179,7 @@
                                             @php $total=0; @endphp
                                             @foreach ($orders as $item)
                                                 @if ($pro->id == $item->product_id)
-                                                    @php $total += $item->quantity @endphp
+                                                    @php $total += $item->quantity; @endphp
                                                 @endif
                                             @endforeach
                                             {{ $total }}
