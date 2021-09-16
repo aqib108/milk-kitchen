@@ -16,7 +16,9 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('group_id');
+            $table->foreign('group_id')->references('id')->on('group_customers')->onDelete('cascade');
             $table->integer('ctn_price')->nullable();
             $table->integer('bottle_price')->nullable();
             $table->boolean('saleable')->default(FALSE);
