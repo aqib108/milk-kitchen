@@ -172,7 +172,7 @@
                                                 }
                                             @endphp
                                             <td>
-                                                {{ $qnty }}
+                                                @if($qnty == 0){{ '' }}@else{{ $qnty }}@endif
                                             </td>
                                         @endforeach
                                         <td>
