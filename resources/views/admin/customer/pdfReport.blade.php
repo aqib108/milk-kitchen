@@ -212,7 +212,7 @@
                                         </td>
                                         <td>
                                             {{ '$' . ($price / 100) * 10 }}
-                                            <input type="hidden" value="{{ ($price / 100) * 1.5 }}"
+                                            <input type="hidden" value="{{ ($price / 100) * 10 }}"
                                                 class="discount">
                                         </td>
                                         <td>
@@ -241,12 +241,10 @@
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
                                     <td class="text-left-wrapper">GST 15%</td>
-                                    <td class="text-right-wrapper">
-                                        {{ '$' . ($price * 15) / 100 }}
-                                            <input type="hidden" value="{{ ($price * 15) / 100 }}"
-                                                class="gst">
+                                    <td class="text-right-wrapper gst">
+                                        <input style="border:none;background:none;" class="text-center gst"
+                                            disabled="disabled" readonly>
                                     </td>
-                                    
                                 </tr>
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
@@ -274,21 +272,23 @@
     <script src="{{ asset('customer-panel/js/index.js') }}"></script>
     <script>
         $(document).ready(function() {
-            var sum = 0,
-                dis = 0;
+
+            var sum = 0,dis = 0;
+
             $(".price").each(function() {
                 sum += +$(this).val();
             });
             $(".discount").each(function() {
                 dis += +$(this).val();
             });
+            
+            var subtotal = sum - dis;
+            var gst = (subtotal * 15) /100;
+            var total =parseFloat(subtotal)+parseFloat(gst);
 
-            var gst = $('.gst').val();
-            var f = sum - dis;
-            $('.subtotal').val('$' + f);
-
-            var final =parseFloat(f)+parseFloat(gst);
-            $('.totalprice').val('$' + final);
+            $('.subtotal').val('$' + subtotal);
+            $('.gst').val('$' + gst);
+            $('.totalprice').val('$' + total);
         });
     </script>
 @endsection
