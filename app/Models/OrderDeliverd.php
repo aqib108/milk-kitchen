@@ -24,8 +24,7 @@ class OrderDeliverd extends Model
 
     public function scopeWeekDetail($query,$arr)
     {
-        // dd($arr-);
-        return $query->whereBetween('created_at',[$arr->created_at->subDays(6),$arr->created_at])->get();
+        return $query->whereBetween('created_at',[$arr->created_at->subDays(6)->format('Y-m-d 00:00:00'),$arr->created_at->format('Y-m-d 23:59:59')])->get();
     }
     
     public function scopeUserDetail($query, $id)

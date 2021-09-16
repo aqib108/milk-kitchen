@@ -185,6 +185,44 @@
                                                {{ $qnty }}
                                             </td>
                                         @endforeach
+                                        <td>
+                                            @foreach ($weekDays as $item)
+                                                @php 
+                                                    $total=0;
+                                                    if ($item->orderDelivered->isNotEmpty()){
+                                                        foreach ($item->orderDelivered as $order){
+                                                            if($order->product_id == $product->id){
+                                                                $total += $order->quantity;                                                        
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
+                                                {{ $total }}@break
+                                            @endforeach
+                                        </td>
+                                        <td>
+                                            {{ '$' . $product->price }}
+                                        </td>
+                                        <td>
+                                            {{ '$' . ($product->price/ 100) * 10 }}
+                                        </td>
+                                        <td>
+                                            @foreach ($weekDays as $item)
+                                                @php 
+                                                    $total=0;
+                                                    if ($item->orderDelivered->isNotEmpty()){
+                                                        foreach ($item->orderDelivered as $order){
+                                                            if($order->product_id == $product->id){
+                                                                $total += $order->quantity;                                                        
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
+                                                <input type="hidden" value="{{$total}}"> @break
+                                            @endforeach
+                                            {{ '$' . ($product->price  - (($product->price / 100) * 10)) * $total}}
+                                            <input type="hidden" class="extention" value="{{($product->price  - (($product->price / 100) * 10)) * $total}}">
+                                        </td>
                                     </tr> 
                                 @endforeach
                                
@@ -193,19 +231,22 @@
                                     <td class="custom-colspan" colspan="10"></td>
                                     <td class="text-left-wrapper">Sub Total</td>
                                     <td class="text-right-wrapper">
-                                        <input style="border:none;background:none;" class="text-center totalprice"
+                                        <input style="border:none;background:none;" class="text-center subtotal"
                                             disabled="disabled" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
                                     <td class="text-left-wrapper">Freight</td>
-                                    <td class="text-right-wrapper">$0.00</td>
+                                    <td class="text-right-wrapper">$ -</td>
                                 </tr>
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
                                     <td class="text-left-wrapper">GST 15%</td>
-                                    <td class="text-right-wrapper">$0.00</td>
+                                    <td class="text-right-wrapper gst">
+                                        <input style="border:none;background:none;" class="text-center gst"
+                                            disabled="disabled" readonly>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="custom-colspan" colspan="10"></td>
@@ -226,6 +267,20 @@
         <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+@endsection
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            var value = 0;
+            $(".extention").each(function(){
+                value += +$(this).val();
+            });
 
-
+            $('.subtotal').val('$' + value);
+            var gst = (value * 15) /100;
+            var total =parseFloat(value)+parseFloat(gst);
+            $('.gst').val('$' + gst);
+            $('.totalprice').val('$' + total);
+        });
+    </script>
 @endsection

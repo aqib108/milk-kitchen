@@ -140,7 +140,7 @@ class CustomerController extends Controller
                     }])->with(['orderDelivered' => function($q) use ($orderDetail) {
                         $q->weekDetail($orderDetail);
                     }])->get();
-                    dd($weekDays);
+        // dd($weekDays);
 
        return view('admin.customer.past-order.statement',compact('customer','products','weekDays'));
     }
