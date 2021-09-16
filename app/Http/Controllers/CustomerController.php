@@ -267,4 +267,9 @@ class CustomerController extends Controller
     {
         return view('admin.customer.packingslip');
     }
+
+    public function finalreport()
+    {
+        return view('admin.customer.finalreport');
+    }
 }

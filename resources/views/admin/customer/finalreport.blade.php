@@ -171,6 +171,55 @@
                     <div class="col-lg-4">
                         <img src="{{ asset('images/barcode.jpg')}}" width="200" alt="">
                     </div>
+                    <div class="col-lg-12">
+                        <h2 class="heading-tbl">Edit Delivery</h2>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="table-th-wrapper" scope="col">Product</th>
+                                        <th class="table-th-wrapper" scope="col">Monday</th>
+                                        <th class="table-th-wrapper" scope="col">Actually received
+                                        </th>
+                                        <th class="table-th-wrapper" scope="col">Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="week-container-tbl"> 
+                                    <tr class="week_days">
+                                        <td class="table-td-wrapper" scope="row">product 1</td>
+                                        <td>3</td>
+                                        <td>3</td>
+                                        <td><textarea name="" class="form-control"></textarea></td>
+                                    </tr>
+                                    <tr class="week_days">
+                                        <td class="table-td-wrapper" scope="row">product 2</td>
+                                        <td>3</td>
+                                        <td>3</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="week_days">
+                                        <td class="table-td-wrapper" scope="row">product 3</td>
+                                        <td>3</td>
+                                        <td>3</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <h2 class="heading-tbl">Edit History</h2>
+                    </div>
+                    <div class="col-lg-12">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>28-sep</td>
+                                <td>Reason notes are display here</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
                 <!-- /.col -->
