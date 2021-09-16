@@ -24,7 +24,7 @@
                     @foreach ($orders as $item)
                         <tr>
                             <td class="table-td-wrapper" scope="row">
-                                {{$item[0]->created_at->format('d/m')}} - {{ $item[0]->created_at->subDays(6)->format('d/m') }}
+                                {{ $item[0]->created_at->subDays(6)->format('d/m')}} - {{$item[0]->created_at->format('d/m')}}
                             </td>
                             <td>
                                 @php
@@ -36,7 +36,7 @@
                                 @endphp
                             </td>
                             <td>
-                                <a href="javascript:;" class="view_statements" data-id="{{ $item[0]->id }}">View</a>
+                                <a href="{{route('customer.week-statement', $item[0]->id)}}" class="view_statements">View</a>
                             </td> 
                             <td>
                                 <a href="javascript:;" class="view_delivery_detail" data-id="{{ $item[0]->id }}">View</a>
@@ -77,6 +77,9 @@
                     }
                 });
             });
+
+            
         });
     </script>
+
 @endsection

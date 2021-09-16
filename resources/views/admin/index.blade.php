@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-lg-3 col-6">
                     <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text"> <a href="{{route('user.index') }}"
                                 style="color: black"> Total<br> Users </a></span>
@@ -39,10 +39,10 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fab fa-product-hunt"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text"><a href="{{route('product.index')}}}"
+                            <span class="info-box-text"><a href="{{route('product.index')}}"
                                 style="color: black">Total Products</a></span>
                             <span class="info-box-number" id="products"></span>
                             <div class="count tr_amount_image">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-cog"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-truck"></i></span>
 
                         <div class="info-box-content">
                             <span class="info-box-text"> <a href="{{route('distributor.index')}}"
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-motorcycle"></i></span>
 
                         <div class="info-box-content">
                             <span class="info-box-text"><a href="{{route('driver.index')}}"

@@ -52,7 +52,6 @@ class OrderDelivery extends Command
             $productPrices = Product::where('id','=',$ord['product_id'])->first();
             $productPrice = $productPrices->price;
             $quantity = $ord['quantity'];
-            $price = $productPrice * $quantity;
 
             $data = OrderDeliverd::updateOrCreate([
                 'user_id' => $ord['user_id'],
@@ -60,7 +59,6 @@ class OrderDelivery extends Command
                 'product_id' => $ord['product_id'],
                 'day_id' => $ord['day_id']],[
                 'quantity' => $quantity,
-                'price' => $price
             ]); 
         }    
     }
