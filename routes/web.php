@@ -106,6 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('zone','ZoneController');
         Route::post('/zonestatus','ZoneController@zonestatus')->name('zone.status');
         Route::delete('zone/delete/{id}','ZoneController@destroy');
+      
         Route::get('/getZone','ZoneController@getZone')->name('zone.getdata');
 
         Route::group(['prefix' => 'driver'], function (){
@@ -120,6 +121,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/delete/{id}','DriverController@destroy');
         });
         Route::group(['prefix' => 'product'], function (){
+            Route::get('/zone/shedule','ProductController@sheduleZone')->name('product.shedule');
+            Route::get('/zone/sheduleChange1','ProductController@sheduleChange1')->name('product.sheduleChange1');
             Route::get('/','ProductController@index')->name('product.index');
             Route::get('/create','ProductController@create')->name('product.create');
             Route::post('/store','ProductController@store')->name('product.store');

@@ -15,7 +15,6 @@ class CreateDeliveryScheduleZonesTable extends Migration
     {
         Schema::create('delivery_schedule_zones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->integer('zone_id')->unsigned();
             $table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade');
             $table->integer('day_id')->unsigned();
