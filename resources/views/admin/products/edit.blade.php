@@ -135,39 +135,37 @@
                                                 <th>Saleable in the market</th>
                                             </tr>
                                             @foreach ($groups as $grp)
+                                            @php $id=0;$ctn=0;$bottle=0; @endphp
                                              <tr>
                                                 <td>{{ $grp->group_name }}</td>
                                                 <td>
                                                     <input type="hidden" value="{{ $grp->id }}" name="group_id[]">
                                                     @foreach ($services as $ser)
                                                         @if ($ser->group_id == $grp->id)
-                                                            <input type="hidden" value="{{ $ser->id }}"
-                                                                name="service_id[]">
-                                                        @else
-                                                            <input type="hidden" value="0" name="service_id[]">
+                                                            @php $id = $ser->id; @endphp
+                                                        @break
                                                         @endif
                                                     @endforeach
+                                                    <input type="hidden" value="{{ $id }}" name="service_id[]">
                                                     
                                                     @foreach ($services as $ser)
                                                         @if ($ser->group_id == $grp->id)
-                                                            <input type="number" value="{{ $ser->ctn_price }}"
-                                                                class="form-control" name="ctn_price[]" min="0">
-                                                        @else
-                                                            <input type="number" value="{{ 0 }}"
-                                                                class="form-control" name="ctn_price[]" min="0">
+                                                            @php $ctn = $ser->ctn_price; @endphp
+                                                        @break
                                                         @endif
                                                     @endforeach
+                                                    <input type="number" value="{{ $ctn }}"
+                                                        class="form-control" name="ctn_price[]" min="0">
                                                 </td>
                                                 <td>
                                                     @foreach ($services as $ser)
                                                         @if ($ser->group_id == $grp->id)
-                                                            <input type="number" value="{{ $ser->bottle_price }}"
-                                                                class="form-control" name="bottle_price[]" min="0">
-                                                        @else
-                                                            <input type="number" value="{{ 0 }}"
-                                                                class="form-control" name="bottle_price[]" min="0">
+                                                            @php $bottle = $ser->bottle_price; @endphp
+                                                        @break
                                                         @endif
                                                     @endforeach
+                                                    <input type="number" value="{{ $bottle }}"
+                                                        class="form-control" name="bottle_price[]" min="0">
                                                 </td>
                                                 <td class="text-center">
                                                     <input type="checkbox" class="form-control" value="1"
