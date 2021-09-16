@@ -262,4 +262,9 @@ class CustomerController extends Controller
             ],401);
         }
     }
+
+    public function packingslip()
+    {
+        return view('admin.customer.packingslip');
+    }
 }
