@@ -15,7 +15,6 @@ class OrderDeliverd extends Model
         'product_id',
         'day_id',
         'quantity',
-        'price'
     ];
 
     public function product()

@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('generate-pdf/{id}', 'CustomerController@generatePDF');
             Route::post('/product-admin-orders/{id}','CustomerController@productOrderAdmin')->name('admin.customer-orders');
             Route::get('/past-orders/{id}','CustomerController@pastOrder')->name('customer.past-orders');
+            Route::get('/statement/{id}','CustomerController@pastOrderStatement')->name('customer.week-statement');
         });
         Route::group(['prefix' => 'customer-group'], function (){
 
