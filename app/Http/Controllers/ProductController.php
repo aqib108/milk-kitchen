@@ -87,16 +87,20 @@ class ProductController extends Controller
     public function sheduleZone(Request $request)
     {
         $shedule=DB::table('delivery_schedule_zones')->where('zone_id',$request->id)->get(); 
+        $id= $shedule->pluck('id');
+        $days=$shedule->pluck('day_id');
+        $zone=$request->id;
         // return view('admin.customer.shedule', compact('shedule'));
         return response()->json([
-            'html' => view('admin.customer.shedule', compact('shedule'))->render()
+            'html' => view('admin.customer.shedule', compact('zone','id','days'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
     }
 
     public function sheduleChange(Request $request)
     {
-        $shedule=DB::table('delivery_schedule_zones')->where('id',$request->id)->first();
+        $shedule=DB::table('delivery_schedule_zones')->where(['zone_id'=>$request->zone_id,'day_id'=>$request->day_id])->first();
+      
         if(!empty($shedule))
         {
             DB::table('delivery_schedule_zones')->delete($shedule->id);

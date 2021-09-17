@@ -123,7 +123,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'product'], function (){
             Route::get('/zone/shedule','ProductController@sheduleZone')->name('product.shedule');
             Route::get('/zone/sheduleChange','ProductController@sheduleChange')->name('product.sheduleChange');
-           
             Route::get('/','ProductController@index')->name('product.index');
             Route::get('/create','ProductController@create')->name('product.create');
             Route::post('/store','ProductController@store')->name('product.store');
