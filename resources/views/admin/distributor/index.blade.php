@@ -1,6 +1,33 @@
 @extends('admin.layouts.admin')
 @section('title', 'List Of Distributor')
 @section('styles')
+<style>
+  .custom-modal .modal-dialog .modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 18px 19px;
+    font-size: 13px;
+    }
+    .xyz {
+    display: block;
+    width: 26px;
+    height: calc(2.25rem + 2px);
+    text-align:center;
+    position:relative;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    margin-top: 30px;
+}
+.table1 td, .table1 th {
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    padding: 0px 6px;
+}
+
+}
+</style>
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 @endsection
 @section('content')
@@ -431,16 +458,15 @@
 
 <!-- Update Warehouse Model -->
 <!-- /.content -->
-<div class="modal fade" id="sheduleZone" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal custom-modal fade" id="sheduleZone" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Delivery Shedule For Zone</h5>
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
             </div>
-            <div class="weeks">
-
-            </div>
+                        <div class="modal-body weeks">
+                        </div>
         </div>
     </div>
 </div>
@@ -771,7 +797,7 @@
             }
         });
     });
-    function toggleCheckbox(id,day_id,zone_id)
+    function toggleCheckbox(id,zone,day)
         {
             $.ajax({
                                 method: "GET",
@@ -779,8 +805,8 @@
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content'),
                                     'id': id,
-                                    'day_id':day_id,
-                                    'zone_id': zone_id,
+                                    'day_id':day,
+                                    'zone_id': zone,
                                 },
                                 success: function(response) {
                                     

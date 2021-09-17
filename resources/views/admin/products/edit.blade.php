@@ -71,6 +71,7 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
+                                      
                                         <img src="{{ asset('storage/' . $product->image_url) }}" id="image"
                                             class="w-25 mt-2" />
                                     </div>

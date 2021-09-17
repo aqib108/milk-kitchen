@@ -1,5 +1,5 @@
 
-                        <table class="table table-bordered mb-0">
+                        <table class="table table1 table-bordered mb-0">
                             <thead>
                                 <tr>
                                     <th class="table-th-wrapper" scope="col">Monday</th>
@@ -13,21 +13,31 @@
                             </thead>
                             <tbody>
                             
-                             @foreach($shedule as $key=>$shedule1)
+                            
                              <tr>
-                             <?php for ($i=0; $i <=6 ; $i++) {?> 
-                                @if($i<=4)
-                                @if(isset($shedule1->day_id)&& ($key==$i)) 
-                                <td><input type="checkbox" class="form-control" value="1" onchange="toggleCheckbox({{$shedule1->id}},{{$shedule1->day_id}},{{$shedule1->zone_id}})" name="saleable[]" data-size="xs" data-toggle="toggle" checked></td>
+                             <?php for ($i=1; $i <=7 ; $i++) {
+                              
+                                 if(isset($days[$i-1]))
+                                 {
+                                    $day = $days[$i-1];
+                                 } 
+                                
+                                if(isset($id[$i-1]))
+                                  $id = $id[$i-1];
+            
+                                 ?> 
+                                @if($i<=5)
+                                @if(isset($day) && ($day==$i)) 
+                                <td><input type="checkbox" class="form-control xyz" value="1" onchange="toggleCheckbox({{$id}},{{$zone}},{{$i}})" name="saleable[]" data-size="sm" data-toggle="toggle" checked></td>
                                 @else
-                                <td><input type="checkbox" class="form-control" value="0" onchange="toggleCheckbox({{$shedule1->id}},{{$shedule1->day_id}},{{$shedule1->zone_id}})"" name="saleable[]" data-size="xs" data-toggle="toggle"></td>
+                                <td><input type="checkbox" class="form-control xyz" value="0" onchange="toggleCheckbox({{$id}},{{$zone}},{{$i}})" name="saleable[]" data-size="sm" data-toggle="toggle"></td>
                                 @endif
                                 @else
-                                <td><input type="checkbox" class="form-control" value="1" name="saleable[]" data-size="xs" data-toggle="toggle" checked disabled></td>
+                                <td><input type="checkbox" class="form-control xyz" value="1" name="saleable[]" data-size="xs" data-toggle="toggle" disabled></td>
                                 @endif
                             <?php } ?>
                             </tr>
-                             @endforeach
+                        
                             
                             </tbody>
                         </table>
