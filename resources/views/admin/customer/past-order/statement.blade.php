@@ -186,19 +186,17 @@
                                             </td>
                                         @endforeach
                                         <td>
+                                            @php $total=0; @endphp
                                             @foreach ($weekDays as $item)
-                                                @php 
-                                                    $total=0;
-                                                    if ($item->orderDelivered->isNotEmpty()){
-                                                        foreach ($item->orderDelivered as $order){
-                                                            if($order->product_id == $product->id){
-                                                                $total += $order->quantity;                                                        
-                                                            }
-                                                        }
-                                                    }
-                                                @endphp
-                                                {{ $total }}@break
+                                                @if ($item->orderDelivered->isNotEmpty())
+                                                    @foreach ($item->orderDelivered as $order)
+                                                        @if($order->product_id == $product->id)
+                                                            @php $total += $order->quantity; @endphp                                                       
+                                                        @endif
+                                                    @endforeach
+                                                @endif 
                                             @endforeach
+                                            {{ $total }}
                                         </td>
                                         <td>
                                             {{ '$' . $product->price }}
@@ -207,19 +205,6 @@
                                             {{ '$' . ($product->price/ 100) * 10 }}
                                         </td>
                                         <td>
-                                            @foreach ($weekDays as $item)
-                                                @php 
-                                                    $total=0;
-                                                    if ($item->orderDelivered->isNotEmpty()){
-                                                        foreach ($item->orderDelivered as $order){
-                                                            if($order->product_id == $product->id){
-                                                                $total += $order->quantity;                                                        
-                                                            }
-                                                        }
-                                                    }
-                                                @endphp
-                                                <input type="hidden" value="{{$total}}"> @break
-                                            @endforeach
                                             {{ '$' . ($product->price  - (($product->price / 100) * 10)) * $total}}
                                             <input type="hidden" class="extention" value="{{($product->price  - (($product->price / 100) * 10)) * $total}}">
                                         </td>

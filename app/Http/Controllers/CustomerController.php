@@ -284,8 +284,56 @@ class CustomerController extends Controller
         return view('admin.customer.packingslip');
     }
 
-    public function finalreport()
+    public function finalreport($id)
     {
-        return view('admin.customer.finalreport');
+        if($id == 0){
+            return redirect()->back()->with('success','No Record Found To This Delivery!.');
+        }else{
+            $orderDetail = OrderDeliverd::find($id);
+            $customerID = $orderDetail->user_id;
+            $customer = CustomerDetail::where('user_id',$customerID)->get();
+            $products = Product::orderBy('id','DESC')->where('status',1)->get();
+            $weekDays = 
+                WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+                    $q->userDetail($customerID);
+                }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                    $q->weekDetail($orderDetail);
+                }])->get();
+
+            return view('admin.customer.finalreport',compact('customerID','customer','products','weekDays'));
+        }
+       
+    }
+    public function editDeliveryOrders(Request $request,$id)
+    {
+        $userID = $id;
+        $order = ProductOrder::where('day_id',$request->day_id)->where('user_id',$userID)->get();
+        // dd($order[0]->id);
+        $validate = $request->validate([
+            'day_id' => 'required',
+            'product_id' => 'required',
+            'qnty' => 'required',
+        ]);
+        
+        if($validate){
+            $data = OrderDeliverd::updateOrCreate([
+                'user_id' => $userID,
+                'product_order_id' => $order[0]->id,
+                'product_id' => $request->product_id,
+                'day_id'     => $request->day_id],[
+                'quantity' => $request->qnty,
+            ]);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Your Record Successfully updated',
+            ]);
+            
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong, Please try again!',
+            ],401);
+        }
     }
 }

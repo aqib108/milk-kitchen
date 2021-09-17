@@ -44,4 +44,9 @@ class Product extends Model
     {
         return $this->product()->where('user_id','=', Auth::id());
     }
+
+    public function orderDelivered()
+    {
+        return $this->hasMany(OrderDeliverd::class,'product_id','id');
+    }
 }

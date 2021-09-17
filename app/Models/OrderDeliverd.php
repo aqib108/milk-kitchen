@@ -31,4 +31,9 @@ class OrderDeliverd extends Model
     {
         return $query->where('user_id','=', $id);
     }
+
+    public function days(){
+        return $this->hasMany(WeekDay::class,'id');
+
+    }
 }
