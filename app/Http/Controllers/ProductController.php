@@ -7,6 +7,7 @@ use App\Http\Requests\ProductRequest;
 use App\Repositories\ProductRepository;
 use App\Models\Product;
 use App\Models\Service;
+use DB;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -80,6 +81,34 @@ class ProductController extends Controller
     {
         $groups = GroupCustomer::all();
         return view('admin.products.create',compact('groups'));
+    }
+
+
+    public function sheduleZone(Request $request)
+    {
+        $shedule=DB::table('delivery_schedule_zones')->where('zone_id',$request->id)->get(); 
+        // return view('admin.customer.shedule', compact('shedule'));
+        return response()->json([
+            'html' => view('admin.customer.shedule', compact('shedule'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);
+    }
+
+    public function sheduleChange(Request $request)
+    {
+        $shedule=DB::table('delivery_schedule_zones')->where('id',$request->id)->first();
+        if(!empty($shedule))
+        {
+            DB::table('delivery_schedule_zones')->delete($shedule->id);
+        }
+        else
+        $shedule=DB::table('delivery_schedule_zones')->insert(['day_id'=>$request->day_id,'status'=>1,'zone_id'=>$request->zone_id]); 
+      
+        return response()->json(array(
+            'data' => $request->id,
+            'message' => 'Zone Sheduled updated Successfully',
+            'status' => 'success',
+        ));
     }
 
     /**

@@ -88,7 +88,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            Region's List (Total Region's : <span id="countTotal">0</span>)
+                            Region's List (Total Region's : <span id="regionTotal">0</span>)
                         </h3>
                     </div>
                     <!-- /.card-header -->
@@ -174,7 +174,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            Zone's List (Total Zone's : <span id="countTotal">0</span>)
+                            Zone's List (Total Zone's : <span id="zoneTotal">0</span>)
                         </h3>
                     </div>
                     <!-- /.card-header -->
@@ -186,6 +186,7 @@
                                     <th>Name</th>
                                     <th>Region</th>
                                     <th>Status</th>
+                                    <th>View</th>
                                     <th class="no-sort" style="width: 200px">Action</th>
                                 </tr>
                             </thead>
@@ -305,15 +306,6 @@
             <form action="{{ route('region.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <!-- <div class="mb-3 error-placeholder">
-                            <label class="form-label">Region Name</label>
-                            <input type="text" class="form-control" name="warehouse_name"
-                                placeholder="Enter Warehouse Name..." required>
-                            @error('warehouse_name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div> -->
-                    <!-- {{ isset($customerDetail->business_country_id) && $customerDetail->business_country_id == $country->id?'selected':''}} -->
                     <div class="mb-3 error-placeholder">
                         <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
                         <select name="country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
@@ -436,8 +428,23 @@
         </div>
     </div>
 </div>
+
 <!-- Update Warehouse Model -->
 <!-- /.content -->
+<div class="modal fade" id="sheduleZone" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delivery Shedule For Zone</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="weeks">
+
+            </div>
+        </div>
+    </div>
+</div>
+    
 @endsection
 @section('scripts')
 <script>
@@ -589,8 +596,8 @@
             ],
             drawCallback: function(response) {
 
-                $('#countTotal').empty();
-                $('#countTotal').append(response['json'].recordsTotal);
+                $('#regionTotal').empty();
+                $('#regionTotal').append(response['json'].recordsTotal);
             }
         });
     });
@@ -631,7 +638,6 @@
 
     $('body').on('click', '.region_edit', function() {
         let id = $(this).attr('data-id');
-        alert(id);
         $.ajax({
             method: "GET",
             url: "{{ route('region.getdata') }}",
@@ -676,6 +682,10 @@
                     name: 'status'
                 },
                 {
+                    data: 'view',
+                    name: 'view'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -684,8 +694,8 @@
             ],
             drawCallback: function(response) {
 
-                $('#countTotal').empty();
-                $('#countTotal').append(response['json'].recordsTotal);
+                $('#zoneTotal').empty();
+                $('#zoneTotal').append(response['json'].recordsTotal);
             }
         });
     });
@@ -723,6 +733,27 @@
                 }
             });
     };
+    function activate(id)
+    {
+        alert(id);
+    }
+    function sheduleZone(id)
+    {
+        $.ajax({
+            method: "GET",
+            url: "{{ route('product.shedule') }}",
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                'id': id
+            },
+            success: function(response) {
+                console.log(response);
+                $('body').find('#sheduleZone .weeks').html(response.html);
+                $('#sheduleZone').modal('show');
+            }
+        });
+        //  $('#weeks').html( '<td>Hello</td><td>Hello</td><td>Hello</td><td>Hello</td><td>Hello</td>');
+    }
 
     $('body').on('click', '.zone_edit', function() {
         let id = $(this).attr('data-id');
@@ -734,10 +765,47 @@
                 'id': id
             },
             success: function(response) {
+                console.log(response.html);
                 $('body').find('#updateWarehouse .form').html(response.html);
                 $('#updateWarehouse').modal('show');
             }
         });
     });
+    function toggleCheckbox(id,day_id,zone_id)
+        {
+            $.ajax({
+                                method: "GET",
+                                url: "{{ route('product.sheduleChange') }}",
+                                data: {
+                                    _token: $('meta[name="csrf-token"]').attr('content'),
+                                    'id': id,
+                                    'day_id':day_id,
+                                    'zone_id': zone_id,
+                                },
+                                success: function(response) {
+                                    
+                                    if (response.status) {
+                                        Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            icon: 'success',
+                                            title: response.message,
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            icon: 'error',
+                                            title: response.success,
+                                        });
+                                    }
+                                }
+                            });
+        }
+      
 </script>
 @endsection
