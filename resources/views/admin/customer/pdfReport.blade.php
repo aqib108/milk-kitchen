@@ -201,7 +201,7 @@
                                                 class="discount">
                                         </td>
                                         <td>
-                                           {{ '$' . $price - ((($item->product->price / 100) * 10) * $total) }}
+                                           {{ '$' . ($price - ((($item->product->price / 100) * 10) * $total)) }}
                                         </td>
                                     </tr>
                                 @endforeach
