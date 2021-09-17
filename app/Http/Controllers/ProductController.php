@@ -335,6 +335,6 @@ class ProductController extends Controller
         }
         $product->update(['status'=> $request->input('status')]);
         $status = $product->status;
-        return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
+        return response()->json(['status'=>true,'message'=>'Status Changed Successfully']);
     }
 }

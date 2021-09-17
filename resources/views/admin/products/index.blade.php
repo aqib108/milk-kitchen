@@ -92,8 +92,7 @@
                                      </td>
                                      
                                      <?php foreach ($data->services as $key => $value) {
-                                      $name= App\Models\GroupCustomer::where('id',$value->group_id)->first()->group_name;
-                                           if($name)
+                                           if($value->saleable)
                                            { 
                                            ?>
                                          <td><i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i></td>
@@ -222,10 +221,24 @@
                             },
                             success: function(response) {
                                 if (response.status == 1) {
-                                    Swal.fire("Active!", response.message, "success");
+                                    Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            icon: 'success',
+                                            title: response.message,
+                                        });
                                     window.location.reload();
                                 } else {
-                                    Swal.fire("Inactive!", response.message, "success");
+                                    Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            icon: 'error',
+                                            title: response.success,
+                                        });
                                     window.location.reload();
                                 }
                             }
