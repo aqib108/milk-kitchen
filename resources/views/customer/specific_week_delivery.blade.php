@@ -30,10 +30,32 @@
                         <td>
                             <input id="{{ $item->name }}" class="form-control" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                             text-align: center;" value="{{ $qnty }}" minlength="0" readonly>
+                            
                         </td>
                     @endforeach
                 </tr> 
             @endforeach
         </tbody>
     </table>
+    <table class="table table-bordered mb-0 weekly_standing_order">
+        <tbody class="week-container-tbl">  
+            <tr>
+                <td style="width: 146px;"></td>
+                @foreach ($weekDays as $item)
+                   
+                     
+                    <td>
+                        @php
+                        $userID = 0;
+                        if ($item->orderDelivered->isNotEmpty()){
+                            foreach ($item->orderDelivered as $order){
+                                $userID = $order->user_id;
+                            }
+                        }
+                    @endphp
+                    <a href="{{route('customer.final-report',$userID)}}">view</a></td>
+                @endforeach 
+            </tr>
+        </tbody>
+    </table>  
 </div>

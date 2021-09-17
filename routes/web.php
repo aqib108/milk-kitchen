@@ -76,9 +76,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('generate-pdf/{id}', 'CustomerController@generatePDF');
             Route::post('/product-admin-orders/{id}','CustomerController@productOrderAdmin')->name('admin.customer-orders');
             Route::get('/past-orders/{id}','CustomerController@pastOrder')->name('customer.past-orders');
-            Route::get('packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
-            Route::get('final-report','CustomerController@finalreport')->name('customer.final-report');
+            Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
+            Route::get('/final-report/{id}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}','CustomerController@pastOrderStatement')->name('customer.week-statement');
+            Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
+
         });
         Route::group(['prefix' => 'customer-group'], function (){
 
