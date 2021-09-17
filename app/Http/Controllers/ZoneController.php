@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\Region;
 use App\Models\City;
 use App\Models\Warehouse;
+use  DB;
 use Yajra\DataTables\DataTables;
 class ZoneController extends Controller
 {
@@ -33,8 +34,12 @@ class ZoneController extends Controller
                     }
                     return $status;
                 })
+                ->addColumn('view',function($data){
+                    $sheduleZone = '<a onclick="sheduleZone('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">View</a>';  
+                     return $sheduleZone;
+                })
                 ->addColumn('action', function(Zone $data){
-                    $btn1 = '<a data-id="'.$data->id.'" data-tab="distributors" data-url="zone/delete" 
+                    $btn1 = '<a data-id="'.$data->id.'" data-tab="zones" data-url="zone/delete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     $btn2 = '<button data-id="'.$data->id.'" class="btn btn-sm btn-primary zone_edit" >Edit</button>';
                      //$btn3 = '<a href="'.route('distributor.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
@@ -47,7 +52,7 @@ class ZoneController extends Controller
 
                     return $btn2.'  '.$status.' '.$btn1;
                 })
-                ->rawColumns(['action','status'])
+                ->rawColumns(['action','status','view'])
                 ->make(true);
         }
         $countries = Country::where('status', '1')->get();
@@ -69,13 +74,15 @@ class ZoneController extends Controller
         $data = Zone::create($request->except('_token'));
         return redirect()->route('zone.index');
     }
+
+   
     public function destroy($id)
     {
         $product = Zone::findOrFail($id);
         $product->delete();
         return response()->json(array(
             'data' => true,
-            'message' => 'Distributor Successfully Deleted',
+            'message' => 'Zone Successfully Deleted',
             'status' => 'success',
         ));
     }

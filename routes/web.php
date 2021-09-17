@@ -100,11 +100,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/delete/{id}','DistributorController@destroy');
         });
         Route::resource('region','RegionController');
+        Route::delete('region/delete/{id}','RegionController@destroy');
         Route::post('/regionstatus','RegionController@regionstatus')->name('region.status');
         Route::get('/getRegion','RegionController@getRegion')->name('region.getdata');
 
         Route::resource('zone','ZoneController');
         Route::post('/zonestatus','ZoneController@zonestatus')->name('zone.status');
+        Route::delete('zone/delete/{id}','ZoneController@destroy');
+      
         Route::get('/getZone','ZoneController@getZone')->name('zone.getdata');
 
         Route::group(['prefix' => 'driver'], function (){
@@ -119,6 +122,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/delete/{id}','DriverController@destroy');
         });
         Route::group(['prefix' => 'product'], function (){
+            Route::get('/zone/shedule','ProductController@sheduleZone')->name('product.shedule');
+            Route::get('/zone/sheduleChange','ProductController@sheduleChange')->name('product.sheduleChange');
+           
             Route::get('/','ProductController@index')->name('product.index');
             Route::get('/create','ProductController@create')->name('product.create');
             Route::post('/store','ProductController@store')->name('product.store');
