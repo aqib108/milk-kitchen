@@ -28,7 +28,7 @@
         <div class="container-fluid">
             <div>
                 <div class="text-center">
-                    <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
+                    <h2 class="heading-wrapper">Packing Slip</h2>
                 </div>
                 <div class="___class_+?10___">
                     <div class="form-container pt-4">
@@ -134,108 +134,42 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <h2 class="heading-tbl">Related Deliveries</h2>
+                <div class="row mb-40-wrapper">
+                    <div class="col-lg-12">
+                        <h2 class="heading-tbl">Delivery Items</h2>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="table-th-wrapper" scope="col"></th>
-                                    <th class="table-th-wrapper" scope="col">Monday</th>
-                                    <th class="table-th-wrapper" scope="col">Tuesday</th>
-                                    <th class="table-th-wrapper" scope="col">Wednesday</th>
-                                    <th class="table-th-wrapper" scope="col">Thursday</th>
-                                    <th class="table-th-wrapper" scope="col">Friday</th>
-                                    <th class="table-th-wrapper" scope="col">Saturday</th>
-                                    <th class="table-th-wrapper" scope="col">Sunday</th>
-                                    <th class="table-th-wrapper" scope="col">Total Ctns</th>
-                                    <th class="table-th-wrapper" scope="col">Price</th>
-                                    <th class="table-th-wrapper" scope="col">Discount</th>
-                                    <th class="table-th-wrapper" scope="col">Extention</th>
-                                </tr>
-                            </thead>
-                            <tbody class="week-container-tbl">
-                                @foreach ($products as $pro)
-                                    <tr class="week_days" data-p-id="{{ $pro->id }}">
-                                        <td class="table-td-wrapper" scope="row">{{ $pro->name }}</td>
-                                        @foreach ($weekDays as $item)
-                                            @php
-                                                $qnty = 0;
-                                                if ($item != null) {
-                                                    foreach ($item->WeekDay as $order) {
-                                                        if ($order->product_id == $pro->id) {
-                                                            $qnty = $order->quantity;
-                                                        }
-                                                    }
-                                                }
-                                            @endphp
-                                            <td>
-                                                @if($qnty == 0){{ '' }}@else{{ $qnty }}@endif
-                                            </td>
-                                        @endforeach
-                                        <td>
-                                            @php $total=0; @endphp
-                                            @foreach ($orders as $item)
-                                                @if ($pro->id == $item->product_id)
-                                                    @php $total += $item->quantity; @endphp
-                                                @endif
-                                            @endforeach
-                                            {{ $total }}
-                                        </td>
-                                        <td>
-                                            @php $price=0; @endphp
-                                            @foreach ($orders as $item)
-                                                @if ($pro->id == $item->product_id)
-                                                    @php $price = $total * $item->product->price @endphp
-                                                @break
-                                                @endif
-                                            @endforeach
-                                            {{ '$' . $item->product->price }}
-                                            <input type="hidden" value="{{ $price }}" class="price">
-                                        </td>
-                                        <td>
-                                            {{ '$' . ($item->product->price / 100) * 10 }}
-                                            <input type="hidden" value="{{ ($price / 100) * 10 }}"
-                                                class="discount">
-                                        </td>
-                                        <td>
-                                           {{ '$' . $price - ((($item->product->price / 100) * 10) * $total) }}
-                                        </td>
+                    <div class="col-lg-4">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="table-th-wrapper" scope="col">Product</th>
+                                        <th class="table-th-wrapper" scope="col">Total Cartons</th>
                                     </tr>
-                                @endforeach
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">Sub Total</td>
-                                    <td class="text-right-wrapper">
-                                        <input style="border:none;background:none;" class="text-center subtotal"
-                                            disabled="disabled" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">Freight</td>
-                                    <td class="text-right-wrapper">$ -</td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">GST 15%</td>
-                                    <td class="text-right-wrapper gst">
-                                        <input style="border:none;background:none;" class="text-center gst"
-                                            disabled="disabled" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper grand-total"> Total</td>
-                                    <td class="text-right-wrapper grand-total-value">
-                                        <input style="border:none;background:none;" class="text-center totalprice"
-                                            disabled="disabled" readonly>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody class="week-container-tbl"> 
+                                    <tr class="week_days">
+                                        <td class="table-td-wrapper" scope="row">product 1</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr class="week_days">
+                                        <td class="table-td-wrapper" scope="row">product 2</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr class="week_days">
+                                        <td class="table-td-wrapper" scope="row">product 3</td>
+                                        <td>3</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <b>Received in full</b>
+                        <hr>
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="{{ asset('images/barcode.jpg')}}" width="200" alt="">
                     </div>
                 </div>
             </div>
@@ -250,25 +184,4 @@
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('customer-panel/js/index.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-
-            var sum = 0,dis = 0;
-
-            $(".price").each(function() {
-                sum += +$(this).val();
-            });
-            $(".discount").each(function() {
-                dis += +$(this).val();
-            });
-            
-            var subtotal = sum - dis;
-            var gst = (subtotal * 15) /100;
-            var total =parseFloat(subtotal)+parseFloat(gst);
-
-            $('.subtotal').val('$' + subtotal);
-            $('.gst').val('$' + gst);
-            $('.totalprice').val('$' + total);
-        });
-    </script>
 @endsection

@@ -19,10 +19,6 @@ class CreateProductsTable extends Migration
             $table->string('image_url')->nullable();
             $table->integer('price');
             $table->longText('description');
-            $table->integer('sku');
-            $table->boolean('new');
-            $table->integer('pack_size');
-            $table->boolean('active');
             $table->boolean('status')->default(TRUE);
             $table->timestamps();
         });
