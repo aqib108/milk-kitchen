@@ -129,6 +129,22 @@ class CustomerController extends Controller
         return view('admin.customer.past-order',compact('orders'));
     }
 
+    public function pastOrderStatement($id)
+    {
+        $orderDetail = OrderDeliverd::find($id);
+        $customerID = $orderDetail->user_id;
+        $customer = CustomerDetail::where('user_id',$customerID)->get();
+        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $weekDays = WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+                        $q->userDetail($orderDetail->user_id);
+                    }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                        $q->weekDetail($orderDetail);
+                    }])->get();
+                    dd($weekDays);
+
+       return view('admin.customer.past-order.statement',compact('customer','products','weekDays'));
+    }
+
     //Create Customer page
     public function newCustomerCreate()
     {
