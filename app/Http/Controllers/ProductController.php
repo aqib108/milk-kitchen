@@ -22,54 +22,76 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Product::orderBy('id','DESC')->with('services')->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('status', function(Product $data){
-                    if($data->status == 1){
-                        $status = '<span class="badge badge-success">Active</span>';
-                    }
-                    else{
-                        $status = '<span class="badge badge-danger">Inactivate</span>';
-                    }
-                    return $status;
-                })
-                ->addColumn('new', function(Product $data){
-                    if($data->new == 1){
-                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
-                    }
-                    else{
-                        $status = '';
-                    }
-                    return $status;
-                })
-                ->addColumn('active', function(Product $data){
-                    if($data->active == 1){
-                        $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
-                    }
-                    else{
-                        $status = '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
-                    }
-                    return $status;
-                })
-                ->addColumn('action', function(Product $data){
-                    $btn1 = '<a onclick="deleteProduct('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="'.route('product.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
-                    $btn3 = '<a href="'.route('product.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
-                    if($data->status == 1){
-                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>';
-                    }
-                    else{
-                        $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success" style ="margin-top:5px;">Activate</a>';
-                    }
+        // $data = Product::orderBy('id','DESC')->with('services')->get();
+       
+        // foreach ($data as $key => $value) {
+        //     $groups=$value->services->pluck('group_id');
+        //     $groups=GroupCustomer::pluck('id')->map(function($ids,$key) use($groups){
+        //                    dd($groups);
+        //     });   
+               
+                // $groups=GroupCustomer::where('group_id',$value->group_id)->pluck('group_name');   
+               
+        // }
+      
+        // if ($request->ajax()) {
+            $groups=GroupCustomer::pluck('group_name');
+            $data = Product::orderBy('id','DESC')->select('id','sku','name','pack_size','new','status','active')->get();
 
-                    return $btn1.' '.$btn2.' '.$btn3.' '.$status;
-                })
-                ->rawColumns(['action','status','new','active'])
-                ->make(true);
-        }
-        return view('admin.products.index');
+        //   $dt=Datatables::of($data)
+        //         ->addIndexColumn()
+        //         ->addColumn('status', function(Product $data){
+        //             if($data->status == 1){
+        //                 $status = '<span class="badge badge-success">Active</span>';
+        //             }
+        //             else{
+        //                 $status = '<span class="badge badge-danger">Inactivate</span>';
+        //             }
+        //             return $status;
+        //         })
+        //         ->addColumn('new', function(Product $data){
+        //             if($data->new == 1){
+        //                 $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+        //             }
+        //             else{
+        //                 $status = '';
+        //             }
+        //             return $status;
+        //         })
+        //         ->addColumn('active', function(Product $data){
+        //             if($data->active == 1){
+        //                 $status = '<i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>';
+        //             }
+        //             else{
+        //                 $status = '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
+        //             }
+        //             return $status;
+        //         })
+        //         ->addColumn('action', function(Product $data){
+        //             $btn1 = '<a onclick="deleteProduct('.$data->id.')" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
+        //             $btn2 = '<a href="'.route('product.edit', $data->id).'" class="btn btn-sm btn-primary" >Edit</a>';
+        //             $btn3 = '<a href="'.route('product.detail', $data->id).'" class="btn btn-primary btn-sm"> Detail </a>';
+        //             if($data->status == 1){
+        //                 $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>';
+        //             }
+        //             else{
+        //                 $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success" style ="margin-top:5px;">Activate</a>';
+        //             }
+
+        //             return $btn1.' '.$btn2.' '.$btn3.' '.$status;
+        //         });
+        //         foreach ($data as $key => $value) {
+        //             foreach ($value->services as $key => $value) {
+        //                $name= GroupCustomer::where('id',$value->id)->first()->group_name; 
+        //                $dt->addColumn($name,$name);
+        //             }
+        //         }
+        //         dd( $dt ->rawColumns(['action','status','new','active'])
+        //         ->make(true));
+        //        return  $dt ->rawColumns(['action','status','new','active'])
+        //             ->make(true);
+        // // }
+        return view('admin.products.index',compact('data','groups'));
     }
 
     /**
@@ -183,11 +205,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($id)->first();
         if ($product == null) {
             return redirect()->back()->with('error', 'No Record Found.');
         }
-
+        
         return view('admin.products.detail',compact('product'));
     }
 
@@ -296,6 +318,7 @@ class ProductController extends Controller
                 return redirect()->back()->with('error', 'No Record Found To Delete.');
             }
 
+            $product->services()->delete();
             $product->delete();
             return response()->json(['status' => 1, 'message' => 'Record deleted successfully.']);
 

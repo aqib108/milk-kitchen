@@ -46,15 +46,76 @@
                                         <th>Pack Size</th>
                                         <th>New</th>
                                         <th>Active</th>
-                                        {{-- <th>Food Service</th>
-                                        <th>Retail</th>
-                                        <th>Consumer</th> --}}
                                         <th>Status</th>
+                                        @foreach($groups as $groups)
+                                          <th>{{$groups}}</th>
+                                        @endforeach
+                                       
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                             @foreach($data as $key=>$data)
+                                 <tr>
+                                     <td>
+                                      {{++$key}}
+                                     </td>
+                                     <td>
+                                         {{$data->sku}}
+                                     </td>
+                                     <td>
+                                         {{$data->name}}
+                                     </td>
+                                     <td>
+                                         {{$data->pack_size}}
+                                     </td>
+                                     <td>
+                                         @if($data->new)
+                                         <i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>
+                                         @else
+                                         <i class="fa fa-times" style="color:red;" aria-hidden="true"></i>   
+                                         @endif
+                                     </td>
+                                     <td>
+                                         @if($data->active)
+                                         <i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>
+                                         @else
+                                         <i class="fa fa-times" style="color:red;" aria-hidden="true"></i>   
+                                         @endif
+                                     </td>
+                                     <td>
+                                         @if($data->status)
+                                         <i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i>
+                                         @else
+                                         <i class="fa fa-times" style="color:red;" aria-hidden="true"></i>   
+                                         @endif
+                                     </td>
+                                     
+                                     <?php foreach ($data->services as $key => $value) {
+                                      $name= App\Models\GroupCustomer::where('id',$value->group_id)->first()->group_name;
+                                           if($name)
+                                           { 
+                                           ?>
+                                         <td><i class="fa fa-check" style="color:#95d60c;" aria-hidden="true"></i></td>
+                                         <?php }else{ ?>
+                                         <td><i class="fa fa-times" style="color:red;" aria-hidden="true"></i>  </td> 
+                                         
+                                         <?php } } ?>
+                                       
+       
+                                     </td>
+                                     <td>
+                                    <a onclick='deleteProduct({{$data->id}})' href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>
+                   <a href="{{route('product.edit', $data->id)}}" class="btn btn-sm btn-primary" >Edit</a>
+                  <a href="{{route('product.detail', $data->id)}}" class="btn btn-primary btn-sm"> Detail </a>
+                    @if($data->status == 1)
+                      <a onclick="changeStatus({{$data->id}},0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">Inactivate</a>
+                    @else
+                      <a onclick="changeStatus({{$data->id}},1)" href="javascript:void(0)" class="btn btn-sm btn-success" style ="margin-top:5px;">Activate</a>
+                    @endif
+                                     </td>
+                                 </tr>
+                             @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -74,68 +135,71 @@
 @section('scripts')
     <script>
         var table;
-        $(document).ready(function() {
+        // $(document).ready(function() {
 
-            table = $('#products').DataTable({
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                ajax: "",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'sku',
-                        name: 'sku'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'pack_size',
-                        name: 'pack_size'
-                    },
-                    {
-                        data: 'new',
-                        name: 'new'
-                    },
-                    {
-                        data: 'active',
-                        name: 'active'
-                    },
-                    // {
-                    //     data: 'f_saleable',
-                    //     name: 'f_saleable'
-                    // },
-                    // {
-                    //     data: 'r_saleable',
-                    //     name: 'r_saleable'
-                    // },
-                    // {
-                    //     data: 'c_saleable',
-                    //     name: 'c_saleable'
-                    // },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
-                ],
-                drawCallback: function(response) {
-                    $('#countTotal').empty();
-                    $('#countTotal').append(response['json'].recordsTotal);
-                }
-            });
-        });
+        //     table = $('#products').DataTable({
+        //         responsive: true,
+        //         processing: true,
+        //         serverSide: true,
+        //         ajax: "",
+        //         columns: [{
+        //                 data: 'DT_RowIndex',
+        //                 name: 'DT_RowIndex',
+        //                 orderable: false,
+        //                 searchable: false
+        //             },
+        //             {
+        //                 data: 'sku',
+        //                 name: 'sku'
+        //             },
+        //             {
+        //                 data: 'name',
+        //                 name: 'name'
+        //             },
+        //             {
+        //                 data: 'pack_size',
+        //                 name: 'pack_size'
+        //             },
+        //             {
+        //                 data: 'new',
+        //                 name: 'new'
+        //             },
+        //             {
+        //                 data: 'active',
+        //                 name: 'active'
+        //             },
+        //             // {
+        //             //     data: 'f_saleable',
+        //             //     name: 'f_saleable'
+        //             // },
+        //             // {
+        //             //     data: 'r_saleable',
+        //             //     name: 'r_saleable'
+        //             // },
+        //             // {
+        //             //     data: 'c_saleable',
+        //             //     name: 'c_saleable'
+        //             // },
+        //             {
+        //                 data: 'status',
+        //                 name: 'status'
+        //             },
+        //             {
+        //                 data: 'action',
+        //                 name: 'action',
+        //                 orderable: false,
+        //                 searchable: false
+        //             },
+        //         ],
+        //         render : function(data) {
+        //             if(data){ $columns[] = [ 'data' => 'Ali', 'name' => 'Ali',]; } return $columns;
+        //         }
+        //         drawCallback: function(response) {
+        //             $('#countTotal').empty();
+        //             $('#countTotal').append(response['json'].recordsTotal);
+        //         }
+        //     });
+        // });
         // Change Status Product
         function changeStatus(id, status) {
             var result =
@@ -159,10 +223,10 @@
                             success: function(response) {
                                 if (response.status == 1) {
                                     Swal.fire("Active!", response.message, "success");
-                                    $('#products').DataTable().ajax.reload();
+                                    window.location.reload();
                                 } else {
                                     Swal.fire("Inactive!", response.message, "success");
-                                    $('#products').DataTable().ajax.reload();
+                                    window.location.reload();
                                 }
                             }
                         });
@@ -192,7 +256,7 @@
                                 console.log(response)
                                 if (response.status) {
                                     Swal.fire("Deleted!", response.message, "success");
-                                    $('#products').DataTable().ajax.reload();
+                                    window.location.reload();
                                 }
                             }
                         });
