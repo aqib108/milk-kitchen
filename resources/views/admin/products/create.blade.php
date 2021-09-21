@@ -50,8 +50,8 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Price <span class="required-star">*</span></label>
-                                        <input type="number" maxlength="50"
-                                            class="form-control @error('price') is-invalid @enderror" name="price"
+                                        <input type="text" maxlength="50"
+                                            class="form-control price @error('price') is-invalid @enderror" name="price"
                                             value="{{ old('price') }}" placeholder="Enter Product Price" required>
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">
@@ -90,6 +90,7 @@
                                     <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>New<span class="required-star">*</span></label>
                                         <select name="new" class="form-control @error('new') is-invalid @enderror" id="">
+                                            <option selected disabled>Select....</option>
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                         </select>
@@ -101,8 +102,8 @@
                                     </div>
                                     <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>Pack Size<span class="required-star">*</span></label>
-                                        <input type="number" maxlength="50"
-                                            class="form-control @error('pack_size') is-invalid @enderror" name="pack_size"
+                                        <input type="text" maxlength="50"
+                                            class="form-control price  @error('pack_size') is-invalid @enderror" id="pack_size" name="pack_size"
                                             value="{{ old('pack_size') }}" placeholder="Enter Pack Size" required>
                                         @error('pack_size')
                                             <span class="invalid-feedback" role="alert">
@@ -114,6 +115,7 @@
                                         <label>Active<span class="required-star">*</span></label>
                                         <select name="active" class="form-control @error('active') is-invalid @enderror"
                                             id="">
+                                            <option selected disabled>Select....</option>
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                         </select>
@@ -130,26 +132,41 @@
                                     </div>
                                     <div class="form-group col-md-12">
                                         <table class="table table-sm table-bordered">
-                                            <tr style="background-color:#95d60c !important;color:white;">
+                                            <tr style="background-color:#95d60c !important;color:white; text-align: center;" >
                                                 <th>Heading</th>
                                                 <th>CTN Price</th>
                                                 <th>Bottle Price</th>
                                                 <th>Saleable in the market</th>
                                             </tr>
-                                            @foreach ($groups as $group)
-                                                <tr>
-                                                    <td>{{ $group->group_name }}</td>
-                                                    <td><input type="hidden" value="{{ $group->id }}"
-                                                            name="group_id[]">
-                                                        <input type="number" class="form-control" name="ctn_price[]"
-                                                            min="0">
-                                                    </td>
-                                                    <td><input type="number" class="form-control" name="bottle_price[]"
-                                                            min="0"></td>
-                                                    <td class="text-center"><input type="checkbox" class="form-control"
+                                            @if($groups->count() > 0)
+                                                @foreach ($groups as $group)
+                                                    <tr>
+                                                        <td style="text-align: center;">{{ $group->group_name }}</td>
+                                                        <td>
+                                                            <input type="hidden" value="{{ $group->id }}"
+                                                                name="group_id[]">
+                                                            <input type="text" maxlength="100" class="form-control price ctnPrice" name="ctn_price[]"
+                                                                id="ctnPrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Ctn Price"
+                                                                value="{{ old('ctn_price') }}">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" maxlength="100" class="form-control price bottlePrice" name="bottle_price[]"
+                                                                id="bottlePrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Bottle Price"
+                                                                value="{{ old('bottle_price') }}">
+                                                        </td>
+                                                        <td class="text-center"><input type="checkbox" class="form-control"
                                                             value="1" name="saleable[]" data-size="xs" data-toggle="toggle">
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="4" role="alert">
+                                                        <div style="text-align: center;">
+                                                            No Result(s) Found !
+                                                        </div>
+                                                    </td>
                                                 </tr>
-                                            @endforeach
+                                            @endif
                                         </table>
                                     </div>
                                 </div>
@@ -199,6 +216,15 @@
                 files.push($(this)[0].files[i].name);
             }
             $(this).next('.custom-file-label').html(files.join(','));
+        });
+
+        $(document).on('change', '.ctnPrice',function () {
+            var id = $(this).data('id');
+            var ctn_price = $('#ctnPrice-'+id).val();     
+            var pack_size = $('#pack_size').val();
+            var value = ctn_price / pack_size;
+            var B_value = value.toFixed(2)
+            $('#bottlePrice-'+id).val(B_value);
         });
     </script>
 @endsection

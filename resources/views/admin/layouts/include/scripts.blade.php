@@ -67,3 +67,4 @@
 <!---- validation ----->
 <script src="{{ asset('customer-panel/jquery-validation/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('customer-panel/jquery-validation/additional-methods.min.js') }}"></script>
+

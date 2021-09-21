@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-4 col-xs-12">
                                         <label>Price <span class="required-star">*</span></label>
-                                        <input type="number" maxlength="100" class="form-control" name="price"
+                                        <input type="text" maxlength="100" class="form-control price" name="price"
                                             placeholder="Enter Product Price" value="{{ $product->price }}" required>
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">
@@ -101,7 +101,7 @@
                                     <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>Pack Size<span class="required-star">*</span></label>
                                         <input type="number" maxlength="50"
-                                            class="form-control @error('pack_size') is-invalid @enderror" name="pack_size"
+                                            class="form-control price @error('pack_size') is-invalid @enderror" name="pack_size" id="pack_size"
                                             value="{{ $product->pack_size }}" placeholder="Enter Pack Size" required>
                                         @error('pack_size')
                                             <span class="invalid-feedback" role="alert">
@@ -155,8 +155,9 @@
                                                         @break
                                                         @endif
                                                     @endforeach
-                                                    <input type="number" value="{{ $ctn }}"
-                                                        class="form-control" name="ctn_price[]" min="0">
+                                                    <input type="text" maxlength="100" class="form-control price ctnPrice" name="ctn_price[]"
+                                                    id="ctnPrice-{{$grp->id}}" data-id="{{$grp->id}}" placeholder="Enter Ctn Price"
+                                                    value="{{ $ctn }}">
                                                 </td>
                                                 <td>
                                                     @foreach ($services as $ser)
@@ -165,8 +166,9 @@
                                                         @break
                                                         @endif
                                                     @endforeach
-                                                    <input type="number" value="{{ $bottle }}"
-                                                        class="form-control" name="bottle_price[]" min="0">
+                                                    <input type="text" maxlength="100" class="form-control price bottlePrice" name="bottle_price[]"
+                                                    id="bottlePrice-{{$grp->id}}" data-id="{{$grp->id}}" placeholder="Enter Bottle Price"
+                                                    value="{{ $bottle }}">
                                                 </td>
                                                 <td class="text-center">
                                                     <input type="checkbox" class="form-control" value="1"
@@ -230,6 +232,15 @@
                 files.push($(this)[0].files[i].name);
             }
             $(this).next('.custom-file-label').html(files.join(','));
+        });
+
+        $(document).on('change', '.ctnPrice',function () {
+            var id = $(this).data('id');
+            var ctn_price = $('#ctnPrice-'+id).val();     
+            var pack_size = $('#pack_size').val();
+            var value = ctn_price / pack_size;
+            var B_value = value.toFixed(2)
+            $('#bottlePrice-'+id).val(B_value);
         });
     </script>
 @endsection
