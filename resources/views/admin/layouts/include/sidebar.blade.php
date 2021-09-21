@@ -136,20 +136,20 @@
                     </ul>
                 </li>
                 <!--- End Stock --->
-                <!--- Distributor --->
+                <!--- WareHouse --->
                 <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
-                        <i class="nav-icon fas fa-truck"></i>
+                        <i class="nav-icon fas fa-warehouse"></i>
                         <p>
-                            Manage Distributors
+                            Manage WareHouse
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('distributor.index') }}" class="nav-link">
+                            <a href="{{ route('warehouse.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Distributors</p>
+                                <p>WareHouses</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -162,7 +162,7 @@
                 </li>
                 <!-- End Distributor --->
                 <!--- Driver --->
-                <li class="nav-item has-treeview">
+                {{-- <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
                         <i class="nav-icon fas fa-motorcycle"></i>
                         <p>
@@ -184,7 +184,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <!--Sales-->
                 <li class="nav-item has-treeview">

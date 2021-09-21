@@ -179,7 +179,7 @@
                                             @endforeach
                                             <td>
                                                 {{ $totalCtn }}
-                                                <input type="hidden" class="t_ctn" value="{{$totalCtn}}">
+                                                <input type="hidden" class="t_ctn" name="totalCtn[]" value="{{$totalCtn}}">
                                             </td>
                                             
                                         </tr>
@@ -300,18 +300,20 @@
     <script src="{{ asset('customer-panel/js/index.js') }}"></script>
     <script>
         $(document).ready(function() {
+            var total = 0;
+            $('input[name="totalCtn[]"]').each(function(){
+                if($(this).val() !==''){
+                    total +=parseInt($(this).val());
+                }
+            });
+            total_ctns = total;
+            console.log(total_ctns);
+            $('#total_ctns').append(total_ctns);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var value = 0;
-            $(".t_ctn").each(function(){
-                value += +$(this).val();
-            });
-            total_ctns = (value);
-            $('#total_ctns').append(total_ctns);
-
             $('body').on('change','.weekly_standing_order .week_days_1 td input', function(){
                 let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
                 let day_id = $(this).attr('data-id');

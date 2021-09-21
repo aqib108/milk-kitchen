@@ -91,17 +91,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}','CustomerGroupController@editGroup');
             Route::post('/update/{id}','CustomerGroupController@updateGroup');
         });
-        Route::group(['prefix' => 'distributor'], function (){
-            Route::post('/checkEmail','DistributorController@checkEmail')->name('distributor.checkEmail');
-            Route::get('/','DistributorController@index')->name('distributor.index');
-            Route::get('/create','DistributorController@create')->name('distributor.create');
-            Route::post('/store','DistributorController@store')->name('distributor.store');
-            Route::get('/edit/{id}','DistributorController@edit')->name('distributor.edit');
-            Route::get('/detail/{id}','DistributorController@show')->name('distributor.detail');
-            Route::post('/update/{id}','DistributorController@update')->name('distributor.update');
-            Route::post('/status','DistributorController@status')->name('distributor.status');
-            Route::get('/getWarehouse','DistributorController@getWarehouse')->name('distributor.getdata');
-            Route::delete('/delete/{id}','DistributorController@destroy');
+        Route::group(['prefix' => 'warehouse'], function (){
+            Route::get('/','WareHouseController@index')->name('warehouse.index');
+            Route::post('/store','WareHouseController@store')->name('warehouse.store');
+            Route::get('/edit/{id}','WareHouseController@edit')->name('warehouse.edit');
+            Route::post('/update/{id}','WareHouseController@update')->name('warehouse.update');
+            Route::post('/status','WareHouseController@status')->name('warehouse.status');
+            Route::get('/getWarehouse','WareHouseController@getWarehouse')->name('warehouse.getdata');
+            Route::delete('/delete/{id}','WareHouseController@destroy');
         });
         Route::resource('region','RegionController');
         Route::delete('region/delete/{id}','RegionController@destroy');
@@ -111,23 +108,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('zone','ZoneController');
         Route::post('/zonestatus','ZoneController@zonestatus')->name('zone.status');
         Route::delete('zone/delete/{id}','ZoneController@destroy');
-      
         Route::get('/getZone','ZoneController@getZone')->name('zone.getdata');
-
-        Route::group(['prefix' => 'driver'], function (){
-            Route::post('/checkEmail','DriverController@checkEmail')->name('driver.checkEmail');
-            Route::get('/','DriverController@index')->name('driver.index');
-            Route::get('/create','DriverController@create')->name('driver.create');
-            Route::post('/store','DriverController@store')->name('driver.store');
-            Route::get('/edit/{id}','DriverController@edit')->name('driver.edit');
-            Route::get('/detail/{id}','DriverController@show')->name('driver.detail');
-            Route::post('/update/{id}','DriverController@update')->name('driver.update');
-            Route::post('/status','DriverController@status')->name('driver.status');
-            Route::delete('/delete/{id}','DriverController@destroy');
-        });
+        Route::get('/shedule','ZoneController@sheduleZone')->name('zone.shedule');
+        Route::post('/sheduleChange','ZoneController@sheduleChange')->name('zone.sheduleChange');
+        
         Route::group(['prefix' => 'product'], function (){
-            Route::get('/zone/shedule','ProductController@sheduleZone')->name('product.shedule');
-            Route::get('/zone/sheduleChange','ProductController@sheduleChange')->name('product.sheduleChange');
             Route::get('/','ProductController@index')->name('product.index');
             Route::get('/create','ProductController@create')->name('product.create');
             Route::post('/store','ProductController@store')->name('product.store');

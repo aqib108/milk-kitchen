@@ -49,16 +49,12 @@ class OrderDelivery extends Command
         $productOrder = json_decode($orders, true);
         
         foreach($productOrder as $ord){
-            $productPrices = Product::where('id','=',$ord['product_id'])->first();
-            $productPrice = $productPrices->price;
-            $quantity = $ord['quantity'];
-
             $data = OrderDeliverd::updateOrCreate([
                 'user_id' => $ord['user_id'],
                 'product_order_id' => $ord['id'],
                 'product_id' => $ord['product_id'],
                 'day_id' => $ord['day_id']],[
-                'quantity' => $quantity,
+                'quantity' => $$ord['quantity'],
             ]); 
         }    
     }

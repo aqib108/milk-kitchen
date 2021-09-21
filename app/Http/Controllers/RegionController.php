@@ -21,13 +21,11 @@ class RegionController extends Controller
 
     public function index(Request $request)
     {
-        // $data = Warehouse::orderBy('id','DESC')->get();
         if ($request->ajax()) {
             $data = Region::
             join('states','states.id','regions.region_id')
             ->join('warehouses','warehouses.id','regions.warehouse_id')
             ->select('regions.*','warehouses.name as warehouse_name','states.name as state_name')->get();
-            // dd($data);
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function(Region $data){
@@ -56,19 +54,19 @@ class RegionController extends Controller
         $regions = Region::
         join('states','states.id','regions.region_id')
         ->select('regions.id','states.name as name')->get();
-        return view('admin.distributor.index',compact('countries','regions','warehouses'));
+        return view('admin.warehouse.index',compact('countries','regions','warehouses'));
     }
 
-       /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function store(Request $request)
     {
         $data = Region::updateOrCreate($request->except('_token'));
-        return redirect()->route('region.index');
+        return redirect()->route('region.index')->with('success', 'Region added successfully.');
     }
 
     public function destroy($id)
@@ -88,11 +86,11 @@ class RegionController extends Controller
             'id'=> 'required'
         ]);
         $region=Region::findOrFail($request->id);
-        $countries = Country::where('status', '1')->get();
-        $states = State::where('status', '1')->get();
+        $countries = Country::where('status',1)->orderby('name','ASC')->get();
+        $states = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $region->country_id)->get();
         $warehouses= Warehouse::all();
         return response()->json([
-            'html' => view('admin.distributor.region_edit', compact('region','states','warehouses','countries'))->render()
+            'html' => view('admin.warehouse.region_edit', compact('region','states','warehouses','countries'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
 
@@ -101,8 +99,9 @@ class RegionController extends Controller
     public function update(Request $request, $id)
     {
         $product = Region::find($id)->update($request->except('_token'));
-        return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
+        return redirect()->route('warehouse.index')->with('success', 'Record updated successfully.');
     }
+
     public function regionstatus(Request $request)
     {
         $distributor = Region::findOrFail($request->id);
@@ -113,6 +112,4 @@ class RegionController extends Controller
         $status = $distributor->status;
         return response()->json(['status'=>$status,'message'=>'Status Changed Successfully']);
     }
-
-
 }

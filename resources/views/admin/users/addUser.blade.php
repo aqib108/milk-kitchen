@@ -66,9 +66,10 @@ Add New User
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Role's <span class="required-star">*</span></label>
                                         <select name="role" class="form-control" id="">
-                                            @foreach ($roles as $roll)
-                                                <option value="{{ $roll->name }}" selected="{{ old('roll->name') }}">
-                                                    {{ $roll->name }}</option>
+                                            <option selected disabled>Select Role</option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}">
+                                                    {{ $role->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -94,9 +95,7 @@ Add New User
     </section>
     <!-- /.content -->
 @endsection
-
 @section('scripts')
-
 <script>
     document.getElementById("registrationForm").onsubmit = function(e) {
         firstNameValidation();
