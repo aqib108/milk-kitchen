@@ -24,5 +24,4 @@ class WeekDay extends Model
     {
         return $this->hasMany(OrderDeliverd::class,'day_id','id');
     }
-    
 }

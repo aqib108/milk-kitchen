@@ -135,22 +135,51 @@
                                                 <th>Bottle Price</th>
                                                 <th>Saleable in the market</th>
                                             </tr>
-                                            @foreach ($services as $serv)
-                                                <tr>
-                                                    <td>{{ $serv->groups->group_name }}</td>
-                                                    <td><input type="hidden" value="{{ $serv->groups->id }}"
-                                                            name="group_id[]">
-                                                            <input type="hidden" value="{{ $serv->id }}"
-                                                            name="service_id[]">
-                                                        <input type="number" value="{{ $serv->ctn_price }}"
-                                                            class="form-control" name="ctn_price[]" min="0">
-                                                    </td>
-                                                    <td><input type="number" value="{{ $serv->bottle_price }}"
-                                                            class="form-control" name="bottle_price[]" min="0"></td>
-                                                    <td class="text-center"><input type="checkbox" class="form-control"
-                                                            value="1" name="saleable[]" data-size="xs" data-toggle="toggle"
-                                                            @if ($serv->saleable == 1){{ 'checked' }}@endif>
-                                                </tr>
+                                            @foreach ($groups as $grp)
+                                            @php $id=0;$ctn=0;$bottle=0; @endphp
+                                             <tr>
+                                                <td>{{ $grp->group_name }}</td>
+                                                <td>
+                                                    <input type="hidden" value="{{ $grp->id }}" name="group_id[]">
+                                                    @foreach ($services as $ser)
+                                                        @if ($ser->group_id == $grp->id)
+                                                            @php $id = $ser->id; @endphp
+                                                        @break
+                                                        @endif
+                                                    @endforeach
+                                                    <input type="hidden" value="{{ $id }}" name="service_id[]">
+                                                    
+                                                    @foreach ($services as $ser)
+                                                        @if ($ser->group_id == $grp->id)
+                                                            @php $ctn = $ser->ctn_price; @endphp
+                                                        @break
+                                                        @endif
+                                                    @endforeach
+                                                    <input type="number" value="{{ $ctn }}"
+                                                        class="form-control" name="ctn_price[]" min="0">
+                                                </td>
+                                                <td>
+                                                    @foreach ($services as $ser)
+                                                        @if ($ser->group_id == $grp->id)
+                                                            @php $bottle = $ser->bottle_price; @endphp
+                                                        @break
+                                                        @endif
+                                                    @endforeach
+                                                    <input type="number" value="{{ $bottle }}"
+                                                        class="form-control" name="bottle_price[]" min="0">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" class="form-control" value="1"
+                                                        name="saleable[]" data-size="xs" data-toggle="toggle"
+                                                    @foreach ($services as $ser)
+                                                        @if ($ser->group_id == $grp->id)
+                                                            @if ($ser->saleable == 1)
+                                                                {{ 'checked' }}
+                                                            @endif
+                                                        @endif
+                                                    @endforeach>
+                                                </td>
+                                            </tr>
                                             @endforeach
                                         </table>
                                     </div>

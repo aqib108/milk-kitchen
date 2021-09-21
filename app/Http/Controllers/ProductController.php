@@ -104,39 +104,7 @@ class ProductController extends Controller
         $groups = GroupCustomer::all();
         return view('admin.products.create',compact('groups'));
     }
-
-
-    public function sheduleZone(Request $request)
-    {
-        $shedule=DB::table('delivery_schedule_zones')->where('zone_id',$request->id)->get(); 
-        $id= $shedule->pluck('id');
-        $days=$shedule->pluck('day_id');
-        $zone=$request->id;
-        // return view('admin.customer.shedule', compact('shedule'));
-        return response()->json([
-            'html' => view('admin.customer.shedule', compact('zone','id','days'))->render()
-            ,200, ['Content-Type' => 'application/json']
-        ]);
-    }
-
-    public function sheduleChange(Request $request)
-    {
-        $shedule=DB::table('delivery_schedule_zones')->where(['zone_id'=>$request->zone_id,'day_id'=>$request->day_id])->first();
-      
-        if(!empty($shedule))
-        {
-            DB::table('delivery_schedule_zones')->delete($shedule->id);
-        }
-        else
-        $shedule=DB::table('delivery_schedule_zones')->insert(['day_id'=>$request->day_id,'status'=>1,'zone_id'=>$request->zone_id]); 
-      
-        return response()->json(array(
-            'data' => $request->id,
-            'message' => 'Zone Sheduled updated Successfully',
-            'status' => 'success',
-        ));
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -193,7 +161,7 @@ class ProductController extends Controller
             ];
             Service::create($data);
         }
-
+        
         return redirect()->route('product.index')->with('success', 'Record added successfully.');  
     }
 
@@ -224,7 +192,7 @@ class ProductController extends Controller
     {
         $groups = GroupCustomer::all();
         $product = Product::findOrFail($id);
-        $services = Service::where('product_id',$id)->with('groups')->get();
+        $services = Service::where('product_id',$id)->get();
         // dd($services);
         if ($product == null) {
             return redirect()->back()->with('error', 'No Record Found.');
@@ -289,8 +257,6 @@ class ProductController extends Controller
             $ctns = isset($ctn[$idx]) ? ($ctn[$idx]) : 0;
             $bottles = isset($bottle[$idx]) ? ($bottle[$idx]) : 0;
             $saleables = isset($saleable[$idx]) ? ($saleable[$idx]) : 0;
-
-            $ser = Service::findOrFail($service);
             
             $update = [
             'product_id' => $product->id,
@@ -299,7 +265,15 @@ class ProductController extends Controller
             'bottle_price' => $bottles,
             'saleable' => $saleables,
             ];
-            $ser->update($update);
+            if($service == 0)
+            {
+                Service::create($update);
+            }
+            else
+            {
+                $ser = Service::findOrFail($service);
+                $ser->update($update);
+            }
         }
         return redirect()->route('product.index')->with('success', 'Product updated successfully.');
     }

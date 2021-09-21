@@ -24,7 +24,6 @@ class CreateOrderDeliverdsTable extends Migration
             $table->integer('product_order_id')->unsigned();
             $table->foreign('product_order_id')->references('id')->on('product_orders')->onDelete('cascade');
             $table->integer('quantity');
-            $table->integer('price');
             $table->softDeletes();
             $table->timestamps();
         });

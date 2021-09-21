@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class DeliverySheduleZone extends Model
 {
     use HasFactory;
-    protected $guarded=[''];
+
+    protected $fillable = [
+        'zone_id',
+        'day_id',
+    ];
+
 }

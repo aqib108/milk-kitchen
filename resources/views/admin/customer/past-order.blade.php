@@ -21,28 +21,38 @@
                     </tr>
                 </thead>
                 <tbody class="week-container-tbl">
-                    @foreach ($orders as $item)
+                    @if($orders->count() > 0)
+                        @foreach ($orders as $item)
+                            <tr>
+                                <td class="table-td-wrapper" scope="row">
+                                    {{ $item[0]->created_at->subDays(6)->format('d/m')}} - {{$item[0]->created_at->format('d/m')}}
+                                </td>
+                                <td>
+                                    @php
+                                        $price = 0;
+                                        foreach($item as $arr){
+                                            $price += $arr->product->price;
+                                        }
+                                        echo '$'.$price;
+                                    @endphp
+                                </td>
+                                <td>
+                                    <a href="{{route('customer.week-statement', $item[0]->id)}}" class="view_statements">View</a>
+                                </td> 
+                                <td>
+                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{ $item[0]->id }}">View</a>
+                                </td> 
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
-                            <td class="table-td-wrapper" scope="row">
-                                {{$item[0]->created_at->format('d/m')}} - {{ $item[0]->created_at->subDays(6)->format('d/m') }}
+                            <td class="alert alert-danger" colspan="4" role="alert">
+                                <div>
+                                    No Result(s) Found !
+                                </div>
                             </td>
-                            <td>
-                                @php
-                                    $price = 0;
-                                    foreach($item as $arr){
-                                        $price += $arr->product->price;
-                                    }
-                                    echo '$'.$price;
-                                @endphp
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="view_statements" data-id="{{ $item[0]->id }}">View</a>
-                            </td> 
-                            <td>
-                                <a href="javascript:;" class="view_delivery_detail" data-id="{{ $item[0]->id }}">View</a>
-                            </td> 
                         </tr>
-                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -77,6 +87,9 @@
                     }
                 });
             });
+
+            
         });
     </script>
+
 @endsection

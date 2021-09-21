@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Auth;
 use App\Models\User;
 use App\Models\Product;
-use App\Models\Distributor;
-use App\Models\Driver;
 use Validator;
 use Session;
 
@@ -36,10 +34,10 @@ class AdminController extends Controller
     public function mangeDashBoard()
     {
         $count = array();
-        $count['users'] = User::where('status', '=', '1')->count();
+        $count['users'] = User::role('Admin')->where('status', '=', '1')->count();
+        $count['distributor'] = User::role('Distributor')->where('status', '=', '1')->count();
+        $count['drivers'] = User::role('Driver')->where('status', '=', '1')->count();
         $count['products'] = Product::where('status', '=', '1')->count();
-        $count['distributor'] = Distributor::where('status', '=', '1')->count();
-        $count['drivers'] = Driver::where('status', '=', '1')->count();
 
         return response()->json(['status' => true, 'count' => $count]);
 
