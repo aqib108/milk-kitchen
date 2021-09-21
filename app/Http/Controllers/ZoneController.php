@@ -9,14 +9,12 @@ use App\Models\State;
 use App\Models\Region;
 use App\Models\City;
 use App\Models\Warehouse;
-use  DB;
+use DB;
 use Yajra\DataTables\DataTables;
 class ZoneController extends Controller
 {
     public function index(Request $request)
     {
-    
-        // $data = Warehouse::orderBy('id','DESC')->get();
         if ($request->ajax()) {
             $data = Zone::
             join('regions','regions.id','zones.region_id')
@@ -35,8 +33,8 @@ class ZoneController extends Controller
                     return $status;
                 })
                 ->addColumn('view',function($data){
-                    $sheduleZone = '<a onclick="sheduleZone('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger" style ="margin-top:5px;">View</a>';  
-                     return $sheduleZone;
+                    $sheduleZone = '<a href="javascript:void(0);" class="btn btn-sm btn-primary view_schedule" data-id="'.$data->id.'" style ="margin-top:5px;">View</a>';  
+                    return $sheduleZone;
                 })
                 ->addColumn('action', function(Zone $data){
                     $btn1 = '<a data-id="'.$data->id.'" data-tab="zones" data-url="zone/delete" 
@@ -60,22 +58,23 @@ class ZoneController extends Controller
         $regions = Region::
         join('states','states.id','regions.region_id')
         ->select('regions.id','states.name as name')->get();
-        return view('admin.distributor.index',compact('countries','regions','warehouses'));
+
+        return view('admin.warehouse.index',compact('countries','regions','warehouses'));
     }
 
-          /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
+
     public function store(Request $request)
     {
         $data = Zone::create($request->except('_token'));
-        return redirect()->route('zone.index');
+        return redirect()->route('zone.index')->with('success', 'Record added successfully.');
     }
 
-   
     public function destroy($id)
     {
         $product = Zone::findOrFail($id);
@@ -110,15 +109,48 @@ class ZoneController extends Controller
         join('states','states.id','regions.region_id')
         ->select('regions.id','states.name as name')->get();
         return response()->json([
-            'html' => view('admin.distributor.zone_edit', compact('zone','states','regions','countries'))->render()
+            'html' => view('admin.warehouse.zone_edit', compact('zone','states','regions','countries'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
-
     }
 
     public function update(Request $request, $id)
     {
         $product = Zone::find($id)->update($request->except('_token'));
-        return redirect()->route('distributor.index')->with('success', 'Record updated successfully.');
+        return redirect()->route('warehouse.index')->with('success', 'Record updated successfully.');
+    }
+
+    public function sheduleZone(Request $request)
+    {
+        $shedule=DB::table('delivery_schedule_zones')->where('zone_id',$request->id)->get(); 
+        $id= $shedule->pluck('id');
+        $days=$shedule->pluck('day_id','day_id');
+        $zone=$request->id;
+
+        return response()->json([
+            'html' => view('admin.warehouse.shedule', compact('zone','id','days'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);
+    }
+
+    public function sheduleChange(Request $request)
+    {
+        $shedule=DB::table('delivery_schedule_zones')->where(['zone_id'=>$request->zone_id,'day_id'=>$request->day_id])->first();
+      
+        if(!empty($shedule))
+        {
+            DB::table('delivery_schedule_zones')->delete($shedule->id);
+        }
+        else
+        {
+            $shedule=DB::table('delivery_schedule_zones')->insert(['day_id'=>$request->day_id,'status'=>1,'zone_id'=>$request->zone_id]); 
+        }
+       
+      
+        return response()->json(array(
+            'data' => $request->id,
+            'message' => 'Zone Sheduled updated Successfully',
+            'status' => 'success',
+        ));
     }
 }

@@ -104,39 +104,7 @@ class ProductController extends Controller
         $groups = GroupCustomer::all();
         return view('admin.products.create',compact('groups'));
     }
-
-
-    public function sheduleZone(Request $request)
-    {
-        $shedule=DB::table('delivery_schedule_zones')->where('zone_id',$request->id)->get(); 
-        $id= $shedule->pluck('id');
-        $days=$shedule->pluck('day_id');
-        $zone=$request->id;
-        // return view('admin.customer.shedule', compact('shedule'));
-        return response()->json([
-            'html' => view('admin.customer.shedule', compact('zone','id','days'))->render()
-            ,200, ['Content-Type' => 'application/json']
-        ]);
-    }
-
-    public function sheduleChange(Request $request)
-    {
-        $shedule=DB::table('delivery_schedule_zones')->where(['zone_id'=>$request->zone_id,'day_id'=>$request->day_id])->first();
-      
-        if(!empty($shedule))
-        {
-            DB::table('delivery_schedule_zones')->delete($shedule->id);
-        }
-        else
-        $shedule=DB::table('delivery_schedule_zones')->insert(['day_id'=>$request->day_id,'status'=>1,'zone_id'=>$request->zone_id]); 
-      
-        return response()->json(array(
-            'data' => $request->id,
-            'message' => 'Zone Sheduled updated Successfully',
-            'status' => 'success',
-        ));
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
