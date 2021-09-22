@@ -147,6 +147,14 @@
     @include('admin.layouts.include._notifications')
 
     @yield('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(document).on('input',function() {
+                $('.price').mask("#,##0.00", {reverse: true});
+            });
+        });
+    </script>
 </body>
 
 </html>
