@@ -378,7 +378,7 @@
                 $.ajax({
                     method: "POST",
                     data: formData,
-                    url: '{{route('customer-detail.store')}}',
+                    url: "{{route('customer-detail.store')}}",
                     processData: false,
                     contentType: false,
                     cache: false,
@@ -402,17 +402,16 @@
             //Update Form Function
             $("#customer-detail-info-form-update").on("submit", function(event){
                 event.preventDefault();
-                let id = $('#update').attr('data-id');
                 $.ajaxSetup({
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
                     }
                 });
                 var formData = new FormData(this);
                 $.ajax({
                     type: "POST",
                     data: formData,
-                    url: 'home/customer-detail/'+id,
+                    url: "{{route('customer-detail.update',$customer->id)}}",
                     processData: false,
                     contentType: false,
                     cache: false,
@@ -430,8 +429,7 @@
                             });
                         }
                     },
-                }); 
-                
+                });   
             });
             // Product Selection
             $('body').on('change','.weekly_standing_order .week_days td input', function(){
