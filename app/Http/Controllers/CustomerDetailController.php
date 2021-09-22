@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CustomerDetailRequest;
 use App\Repositories\CustomerDetailRepository;
 use App\Models\CustomerDetail;
+use App\Models\Country;
 use Auth;
 
 class CustomerDetailController extends Controller
@@ -39,7 +40,12 @@ class CustomerDetailController extends Controller
     {
         //
     }
-
+       public function getCities()
+       {
+          $cities= Country::where('name','like','%' . request()->city . '%')->get();
+           return response()->json([
+            'html' => view('customer.cities',compact('cities'))->render() ]);
+       }
     /**
      * Store a newly created resource in storage.
      *
