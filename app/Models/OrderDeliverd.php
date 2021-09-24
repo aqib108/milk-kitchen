@@ -10,10 +10,7 @@ class OrderDeliverd extends Model
 {
     use HasFactory;
     protected $fillable =[
-        'user_id',
         'product_order_id',
-        'product_id',
-        'day_id',
         'quantity',
     ];
 

@@ -24,4 +24,8 @@ class WeekDay extends Model
     {
         return $this->hasMany(ProductOrder::class,'day_id','id');
     }
+    public function orderDeliverd()
+    {
+        return $this->hasMany(OrderDeliverd::class,'product_order_id','id');
+    }
 }
