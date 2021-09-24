@@ -165,23 +165,29 @@
                                 </thead>
                                 <tbody class="week-container-tbl"> 
                                     @foreach ($products as $product)
-                                        <tr class="week_days" data-p-id="{{$product->id}}">
-                                            <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                                            @php $totalCtn=0; @endphp
+                                        <tr class="week_days_1" data-p-id="{{$product->id}}">
                                             @foreach ($weekDays as $item)
                                                 @if($item->productOrder->isNotEmpty())
-                                                    @foreach($item->productOrder as $order)
-                                                        @if($order->product_id == $product->id)
-                                                            @php $totalCtn += $order->quantity; @endphp                                                       
-                                                        @endif
-                                                    @endforeach
-                                                @endif 
+                                                    @if ($item->id == $orderDetail->day_id)
+                                                        @foreach ($item->productOrder as $order)
+                                                            @if($order->product_id == $product->id)
+                                                                <th class="table-td-wrapper" scope="row" style="width: 175px; text-align:center;">{{$product->name}}</th>
+                                                                <td>
+                                                                    <div class="quantity">
+                                                                        {{$order->quantity}} 
+                                                                    </div>
+                                                                    
+                                                                    <input type="hidden"  name="totalCtn[]" value="{{$order->quantity}}">
+                                                                </td>
+                                                                
+                                                                
+                                                                
+                                                 
+                                                            @endif
+                                                        @endforeach
+                                                    @endif 
+                                                @endif
                                             @endforeach
-                                            <td>
-                                                {{ $totalCtn }}
-                                                <input type="hidden" class="t_ctn" name="totalCtn[]" value="{{$totalCtn}}">
-                                            </td>
-                                            
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -205,7 +211,7 @@
                     </div>
                     <div class="col-lg-4">
                         
-                        {!! QrCode::size(150)->merge('http://milkkitchen.leadconcept.info/login', 0.3, true)->errorCorrection('H')->generate('milkkitchen.leadconcept.info/login') !!}
+                        {!! QrCode::size(150)->merge('https://milkkitchen.leadconcept.info/login', 0.3, true)->errorCorrection('H')->generate('milkkitchen.leadconcept.info/login') !!}
                     </div>
                 </div>
                 <section>
