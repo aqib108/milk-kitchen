@@ -9,10 +9,13 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-12" >
-                    <div style="text-align: center;">
-                        <h4 ><b>STATEMENT</b></h4>
-                    </div>
+                <div class="heading" style="text-align: center; margin-left: 440px;">
+                    <h4 ><b>STATEMENT</b></h4>  
+                </div>
+                <div class="downad" style="margin-left: 420px; font-size: 20px;">
+                    <a href="{{route('customer.statementPdf',$orderDetail->id)}}">
+                        <i class="fas fa-download" aria-hidden="true"></i>
+                    </a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -173,8 +176,8 @@
                                         @foreach ($weekDays as $item)
                                             @php
                                                 $qnty = 0;
-                                                if ($item->orderDelivered->isNotEmpty()){
-                                                    foreach ($item->orderDelivered as $order){
+                                                if ($item->productOrder->isNotEmpty()){
+                                                    foreach ($item->productOrder as $order){
                                                         if($order->product_id == $product->id){
                                                             $qnty = $order->quantity;
                                                         }
@@ -188,8 +191,8 @@
                                         <td>
                                             @php $total=0; @endphp
                                             @foreach ($weekDays as $item)
-                                                @if ($item->orderDelivered->isNotEmpty())
-                                                    @foreach ($item->orderDelivered as $order)
+                                                @if ($item->productOrder->isNotEmpty())
+                                                    @foreach ($item->productOrder as $order)
                                                         @if($order->product_id == $product->id)
                                                             @php $total += $order->quantity; @endphp                                                       
                                                         @endif

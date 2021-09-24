@@ -1,8 +1,8 @@
 @extends('admin.layouts.admin')
 @section('title', 'List Of Customer')
 @section('styles')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('customer-panel/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin-panel/customer-view/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin-panel/customer-view/css/font-awesome.min.css') }}" />
 @endsection
 @section('content')
 
@@ -169,8 +169,8 @@
                                             <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
                                             @php $totalCtn=0; @endphp
                                             @foreach ($weekDays as $item)
-                                                @if($item->orderDelivered->isNotEmpty())
-                                                    @foreach($item->orderDelivered as $order)
+                                                @if($item->productOrder->isNotEmpty())
+                                                    @foreach($item->productOrder as $order)
                                                         @if($order->product_id == $product->id)
                                                             @php $totalCtn += $order->quantity; @endphp                                                       
                                                         @endif
@@ -204,87 +204,95 @@
                         <hr>
                     </div>
                     <div class="col-lg-4">
-                        <img src="{{ asset('images/barcode.jpg')}}" width="200" alt="">
+                        
+                        {!! QrCode::size(150)->merge('http://milkkitchen.leadconcept.info/login', 0.3, true)->errorCorrection('H')->generate('http://milkkitchen.leadconcept.info/login') !!}
                     </div>
-                    <div class="col-lg-12">
-                        <h2 class="heading-tbl">Edit Delivery</h2>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="table-responsive">
-                            <table class="table table-bordered mb-0 weekly_standing_order">
-                                <thead>
-                                    <tr>
-                                        <th class="table-th-wrapper" scope="col">Product</th>
-                                        <th class="table-th-wrapper" scope="col">
-                                            @foreach ($weekDays as $item)
-                                                @if($item->orderDelivered->isNotEmpty())
-                                                    @foreach($item->orderDelivered as $order)
-                                                        @if($item->id == $order->day_id)
-                                                            {{$item->name}}@break;
+                </div>
+                <section>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2 class="heading-tbl">Edit Delivery</h2>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0 weekly_standing_order">
+                                        <thead>
+                                            <tr>
+                                                <th class="table-th-wrapper" scope="col">Product</th>
+                                                <th class="table-th-wrapper" scope="col">
+                                                    @foreach ($weekDays as $item)
+                                                        @if($item->productOrder->isNotEmpty())
+                                                            @if($item->id == $orderDetail->day_id)
+                                                                {{$item->name}}
+                                                            @endif 
                                                         @endif 
                                                     @endforeach
-                                                @endif 
-                                            @endforeach
-                                        </th>
-                                        <th class="table-th-wrapper" scope="col">Actually received
-                                        </th>
-                                        <th class="table-th-wrapper" scope="col">Reason</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="week-container-tbl" style="text-align: center;"> 
-                                    @foreach ($products as $product)
-                                        <tr class="week_days_1" data-p-id="{{$product->id}}">
-                                            <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                                            @php $totalCtn=0; @endphp
-                                            @foreach ($weekDays as $item)
-                                                @if($item->orderDelivered->isNotEmpty())
-                                                    @foreach($item->orderDelivered as $order)
-                                                        @if($order->product_id == $product->id)
-                                                            @php $totalCtn += $order->quantity; @endphp                                                       
+                                                </th>
+                                                <th class="table-th-wrapper" scope="col">Actually received
+                                                </th>
+                                                <th class="table-th-wrapper" scope="col">Reason</th>
+                                              
+                                            </tr>
+        
+                                        </thead>
+        
+                                        <tbody class="week-container-tbl" style="text-align: center;"> 
+                                            
+                                            @foreach ($products as $product)
+                                                <tr class="week_days_1" data-p-id="{{$product->id}}">
+                                                    @foreach ($weekDays as $item)
+                                                        @if($item->productOrder->isNotEmpty())
+                                                            @if ($item->id == $orderDetail->day_id)
+                                                                @foreach ($item->productOrder as $order)
+                                                                    @if($order->product_id == $product->id)
+                                                                        <th class="table-td-wrapper" scope="row">{{$product->name}}</th>
+                                                                        <td>
+                                                                            <div class="quantity">
+                                                                                {{$order->quantity}} 
+                                                                            </div>
+                                                                           
+                                                                            <input type="hidden"  class="t_ctn" value="{{$order->quantity}}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="{{ $item->name }}"  data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                                            text-align: center;" value="{{ $order->quantity }}" minlength="0">
+                                                                        </td> 
+                                                                        
+                                                                        
+                                                                       
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif 
                                                         @endif
                                                     @endforeach
-                                                @endif 
+                                                    @if($loop->first)
+                                                        <td rowspan="15">
+                                                            <div class="form-group">
+                                                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                            </div>
+                                                        </td>
+                                                    @endif
+                                                </tr>
                                             @endforeach
-                                            <td>
-                                                {{ $totalCtn }}
-                                                <input type="hidden" class="t_ctn" value="{{$totalCtn}}">
-                                            </td>
-                                            @foreach ($weekDays as $item)
-                                                @if($item->orderDelivered->isNotEmpty())
-                                                    @foreach($item->orderDelivered as $order)
-                                                        @if($item->id == $order->day_id)
-                                                            <td>
-                                                                <input id="{{ $item->name }}" class="form-control" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                text-align: center;" value="{{ $totalCtn }}" minlength="0"> @break;
-                                                            </td>
-                                                        @endif 
-                                                    @endforeach
-                                                @endif
-                                                @if($item->orderDelivered->isNotEmpty())
-                                                    @foreach($item->orderDelivered as $order)
-                                                        @if($item->id == $order->day_id)
-                                                            <td><textarea  id="{{ $item->name }}" name="reason_qty" type="text" class="form-control"></textarea></td>@break;
-                                                        @endif 
-                                                    @endforeach
-                                                @endif
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <h2 class="heading-tbl">Edit History</h2>
-                    </div>
-                    <div class="col-lg-12">
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>28-sep</td>
-                                <td>Reason notes are display here</td>
-                            </tr>
-                        </table>
-                    </div>
+                </section>
+                <div class="col-lg-12">
+                    <h2 class="heading-tbl">Edit History</h2>
+                </div>
+                <div class="col-lg-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>28-sep</td>
+                            <td>Reason notes are display here</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
                 <!-- /.col -->
@@ -296,8 +304,7 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="{{ asset('customer-panel/js/index.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             var total = 0;
@@ -307,7 +314,6 @@
                 }
             });
             total_ctns = total;
-            console.log(total_ctns);
             $('#total_ctns').append(total_ctns);
             $.ajaxSetup({
                 headers: {
@@ -338,7 +344,7 @@
                         },
                         url: "{{route('customer.edit-delivery-orders',$customerID)}}",
                         success: function (response) {
-                            if(response.status)
+                            if(response.status == true)
                             {
                                 Swal.fire({
                                     position: 'top-end',

@@ -49,4 +49,11 @@ class Product extends Model
     {
         return $this->hasMany(OrderDeliverd::class,'product_id','id');
     }
+
+    public function productOrder()
+    {
+        return $this->hasMany(ProductOrder::class,'day_id','id');
+    }
+
+
 }

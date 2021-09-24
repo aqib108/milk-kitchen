@@ -19,8 +19,8 @@
                     @foreach ($weekDays as $item)
                         @php
                             $qnty = 0;
-                            if ($item->orderDelivered->isNotEmpty()){
-                                foreach ($item->orderDelivered as $order){
+                            if ($item->productOrder->isNotEmpty()){
+                                foreach ($item->productOrder as $order){
                                     if($order->product_id == $product->id){
                                         $qnty = $order->quantity;
                                     }
@@ -42,18 +42,21 @@
             <tr>
                 <td style="width: 146px;"></td>
                 @foreach ($weekDays as $item)
-                   
-                     
-                    <td>
-                        @php
-                        $userID = 0;
-                        if ($item->orderDelivered->isNotEmpty()){
-                            foreach ($item->orderDelivered as $order){
-                                $userID = $order->user_id;
+                    @php
+                        $id = 0;
+                        if ($item->productOrder->isNotEmpty()){
+                            foreach ($item->productOrder as $order){
+                                if($order->day_id == $item->id){
+                                    $id = $order->id;
+                                }
                             }
                         }
                     @endphp
-                    <a href="{{route('customer.final-report',$userID)}}">view</a></td>
+                    <td>
+                        <a href="{{route('customer.final-report',$id)}}">view</a>
+
+                    </td>
+                   
                 @endforeach 
             </tr>
         </tbody>
