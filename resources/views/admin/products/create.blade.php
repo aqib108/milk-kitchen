@@ -33,7 +33,7 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('product.store') }}" method="POST" onsubmit="return validateForm()" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">
@@ -90,8 +90,7 @@
                                     <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>New<span class="required-star">*</span></label>
                                         <select name="new" class="form-control @error('new') is-invalid @enderror" id="">
-                                            <option selected disabled>Select....</option>
-                                            <option value="1">Yes</option>
+                                            <option value="1" selected>Yes</option>
                                             <option value="0">No</option>
                                         </select>
                                         @error('new')
@@ -115,8 +114,7 @@
                                         <label>Active<span class="required-star">*</span></label>
                                         <select name="active" class="form-control @error('active') is-invalid @enderror"
                                             id="">
-                                            <option selected disabled>Select....</option>
-                                            <option value="1">Yes</option>
+                                            <option value="1" selected>Yes</option>
                                             <option value="0">No</option>
                                         </select>
                                         @error('active')
@@ -128,7 +126,7 @@
                                     <div class="form-group col-md-12 col-sm-6">
                                         <label>Descriptions <span class="required-star">*</span></label>
                                         <textarea name="description" id="description" cols="15" rows="2"
-                                            class="form-control text-area">{{ old('description') }}</textarea>
+                                            class="form-control text-area" required>{{ old('description') }}</textarea>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <table class="table table-sm table-bordered">
@@ -147,12 +145,12 @@
                                                                 name="group_id[]">
                                                             <input type="text" maxlength="100" class="form-control price ctnPrice" name="ctn_price[]"
                                                                 id="ctnPrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Ctn Price"
-                                                                value="{{ old('ctn_price[]') }}">
+                                                                value="{{ old('ctn_price[]') }}" required>
                                                         </td>
                                                         <td>
                                                             <input type="text" maxlength="100" class="form-control price bottlePrice" name="bottle_price[]"
                                                                 id="bottlePrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Bottle Price"
-                                                                value="{{ old('bottle_price[]') }}">
+                                                                value="{{ old('bottle_price[]') }}" required>
                                                         </td>
                                                         <td class="text-center"><input type="checkbox" class="form-control"
                                                             value="1" name="saleable[]" data-size="xs" data-toggle="toggle">
@@ -173,7 +171,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary" >Save</button>
                             </div>
                         </form>
                     </div>
@@ -193,6 +191,26 @@
 @endsection
 @section('scripts')
     <script>
+   
+       var validateForm = function(event){
+        var groups=<?php echo $groups->count(); ?> 
+        
+           if(groups == 0)
+           {
+            Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 4000,
+                                            icon: 'error',
+                                            title: 'First Create Customer Groups',
+                                        });
+                                        return false;
+           }
+           else
+           return true;
+              
+};
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
