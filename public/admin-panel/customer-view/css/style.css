@@ -495,3 +495,11 @@ border-right: none !important;
   font-size: 22px;
 }
 }
+.tbl-left-box{
+  float: left;
+  width: 50%;
+}
+.tbl-right-box{
+  float: right;
+  width: 50%;
+}

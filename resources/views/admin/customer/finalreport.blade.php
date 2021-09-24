@@ -221,8 +221,8 @@
                                 <h2 class="heading-tbl">Edit Delivery</h2>
                             </div>
                             <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered mb-0 weekly_standing_order">
+                                <div>
+                                    <table class="table table-bordered mb-0 weekly_standing_order tbl-left-box">
                                         <thead>
                                             <tr>
                                                 <th class="table-th-wrapper" scope="col">Product</th>
@@ -237,14 +237,13 @@
                                                 </th>
                                                 <th class="table-th-wrapper" scope="col">Actually received
                                                 </th>
-                                                <th class="table-th-wrapper" scope="col">Reason</th>
+                                               
                                               
                                             </tr>
         
                                         </thead>
         
                                         <tbody class="week-container-tbl" style="text-align: center;"> 
-                                            
                                             @foreach ($products as $product)
                                                 <tr class="week_days_1" data-p-id="{{$product->id}}">
                                                     @foreach ($weekDays as $item)
@@ -252,7 +251,7 @@
                                                             @if ($item->id == $orderDetail->day_id)
                                                                 @foreach ($item->productOrder as $order)
                                                                     @if($order->product_id == $product->id)
-                                                                        <th class="table-td-wrapper" scope="row">{{$product->name}}</th>
+                                                                        <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
                                                                         <td>
                                                                             <div class="quantity">
                                                                                 {{$order->quantity}} 
@@ -272,16 +271,26 @@
                                                             @endif 
                                                         @endif
                                                     @endforeach
-                                                    @if($loop->first)
-                                                        <td rowspan="15">
-                                                            <div class="form-group">
-                                                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                                            </div>
-                                                        </td>
-                                                    @endif
+                                                   
                                                 </tr>
                                             @endforeach
                                            
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered mb-0 tbl-right-box">
+                                        <thead>
+                                            <tr>
+                                                <th class="table-th-wrapper" scope="col">Reason</th>
+                                            </tr>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
