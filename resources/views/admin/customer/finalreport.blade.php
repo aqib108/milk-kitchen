@@ -211,7 +211,7 @@
                     </div>
                     <div class="col-lg-4">
                         
-                        {!! QrCode::size(150)->merge('https://milkkitchen.leadconcept.info/login', 0.3, true)->errorCorrection('H')->generate('milkkitchen.leadconcept.info/login') !!}
+                        {!! QrCode::size(150)->merge('https://leadconcept.com/', 0.3, true)->errorCorrection('H')->generate('milkkitchen.leadconcept.info/login') !!}
                     </div>
                 </div>
                 <section>
