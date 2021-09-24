@@ -123,7 +123,7 @@ class CustomerController extends Controller
 
     public function pastOrder($id)
     {
-        $orders = OrderDeliverd::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
+        $orders = ProductOrder::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
             return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
         });
         return view('admin.customer.past-order',compact('orders'));
@@ -131,18 +131,19 @@ class CustomerController extends Controller
 
     public function pastOrderStatement($id)
     {
-        $orderDetail = OrderDeliverd::find($id);
+
+        $orderDetail = ProductOrder::find($id);
         $customerID = $orderDetail->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
         $products = Product::orderBy('id','DESC')->where('status',1)->get();
-        $weekDays = WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+        $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                         $q->userDetail($orderDetail->user_id);
-                    }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                    }])->with(['productOrder' => function($q) use ($orderDetail) {
                         $q->weekDetail($orderDetail);
                     }])->get();
         // dd($weekDays);
 
-       return view('admin.customer.past-order.statement',compact('customer','products','weekDays'));
+       return view('admin.customer.past-order.statement',compact('orderDetail','customer','products','weekDays'));
     }
 
     //Create Customer page
@@ -285,22 +286,24 @@ class CustomerController extends Controller
     }
 
     public function finalreport($id)
+    
     {
         if($id == 0){
             return redirect()->back()->with('success','No Record Found To This Delivery!.');
         }else{
-            $orderDetail = OrderDeliverd::find($id);
+            $orderDetail = ProductOrder::find($id);
             $customerID = $orderDetail->user_id;
             $customer = CustomerDetail::where('user_id',$customerID)->get();
             $products = Product::orderBy('id','DESC')->where('status',1)->get();
             $weekDays = 
-                WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+                WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                     $q->userDetail($customerID);
-                }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                }])->with(['productOrder' => function($q) use ($orderDetail) {
                     $q->weekDetail($orderDetail);
                 }])->get();
+                // dd($weekDays);
 
-            return view('admin.customer.finalreport',compact('customerID','customer','products','weekDays'));
+            return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays'));
         }
        
     }
@@ -308,7 +311,7 @@ class CustomerController extends Controller
     {
         $userID = $id;
         $order = ProductOrder::where('day_id',$request->day_id)->where('user_id',$userID)->get();
-        // dd($order[0]->id);
+        dd($order[0]->id);
         $validate = $request->validate([
             'day_id' => 'required',
             'product_id' => 'required',
@@ -316,9 +319,9 @@ class CustomerController extends Controller
         ]);
         
         if($validate){
-            $data = OrderDeliverd::updateOrCreate([
+            $data = ProductOrder::updateOrCreate([
                 'user_id' => $userID,
-                'product_order_id' => $order[0]->id,
+                'id' => $order[0]->id,
                 'product_id' => $request->product_id,
                 'day_id'     => $request->day_id],[
                 'quantity' => $request->qnty,
@@ -335,5 +338,22 @@ class CustomerController extends Controller
                 'message' => 'Something went wrong, Please try again!',
             ],401);
         }
+    }
+
+    public function statementPrint($id)
+    {
+        ini_set('max_execution_time', 300); //300 seconds = 5 minutes 
+        $order = ProductOrder::find($id);
+        $customerID = $order->user_id;
+        $customer = CustomerDetail::where('user_id',$customerID)->get();
+        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $weekDays = WeekDay::with(['productOrder' => function($q) use ($order){
+                        $q->userDetail($order->user_id);
+                    }])->with(['productOrder' => function($q) use ($order) {
+                        $q->weekDetail($order);
+                    }])->get();
+        $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
+        $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true, 'isPhpEnabled'=>true,'isRemoteEnabled' => TRUE,])->loadView('admin.customer.pdfReport',['weekDays' => $weekDays,'products' => $products,'customer' => $customer,'image' => $image,'order'=>$order])->setPaper('a4', 'porttrait');
+        return $pdf->stream();
     }
 }

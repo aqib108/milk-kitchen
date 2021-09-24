@@ -1,39 +1,54 @@
-@extends('admin.layouts.admin')
-@section('title', 'List Of Customer')
-@section('styles')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('customer-panel/css/style.css') }}" />
-@endsection
-@section('content')
-
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>FOOD SERVICE PORTAL</h1>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Statement Pdf</title>
+    <link href="http://localhost/milk-kitchen/public/pdf.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://localhost/milk-kitchen/public/admin-panel/customer-view/css/font-awesome.min.css" />
+    
+</head>
+<body>
+    <section style="background-color: #757170; padding: 6px 0; height: 50px !important;">
+        <div class="">
+            <div class="flex-wraper" style="display:flex; ">
+                <div>
+                    <img src="data:image/png;base64,{{ $image }}" style="width: 200px; height:50px;" class="img-fluid" alt="">
                 </div>
-                <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('customer.customer-report') }}" class="btn btn-dark">Back</a>
-                        </li>
-                    </ol>
+                <div>
+                    <h2 class="heading-one-banner" style=" margin: 0px; margin-top: 16px; font-size: 20px; color: #ffffff;
+                    font-weight: 700;
+                    font-family: 'Roboto-Medium';
+                    text-align: center;
+                    text-transform: uppercase;
+                    ">FOOD SERVICE PORTAL</h2>
                 </div>
+                
             </div>
-        </div><!-- /.container-fluid -->
-    </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
+
+        </div>
+    </section>
+    <section  style="padding:0px !important;">
+        <div class="container">
             <div>
                 <div class="text-center">
-                    <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
+                    <h2 style=" font-size: 22px;
+                    color: #010101;
+                    padding: 10px 0;
+                    margin: 0px;    
+                    font-weight: 700;
+                    font-family: 'Roboto-Bold';
+                    text-align: center;">INVOICE / STATEMENT</h2>
                 </div>
-                <div class="___class_+?10___">
+                <div>
                     <div class="form-container pt-4">
                         <div class="row">
-                            <div class="col-lg-6 border-riht-clr">
+                            <div class="main-container border-riht-clr">
                                 <div>
                                     <h2 class="heading-inner-top">
                                         @isset($customer[0]->business_name)
@@ -41,234 +56,234 @@
                                         @endisset
                                     </h2>
                                 </div>
-                                <form class="custom-form">
+                                <div>
                                     <div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Address 1</p>
-                                            <span>@isset($customer[0]->business_address_1){{ $customer[0]->business_address_1 }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Address 2 </p>
-                                            <span>@isset($customer[0]->business_address_2){{ $customer[0]->business_address_2 }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Suburb</p>
-                                            <span>@isset($customer[0]->bcountry->name){{ $customer[0]->bcountry->name }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">City</p>
-                                            <span>@isset($customer[0]->bcity->name){{ $customer[0]->bcity->name }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Region</p>
-                                            <span>@isset($customer[0]->bstate->name){{ $customer[0]->bstate->name }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Phone</p>
-                                            <span>@isset($customer[0]->business_phone_no){{ $customer[0]->business_phone_no }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Email</p>
-                                            <span>@isset($customer[0]->business_email){{ $customer[0]->business_email }}@endisset</span>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">Contact</p>
-                                            <span>@isset($customer[0]->business_contact_no){{ $customer[0]->business_contact_no }}@endisset</span>
-                                        </div>
+                                        <p class="label-wrapper-custm">
+                                            Address 1:  <span>@isset($customer[0]->business_address_1){{ $customer[0]->business_address_1 }}@endisset</span>
+                                        </p>
                                     </div>
-                                </form>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Address 2: <span>@isset($customer[0]->business_address_2){{ $customer[0]->business_address_2 }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Suburb: <span>@isset($customer[0]->bcountry->name){{ $customer[0]->bcountry->name }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            City: <span>@isset($customer[0]->bcity->name){{ $customer[0]->bcity->name }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Region: <span>@isset($customer[0]->bstate->name){{ $customer[0]->bstate->name }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Phone No: <span>@isset($customer[0]->business_phone_no){{ $customer[0]->business_phone_no }}@endisset</span>  
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Email: <span>@isset($customer[0]->business_email){{ $customer[0]->business_email }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Contact No: <span>@isset($customer[0]->business_contact_no){{ $customer[0]->business_contact_no }}@endisset</span>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="main-container" style="padding-left: 10px !important;">
                                 <div>
                                     <h2 class="heading-inner-top">
                                         @isset($customer[0]->delivery_name){{ $customer[0]->delivery_name }}@endisset
                                         </h2>
                                     </div>
-                                    <form class="custom-form">
+                                    <div>
                                         <div>
-                                            <div>
-                                                <p class="label-wrapper-custm">Address 1</p>
-                                                <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm">Address 2 </p>
-                                                <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm">Suburb</p>
-                                                <span>@isset($customer[0]->dcountry->name){{ $customer[0]->dcountry->name }}@endisset</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm">City</p>
-                                                <span>@isset($customer[0]->dcity->name){{ $customer[0]->dcity->name }}@endisset</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm">Region</p>
-                                                <span>@isset($customer[0]->dstate->name){{ $customer[0]->dstate->name }}@endisset</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm">GST Number:</p>
-                                                <span>33030400923</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm">Invoice Number</p>
-                                                <span>33030400923</span>
-                                            </div>
-                                            <div>
-                                                <p class="label-wrapper-custm"> Period Covered</p>
-                                                <span>-------------</span>
-                                            </div>
+                                            <p class="label-wrapper-custm">
+                                                Address 1:  <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
+                                            </p>
                                         </div>
-                                    </form>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Address 2: <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Suburb: <span>@isset($customer[0]->dcountry->name){{ $customer[0]->dcountry->name }}@endisset</span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                City:  <span>@isset($customer[0]->dcity->name){{ $customer[0]->dcity->name }}@endisset</span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Region: <span>@isset($customer[0]->dstate->name){{ $customer[0]->dstate->name }}@endisset</span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                GST Number: <span>33030400923</span>
+                                            </p>
+                                            
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Invoice Number: <span>33030400923</span>
+                                            </p>
+                                            
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Period Covered:  <span>-------------</span>
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mb-40-wrapper">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label for="" class="label-wrapper-custm">Delivery Notes</label>
-                                        <div class="box1">
+                                        <label for="" class="label-wrapper-custm">Delivery Notes:</label>
+                                        <div class="box1" style="padding:10px;">
+                                            <span>@isset($customer[0]->delivery_notes){{ $customer[0]->delivery_notes }}@endisset</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <h2 class="heading-tbl">Related Deliveries</h2>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="table-th-wrapper" scope="col"></th>
-                                    <th class="table-th-wrapper" scope="col">Monday</th>
-                                    <th class="table-th-wrapper" scope="col">Tuesday</th>
-                                    <th class="table-th-wrapper" scope="col">Wednesday</th>
-                                    <th class="table-th-wrapper" scope="col">Thursday</th>
-                                    <th class="table-th-wrapper" scope="col">Friday</th>
-                                    <th class="table-th-wrapper" scope="col">Saturday</th>
-                                    <th class="table-th-wrapper" scope="col">Sunday</th>
-                                    <th class="table-th-wrapper" scope="col">Total Ctns</th>
-                                    <th class="table-th-wrapper" scope="col">Price</th>
-                                    <th class="table-th-wrapper" scope="col">Discount</th>
-                                    <th class="table-th-wrapper" scope="col">Extention</th>
-                                </tr>
-                            </thead>
-                            <tbody class="week-container-tbl">
-                                @foreach ($products as $pro)
-                                    <tr class="week_days" data-p-id="{{ $pro->id }}">
-                                        <td class="table-td-wrapper" scope="row">{{ $pro->name }}</td>
-                                        @foreach ($weekDays as $item)
-                                            @php
-                                                $qnty = 0;
-                                                if ($item != null) {
-                                                    foreach ($item->WeekDay as $order) {
-                                                        if ($order->product_id == $pro->id) {
-                                                            $qnty = $order->quantity;
-                                                        }
-                                                    }
-                                                }
-                                            @endphp
-                                            <td>
-                                                @if($qnty == 0){{ '' }}@else{{ $qnty }}@endif
-                                            </td>
-                                        @endforeach
-                                        <td>
-                                            @php $total=0; @endphp
-                                            @foreach ($orders as $item)
-                                                @if ($pro->id == $item->product_id)
-                                                    @php $total += $item->quantity; @endphp
-                                                @endif
-                                            @endforeach
-                                            {{ $total }}
-                                        </td>
-                                        <td>
-                                            @php $price=0; @endphp
-                                            @foreach ($orders as $item)
-                                                @if ($pro->id == $item->product_id)
-                                                    @php $price = $total * $item->product->price @endphp
-                                                @break
-                                                @endif
-                                            @endforeach
-                                            {{ '$' . $item->product->price }}
-                                            <input type="hidden" value="{{ $price }}" class="price">
-                                        </td>
-                                        <td>
-                                            {{ '$' . ($item->product->price / 100) * 10 }}
-                                            <input type="hidden" value="{{ ($price / 100) * 10 }}"
-                                                class="discount">
-                                        </td>
-                                        <td>
-                                           {{ '$' . ($price-((($item->product->price / 100) * 10) * $total)) }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">Sub Total</td>
-                                    <td class="text-right-wrapper">
-                                        <input style="border:none;background:none;" class="text-center subtotal"
-                                            disabled="disabled" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">Freight</td>
-                                    <td class="text-right-wrapper">$ -</td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">GST 15%</td>
-                                    <td class="text-right-wrapper gst">
-                                        <input style="border:none;background:none;" class="text-center gst"
-                                            disabled="disabled" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper grand-total"> Total</td>
-                                    <td class="text-right-wrapper grand-total-value">
-                                        <input style="border:none;background:none;" class="text-center totalprice"
-                                            disabled="disabled" readonly>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    </div>                         
                 </div>
             </div>
-                <!-- /.col -->
-            <br>
+            <div>
+                <div>
+                    <h2 class="heading-tbl">Related Deliveries</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0 w-100" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Product Name</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Monday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Tuesday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Wednesday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Thursday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Friday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Saturday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Sunday</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Total Ctns</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Price</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Discount</th>
+                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Extention</th>
+                            </tr>
+                        </thead>
+                        <tbody class="week-container-tbl">
+                            @php
+                                $subtotal=0;
+                            @endphp
+                            @foreach ($products as $product)
+                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                    <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
+                                    @php $total=0;  @endphp
+                                    @foreach ($weekDays as $item)
+                                        @php $qnty=0; $price=$product->price; $discount=($price/ 100) * 10;@endphp
+                                        @if($item->productOrder->isNotEmpty())
+                                            @foreach ($item->productOrder as $order)
+                                                @if($order->product_id == $product->id)
+                                                    @php
+                                                        $total += $order->quantity;
+                                                        $qnty = $order->quantity;
+                                                        $extention = ($price  - (($price / 100) * 10)) * $total;
+                                                    @endphp 
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        <td>
+                                            {{$qnty}}
+                                        </td>
+                                    @endforeach 
+                                    <td>
+                                        {{$total}}
+                                    </td>
+                                    <td>
+                                        {{ '$' . $price }}
+                                    </td>
+                                    <td>
+                                        {{ '$' . $discount }}
+                                    </td>
+                                    <td>
+                                        {{ '$' . $extention}}
+                                        @php $subtotal +=$extention @endphp
+                                    </td>
+                                </tr> 
+                            @endforeach
+                            <tr>
+                                <td class="custom-colspan" colspan="8"></td>
+                                <td colspan="3" class="text-left-wrapper">Sub Total</td>
+                                <td class="text-right-wrapper">
+                                    {{$subtotal}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="custom-colspan" colspan="8"></td>
+                                <td colspan="3" class="text-left-wrapper">Freight</td>
+                                <td class="text-right-wrapper">$ -</td>
+                            </tr>
+                            <tr>
+                                <td class="custom-colspan" colspan="8"></td>
+                                <td colspan="3" class="text-left-wrapper">GST 15%</td>
+                                <td class="text-right-wrapper gst">
+                                    {{ ($subtotal * 15) /100 }}
+                                    @php
+                                        $gst = ($subtotal * 15) /100;
+                                    @endphp
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="custom-colspan" colspan="8"></td>
+                                <td colspan="3" class="text-left-wrapper grand-total"> Total</td>
+                                <td class="text-right-wrapper grand-total-value">
+                                    {{$subtotal+$gst}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <!-- /.container-fluid -->
+        <br>
     </section>
-    <!-- /.content -->
-@endsection
-
-@section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="{{ asset('customer-panel/js/index.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-
-            var sum = 0,dis = 0;
-
-            $(".price").each(function() {
-                sum += +$(this).val();
-            });
-            $(".discount").each(function() {
-                dis += +$(this).val();
-            });
-            
-            var subtotal = sum - dis;
-            var gst = (subtotal * 15) /100;
-            var total =parseFloat(subtotal)+parseFloat(gst);
-
-            $('.subtotal').val('$' + subtotal);
-            $('.gst').val('$' + gst);
-            $('.totalprice').val('$' + total);
-        });
-    </script>
-@endsection
+    <table style=" background-color: #757170;  padding:0; height:40px; width:100%;">
+        <tr>
+            <td>
+                <div style="padding:5px;">
+                    <p class="m-0" style="font-size: 12px;  color: #ffffff; margin: 0px !important;  font-weight: 400; font-family: 'Roboto-Regular'; margin: 0px">© Copyright 2021 Milk Kitchen . All rights reserved </p>
+                </div>
+            </td>
+            <td>
+                <div style="text-align: right; padding:5px;">
+                    <p class="m-0" style="  font-size: 12px;  color: #ffffff; margin: 0px !important; font-weight: 400; font-family: 'Roboto-Regular'; margin: 0px">Designed & Developed by <a href="https://leadconcept.com/"
+                       style="font-size: 12px;  color: #ffffff; margin: 0px !important; font-weight: 400; font-family: 'Roboto-Regular';"     target="_blank">LEADconcept</a></p>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <style>
+        .main-container{
+            width: 50%;
+            float: left !important;
+        }
+    </style>
+</body>
+</html>

@@ -121,7 +121,7 @@ class HomeController extends Controller
     
     public  function pastOrder($id)
     {
-        $orders = OrderDeliverd::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
+        $orders = ProductOrder::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
             return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
         });
         return view('customer.order-history',compact('orders'));
@@ -132,11 +132,11 @@ class HomeController extends Controller
         $request->validate([
             'id'=>'required'
         ]);
-        $orderDetail = OrderDeliverd::find($request->id);
+        $orderDetail = ProductOrder::find($request->id);
         $products = Product::orderBy('id','DESC')->where('status',1)->get();
-        $weekDays = WeekDay::with(['orderDelivered' => function($q) use ($orderDetail){
+        $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                         $q->userDetail($orderDetail->user_id);
-                    }])->with(['orderDelivered' => function($q) use ($orderDetail) {
+                    }])->with(['productOrder' => function($q) use ($orderDetail) {
                         $q->weekDetail($orderDetail);
                     }])->get();
         return response()->json([

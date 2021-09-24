@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/final-report/{id}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}','CustomerController@pastOrderStatement')->name('customer.week-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
-
+            Route::get('/statement/pdf/{id}', 'CustomerController@statementPrint')->name('customer.statementPdf');
         });
         Route::group(['prefix' => 'customer-group'], function (){
 
