@@ -33,7 +33,7 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('product.store') }}" method="POST" onsubmit="return validateForm()" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">
@@ -173,7 +173,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary" >Save</button>
                             </div>
                         </form>
                     </div>
@@ -193,6 +193,26 @@
 @endsection
 @section('scripts')
     <script>
+   
+       var validateForm = function(event){
+        var groups=<?php echo $groups->count(); ?> 
+        
+           if(groups == 0)
+           {
+            Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 4000,
+                                            icon: 'error',
+                                            title: 'First Create Customer Groups',
+                                        });
+                                        return false;
+           }
+           else
+           return true;
+              
+};
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
