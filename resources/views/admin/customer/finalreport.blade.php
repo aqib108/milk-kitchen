@@ -205,7 +205,7 @@
                     </div>
                     <div class="col-lg-4">
                         
-                        {!! QrCode::size(150)->merge('https://aujtravels.com/carelink/home', 0.3, true)->errorCorrection('H')->generate('aujtravels.com/carelink/home') !!}
+                        {!! QrCode::size(150)->merge('http://milkkitchen.leadconcept.info/login', 0.3, true)->errorCorrection('H')->generate('http://milkkitchen.leadconcept.info/login') !!}
                     </div>
                 </div>
                 <section>

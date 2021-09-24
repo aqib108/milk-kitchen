@@ -354,6 +354,6 @@ class CustomerController extends Controller
                     }])->get();
         $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
         $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true, 'isPhpEnabled'=>true,'isRemoteEnabled' => TRUE,])->loadView('admin.customer.pdfReport',['weekDays' => $weekDays,'products' => $products,'customer' => $customer,'image' => $image,'order'=>$order])->setPaper('a4', 'porttrait');
-        return $pdf->stream();
+        return $pdf->download('report.pdf');
     }
 }
