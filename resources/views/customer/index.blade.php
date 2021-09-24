@@ -409,9 +409,10 @@
                 });
                 var formData = new FormData(this);
                 $.ajax({
+                    
                     type: "POST",
                     data: formData,
-                    url: "{{route('customer-detail.update',$customer->id)}}",
+                    url: "{{route('customer-detail.update',$user)}}",
                     processData: false,
                     contentType: false,
                     cache: false,
