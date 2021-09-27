@@ -298,16 +298,18 @@ class CustomerController extends Controller
             $customerID = $orderDetail->user_id;
             $customer = CustomerDetail::where('user_id',$customerID)->get();
             $products = Product::orderBy('id','DESC')->where('status',1)->get();
+            $deliverOrder = ProductOrder::where('day_id',$orderDetail->day_id)->where('user_id',$customerID)->where('product_id',$orderDetail->product_id)->get();
+                
             $weekDays = 
                 WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                     $q->userDetail($customerID);
-                }])->with(['productOrder' => function($q) use ($orderDetail) {
+                }])->with(['productOrder' => function($q) use ($orderDetail,$deliverOrder) {
                     $q->weekDetail($orderDetail);
                 }])->get();
 
-            $orderDelivered = ProductOrder::with('orderDeliverd')->get();
-            // dd($orderDelivered);
-            return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays','orderDelivered'));
+           
+            // dd($weekDays);
+            return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays'));
         }
        
     }
@@ -315,9 +317,7 @@ class CustomerController extends Controller
     {
         $userID = $id;
         $order = ProductOrder::where('day_id',$request->day_id)->where('user_id',$userID)->where('product_id',$request->product_id)->get();
-        dd($order);
         $validate = $request->validate([
-            'day_id' => 'required',
             'product_id' => 'required',
             'qnty' => 'required',
         ]);
