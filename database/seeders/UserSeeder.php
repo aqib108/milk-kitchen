@@ -18,9 +18,16 @@ class UserSeeder extends Seeder
         $user = User::create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('demoadmin'),
             'status' => '1',
         ]);
-        return $user->syncRoles('Admin');
+        $user->syncRoles('Admin');
+        $user = User::create([
+            'name' => 'Customer',
+            'email' => 'user@gmail.com',
+            'password' => bcrypt('demouser'),
+            'status' => '1',
+        ]);
+        return $user->syncRoles('Customer');
     }
 }
