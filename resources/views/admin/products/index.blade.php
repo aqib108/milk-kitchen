@@ -32,7 +32,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
-                                Product's List (Total Product's : <span id="countTotal">0</span>)
+                                Product's List (Total Product's : <span id="countTotal">{{App\Models\Product::count();}}</span>)
                             </h3>
                         </div>
                         <!-- /.card-header -->
@@ -47,8 +47,8 @@
                                         <th>New</th>
                                         <th>Active</th>
                                         <th>Status</th>
-                                        @foreach($groups as $groups)
-                                          <th>{{$groups}}</th>
+                                        @foreach($groups as $group)
+                                          <th>{{$group}}</th>
                                         @endforeach
                                        
                                         <th class="no-sort" style="width: 200px">Action</th>
@@ -91,7 +91,9 @@
                                          @endif
                                      </td>
                                      
-                                     <?php foreach ($data->services as $key => $value) {
+                                     <?php 
+                                        $other =$groups->count()-$data->services->count();
+                                     foreach ($data->services as $key => $value) {
                                            if($value->saleable)
                                            { 
                                            ?>
@@ -99,7 +101,12 @@
                                          <?php }else{ ?>
                                          <td><i class="fa fa-times" style="color:red;" aria-hidden="true"></i>  </td> 
                                          
-                                         <?php } } ?>
+                                         <?php } } 
+                                          for ($i=0; $i <$other ; $i++) { ?>
+                                            <td><i class="fa fa-times" style="color:red;" aria-hidden="true"></i>  </td> 
+                                          <?php }
+                                         ?>
+                                         
                                        
        
                                      </td>
@@ -255,7 +262,7 @@
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, Change it!"
+                    confirmButtonText: "Yes, Delete it!"
                 }).then(result => {
                     if (result.value) {
                         $.ajax({
@@ -266,9 +273,15 @@
                                 'id': id
                             },
                             success: function(response) {
-                                console.log(response)
                                 if (response.status) {
-                                    Swal.fire("Deleted!", response.message, "success");
+                                    Swal.fire({
+                                            position: 'top-end',
+                                            toast: true,
+                                            showConfirmButton: false,
+                                            timer: 4000,
+                                            icon: 'success',
+                                            title: 'Deleted Successfully',
+                                        });
                                     window.location.reload();
                                 }
                             }

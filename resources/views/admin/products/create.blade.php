@@ -195,9 +195,21 @@
    <script>
     $(document).ready(function () {
         
+        function named(){
 
+  $("ctn_price").each(function(){
+      alert("djd");
+     $(this).rules("add", {
+       required: true,
+       email: true,
+       messages: {
+         required: "Required"
+       }  
+   });
+});
+        }
          $('#form').validate({ 
-        
+          function : named,
         rules: {
             name: {
                 required: true
@@ -215,6 +227,12 @@
             pack_size: {
                 required: true,  
             },
+            // 'ctn_price[]':{
+            //     required: true,  
+            // },
+            // 'bottle_price[]':{
+            //     required: true,  
+            // },
         },
           errorElement: 'span',
           errorPlacement: function (error, element) {
