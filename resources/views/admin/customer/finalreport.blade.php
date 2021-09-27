@@ -184,6 +184,9 @@
                                             @if ($item->productOrder->isNotEmpty())
                                                 @if ($item->id == $orderDetail->day_id)
                                                     @foreach ($item->productOrder as $order)
+                                                        @if ($order->quantity == 0)
+                                                            @continue;
+                                                        @endif
                                                         @if ($order->product_id == $product->id)
                                                             <td class="table-td-wrapper" scope="row"
                                                                 style="width: 175px; text-align:center;">
@@ -271,6 +274,9 @@
                                                 @if ($item->productOrder->isNotEmpty())
                                                     @if ($item->id == $orderDetail->day_id)
                                                         @foreach ($item->productOrder as $order)
+                                                            @if ($order->quantity == 0)
+                                                                @continue;
+                                                            @endif
                                                             @if ($order->product_id == $product->id)
                                                                 @php
                                                                     $order_id = $orderDetail->id;
