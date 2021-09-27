@@ -33,15 +33,15 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('product.store') }}" method="POST" onsubmit="return validateForm()" enctype="multipart/form-data">
+                        <form action="{{ route('product.store') }}" method="POST" onsubmit="return validateForm()" id="form" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Name <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50"
-                                            class="form-control @error('name') is-invalid @enderror" name="name"
-                                            value="{{ old('name') }}" placeholder="Enter Product Name" required>
+                                            class="form-control @error('name') is-invalid @enderror" name="name" id="name"
+                                            value="{{ old('name') }}" placeholder="Enter Product Name" >
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -51,8 +51,8 @@
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Price <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50"
-                                            class="form-control price @error('price') is-invalid @enderror" name="price"
-                                            value="{{ old('price') }}" placeholder="Enter Product Price" required>
+                                            class="form-control price @error('price') is-invalid @enderror" name="price" id="price"
+                                            value="{{ old('price') }}" placeholder="Enter Product Price" >
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -65,7 +65,7 @@
                                             <div class="custom-file">
                                                 <input type="file" id="image_url"
                                                     class="custom-file-input @error('image_url') is-invalid @enderror "
-                                                    name="image_url" accept=".png, .jpg, .jpeg" required>
+                                                    name="image_url" accept=".png, .jpg, .jpeg" >
                                                 <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                             </div>
                                         </div>
@@ -79,8 +79,8 @@
                                     <div class="form-group col-md-3 col-sm-6 col-xs-12">
                                         <label>Sku<span class="required-star">*</span></label>
                                         <input type="number" maxlength="50"
-                                            class="form-control @error('sku') is-invalid @enderror" name="sku"
-                                            value="{{ old('sku') }}" placeholder="Enter Product Sku" required>
+                                            class="form-control @error('sku') is-invalid @enderror" name="sku" id="sku"
+                                            value="{{ old('sku') }}" placeholder="Enter Product Sku" >
                                         @error('sku')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -103,7 +103,7 @@
                                         <label>Pack Size<span class="required-star">*</span></label>
                                         <input type="text" maxlength="50"
                                             class="form-control price  @error('pack_size') is-invalid @enderror" id="pack_size" name="pack_size"
-                                            value="{{ old('pack_size') }}" placeholder="Enter Pack Size" required>
+                                            value="{{ old('pack_size') }}" placeholder="Enter Pack Size" >
                                         @error('pack_size')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -126,7 +126,7 @@
                                     <div class="form-group col-md-12 col-sm-6">
                                         <label>Descriptions <span class="required-star">*</span></label>
                                         <textarea name="description" id="description" cols="15" rows="2"
-                                            class="form-control text-area" required>{{ old('description') }}</textarea>
+                                            class="form-control text-area" >{{ old('description') }}</textarea>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <table class="table table-sm table-bordered">
@@ -145,12 +145,12 @@
                                                                 name="group_id[]">
                                                             <input type="text" maxlength="100" class="form-control price ctnPrice" name="ctn_price[]"
                                                                 id="ctnPrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Ctn Price"
-                                                                value="{{ old('ctn_price[]') }}" required>
+                                                                value="{{ old('ctn_price[]') }}" >
                                                         </td>
                                                         <td>
                                                             <input type="text" maxlength="100" class="form-control price bottlePrice" name="bottle_price[]"
                                                                 id="bottlePrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Bottle Price"
-                                                                value="{{ old('bottle_price[]') }}" required>
+                                                                value="{{ old('bottle_price[]') }}" >
                                                         </td>
                                                         <td class="text-center"><input type="checkbox" class="form-control"
                                                             value="1" name="saleable[]" data-size="xs" data-toggle="toggle">
@@ -190,6 +190,64 @@
     <!-- /.content -->
 @endsection
 @section('scripts')
+
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+   <script>
+    $(document).ready(function () {
+        
+        function named(){
+
+  $("ctn_price").each(function(){
+      alert("djd");
+     $(this).rules("add", {
+       required: true,
+       email: true,
+       messages: {
+         required: "Required"
+       }  
+   });
+});
+        }
+         $('#form').validate({ 
+          function : named,
+        rules: {
+            name: {
+                required: true
+            },
+            sku: {
+                required: true,
+            },
+            description: {
+                required: true,
+                
+            },
+            price: {
+                required: true,    
+            },
+            pack_size: {
+                required: true,  
+            },
+            // 'ctn_price[]':{
+            //     required: true,  
+            // },
+            // 'bottle_price[]':{
+            //     required: true,  
+            // },
+        },
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+    });
+});
+</script> 
     <script>
    
        var validateForm = function(event){
