@@ -47,7 +47,7 @@ class ProductOrder extends Model
 
     public function scopeWeekDetail($query,$arr)
     {
-        return $query->whereBetween('created_at',[$arr->created_at->subDays(6)->format('Y-m-d 00:00:00'),$arr->created_at->format('Y-m-d 23:59:59')])->get();
+        return $query->whereBetween('product_orders.created_at',[$arr->created_at->subDays(6)->format('Y-m-d 00:00:00'),$arr->created_at->format('Y-m-d 23:59:59')])->leftJoin('order_deliverds','product_orders.id', '=', 'order_deliverds.product_order_id')->select('product_orders.*', 'order_deliverds.quantity as d_qnty')->get();
     }
     
 }

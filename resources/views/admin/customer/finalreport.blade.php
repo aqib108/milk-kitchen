@@ -264,7 +264,7 @@
                                                                                                     $count = 0;
                                                                                                     $order_id = 0;
                                                                                                 @endphp
-                                                                                                
+
                                                                                                 @foreach ($products as $product)
                                                                                                     <tr class="week_days_1" data-p-id="{{ $product->id }}">
                                                                                                         @foreach ($weekDays as $item)
@@ -272,9 +272,9 @@
                                                                                                                 @if ($item->id == $orderDetail->day_id)
                                                                                                                     @foreach ($item->productOrder as $order)
                                                                                                                         @if ($order->product_id == $product->id)
-                                                                                                                    @php
-                                                                                                                        $order_id = $orderDetail->id;
-                                                                                                                    @endphp
+                                                                                                                            @php
+                                                                                                                                $order_id = $orderDetail->id;
+                                                                                                                            @endphp
                                                                                                                             <td class="table-td-wrapper" scope="row">
                                                                                                                                 {{ $product->name }}</td>
                                                                                                                             <td>
@@ -284,37 +284,12 @@
                                                                                                                                 <input type="hidden" class="t_ctn"
                                                                                                                                     value="{{ $order->quantity }}">
                                                                                                                             </td>
+                                                                                                                            <td>
+                                                                                                                                <input type="number" class="d_qnty"
+                                                                                                                                    value="{{ !empty($order->d_qnty)?$order->d_qnty:0 }}">
+                                                                                                                            </td>
                                                                                                                         @endif
                                                                                                                     @endforeach
-                                                                                                                    @if ($orderDelivered)
-                                                                                                                        @foreach ($orderDelivered as $key => $orderD)
-                                                                                                                            @if ($orderD->day_id == $orderDetail->day_id && $orderD->product_id == $product->id  && isset($orderD->orderDeliverd[0]))
-                                                                                                                                @php
-                                                                                                                                    $count++;
-                                                                                                                                @endphp
-                                                                                                                                <td>
-                                                                                                                                    <input
-                                                                                                                                        data-id="{{ $orderD->id }}"
-                                                                                                                                        type="number" style="width: 80px;
-                                                                                                                                                    text-align: center;"
-                                                                                                                                        value="{{ $orderD->orderDeliverd[0]->quantity }}"
-                                                                                                                                        minlength="0">
-                                                                                                                                </td>
-                                                                                                                            @endif
-                                                                                                                            @endforeach
-                                                                                                                            @if (!$count)
-                                                                                                                                
-                                                                                                                                <td>
-                                                                                                                                    <input
-                                                                                                                                        data-id="{{ $orderDetail->day_id }}"
-                                                                                                                                        type="number" style="width: 80px;
-                                                                                                                                                    text-align: center;"
-                                                                                                                                        value="0"
-                                                                                                                                        minlength="0">
-                                                                                                                                </td>
-                                                                                                                            @endif
-
-                                                                                                                    @endif
                                                                                                                 @endif
                                                                                                             @endif
                                                                                                         @endforeach
