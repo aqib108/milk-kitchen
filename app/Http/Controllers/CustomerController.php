@@ -292,6 +292,9 @@ class CustomerController extends Controller
             return redirect()->back()->with('success','No Record Found To This Delivery!.');
         }else{
             $orderDetail = ProductOrder::find($id);
+            if ($orderDetail == NULL) {
+                return redirect()->back()->with('error','No Record Found');
+            }
             $customerID = $orderDetail->user_id;
             $customer = CustomerDetail::where('user_id',$customerID)->get();
             $products = Product::orderBy('id','DESC')->where('status',1)->get();
@@ -301,17 +304,18 @@ class CustomerController extends Controller
                 }])->with(['productOrder' => function($q) use ($orderDetail) {
                     $q->weekDetail($orderDetail);
                 }])->get();
-                // dd($weekDays);
 
-            return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays'));
+            $orderDelivered = ProductOrder::with('orderDeliverd')->get();
+            // dd($orderDelivered);
+            return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays','orderDelivered'));
         }
        
     }
     public function editDeliveryOrders(Request $request,$id)
     {
         $userID = $id;
-        $order = ProductOrder::where('day_id',$request->day_id)->where('user_id',$userID)->get();
-        dd($order[0]->id);
+        $order = ProductOrder::where('day_id',$request->day_id)->where('user_id',$userID)->where('product_id',$request->product_id)->get();
+        dd($order);
         $validate = $request->validate([
             'day_id' => 'required',
             'product_id' => 'required',
@@ -319,11 +323,8 @@ class CustomerController extends Controller
         ]);
         
         if($validate){
-            $data = ProductOrder::updateOrCreate([
-                'user_id' => $userID,
-                'id' => $order[0]->id,
-                'product_id' => $request->product_id,
-                'day_id'     => $request->day_id],[
+            $data = OrderDeliverd::updateOrCreate([
+                'product_order_id' => $order[0]->id],[
                 'quantity' => $request->qnty,
             ]);
             
