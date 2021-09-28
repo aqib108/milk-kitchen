@@ -16,8 +16,8 @@ class CreateZoneRegionsTable extends Migration
         //
         Schema::create('regions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('region_id');
-            $table->integer('country_id');
+            $table->string('country');
+            $table->string('region');
             $table->integer('warehouse_id')->unsigned();
             $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
             $table->softDeletes();

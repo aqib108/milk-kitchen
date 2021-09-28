@@ -10,8 +10,15 @@ class Zone extends Model
     use HasFactory;
     protected $guarded=[''];
 
-    public function region()
+    public function regionName()
     {
         return $this->belongsTo(Region::class,'region_id');
     }
+
+    public function deliveryZone()
+    {
+        return $this->hasMany(DeliverySheduleZone::class,'zone_id','id');
+    }
+
+
 }

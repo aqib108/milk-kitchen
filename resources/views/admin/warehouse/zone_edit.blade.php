@@ -5,18 +5,17 @@
         <div class="mb-3 error-placeholder">
             <label class="form-label"> Name</label>
             <input type="text" class="form-control" name="name" value="{{ $zone->name }}"
-                placeholder="Enter Zone Name..." required>
+                placeholder="Enter Zone Name" required>
             @error('name')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3 error-placeholder">
-            <label class="label-wrapper-custm" for="region_id">Suburb <span class="required-star">*</span></label>
+            <label class="label-wrapper-custm" for="region_id">Region <span class="required-star">*</span></label>
             <select name="region_id" class="form-control @error('region_id') is-invalid @enderror" id="region_id">
-                <option selected disabled>Select Region</option>
-                @foreach($regions as $state)
-                    <option value="{{$state->id}}"
-                    {{$zone->region_id == $state->id ? "selected":""}}>{{$state->name}}</option>
+                @foreach ($regions as $regionName)
+                <option @if ($zone->region_id == $regionName->id) selected @endif
+                    value="{{$regionName->id}}">{{ $regionName->region }}</option>
                 @endforeach
             </select>
             @error('region_id')

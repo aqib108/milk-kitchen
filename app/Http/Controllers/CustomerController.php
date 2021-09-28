@@ -9,6 +9,8 @@ use App\Models\ProductOrder;
 use App\Models\OrderDeliverd;
 use App\Models\CustomerDetail;
 use App\Models\WeekDay;
+use App\Models\DeliverySheduleZone;
+use App\Models\Zone;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
@@ -28,10 +30,6 @@ class CustomerController extends Controller
         $this->middleware('auth');
     }
     
-    ///////////////////////////////
-    //***** Customer's *****//
-   //////////////////////////////
-
     //Email validation's
     public function checkEmail(Request $request)
     {
@@ -88,37 +86,20 @@ class CustomerController extends Controller
     {
         $customerID = $id;
         $customer = User::find($customerID);
+        
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
+        $ZoneID = Zone::join('regions','regions.id','zones.id')
+        ->select('zones.id as id')->where('regions.region',$customerDetail->delivery_region)->get();
+        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id)->where('status',1)->pluck('day_id','day_id');
+      
+
         $products = Product::orderBy('id','DESC')->where('status',1)->get();
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
             $q->userDetail($customerID);
         }])->get();
-        $countries = Country::get(["name","id"]);
-        if ($customerDetail != NULL) {
-            $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
-        } else {
-            $regions = null;
-        }
-
-        if ($customerDetail != NULL) {
-            $cities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->business_region_id)->get();
-        } else {
-            $cities = null;
-        }
-
-        if ($customerDetail != NULL) {
-            $dregions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->delivery_country_id)->get();
-        } else {
-            $dregions = null;
-        }
-
-        if ($customerDetail != NULL) {
-            $dcities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->delivery_region_id)->get();
-        } else {
-            $dcities = null;
-        }
-        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','regions','cities','countries','dregions','dcities'));
-        // return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays'),$data);
+        // dd($weekDays);
+       
+        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','deliveryZoneDay'));
     }
 
     public function pastOrder($id)
@@ -286,7 +267,6 @@ class CustomerController extends Controller
     }
 
     public function finalreport($id)
-    
     {
         if($id == 0){
             return redirect()->back()->with('success','No Record Found To This Delivery!.');

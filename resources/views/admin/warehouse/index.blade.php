@@ -310,12 +310,12 @@
                         searchable: false
                     },
                     {
-                        data: 'state_name',
-                        name: 'state_name'
+                        data: 'region',
+                        name: 'region'
                     },
                     {
-                        data: 'warehouse_name',
-                        name: 'warehouse_name'
+                        data: 'warehouse_id',
+                        name: 'warehouse_id'
                     },
                     {
                         data: 'action',
@@ -407,8 +407,8 @@
                         name: 'name'
                     },
                     {
-                        data: 'state_name',
-                        name: 'state_name'
+                        data: 'region_id',
+                        name: 'region_id'
                     },
                     {
                         data: 'status',

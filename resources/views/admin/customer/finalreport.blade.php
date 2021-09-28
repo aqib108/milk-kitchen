@@ -58,19 +58,19 @@
                                     <div>
                                         <p class="label-wrapper-custm">
                                             Suburb:
-                                            <span>@isset($customer[0]->bcountry->name){{ $customer[0]->bcountry->name }}@endisset</span>
+                                            <span>@isset($customer[0]->business_country){{ $customer[0]->business_country }}@endisset</span>
                                         </p>
                                     </div>
                                     <div>
                                         <p class="label-wrapper-custm">
                                             City:
-                                            <span>@isset($customer[0]->bcity->name){{ $customer[0]->bcity->name }}@endisset</span>
+                                            <span>@isset($customer[0]->business_city){{ $customer[0]->business_city }}@endisset</span>
                                         </p>
                                     </div>
                                     <div>
                                         <p class="label-wrapper-custm">
                                             Region:
-                                            <span>@isset($customer[0]->bstate->name){{ $customer[0]->bstate->name }}@endisset</span>
+                                            <span>@isset($customer[0]->business_region){{ $customer[0]->business_region }}@endisset</span>
                                         </p>
                                     </div>
                                     <div>
@@ -115,19 +115,19 @@
                                     <div>
                                         <p class="label-wrapper-custm">
                                             Suburb:
-                                            <span>@isset($customer[0]->dcountry->name){{ $customer[0]->dcountry->name }}@endisset</span>
+                                            <span>@isset($customer[0]->delivery_country){{ $customer[0]->delivery_country }}@endisset</span>
                                         </p>
                                     </div>
                                     <div>
                                         <p class="label-wrapper-custm">
                                             City:
-                                            <span>@isset($customer[0]->dcity->name){{ $customer[0]->dcity->name }}@endisset</span>
+                                            <span>@isset($customer[0]->delivery_city){{ $customer[0]->delivery_city }}@endisset</span>
                                         </p>
                                     </div>
                                     <div>
                                         <p class="label-wrapper-custm">
                                             Region:
-                                            <span>@isset($customer[0]->dstate->name){{ $customer[0]->dstate->name }}@endisset</span>
+                                            <span>@isset($customer[0]->delivery_region){{ $customer[0]->delivery_region }}@endisset</span>
                                         </p>
                                     </div>
                                     <div>
