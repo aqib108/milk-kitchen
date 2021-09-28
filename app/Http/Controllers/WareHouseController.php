@@ -49,12 +49,10 @@ class WareHouseController extends Controller
                 ->rawColumns(['action','status'])
                 ->make(true);
         }
-        
-        $countries = Country::where('status', '1')->get();
-        $warehouses= Warehouse::all();
-        $regions = Region::join('states','states.id','regions.region_id')->select('regions.id','states.name as name')->get();
 
-        return view('admin.warehouse.index',compact('countries','regions','warehouses'));
+        $regions = Region::orderBy('id', 'DESC')->get();
+        $warehouses= Warehouse::where('status',1)->get();
+        return view('admin.warehouse.index',compact('regions','warehouses'));
     }
 
     /**

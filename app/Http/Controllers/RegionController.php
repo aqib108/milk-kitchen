@@ -22,10 +22,7 @@ class RegionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Region::
-            join('states','states.id','regions.region_id')
-            ->join('warehouses','warehouses.id','regions.warehouse_id')
-            ->select('regions.*','warehouses.name as warehouse_name','states.name as state_name')->get();
+            $data = Region::orderBy('id', 'DESC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function(Region $data){
@@ -37,6 +34,11 @@ class RegionController extends Controller
                     }
                     return $status;
                 })
+
+                ->addColumn('warehouse_id', function(Region $data){
+                    $warehouse = $data->wareHouse->name;
+                    return $warehouse;
+                })
                 ->addColumn('action', function(Region $data){
                     $btn1 = '<a data-id="'.$data->id.'" data-tab="regions" data-url="region/delete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
@@ -46,15 +48,12 @@ class RegionController extends Controller
 
                     return $btn2.'  '.$btn1;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','warehouse_id'])
                 ->make(true);
         }
-        $countries = Country::where('status', '1')->get();
-        $warehouses= Warehouse::all();
-        $regions = Region::
-        join('states','states.id','regions.region_id')
-        ->select('regions.id','states.name as name')->get();
-        return view('admin.warehouse.index',compact('countries','regions','warehouses'));
+        $warehouses= Warehouse::where('status',1)->get();
+        $regions = Region::orderBy('id', 'DESC')->get();
+        return view('admin.warehouse.index',compact('warehouses','regions'));
     }
 
     /**
@@ -86,11 +85,9 @@ class RegionController extends Controller
             'id'=> 'required'
         ]);
         $region=Region::findOrFail($request->id);
-        $countries = Country::where('status',1)->orderby('name','ASC')->get();
-        $states = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $region->country_id)->get();
         $warehouses= Warehouse::all();
         return response()->json([
-            'html' => view('admin.warehouse.region_edit', compact('region','states','warehouses','countries'))->render()
+            'html' => view('admin.warehouse.region_edit', compact('region','warehouses'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
 

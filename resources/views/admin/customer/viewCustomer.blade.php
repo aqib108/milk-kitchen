@@ -70,54 +70,27 @@
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
-                                                <input type="text" name="business_country_id" value="{{$customerDetail->business_country_id ?? ''}}" placeholder="Enter Country Name" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
-                                                <!-- <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id" >
-                                                <option selected disabled>Select Country</option>
-                                                @foreach($countries as $country)                                        
-                                                    <option value="{{$country->id}}" {{ isset($customerDetail->business_country_id) && $customerDetail->business_country_id == $country->id?'selected':''}}>{{$country->name}}</option>
-                                                @endforeach
-                                                </select> -->
-                                                @error('business_country_id')
+                                                <label class="label-wrapper-custm" for="business_country">Suburb <span class="required-star">*</span></label>
+                                                <input type="text" name="business_country" value="{{$customerDetail->business_country ?? ''}}" placeholder="Enter Country Name" class="form-control @error('business_country') is-invalid @enderror" id="business_country">
+                                                @error('business_country')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
-                                                <input type="text" name="business_region_id" value="{{$customerDetail->business_region_id ?? ''}}" placeholder="Enter Region Name" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-                                                <!-- <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-                                                    @if($customerDetail != null)
-                                                        @foreach($regions as $region)
-                                                            <option value="{{$region->id}}"
-                                                                {{$customerDetail->business_region_id == $region->id ? "selected":""}}>{{$region->name}}
-                                                            </option>
-                                                        @endforeach
-                                                    @else
-                                                        <option value="" disabled selected>Select Region</option>
-                                                    @endif
-                                                </select> -->
-                                                @error('business_region_id')
+                                                <label class="label-wrapper-custm" for="business_region">Region <span class="required-star">*</span></label>
+                                                <input type="text" name="business_region" value="{{$customerDetail->business_region ?? ''}}" placeholder="Enter Region Name" class="form-control @error('business_region') is-invalid @enderror" id="business_region">
+                                                @error('business_region')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
-                                                <input type="text" name="business_city_id" value="{{$customerDetail->business_city_id ?? ''}}" placeholder="Enter City Name" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                                <!-- <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                                    @if($customerDetail != null)
-                                                        @foreach($cities as $city)
-                                                            <option value="{{$city->id}}" {{$customerDetail->business_city_id == $city->id ? "selected":""}}>
-                                                                {{$city->name}}</option>
-                                                        @endforeach
-                                                    @else
-                                                        <option value="" disabled selected>Select City</option>
-                                                    @endif
-                                                </select> -->
-                                                @error('business_city_id')
+                                                <label class="label-wrapper-custm" for="business_city">City <span class="required-star">*</span></label>
+                                                <input type="text" name="business_city" value="{{$customerDetail->business_city ?? ''}}" placeholder="Enter City Name" class="form-control @error('business_city') is-invalid @enderror" id="business_city">
+                                                @error('business_city')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -185,54 +158,27 @@
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="label-wrapper-custm" for="delivery_country_id">Suburb <span class="required-star">*</span></label>
-                                                <input type="text" name="delivery_country_id" value="{{$customerDetail->delivery_country_id ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
-                                                <!-- <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
-                                                    <option selected disabled>Select Country</option>
-                                                    @foreach($countries as $country)
-                                                        <option value="{{$country->id}}" {{ isset($customerDetail->delivery_country_id) && $customerDetail->delivery_country_id == $country->id ?'selected':''}}>{{$country->name}}</option>
-                                                    @endforeach
-                                                </select> -->
-                                                @error('delivery_country_id')
+                                                <label class="label-wrapper-custm" for="delivery_country">Suburb <span class="required-star">*</span></label>
+                                                <input type="text" name="delivery_country" value="{{$customerDetail->delivery_country ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_country') is-invalid @enderror" id="delivery_country">
+                                                @error('delivery_country')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
-                                                <input type="text" name="delivery_region_id" value="{{$customerDetail->delivery_region_id ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                <!-- <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                    @if($customerDetail != null)
-                                                        @foreach($dregions as $region)
-                                                            <option value="{{$region->id}}"
-                                                                {{$customerDetail->delivery_region_id == $region->id ? "selected":""}}>{{$region->name}}
-                                                            </option>
-                                                        @endforeach
-                                                    @else
-                                                        <option value="" disabled selected>Select Region</option>
-                                                    @endif
-                                                </select> -->
-                                                @error('delivery_region_id')
+                                                <label class="label-wrapper-custm" for="delivery_region">Region <span class="required-star">*</span></label>
+                                                <input type="text" name="delivery_region" value="{{$customerDetail->delivery_region ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_region') is-invalid @enderror" id="delivery_region">
+                                                @error('delivery_region')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
-                                                <input type="text" name="delivery_city_id" value="{{$customerDetail->delivery_city_id ?? '' }}" placeholder="Enter City Name" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                <!-- <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                    @if($customerDetail != null)
-                                                        @foreach($dcities as $city)
-                                                            <option value="{{$city->id}}" {{$customerDetail->delivery_city_id == $city->id ? "selected":""}}>
-                                                                {{$city->name}}</option>
-                                                        @endforeach
-                                                    @else
-                                                        <option value="" disabled selected>Select City</option>
-                                                    @endif
-                                                </select> -->
-                                                @error('delivery_city_id')
+                                                <label class="label-wrapper-custm" for="delivery_city">City <span class="required-star">*</span></label>
+                                                <input type="text" name="delivery_city" value="{{$customerDetail->delivery_city ?? '' }}" placeholder="Enter City Name" class="form-control @error('delivery_city') is-invalid @enderror" id="delivery_city">
+                                                @error('delivery_city')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -297,25 +243,36 @@
                     </thead>
                     <tbody class="week-container-tbl">
                         @foreach ($products as $product)
-                        <tr class="week_days" data-p-id="{{$product->id}}">
-                            <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                            @foreach ($weekDays as $item)
-                            @php
-                            $qnty = 0;
-                            if ($item != null){
-                            foreach ($item->WeekDay as $order){
-                            if($order->product_id == $product->id){
-                            $qnty = $order->quantity;
-                            }
-                            }
-                            }
-                            @endphp
-                            <td>
-                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                            text-align: center;" value="{{$qnty}}" minlength="0">
-                            </td>
-                            @endforeach
-                        </tr>
+                            <tr class="week_days" data-p-id="{{$product->id}}">
+                                <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
+                               
+                                @foreach ($weekDays as  $key=>$item)
+                                @php $key1 = ++$key; @endphp
+                                    @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                        @php
+                                            $qnty = 0;
+                                            if ($item != null){
+                                                foreach ($item->WeekDay as $order){
+                                                    
+                                                    if($order->product_id == $product->id){
+                                                        $qnty = $order->quantity;
+                                                    }
+                                                    
+                                                } 
+                                            }  
+                                        @endphp
+                                        <td>
+                                            <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                        text-align: center;" value="{{$qnty}}" minlength="0">
+                                        </td>
+                                    @else
+                                        <td>
+                                            <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                        text-align: center;" value="0" minlength="0" disabled>
+                                        </td>
+                                    @endif
+                                @endforeach
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -357,130 +314,128 @@
             </div>
         </div>
     </div>
-
 </section>
 @endsection
 @section('scripts')
-
-<script>
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        //Submit Form Function
-        $("#customer-detail-info-form").on("submit", function(event){
-            event.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                method: "POST",
-                data: formData,
-                url: "{{route('customer-detail.store')}}",
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    if(response.success)
-                    {
-                        $('#submit').hide();
-                        Swal.fire({
-                            position: 'top-end',
-                            toast: true,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            icon: 'success',
-                            title: response.success,
-                        });
-                        location.reload();
-                    }
-                },
-            }); 
-        });
-        //Update Form Function
-        $("#customer-detail-info-form-update").on("submit", function(event){
-            event.preventDefault();
+    <script>
+        $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var formData = new FormData(this);
-            $.ajax({
-                type: "POST",
-                data: formData,
-                url: "{{route('customer-detail.update',$customer->id)}}",
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    console.log(response);
-                    if(response.success)
-                    {
-                        Swal.fire({
-                            position: 'top-end',
-                            toast: true,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            icon: 'success',
-                            title: response.success,
-                        });
-                    }
-                },
-            });   
-        });
-        // Product Selection
-        $('body').on('change', '.weekly_standing_order .week_days td input', function() {
-            let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
-            let day_id = $(this).attr('data-id');
-            let qnty = $(this).val();
-            if (qnty < 0) {
-                Swal.fire({
-                    position: 'top-end',
-                    toast: true,
-                    showConfirmButton: false,
-                    timer: 2000,
-                    icon: 'error',
-                    title: 'Quantity should not be less than 0',
-                });
-                $(this).val(0);
-            } else {
+            //Submit Form Function
+            $("#customer-detail-info-form").on("submit", function(event){
+                event.preventDefault();
+                var formData = new FormData(this);
                 $.ajax({
-                    type: "POST",
-                    data: {
-                        'day_id': day_id,
-                        'product_id': product_id,
-                        'qnty': qnty
-                    },
-                    url: "{{route('admin.customer-orders',$customer->id)}}",
-                    success: function(response) {
-                        if (response.status) {
+                    method: "POST",
+                    data: formData,
+                    url: "{{route('customer-detail.store')}}",
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        if(response.success)
+                        {
+                            $('#submit').hide();
                             Swal.fire({
                                 position: 'top-end',
                                 toast: true,
                                 showConfirmButton: false,
                                 timer: 2000,
                                 icon: 'success',
-                                title: response.message,
+                                title: response.success,
                             });
-                        } else {
+                            location.reload();
+                        }
+                    },
+                }); 
+            });
+            //Update Form Function
+            $("#customer-detail-info-form-update").on("submit", function(event){
+                event.preventDefault();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+                    }
+                });
+                var formData = new FormData(this);
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    url: "{{route('customer-detail.update',$customer->id)}}",
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        console.log(response);
+                        if(response.success)
+                        {
                             Swal.fire({
                                 position: 'top-end',
                                 toast: true,
                                 showConfirmButton: false,
                                 timer: 2000,
-                                icon: 'error',
+                                icon: 'success',
                                 title: response.success,
                             });
                         }
                     },
-                });
-            }
+                });   
+            });
+            // Product Selection
+            $('body').on('change', '.weekly_standing_order .week_days td input', function() {
+                let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
+                let day_id = $(this).attr('data-id');
+                let qnty = $(this).val();
+                if (qnty < 0) {
+                    Swal.fire({
+                        position: 'top-end',
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        icon: 'error',
+                        title: 'Quantity should not be less than 0',
+                    });
+                    $(this).val(0);
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        data: {
+                            'day_id': day_id,
+                            'product_id': product_id,
+                            'qnty': qnty
+                        },
+                        url: "{{route('admin.customer-orders',$customer->id)}}",
+                        success: function(response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'success',
+                                    title: response.message,
+                                });
+                            } else {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'error',
+                                    title: response.success,
+                                });
+                            }
+                        },
+                    });
+                }
+            });
         });
-    });
-</script>
-  <!---- SUBMIT FORM VALIDATION SCRIPT  ---->
-  <script>
+    </script>
+    <!---- SUBMIT FORM VALIDATION SCRIPT  ---->
+    <script>
         // Submit Form
         $(function () {
             $.validator.setDefaults({
@@ -495,13 +450,13 @@
                     business_address_1: {
                         required: true,
                     },
-                    business_country_id: {
+                    business_country: {
                         required: true,
                     },
-                    business_region_id: {
+                    business_region: {
                         required: true,
                     },
-                    business_city_id: {
+                    business_city: {
                         required: true,
                     },
                     business_email: {
@@ -518,13 +473,13 @@
                     delivery_address_1: {
                         required: true,
                     },
-                    delivery_country_id: {
+                    delivery_country: {
                         required: true,
                     },
-                    delivery_region_id: {
+                    delivery_region: {
                         required: true,
                     },
-                    delivery_city_id: {
+                    delivery_city: {
                         required: true,
                     },
                     terms: {
@@ -582,13 +537,13 @@
                     business_address_1: {
                         required: true,
                     },
-                    business_country_id: {
+                    business_country: {
                         required: true,
                     },
-                    business_region_id: {
+                    business_region: {
                         required: true,
                     },
-                    business_city_id: {
+                    business_city: {
                         required: true,
                     },
                     business_email: {
@@ -605,13 +560,13 @@
                     delivery_address_1: {
                         required: true,
                     },
-                    delivery_country_id: {
+                    delivery_country: {
                         required: true,
                     },
-                    delivery_region_id: {
+                    delivery_region: {
                         required: true,
                     },
-                    delivery_city_id: {
+                    delivery_city: {
                         required: true,
                     },
                     terms: {

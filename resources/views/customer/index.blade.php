@@ -64,54 +64,27 @@
                                                         @enderror
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
-                                                        <input type="text" name="business_country_id" value="{{$customerDetail->business_country_id ?? '' }}" placeholder="Enter Country Name" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id">
-                                                        <!-- <select name="business_country_id" class="form-control @error('business_country_id') is-invalid @enderror" id="business_country_id" >
-                                                        <option selected disabled>Select Country</option>
-                                                        @foreach($countries as $country)                                        
-                                                            <option value="{{$country->id}}" {{ isset($customerDetail->business_country_id) && $customerDetail->business_country_id == $country->id?'selected':''}}>{{$country->name}}</option>
-                                                        @endforeach
-                                                        </select> -->
-                                                        @error('business_country_id')
+                                                        <label class="label-wrapper-custm" for="business_country">Suburb <span class="required-star">*</span></label>
+                                                        <input type="text" name="business_country" value="{{$customerDetail->business_country ?? '' }}" placeholder="Enter Country Name" class="form-control @error('business_country') is-invalid @enderror" id="business_country">
+                                                        @error('business_country')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="label-wrapper-custm" for="business_region_id">Region <span class="required-star">*</span></label>
-                                                        <input type="text" name="business_region_id" value="{{$customerDetail->business_region_id ?? '' }}" placeholder="Enter Region Name" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-                                                        <!-- <select name="business_region_id" class="form-control @error('business_region_id') is-invalid @enderror" id="business_region_id">
-                                                            @if($customerDetail != null)
-                                                                @foreach($regions as $region)
-                                                                    <option value="{{$region->id}}"
-                                                                        {{$customerDetail->business_region_id == $region->id ? "selected":""}}>{{$region->name}}
-                                                                    </option>
-                                                                @endforeach
-                                                            @else
-                                                                <option value="" disabled selected>Select Region</option>
-                                                            @endif
-                                                        </select> -->
-                                                        @error('business_region_id')
+                                                        <label class="label-wrapper-custm" for="business_region">Region <span class="required-star">*</span></label>
+                                                        <input type="text" name="business_region" value="{{$customerDetail->business_region ?? '' }}" placeholder="Enter Region Name" class="form-control @error('business_region') is-invalid @enderror" id="business_region">
+                                                        @error('business_region')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="label-wrapper-custm" for="business_city_id">City <span class="required-star">*</span></label>
-                                                        <input type="text" name="business_city_id" value="{{$customerDetail->business_city_id ?? ''}}" placeholder="Enter City Name" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                                        <!-- <select name="business_city_id" class="form-control @error('business_city_id') is-invalid @enderror" id="business_city_id">
-                                                            @if($customerDetail != null)
-                                                                @foreach($cities as $city)
-                                                                    <option value="{{$city->id}}" {{$customerDetail->business_city_id == $city->id ? "selected":""}}>
-                                                                        {{$city->name}}</option>
-                                                                @endforeach
-                                                            @else
-                                                                <option value="" disabled selected>Select City</option>
-                                                            @endif
-                                                        </select> -->
-                                                        @error('business_city_id')
+                                                        <label class="label-wrapper-custm" for="business_city">City <span class="required-star">*</span></label>
+                                                        <input type="text" name="business_city" value="{{$customerDetail->business_city ?? ''}}" placeholder="Enter City Name" class="form-control @error('business_city') is-invalid @enderror" id="business_city">
+                                                        @error('business_city')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
@@ -185,54 +158,27 @@
                                                         @enderror
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="label-wrapper-custm" for="delivery_country_id">Suburb <span class="required-star">*</span></label>
-                                                        <input type="text" name="delivery_country_id"  value="{{$customerDetail->delivery_country_id ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
-                                                        <!-- <select name="delivery_country_id" class="form-control @error('delivery_country_id') is-invalid @enderror" id="delivery_country_id">
-                                                            <option selected disabled>Select Country</option>
-                                                            @foreach($countries as $country)
-                                                                <option value="{{$country->id}}" {{ isset($customerDetail->delivery_country_id) && $customerDetail->delivery_country_id == $country->id ?'selected':''}}>{{$country->name}}</option>
-                                                            @endforeach
-                                                        </select> -->
-                                                        @error('delivery_country_id')
+                                                        <label class="label-wrapper-custm" for="delivery_country">Suburb <span class="required-star">*</span></label>
+                                                        <input type="text" name="delivery_country"  value="{{$customerDetail->delivery_country ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_country') is-invalid @enderror" id="delivery_country">
+                                                        @error('delivery_country')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="label-wrapper-custm" for="delivery_region_id">Region <span class="required-star">*</span></label>
-                                                        <input type="text" name="delivery_region_id" value="{{$customerDetail->delivery_region_id ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                        <!-- <select name="delivery_region_id" class="form-control @error('delivery_region_id') is-invalid @enderror" id="delivery_region_id">
-                                                            @if($customerDetail != null)
-                                                                @foreach($dregions as $region)
-                                                                    <option value="{{$region->id}}"
-                                                                        {{$customerDetail->delivery_region_id == $region->id ? "selected":""}}>{{$region->name}}
-                                                                    </option>
-                                                                @endforeach
-                                                            @else
-                                                                <option value="" disabled selected>Select Region</option>
-                                                            @endif
-                                                        </select> -->
-                                                        @error('delivery_region_id')
+                                                        <label class="label-wrapper-custm" for="delivery_region">Region <span class="required-star">*</span></label>
+                                                        <input type="text" name="delivery_region" value="{{$customerDetail->delivery_region ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_region') is-invalid @enderror" id="delivery_region">
+                                                        @error('delivery_region')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="label-wrapper-custm" for="delivery_city_id">City <span class="required-star">*</span></label>
-                                                        <input type="text" name="delivery_city_id" value="{{$customerDetail->delivery_city_id ?? '' }}" placeholder="Enter City Name" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                        <!-- <select name="delivery_city_id" class="form-control @error('delivery_city_id') is-invalid @enderror" id="delivery_city_id">
-                                                            @if($customerDetail != null)
-                                                                @foreach($dcities as $city)
-                                                                    <option value="{{$city->id}}" {{$customerDetail->delivery_city_id == $city->id ? "selected":""}}>
-                                                                        {{$city->name}}</option>
-                                                                @endforeach
-                                                            @else
-                                                                <option value="" disabled selected>Select City</option>
-                                                            @endif
-                                                        </select> -->
-                                                        @error('delivery_city_id')
+                                                        <label class="label-wrapper-custm" for="delivery_city">City <span class="required-star">*</span></label>
+                                                        <input type="text" name="delivery_city" value="{{$customerDetail->delivery_city ?? '' }}" placeholder="Enter City Name" class="form-control @error('delivery_city') is-invalid @enderror" id="delivery_city">
+                                                        @error('delivery_city')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
@@ -270,7 +216,6 @@
                                             @endif
                                         </div>
                                     </div>
-                                    {{-- @include('customer.modal') --}}
                                 </form>
                             </div>
                         </div>
@@ -529,13 +474,13 @@
                     business_address_1: {
                         required: true,
                     },
-                    business_country_id: {
+                    business_country: {
                         required: true,
                     },
-                    business_region_id: {
+                    business_region: {
                         required: true,
                     },
-                    business_city_id: {
+                    business_city: {
                         required: true,
                     },
                     business_email: {
@@ -552,13 +497,13 @@
                     delivery_address_1: {
                         required: true,
                     },
-                    delivery_country_id: {
+                    delivery_country: {
                         required: true,
                     },
-                    delivery_region_id: {
+                    delivery_region: {
                         required: true,
                     },
-                    delivery_city_id: {
+                    delivery_city: {
                         required: true,
                     },
                     terms: {
@@ -616,13 +561,13 @@
                     business_address_1: {
                         required: true,
                     },
-                    business_country_id: {
+                    business_country: {
                         required: true,
                     },
-                    business_region_id: {
+                    business_region: {
                         required: true,
                     },
-                    business_city_id: {
+                    business_city: {
                         required: true,
                     },
                     business_email: {
@@ -639,13 +584,13 @@
                     delivery_address_1: {
                         required: true,
                     },
-                    delivery_country_id: {
+                    delivery_country: {
                         required: true,
                     },
-                    delivery_region_id: {
+                    delivery_region: {
                         required: true,
                     },
-                    delivery_city_id: {
+                    delivery_city: {
                         required: true,
                     },
                     terms: {
@@ -687,111 +632,6 @@
                     $(element).removeClass('is-invalid');
                 }
             });
-        });
-    </script>
-    <!---- BUSINESS AND DELIVERY DETAIL COUNTRY,STATE,CITY SCRIPT ---->
-    <script>
-        $(document).ready(function() {
-            //Business Country City States Function on change dropdown
-            $('#business_country_id').on('change', function () {
-                var country_id = $('#business_country_id').find(":selected").val();
-                var option = '';
-                $('#business_region_id').prop('disabled', false);
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{route('getRegions')}}",
-                    data: {
-                        _token: $('meta[name="csrf_token"]').attr('content'),
-                        'country_id': country_id
-                    },
-                    success: function (response) {
-
-                        $('#business_region_id').empty();
-                        $('#business_region_id').append(' <option value="" selected disabled>Select Region</option>');
-
-                        response.regions.forEach(function (item, index) {
-                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
-                            $('#business_region_id').append(option);
-                        });
-
-                    }
-                });
-            });
-            $('#business_region_id').on('change', function () {
-                var state_id = $('#business_region_id').find(":selected").val();
-                var option = '';
-                $('#business_city_id').prop('disabled', false);
-                $.ajax({
-                    method: "POST",
-                    url: "{{route('getCitiesByRegion')}}",
-                    data: {
-                        _token: $('meta[name="csrf_token"]').attr('content'),
-                        'state_id': state_id
-                    },
-                    success: function (response) {
-
-                        $('#business_city_id').empty();
-                        $('#business_city_id').append(' <option value="" selected disabled>Select City</option>');
-
-                        response.cities.forEach(function (item, index) {
-                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
-                            $('#business_city_id').append(option);
-                        });
-
-                    }
-                });
-            });
-            //Delivery Country City States Function on change dropdown
-            $('#delivery_country_id').on('change', function () {
-                var country_id = $('#delivery_country_id').find(":selected").val();
-                var option = '';
-                $('#delivery_region_id').prop('disabled', false);
-
-                $.ajax({
-                    method: "POST",
-                    url: "{{route('getRegions')}}",
-                    data: {
-                        _token: $('meta[name="csrf_token"]').attr('content'),
-                        'country_id': country_id
-                    },
-                    success: function (response) {
-
-                        $('#delivery_region_id').empty();
-                        $('#delivery_region_id').append(' <option value="" selected disabled>Select Region</option>');
-
-                        response.regions.forEach(function (item, index) {
-                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
-                            $('#delivery_region_id').append(option);
-                        });
-
-                    }
-                });
-            }); 
-            $('#delivery_region_id').on('change', function () {
-                var state_id = $('#delivery_region_id').find(":selected").val();
-                var option = '';
-                $('#delivery_city_id').prop('disabled', false);
-                $.ajax({
-                    method: "POST",
-                    url: "{{route('getCitiesByRegion')}}",
-                    data: {
-                        _token: $('meta[name="csrf_token"]').attr('content'),
-                        'state_id': state_id
-                    },
-                    success: function (response) {
-
-                        $('#delivery_city_id').empty();
-                        $('#delivery_city_id').append(' <option value="" selected disabled>Select City</option>');
-
-                        response.cities.forEach(function (item, index) {
-                            option = "<option value='" + item.id + "'>" + item.name + "</option>"
-                            $('#delivery_city_id').append(option);
-                        });
-
-                    }
-                });
-            });  
         });
     </script>
 @endsection

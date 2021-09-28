@@ -25,29 +25,31 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3 error-placeholder">
-                            <label class="form-label">Zone Name</label>
-                            <input type="text" class="form-control" name="name"
-                                placeholder="Enter Zone Name..." required>
-                            @error('zone_name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    <!-- {{ isset($customerDetail->business_country_id) && $customerDetail->business_country_id == $country->id?'selected':''}} -->
+                        <label class="form-label">Zone Name</label>
+                        <input type="text" class="form-control" name="name"
+                                placeholder="Enter Zone Name" required>
+                        @error('name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3 error-placeholder">
-                        <label class="label-wrapper-custm" for="business_country_id">Suburb <span class="required-star">*</span></label>
-                        <select name="region_id" class="form-control @error('business_country_id') is-invalid @enderror" id="region_id">
-                            <option selected disabled>Select Region</option>
-                            @foreach($regions as $country)
-                                <option value="{{$country->id}}">{{$country->name}}</option>
+                        <label class="label-wrapper-custm" for="region_id">Region <span class="required-star">*</span></label>
+                       
+                        <select name="region_id" id="region_id" class="form-control">
+                            <option value="" selected disabled>Select Region</option>
+                            @foreach ($regions as $region)
+                                <option
+                                    value="{{$region->id}}">{{ $region->region }}
+                                </option>
                             @endforeach
                         </select>
-                        @error('business_country_id')
+                        @error('region_id')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
-                     </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success">Save Changes</button>

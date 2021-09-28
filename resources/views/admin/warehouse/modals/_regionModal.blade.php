@@ -26,24 +26,19 @@
                 <div class="modal-body">
                     <div class="mb-3 error-placeholder">
                         <label class="label-wrapper-custm" for="country_id">Suburb <span class="required-star">*</span></label>
-                        <select name="country_id" class="form-control @error('country_id') is-invalid @enderror" id="country_id">
-                            <option selected disabled>Select Country</option>
-                            @foreach($countries as $country)
-                            <option value="{{$country->id}}">{{$country->name}}</option>
-                            @endforeach
-                        </select>
-                        @error('country_id')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                        <input type="text" maxlength="50" class="form-control @error('country') is-invalid @enderror" name="country" id="country"
+                        value="{{ old('country') }}" placeholder="Enter Country Name" >
+                        @error('country')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
                     </div>
                     <div class="mb-3 error-placeholder">
-                        <label class="label-wrapper-custm" for="region_id">Region <span class="required-star">*</span></label>
-                        <select name="region_id" class="form-control @error('region_id') is-invalid @enderror"id="region_id">
-                        <option selected disabled> Select Region</option>    
-                        </select>
-                        @error('region_id')
+                        <label class="label-wrapper-custm" for="region">Region <span class="required-star">*</span></label>
+                        <input type="text" maxlength="50" class="form-control @error('region') is-invalid @enderror" name="region" id="region"
+                        value="{{ old('region') }}" placeholder="Enter Region Name" >
+                        @error('region')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -63,7 +58,7 @@
                             </span>
                         @enderror
                     </div>
-                     </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success">Save & Submit</button>

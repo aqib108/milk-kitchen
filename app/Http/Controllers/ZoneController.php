@@ -16,13 +16,14 @@ class ZoneController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Zone::
-            join('regions','regions.id','zones.region_id')
-            ->join('states','states.id','regions.region_id')
-           ->select('zones.*','states.name as state_name')->get();
-           
+            $data = Zone::orderBy('id', 'DESC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('region_id', function(Zone $data){
+                    $region = $data->regionName->region;
+                    return $region;
+
+                })
                 ->addColumn('status', function(Zone $data){
                     if($data->status == 1){
                         $status = '<span class="badge badge-success">Active</span>';
@@ -50,16 +51,13 @@ class ZoneController extends Controller
 
                     return $btn2.'  '.$status.' '.$btn1;
                 })
-                ->rawColumns(['action','status','view'])
+                ->rawColumns(['action','status','view','region_id'])
                 ->make(true);
         }
-        $countries = Country::where('status', '1')->get();
-        $warehouses= Warehouse::all();
-        $regions = Region::
-        join('states','states.id','regions.region_id')
-        ->select('regions.id','states.name as name')->get();
 
-        return view('admin.warehouse.index',compact('countries','regions','warehouses'));
+        $warehouses= Warehouse::where('status',1)->get();
+        $regions = Region::orderBy('id', 'DESC')->get();
+        return view('admin.warehouse.index',compact('regions','warehouses'));
     }
 
     /**
@@ -103,13 +101,9 @@ class ZoneController extends Controller
             'id'=> 'required'
         ]);
         $zone=Zone::findOrFail($request->id);
-        $countries = Country::where('status', '1')->get();
-        $states = State::where('status', '1')->get();
-        $regions = Region::
-        join('states','states.id','regions.region_id')
-        ->select('regions.id','states.name as name')->get();
+        $regions = Region::all();
         return response()->json([
-            'html' => view('admin.warehouse.zone_edit', compact('zone','states','regions','countries'))->render()
+            'html' => view('admin.warehouse.zone_edit', compact('zone','regions'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
     }
