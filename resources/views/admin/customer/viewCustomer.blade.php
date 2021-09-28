@@ -244,7 +244,7 @@
                     <tbody class="week-container-tbl">
                         @foreach ($products as $product)
                             <tr class="week_days" data-p-id="{{$product->id}}">
-                                <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
+                                <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
                                
                                 @foreach ($weekDays as  $key=>$item)
                                 @php $key1 = ++$key; @endphp
@@ -261,12 +261,12 @@
                                                 } 
                                             }  
                                         @endphp
-                                        <td>
+                                        <td style="background-color: white !important;">
                                             <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                         text-align: center;" value="{{$qnty}}" minlength="0">
                                         </td>
                                     @else
-                                        <td>
+                                        <td style="background-color: aliceblue !important;">
                                             <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                         text-align: center;" value="0" minlength="0" disabled>
                                         </td>

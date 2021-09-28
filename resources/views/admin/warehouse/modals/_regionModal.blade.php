@@ -27,7 +27,7 @@
                     <div class="mb-3 error-placeholder">
                         <label class="label-wrapper-custm" for="country_id">Suburb <span class="required-star">*</span></label>
                         <input type="text" maxlength="50" class="form-control @error('country') is-invalid @enderror" name="country" id="country"
-                        value="{{ old('country') }}" placeholder="Enter Country Name" >
+                        value="{{ old('country') }}" placeholder="Enter Country Name" required>
                         @error('country')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -37,7 +37,7 @@
                     <div class="mb-3 error-placeholder">
                         <label class="label-wrapper-custm" for="region">Region <span class="required-star">*</span></label>
                         <input type="text" maxlength="50" class="form-control @error('region') is-invalid @enderror" name="region" id="region"
-                        value="{{ old('region') }}" placeholder="Enter Region Name" >
+                        value="{{ old('region') }}" placeholder="Enter Region Name" required>
                         @error('region')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="mb-3 error-placeholder"> 
                         <label class="label-wrapper-custm" for="warehouse_id">Warehouse <span class="required-star">*</span></label>
-                        <select name="warehouse_id" class="form-control @error('warehouse_id') is-invalid @enderror" id="warehouse_id" >
+                        <select name="warehouse_id" class="form-control @error('warehouse_id') is-invalid @enderror" id="warehouse_id" required>
                             <option selected disabled>Select Warehouse</option>
                             @foreach($warehouses as $warehouse)                                        
                                 <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
