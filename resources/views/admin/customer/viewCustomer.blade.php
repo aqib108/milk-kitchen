@@ -242,38 +242,48 @@
                         </tr>
                     </thead>
                     <tbody class="week-container-tbl">
-                        @foreach ($products as $product)
-                            <tr class="week_days" data-p-id="{{$product->id}}">
-                                <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
-                               
-                                @foreach ($weekDays as  $key=>$item)
-                                @php $key1 = ++$key; @endphp
-                                    @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
-                                        @php
-                                            $qnty = 0;
-                                            if ($item != null){
-                                                foreach ($item->WeekDay as $order){
-                                                    
-                                                    if($order->product_id == $product->id){
-                                                        $qnty = $order->quantity;
-                                                    }
-                                                    
-                                                } 
-                                            }  
-                                        @endphp
-                                        <td style="background-color: white !important;">
-                                            <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                        text-align: center;" value="{{$qnty}}" minlength="0">
-                                        </td>
-                                    @else
-                                        <td style="background-color: aliceblue !important;">
-                                            <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                        text-align: center;" value="0" minlength="0" disabled>
-                                        </td>
-                                    @endif
-                                @endforeach
+                        @if($products->count() > 0)
+                            @foreach ($products as $product)
+                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
+                                
+                                    @foreach ($weekDays as  $key=>$item)
+                                    @php $key1 = ++$key; @endphp
+                                        @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                            @php
+                                                $qnty = 0;
+                                                if ($item != null){
+                                                    foreach ($item->WeekDay as $order){
+                                                        
+                                                        if($order->product_id == $product->id){
+                                                            $qnty = $order->quantity;
+                                                        }
+                                                        
+                                                    } 
+                                                }  
+                                            @endphp
+                                            <td style="background-color: white !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="{{$qnty}}" minlength="0">
+                                            </td>
+                                        @else
+                                            <td style="background-color: aliceblue !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="0" minlength="0" disabled>
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td class="alert alert-danger" colspan="8" role="alert">
+                                    <div>
+                                        No Result(s) Found !
+                                    </div>
+                                </td>
                             </tr>
-                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

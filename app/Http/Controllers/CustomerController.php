@@ -87,7 +87,7 @@ class CustomerController extends Controller
         $customerID = $id;
         $customer = User::find($customerID);
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
-        $deliveryRegion = $customerDetail->delivery_region;
+        $deliveryRegion = $customerDetail->delivery_region ?? '';
         $ZoneID = Zone::join('regions','regions.id','zones.id')
         ->select('zones.id as id')->where('regions.region',$deliveryRegion ?? '')->get();
         $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id ?? '')->where('status',1)->pluck('day_id','day_id');

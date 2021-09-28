@@ -42,9 +42,10 @@ class HomeController extends Controller
     {
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
+       $deliveryRegion = $customerDetail->delivery_region ?? '';
        $ZoneID = Zone::join('regions','regions.id','zones.id')
-        ->select('zones.id as id')->where('regions.region',$customerDetail->delivery_region)->get();
-        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id)->where('status',1)->pluck('day_id','day_id');
+        ->select('zones.id as id')->where('regions.region',$deliveryRegion ?? '')->get();
+        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id ?? '')->where('status',1)->pluck('day_id','day_id');
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user){
                     $q->userDetail($user);
