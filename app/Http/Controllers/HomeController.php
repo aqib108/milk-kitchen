@@ -7,6 +7,7 @@ use App\Repositories\UserRepository;
 use Auth;
 use App\Models\CustomerDetail;
 use App\Models\Product;
+use App\Models\Zone;
 use App\Models\WeekDay;
 use App\Models\ProductOrder;
 use App\Models\OrderDeliverd;
@@ -15,6 +16,7 @@ use App\Models\State;
 use App\Models\City;
 use Carbon\Carbon;
 use DateTime;
+use DB;
 
 
 class HomeController extends Controller
@@ -40,36 +42,16 @@ class HomeController extends Controller
     {
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
+       $deliveryRegion = $customerDetail->delivery_region ?? '';
+       $ZoneID = Zone::join('regions','regions.id','zones.id')
+        ->select('zones.id as id')->where('regions.region',$deliveryRegion ?? '')->get();
+        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id ?? '')->where('status',1)->pluck('day_id','day_id');
        $products = Product::orderBy('id','DESC')->where('status',1)->get();
        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user){
                     $q->userDetail($user);
                     }])->get();
-       $countries = Country::where('status',1)->orderby('name','ASC')->get();
-       if ($customerDetail != NULL) {
-            $regions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->business_country_id)->get();
-        } else {
-            $regions = null;
-        }
-
-        if ($customerDetail != NULL) {
-            $cities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->business_region_id)->get();
-        } else {
-            $cities = null;
-        }
-
-        if ($customerDetail != NULL) {
-            $dregions = State::select('id', 'country_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('country_id', $customerDetail->delivery_country_id)->get();
-        } else {
-            $dregions = null;
-        }
-
-        if ($customerDetail != NULL) {
-            $dcities = City::select('id', 'state_id', 'name')->orderBy('name', "ASC")->where('status', 1)->where('state_id', $customerDetail->delivery_region_id)->get();
-        } else {
-            $dcities = null;
-        }
-       
-       return view('customer.index',compact('user','customerDetail','products','weekDays','regions','cities','countries','dregions','dcities'));
+      
+       return view('customer.index',compact('user','customerDetail','products','weekDays','deliveryZoneDay'));
     }
     public function getState(Request $request)
     {

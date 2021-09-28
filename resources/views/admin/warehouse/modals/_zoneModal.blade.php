@@ -35,7 +35,7 @@
                     <div class="mb-3 error-placeholder">
                         <label class="label-wrapper-custm" for="region_id">Region <span class="required-star">*</span></label>
                        
-                        <select name="region_id" id="region_id" class="form-control">
+                        <select name="region_id" id="region_id" class="form-control" required>
                             <option value="" selected disabled>Select Region</option>
                             @foreach ($regions as $region)
                                 <option
