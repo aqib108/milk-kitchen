@@ -152,6 +152,7 @@
         $(document).ready(function(){
             $(document).on('input',function() {
                 $('.price').mask("###0.00", {reverse: true});
+                $('.driver').mask("0000", {reverse: true});
             });
         });
     </script>

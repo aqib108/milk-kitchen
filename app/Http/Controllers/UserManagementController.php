@@ -12,6 +12,7 @@ use Auth;
 use DB;
 use Validator;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Mail;
 
 class UserManagementController extends Controller
 {
@@ -131,14 +132,38 @@ class UserManagementController extends Controller
 
     public function createNewUser(Request $request)
     {
+        // dd($request->all());
         $data = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        $data->assignRole($request->role);
+        if($request->role == 5){
+            $driverCode = [
+                'driver_code' => $request->input('driver_code'),
+            ];
+            $data->update($driverCode);
+        }
+
+        $role = $data->assignRole($request->role);
+
         if($data->wasRecentlyCreated){
+            try {
+                $userEmail = [
+                    'title' => 'Driver 4-Digit Code',
+                    'body' => 'Your Email Has Been Generated.',
+                    'name' =>  $data->name,
+                    'email' =>  $data->email,
+                    'driver_code' => $data->driver_code,
+                ];
+    
+                Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
+            }
+            catch (\Throwable $error) {
+                Report($error);
+            }
+
             $response = array(
                 'data' => [],
                 'message' => 'Data Successfully Added',
