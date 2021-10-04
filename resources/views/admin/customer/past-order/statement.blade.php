@@ -85,174 +85,178 @@
                                 <div>
                                     <h2 class="heading-inner-top">
                                         @isset($customer[0]->delivery_name){{ $customer[0]->delivery_name }}@endisset
-                                        </h2>
+                                    </h2>
+                                </div>
+                                <div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Address 1:  <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
+                                        </p>
                                     </div>
                                     <div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Address 1:  <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Address 2: <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Suburb: <span>@isset($customer[0]->delivery_country){{ $customer[0]->delivery_country }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                City:  <span>@isset($customer[0]->delivery_city){{ $customer[0]->delivery_city }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Region: <span>@isset($customer[0]->delivery_region){{ $customer[0]->delivery_region }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                GST Number: <span>33030400923</span>
-                                            </p>
-                                            
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Invoice Number: <span>33030400923</span>
-                                            </p>
-                                            
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Period Covered:  <span>-------------</span>
-                                            </p>
-                                           
-                                        </div>
+                                        <p class="label-wrapper-custm">
+                                            Address 2: <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Suburb: <span>@isset($customer[0]->delivery_country){{ $customer[0]->delivery_country }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            City:  <span>@isset($customer[0]->delivery_city){{ $customer[0]->delivery_city }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Region: <span>@isset($customer[0]->delivery_region){{ $customer[0]->delivery_region }}@endisset</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            GST Number: <span>33030400923</span>
+                                        </p>
+                                        
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Invoice Number: <span>33030400923</span>
+                                        </p>
+                                        
+                                    </div>
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Period Covered:  <span>-------------</span>
+                                        </p>
+                                        
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-40-wrapper">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="" class="label-wrapper-custm">Delivery Notes:</label>
-                                        <div class="box1">
-                                            <span>@isset($customer[0]->delivery_notes){{ $customer[0]->delivery_notes }}@endisset</span>
-                                        </div>
+                        </div>
+                        <div class="row mb-40-wrapper">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="" class="label-wrapper-custm">Delivery Notes:</label>
+                                    <div class="box1">
+                                        <span>@isset($customer[0]->delivery_notes){{ $customer[0]->delivery_notes }}@endisset</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
                 <div>
-                    <div>
-                        <h2 class="heading-tbl">Related Deliveries</h2>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="table-th-wrapper" scope="col">Product Name</th>
-                                    <th class="table-th-wrapper" scope="col">Monday</th>
-                                    <th class="table-th-wrapper" scope="col">Tuesday</th>
-                                    <th class="table-th-wrapper" scope="col">Wednesday</th>
-                                    <th class="table-th-wrapper" scope="col">Thursday</th>
-                                    <th class="table-th-wrapper" scope="col">Friday</th>
-                                    <th class="table-th-wrapper" scope="col">Saturday</th>
-                                    <th class="table-th-wrapper" scope="col">Sunday</th>
-                                    <th class="table-th-wrapper" scope="col">Total Ctns</th>
-                                    <th class="table-th-wrapper" scope="col">Price</th>
-                                    <th class="table-th-wrapper" scope="col">Discount</th>
-                                    <th class="table-th-wrapper" scope="col">Extention</th>
-                                </tr>
-                            </thead>
-                            <tbody class="week-container-tbl">
-                                @foreach ($products as $product)
-                                    <tr class="week_days" data-p-id="{{$product->id}}">
-                                        <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                                        @foreach ($weekDays as $item)
-                                            @php
-                                                $qnty = 0;
-                                                if ($item->productOrder->isNotEmpty()){
-                                                    foreach ($item->productOrder as $order){
-                                                        if($order->product_id == $product->id){
-                                                            $qnty = $order->quantity;
-                                                        }
+                    <h2 class="heading-tbl">Related Deliveries</h2>
+                </div>
+                <div class="table-responsive" style="overflow: hidden;">
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th class="table-th-wrapper" scope="col">Product Name</th>
+                                <th class="table-th-wrapper" scope="col">Monday</th>
+                                <th class="table-th-wrapper" scope="col">Tuesday</th>
+                                <th class="table-th-wrapper" scope="col">Wednesday</th>
+                                <th class="table-th-wrapper" scope="col">Thursday</th>
+                                <th class="table-th-wrapper" scope="col">Friday</th>
+                                <th class="table-th-wrapper" scope="col">Saturday</th>
+                                <th class="table-th-wrapper" scope="col">Sunday</th>
+                                <th class="table-th-wrapper" scope="col">Total Ctns</th>
+                                <th class="table-th-wrapper" scope="col">Price</th>
+                                <th class="table-th-wrapper" scope="col">Discount</th>
+                                <th class="table-th-wrapper" scope="col">Extention</th>
+                            </tr>
+                        </thead>
+                        <tbody class="week-container-tbl">
+                            @foreach ($products as $product)
+                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
+                                        {{$product->name}}
+                                    </td>
+                                    @foreach ($weekDays as $item)
+                                        @php
+                                            $qnty = 0;
+                                            if ($item->productOrder->isNotEmpty()){
+                                                foreach ($item->productOrder as $order){
+                                                    if($order->product_id == $product->id){
+                                                        $qnty = $order->quantity;
                                                     }
                                                 }
-                                            @endphp
-                                            <td>
-                                               {{ $qnty }}
+                                            }
+                                        @endphp
+                                        @if($qnty != null)
+                                            <td style="background-color: white !important;">
+                                                {{ $qnty }}
                                             </td>
+                                        @else
+                                            <td disabled style="background-color: aliceblue !important;">
+                                               0 
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                    <td style="background-color: white !important;">
+                                        @php $total=0; @endphp
+                                        @foreach ($weekDays as $item)
+                                            @if ($item->productOrder->isNotEmpty())
+                                                @foreach ($item->productOrder as $order)
+                                                    @if($order->product_id == $product->id)
+                                                        @php $total += $order->quantity; @endphp                                                       
+                                                    @endif
+                                                @endforeach
+                                            @endif 
                                         @endforeach
-                                        <td>
-                                            @php $total=0; @endphp
-                                            @foreach ($weekDays as $item)
-                                                @if ($item->productOrder->isNotEmpty())
-                                                    @foreach ($item->productOrder as $order)
-                                                        @if($order->product_id == $product->id)
-                                                            @php $total += $order->quantity; @endphp                                                       
-                                                        @endif
-                                                    @endforeach
-                                                @endif 
-                                            @endforeach
-                                            {{ $total }}
-                                        </td>
-                                        <td>
-                                            {{ '$' . $product->price }}
-                                        </td>
-                                        <td>
-                                            {{ '$' . ($product->price/ 100) * 10 }}
-                                        </td>
-                                        <td>
-                                            {{ '$' . ($product->price  - (($product->price / 100) * 10)) * $total}}
-                                            <input type="hidden" class="extention" value="{{($product->price  - (($product->price / 100) * 10)) * $total}}">
-                                        </td>
-                                    </tr> 
-                                @endforeach
-                               
-                               
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">Sub Total</td>
-                                    <td class="text-right-wrapper">
-                                        <input style="border:none;background:none;" class="text-center subtotal"
-                                            disabled="disabled" readonly>
+                                        {{ $total }}
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">Freight</td>
-                                    <td class="text-right-wrapper">$ -</td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper">GST 15%</td>
-                                    <td class="text-right-wrapper gst">
-                                        <input style="border:none;background:none;" class="text-center gst"
-                                            disabled="disabled" readonly>
+                                    <td style="background-color: white !important;">
+                                        {{ '$' . $product->price }}
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td class="custom-colspan" colspan="10"></td>
-                                    <td class="text-left-wrapper grand-total"> Total</td>
-                                    <td class="text-right-wrapper grand-total-value">
-                                        <input style="border:none;background:none;" class="text-center totalprice"
-                                            disabled="disabled" readonly>
+                                    <td style="background-color: white !important;">
+                                        {{ '$' . ($product->price/ 100) * 10 }}
                                     </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                    <td style="background-color: white !important;">
+                                        {{ '$' . ($product->price  - (($product->price / 100) * 10)) * $total}}
+                                        <input type="hidden" class="extention" value="{{($product->price  - (($product->price / 100) * 10)) * $total}}">
+                                    </td>
+                                </tr> 
+                            @endforeach
+                            <tr>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper">Sub Total</td>
+                                <td class="text-right-wrapper">
+                                    <input style="border:none;background:none;" class="text-center subtotal"
+                                        disabled="disabled" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper">Freight</td>
+                                <td class="text-right-wrapper">$ -</td>
+                            </tr>
+                            <tr>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper">GST 15%</td>
+                                <td class="text-right-wrapper gst">
+                                    <input style="border:none;background:none;" class="text-center gst"
+                                        disabled="disabled" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper grand-total"> Total</td>
+                                <td class="text-right-wrapper grand-total-value">
+                                    <input style="border:none;background:none;" class="text-center totalprice"
+                                        disabled="disabled" readonly>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-                <!-- /.col -->
-            <br>
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.col -->
+        <br>
     </section>
     <!-- /.content -->
 @endsection

@@ -248,7 +248,7 @@
                                     <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
                                 
                                     @foreach ($weekDays as  $key=>$item)
-                                    @php $key1 = ++$key; @endphp
+                                        @php $key1 = ++$key; @endphp
                                         @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
                                             @php
                                                 $qnty = 0;
