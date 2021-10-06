@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Warehouse;
 use App\Http\Requests\WarehouseRequest;
 use Yajra\DataTables\DataTables;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
+use App\Models\User;
 use App\Models\Region;
-use Validator;
 class WareHouseController extends Controller
 {
     /**
@@ -19,7 +16,46 @@ class WareHouseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {         
+            //  Zone::join('region','region.id','zones.region_id')
+            //         ->leftjoin('customer_details','customer_details.delivery_region','zones.region_id')
+            //         ->get();
+            //   $detail=CustomerDetail::join('users','users.id','customer_details.user_id')
+            //                          ->join('regions','regions.region','customer_details.delivery_region')
+            //                          ->select('users.name as name','customer_details.user_id as CustomerID',
+            //                          'customer_details.business_address_1 as address','regions.id as regionID',)
+            //                         ->get()
+            //                         ->map(function($region){
+            //                             $p= ProductOrder::
+            //                             leftjoin('products','products.id','product_orders.product_id')
+            //                             ->where('product_orders.user_id',$region->CustomerID)
+            //                             ->select('products.name as name','product_orders.quantity as corton')
+            //                             ->get();
+            //                               $zone=Zone::whereRegionId($region->regionID)->get('name');
+            //                           return $p.$zone;
+                                    // $var= Region::where('regions.region',$region->delivery_region)
+                                    // ->join('warehouses','warehouses.id','regions.warehouse_id')
+                                    // ->select('warehouses.name')
+                                    // ->get();
+                                    // return $var;
+                    //             });
+                    // dd($detail);
+                    //  $warehouseId= Warehouse::where('id',2)->first()->id;
+                    //     $product= Region::leftjoin('customer_details','customer_details.delivery_region','regions.region')
+                    //              ->where('regions.warehouse_id',$warehouseId)
+                    //              ->select('customer_details.user_id')
+                    //              ->get()->map(function($value){
+                    //                 $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
+                    //                  ->where('product_orders.user_id',$value->user_id)
+                    //                  ->select('products.name as name','product_orders.quantity as corton')
+                    //                   ->get();
+                    //                   return $p;
+                    //                 });
+                    //                 $products=$product->first();
+                    //                 return view('admin.customer.master_picklist',compact('products'));
+                                
+              $data = User::role('Customer')->get(); 
+        //   dd($data);
         if ($request->ajax()) {
             $data = Warehouse::orderBy('id','DESC')->get();
             return Datatables::of($data)
@@ -49,7 +85,6 @@ class WareHouseController extends Controller
                 ->rawColumns(['action','status'])
                 ->make(true);
         }
-
         $regions = Region::orderBy('id', 'DESC')->get();
         $warehouses= Warehouse::where('status',1)->get();
         return view('admin.warehouse.index',compact('regions','warehouses'));

@@ -39,26 +39,27 @@ Edit User
                             <div class="row">
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <label>Name <span class="required-star">*</span></label>
-                                    <input type="text" maxlength="50" class="form-control" id="firstName" name="name"
-                                        value="{{ $user->name }}" placeholder="Enter User Name" readonly>
+                                    <input type="text" maxlength="50" class="form-control" id="firstName" name="name" value="{{ $user->name }}" placeholder="Enter User Name" readonly>
                                     <div id="first-name-err" class="alert alert-danger"></div>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <label>Email <span class="required-star">*</span></label>
-                                    <input type="email" maxlength="50" class="form-control" id="emailAddress"
-                                        name="email" value="{{ $user->email }}" placeholder="Enter Email " readonly>
+                                    <input type="email" maxlength="50" class="form-control" id="emailAddress" name="email" value="{{ $user->email }}" placeholder="Enter Email " readonly>
                                     <div id="email-err" class="alert alert-danger"></div>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <label>Role's <span class="required-star">*</span></label>
-                                    <select name="role" class="form-control" id="">
+                                    <select name="role" class="form-control" id="roleId">
                                         <option value="{{ $role[0] }}">{{ $role[0] }}</option>
                                         @foreach ($roles as $roll)
-                                            @if ($role[0] != $roll->name)
-                                                <option value="{{ $roll->name }}">{{ $roll->name }}</option>
-                                            @endif
+                                        @if ($role[0] != $roll->name)
+                                        <option value="{{ $roll->name }}">{{ $roll->name }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-6 col-xs-12" id="assign_warehouse">
+
                                 </div>
                             </div>
                         </div>
@@ -85,21 +86,57 @@ Edit User
 
 @section('scripts')
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Initialize Select2 select box
-            $("select[name=\"validation-select2\"]").select2({
-                allowClear: true,
-                placeholder: "Select gear...",
-            }).change(function() {
-                $(this).valid();
-            });
-            // Initialize Select2 multiselect box
-            $("select[name=\"validation-select2-multi\"]").select2({
-                placeholder: "Select gear...",
-            }).change(function() {
-                $(this).valid();
-            });
+<script>
+    window.onload = function() {
+        var role_id = $('#roleId').val();
+        $.ajax({
+            method: "get",
+            url: "{{route('getWarehouses')}}",
+            data: {
+                _token: $('meta[name="csrf_token"]').attr('content'),
+                id: role_id,
+            },
+            success: function(response) {
+                $('#assign_warehouse').empty();
+                $('#assign_warehouse').append(response.html);
+            }
         });
-    </script>
+    };
+    $(document).ready(function() {
+                $('#roleId').on('change', function() {
+                    var role_id = $('#roleId').val();
+                    if (role_id == 4) {
+                        $.ajax({
+                            method: "get",
+                            url: "{{route('getWarehouses')}}",
+                            data: {
+                                _token: $('meta[name="csrf_token"]').attr('content'),
+                                id: role_id,
+                            },
+                            success: function(response) {
+                                $('#assign_warehouse').empty();
+                                $('#assign_warehouse').append(response.html);
+                            }
+                        });
+                    } else {
+                        $('#assign_warehouse').empty();
+                    }
+
+                });});
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Initialize Select2 select box
+                    $("select[name=\"validation-select2\"]").select2({
+                        allowClear: true,
+                        placeholder: "Select gear...",
+                    }).change(function() {
+                        $(this).valid();
+                    });
+                    // Initialize Select2 multiselect box
+                    $("select[name=\"validation-select2-multi\"]").select2({
+                        placeholder: "Select gear...",
+                    }).change(function() {
+                        $(this).valid();
+                    });
+                });
+</script>
 @endsection

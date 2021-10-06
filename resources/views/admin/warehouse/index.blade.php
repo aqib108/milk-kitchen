@@ -564,7 +564,6 @@
                         option = "<option value='" + item.id + "'>" + item.name + "</option>"
                         $('#region_id').append(option);
                     });
-
                 }
             });
         });

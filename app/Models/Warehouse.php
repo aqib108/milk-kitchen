@@ -13,4 +13,8 @@ class Warehouse extends Model
         'name',
         'status'
     ];
+    public function getzone()
+    {
+        return $this->hasManyThrough(Zone::class, Region::class);
+    }
 }

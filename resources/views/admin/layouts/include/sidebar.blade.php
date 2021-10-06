@@ -33,7 +33,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+               @can('mange user')
+               <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user-cog"></i>
                         <p>
@@ -62,7 +63,9 @@
                         </li>
                     </ul>
                 </li>
+               @endcan
                 <!--Customers-->
+                @can('manage customer')
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
@@ -92,8 +95,10 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
                 <!--- End Customers-->
                 <!--- Stocks --->
+                @can('manage products')
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fab fa-product-hunt"></i>
@@ -135,10 +140,12 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
                 <!--- End Stock --->
                 <!--- WareHouse --->
+                @can('manage warehouse')
                 <li class="nav-item has-treeview">
-                    <a href="" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-warehouse"></i>
                         <p>
                             Manage WareHouse
@@ -160,6 +167,33 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
+
+                @can('check Deliveries Record')
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Check Deliveries
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('masterPicklist') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Master Picklist</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('runPicklist') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Run Picklist</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endcan
                 <!-- End Distributor --->
                 <!--- Driver --->
                 {{-- <li class="nav-item has-treeview">
@@ -187,6 +221,7 @@
                 </li> --}}
 
                 <!--Sales-->
+                @can('manage sales')
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fab fa-salesforce"></i>
@@ -211,8 +246,9 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
                 <!--- End sale --->
-
+                 @can('manage report')
                 <li class="nav-item">
                     <a href="{{ route('customer.customer-report') }}" class="nav-link">
                         <i class="nav-icon fas fa-clock"></i>
@@ -221,6 +257,7 @@
                         </p>
                     </a>
                 </li>
+                @endcan
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
