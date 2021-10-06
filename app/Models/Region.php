@@ -17,4 +17,7 @@ class Region extends Model
     public function wareHouse(){
         return $this->belongsTo(Warehouse::class,'warehouse_id','id');
     }
+    public function zone() {
+        return $this->hasOne(Zone::class);
+    }
 }

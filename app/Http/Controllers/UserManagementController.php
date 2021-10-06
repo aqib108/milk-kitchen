@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Models\Warehouse;
 use Auth;
 use DB;
 use Validator;
@@ -76,6 +77,15 @@ class UserManagementController extends Controller
 
         return view('admin.users.editUser',compact('user','role','roles'));
     }
+    public function getWarehouses()
+    {
+        $warehouses=Warehouse::whereStatus(1)->get();
+          $arr=  Warehouse::whereStatus(1)->get('id')->toArray();
+        return response()->json([
+            'html' => view('admin.users.warehouseSelect', compact('warehouses','arr'))->render()
+            ,200, ['Content-Type' => 'application/json']
+        ]);   
+    } 
 
     public function status(Request $request)
     {
@@ -94,6 +104,10 @@ class UserManagementController extends Controller
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Update.');
         }
+        // $warehouses_all=implode(',',$request->warehouses);
+        // foreach (explode(',',$warehouses_all) as $key => $value) {
+        //    DB::table('assign_warehouses')->where('user_id',$user->id)->insertOrUpdate(['user_id'=>$user->id,'warehouse_id'=>$value]);
+        // }
         $role = $request->role;
         $user->syncRoles($role);
 
@@ -132,44 +146,58 @@ class UserManagementController extends Controller
 
     public function createNewUser(Request $request)
     {
-        // dd($request->all());
-        $data = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        if($request->role == 5){
-            $driverCode = [
-                'driver_code' => $request->input('driver_code'),
-            ];
-            $data->update($driverCode);
+        if($request->role == 4)
+        {
+            $data = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            $warehouses_all=implode(',',$request->warehouses);
+            foreach (explode(',',$warehouses_all) as $key => $value) {
+                DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
+            }
+            $data->assignRole($request->role);
         }
+        else
+        {
+            $data = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        $role = $data->assignRole($request->role);
-
-        if($data->wasRecentlyCreated){
-            try {
-                $userEmail = [
-                    'title' => 'Driver 4-Digit Code',
-                    'body' => 'Your Email Has Been Generated.',
-                    'name' =>  $data->name,
-                    'email' =>  $data->email,
-                    'driver_code' => $data->driver_code,
+            if($request->role == 5){
+                $driverCode = [
+                    'driver_code' => $request->input('driver_code'),
                 ];
-    
-                Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
+                $data->update($driverCode);
             }
-            catch (\Throwable $error) {
-                Report($error);
-            }
+            
+            $role = $data->assignRole($request->role);
+            if($data->wasRecentlyCreated){
+                try {
+                    $userEmail = [
+                        'title' => 'Driver 4-Digit Code',
+                        'body' => 'Your Email Has Been Generated.',
+                        'name' =>  $data->name,
+                        'email' =>  $data->email,
+                        'driver_code' => $data->driver_code,
+                    ];
+        
+                    Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
+                }
+                catch (\Throwable $error) {
+                    Report($error);
+                }
 
-            $response = array(
-                'data' => [],
-                'message' => 'Data Successfully Added',
-                'status' => 'success',
-            );
-            return $response;
+                $response = array(
+                    'data' => [],
+                    'message' => 'Data Successfully Added',
+                    'status' => 'success',
+                );
+                return $response;
+            }
         }
     }
 

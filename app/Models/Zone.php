@@ -19,6 +19,6 @@ class Zone extends Model
     {
         return $this->hasMany(DeliverySheduleZone::class,'zone_id','id');
     }
-
+  
 
 }
