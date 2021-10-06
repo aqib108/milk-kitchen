@@ -50,13 +50,28 @@ Add New User
                                             name="email" value="{{ old('email') }}" placeholder="Enter Email ">
                                         <div id="email-err" class="alert alert-danger"></div>
                                     </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12" id>
+                                        <label>Role's <span class="required-star">*</span></label>
+                                        <select name="role" class="form-control" id="role_id">
+                                            <option selected disabled>Select Role</option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}">
+                                                    {{ $role->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden"  id="driver">
+                                        <label>Driver Code<span class="required-star">*</span></label>
+                                        <input type="text"  class="form-control driver"  name="driver_code" minlength="4" maxlength="4" placeholder="Enter 4-Digit Code Driver" value="{{ old('driver_code') }}">
+                                        <div id="digit-err" class="alert alert-danger"></div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Password <span class="required-star">*</span></label>
                                         <input type="password" maxlength="50" class="form-control" id="password"
                                             name="password" placeholder="Enter Password ">
                                         <div id="password-err" class="alert alert-danger"></div>
                                     </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Confirm Password <span class="required-star">*</span></label>
                                         <input type="password" maxlength="50" class="form-control"
                                             name="password_confirmation" id="confirmPassword"
@@ -171,8 +186,6 @@ Add New User
             return false;
         }
     }
-
-
     //  Name Validation
     var firstName = document.getElementById("firstName");
     var firstNameValidation = function() {
@@ -193,7 +206,6 @@ Add New User
     firstName.oninput = function() {
         firstNameValidation();
     }
-
     // Email Address Validation
     var emailAddress = document.getElementById("emailAddress");
     var emailAddressValidation = function() {
@@ -210,15 +222,12 @@ Add New User
             return true;
         }
     }
-
     emailAddress.oninput = function() {
         var startTimer;
         let email = $(this).val();
         startTimer = setTimeout(checkEmail, 500, email);
         emailAddressValidation();
     }
-
-
     function checkEmail(email) {
         emailAddressErr = document.getElementById('email-err');
         $('#email-error').remove();
@@ -245,10 +254,9 @@ Add New User
             $('#email').after('<div id="email-error" class="text-danger" <strong>Email address can not be empty.<strong></div>');
         }
     }
-        // Password Validation
-        var password = document.getElementById("password");;
-
-        var passwordValidation = function() {
+    // Password Validation
+    var password = document.getElementById("password");
+    var passwordValidation = function() {
         passwordValue = password.value.trim();
         re = /[0-9]/;  re1 = /[a-z]/;      re2 = /[A-Z]/;
         passwordErr = document.getElementById('password-err');
@@ -267,42 +275,45 @@ Add New User
             passwordErr.innerHTML="Error: password must contain at least one uppercase letter (A-Z)!";
             return false;
         }
-       else {
+        else {
             passwordErr.innerHTML = "";
             return true;
         }
     }
+    password.oninput = function() {
+        passwordValidation();
+        confirmPasswordValidation();
+    }
+    // Confirm Password Validation
+    var confirmPassword = document.getElementById("confirmPassword");
+    var confirmPasswordValidation = function() {
+        confirmPasswordValue = confirmPassword.value.trim();
+        confirmPasswordErr = document.getElementById('confirm-password-err');
 
-        password.oninput = function() {
-
-            passwordValidation();
-
-            confirmPasswordValidation();
-
+        if (confirmPasswordValue == "") {
+            confirmPasswordErr.innerHTML = "Confirm Password is required";
+        } else if (confirmPasswordValue != password.value) {
+            confirmPasswordErr.innerHTML = "Confirm Password does not match";
+        } else {
+            confirmPasswordErr.innerHTML = "";
+            return true;
         }
+    }
+    confirmPassword.oninput = function() {
+        confirmPasswordValidation();
+    }
 
-        // Confirm Password Validation
-        var confirmPassword = document.getElementById("confirmPassword");;
-
-        var confirmPasswordValidation = function() {
-            confirmPasswordValue = confirmPassword.value.trim();
-
-            confirmPasswordErr = document.getElementById('confirm-password-err');
-            if (confirmPasswordValue == "") {
-                confirmPasswordErr.innerHTML = "Confirm Password is required";
-            } else if (confirmPasswordValue != password.value) {
-                confirmPasswordErr.innerHTML = "Confirm Password does not match";
-            } else {
-                confirmPasswordErr.innerHTML = "";
-                return true;
-            }
+    // Driver 4-Digit Code Assigined By Role
+    $('#role_id').on('change', function() {
+        var role = $('#role_id').find(":selected").val();
+        console.log(role);
+        if(role == 5)
+        {
+            $('#driver').removeClass('hidden'); 
+        }else{
+            $('#driver').addClass('hidden');
         }
+    });
 
-        confirmPassword.oninput = function() {
-
-            confirmPasswordValidation();
-
-        }
-    </script>
-    
+</script> 
 @endsection

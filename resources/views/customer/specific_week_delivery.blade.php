@@ -15,7 +15,7 @@
         <tbody class="week-container-tbl">
             @foreach ($products as $product)
                 <tr class="week_days" data-p-id="{{$product->id}}">
-                    <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
+                    <td class="table-td-wrapper" scope="row" style="width: 149px; background-color: white !important;">{{$product->name}}</td>
                     @foreach ($weekDays as $item)
                         @php
                             $qnty = 0;
@@ -27,10 +27,18 @@
                                 }
                             }
                         @endphp
-                        <td>
-                            <input id="{{ $item->name }}" class="form-control" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                            text-align: center;" value="{{ $qnty }}" minlength="0" readonly>
-                        </td>
+                        @if($qnty != null)
+                            <td style="background-color: white !important; width: 149px;">
+                                <input id="{{ $item->name }}" class="form-control" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                text-align:center;  margin: auto;" value="{{ $qnty }}" minlength="0" readonly>
+                                
+                            </td>
+                        @else
+                            <td style="background-color: aliceblue !important; width: 149px;">
+                                <input id="{{ $item->name }}" class="form-control" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                text-align:center;  margin: auto;" value="{{ $qnty }}" minlength="0" readonly>
+                            </td>
+                        @endif
                     @endforeach
                 </tr> 
             @endforeach
@@ -39,7 +47,7 @@
     <table class="table table-bordered mb-0 weekly_standing_order">
         <tbody class="week-container-tbl">  
             <tr>
-                <td style="width: 146px;"></td>
+                <td style="width: 145px;"></td>
                 @foreach ($weekDays as $item)
                     @php
                         $id = 0;
@@ -51,10 +59,15 @@
                             }
                         }
                     @endphp
-                    <td>
-                        <a href="{{route('customer.final-report',$id)}}">view</a>
-
-                    </td>
+                    @if($id != 0)
+                        <td style="width: 149px;">
+                            <a href="{{route('customer.final-report',$id)}}">view</a>
+                        </td>
+                    @else
+                        <td style="background-color: aliceblue !important; width: 149px;">
+                            <a href="{{route('customer.final-report',$id)}}">view</a>
+                        </td>
+                    @endif
                    
                 @endforeach 
             </tr>

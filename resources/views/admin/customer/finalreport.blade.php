@@ -188,21 +188,16 @@
                                                             @continue;
                                                         @endif
                                                         @if ($order->product_id == $product->id)
-                                                            <td class="table-td-wrapper" scope="row"
-                                                                style="width: 175px; text-align:center;">
-                                                                {{ $product->name }}</td>
-                                                            <td>
-                                                                <div class="quantity">
+                                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important; width: 175px; text-align:center;">
+                                                                {{ $product->name }}
+                                                            </td>
+                                                            <td style="background-color: white !important; width: 175px; text-align:center;">
+                                                                <div class="quantity" >
                                                                     {{ $order->quantity }}
                                                                 </div>
-
                                                                 <input type="hidden" name="totalCtn[]"
                                                                     value="{{ $order->quantity }}">
                                                             </td>
-
-
-
-
                                                         @endif
                                                     @endforeach
                                                 @endif
@@ -215,7 +210,7 @@
                         <table class="table table-bordered mb-0 weekly_standing_order">
                             <tbody class="week-container-tbl">
                                 <tr>
-                                    <th style="width: 175px; text-align: center;">Total Carton</th>
+                                    <th style="width: 172px; text-align: center;">Total Carton</th>
                                     <td id="total_ctns">
 
                                     </td>
@@ -231,7 +226,7 @@
                 </div>
                 <div class="col-lg-4">
 
-                    {!! QrCode::size(150)->merge('https://leadconcept.com/', 0.3, true)->errorCorrection('H')->generate('milkkitchen.leadconcept.info/login') !!}
+                    {!! QrCode::size(150)->merge('https://leadconcept.com/', 0.3, true)->errorCorrection('H')->generate('lead concept') !!}
                 </div>
             </div>
             <section>
@@ -281,16 +276,16 @@
                                                                 @php
                                                                     $order_id = $orderDetail->id;
                                                                 @endphp
-                                                                <td class="table-td-wrapper" scope="row">
+                                                                <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
                                                                     {{ $product->name }}</td>
-                                                                <td>
+                                                                <td style="background-color: white !important;">
                                                                     <div class="quantity">
                                                                         {{ $order->quantity }}
                                                                     </div>
                                                                     <input type="hidden" class="t_ctn"
                                                                         value="{{ $order->quantity }}">
                                                                 </td>
-                                                                <td>
+                                                                <td style="background-color: white !important;">
                                                                     <input type="number" class="d_qnty" data-id="{{$orderDetail->day_id}}" style="width: 80px;
                                                                     text-align: center;" minlength="0"
                                                                         value="{{ !empty($order->d_qnty)?$order->d_qnty:0 }}">
