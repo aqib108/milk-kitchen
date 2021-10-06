@@ -14,6 +14,8 @@ use App\Models\OrderDeliverd;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use App\Models\Region;
+use App\Models\Warehouse;
 use Carbon\Carbon;
 use DateTime;
 use DB;
@@ -50,7 +52,6 @@ class HomeController extends Controller
        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user){
                     $q->userDetail($user);
                     }])->get();
-      
        return view('customer.index',compact('user','customerDetail','products','weekDays','deliveryZoneDay'));
     }
     public function getState(Request $request)

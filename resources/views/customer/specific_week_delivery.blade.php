@@ -30,7 +30,6 @@
                         <td>
                             <input id="{{ $item->name }}" class="form-control" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                             text-align: center;" value="{{ $qnty }}" minlength="0" readonly>
-                            
                         </td>
                     @endforeach
                 </tr> 

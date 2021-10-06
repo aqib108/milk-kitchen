@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PhpParser\Node\Expr\Assign;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
@@ -49,5 +50,10 @@ class User extends Authenticatable
     public function customerDetail()
     {
         return $this->belongsTo(customerDetail::class, 'id', 'user_id');
+    }
+
+    public function warehouseManagers()
+    {
+        return $this->hasMany(AssignWarehouse::class);
     }
 }

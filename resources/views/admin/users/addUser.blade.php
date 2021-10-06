@@ -65,13 +65,16 @@ Add New User
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Role's <span class="required-star">*</span></label>
-                                        <select name="role" class="form-control" id="">
+                                        <select name="role" class="form-control" id="roleId">
                                             <option selected disabled>Select Role</option>
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role->id }}">
                                                     {{ $role->name }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-6 col-xs-12" id="assign_warehouse">
+                                              
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +99,34 @@ Add New User
     <!-- /.content -->
 @endsection
 @section('scripts')
+
 <script>
+
+    $(document).ready(function() {
+         $('#roleId').on('change', function() {
+        var role_id = $('#roleId').val();
+       if(role_id == 4)
+       {
+                $.ajax({
+                    method: "get",
+                    url: "{{route('getWarehouses')}}",
+                    data: {
+                        _token: $('meta[name="csrf_token"]').attr('content'),
+                        id: role_id,
+                    },
+                    success: function(response) {
+                        $('#assign_warehouse').empty();
+                        $('#assign_warehouse').append(response.html);
+                    }
+                });
+       }
+            else
+            {
+                $('#assign_warehouse').empty();  
+            }
+
+    });
+    });
     document.getElementById("registrationForm").onsubmit = function(e) {
         firstNameValidation();
         // lastNameValidation();
