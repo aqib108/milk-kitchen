@@ -60,35 +60,29 @@
 
 @section('scripts')
 <script>
-       window.onload =function() {
+    window.onload = function() {
+        runpicklist();  
+    };
+    function runpicklist(warehouse_id = null)
+    {
         $.ajax({
-            method: "post",
-            url: "{{route('getrunPicklist')}}",
-            data: {
-                _token: $('meta[name="csrf_token"]').attr('content'),
-            },
-            success: function(response) {
-                $('#deliverRecord').empty();
-                $('#deliverRecord').append(response.html);
-            }
-        });        
-       };
+                method: "post",
+                url: "{{route('getrunPicklist')}}",
+                data: {
+                    _token: $('meta[name="csrf_token"]').attr('content'),
+                    id: warehouse_id,
+                },
+                success: function(response) {
+                    $('#deliverRecord').empty();
+                    $('#deliverRecord').append(response.html);
+                }
+            });
+    }
     $(document).ready(function() {
-         $('#warehouse').on('change', function() {
-        var warehouse_id = $('#warehouse').val();
-        $.ajax({
-            method: "post",
-            url: "{{route('getrunPicklist')}}",
-            data: {
-                _token: $('meta[name="csrf_token"]').attr('content'),
-                id: warehouse_id,
-            },
-            success: function(response) {
-                $('#deliverRecord').empty();
-                $('#deliverRecord').append(response.html);
-            }
+        $('#warehouse').on('change', function() {
+            var warehouse_id = $('#warehouse').val();
+            runpicklist(warehouse_id);   
         });
-    });
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

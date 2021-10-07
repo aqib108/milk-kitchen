@@ -67,13 +67,12 @@ class AdminController extends Controller
         if(auth()->user()->name != 'admin')
         {
             $warehouses=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
-            ->select('warehouses.*')->whereStatus(1)->get();
-            
+            ->select('warehouses.*')->whereStatus(1)->get();    
         }
-        else{
+        else
+        {
             $warehouses=Warehouse::whereStatus(1)->get();
-        }
-      
+        }   
         return view('admin.customer.runPicklist',compact('warehouses','days'));
     }
     public function getmasterPicklist()
@@ -85,6 +84,7 @@ class AdminController extends Controller
                       
                             $product= Region::leftjoin('customer_details','customer_details.delivery_region','regions.region')
                                  ->where('regions.warehouse_id',$warehouse->id)
+                                 ->where('regions.id',2)
                                  ->select('customer_details.user_id')
                                  ->get()->map(function($value){
                                 if(!empty(request()->day_id))
