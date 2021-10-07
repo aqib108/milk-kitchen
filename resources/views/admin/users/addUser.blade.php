@@ -287,7 +287,7 @@ Add New User
                 url: "{{route('getWarehouses')}}",
                 data: {
                     _token: $('meta[name="csrf_token"]').attr('content'),
-                    id: role_id,
+                    role_id: role_id,
                 },
                 success: function(response) {
                     $('#assign_warehouse').removeClass('hidden'); 
