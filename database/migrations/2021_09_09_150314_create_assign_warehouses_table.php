@@ -16,9 +16,7 @@ class CreateAssignWarehousesTable extends Migration
         Schema::create('assign_warehouses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('warehouse_id');
-            $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');   
             $table->timestamps();
         });
     }
