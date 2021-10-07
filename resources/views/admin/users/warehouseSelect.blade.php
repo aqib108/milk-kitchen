@@ -1,7 +1,9 @@
 
     <label>Warehouses <span class="required-star">*</span></label>
+ 
     <select class="form-control" name="warehouses[]" multiple style="width: 100%" required>
         @foreach ($warehouses as $value)
+        
         <option value="{{ $value->id }}" {{ in_array($value->id,$arr) ? 'selected' : false }}>
             {{ $value->name }}
         </option>
@@ -12,8 +14,6 @@
         <strong>{{ $message }}</strong>
     </span>
     @enderror
-
-
 <script>
     $(document).ready(function() {
         // Initialize Select2 select box

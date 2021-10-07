@@ -95,24 +95,26 @@ Edit User
             data: {
                 _token: $('meta[name="csrf_token"]').attr('content'),
                 id: role_id,
+                user_id: 1
             },
             success: function(response) {
                 $('#assign_warehouse').empty();
                 $('#assign_warehouse').append(response.html);
             }
         });
-    };
-    $(document).ready(function() {
-                $('#roleId').on('change', function() {
+    }
+             $(document).ready(function() {
+                $('#roleId').on('change', function() {    
                     var role_id = $('#roleId').val();
-                    if (role_id == 4) {
+                    if (role_id == 'Warehouse') {
                         $.ajax({
                             method: "get",
                             url: "{{route('getWarehouses')}}",
                             data: {
                                 _token: $('meta[name="csrf_token"]').attr('content'),
-                                id: role_id,
-                            },
+                                  id: role_id,
+                                  user_id:1
+                                 },
                             success: function(response) {
                                 $('#assign_warehouse').empty();
                                 $('#assign_warehouse').append(response.html);
@@ -122,7 +124,8 @@ Edit User
                         $('#assign_warehouse').empty();
                     }
 
-                });});
+                });
+             });
                 document.addEventListener("DOMContentLoaded", function() {
                     // Initialize Select2 select box
                     $("select[name=\"validation-select2\"]").select2({
