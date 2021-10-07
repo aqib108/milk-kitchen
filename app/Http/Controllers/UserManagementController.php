@@ -118,14 +118,24 @@ class UserManagementController extends Controller
         }
 
         if($request->role == 4){
-            $warehouses_all=implode(',',$request->warehouses);
-            foreach (explode(',',$warehouses_all) as $key => $value) {
-                DB::table('assign_warehouses')->insert(['user_id'=>$user->id,'warehouse_id'=>$value]);
+            if ($request->has('warehouses')) {
+                $user->wareHouses()->detach();
+                $warehouse = Warehouse::whereIn('id', $request->warehouses)->get();
+                $user->wareHouses()->attach($warehouse);
             }
+            $driverCode = $user->driver_code;
+            if($driverCode != null){
+                $code = null;
+                $data = [
+                    'driver_code' => $code,
+                ];
+                $user->update($data);
+            }
+            
         }elseif($request->role == 5){
              $assigned_warehouse=AssignWarehouse::where('user_id',$user->id)->get()->map(function($user){
-                 $userID =  $user->id;
-                 return AssignWarehouse::find($userID)->delete();
+                $userID =  $user->id;
+                return AssignWarehouse::find($userID)->delete();
              });
            
             $driverCode = [
