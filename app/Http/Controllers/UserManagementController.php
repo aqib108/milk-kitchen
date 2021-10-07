@@ -85,6 +85,7 @@ class UserManagementController extends Controller
         if($role->id == 4)
         {
             $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
+            ->where('assign_warehouses.user_id',$request->user_id)
             ->select('warehouses.*')->whereStatus(1)->pluck('id')->toArray();  
         }
         else
@@ -122,20 +123,25 @@ class UserManagementController extends Controller
                 DB::table('assign_warehouses')->insert(['user_id'=>$user->id,'warehouse_id'=>$value]);
             }
         }elseif($request->role == 5){
+             $assigned_warehouse=AssignWarehouse::where('user_id',$user->id)->get()->map(function($user){
+                 $userID =  $user->id;
+                 return AssignWarehouse::find($userID)->delete();
+             });
+           
             $driverCode = [
-                'driver_code' => $request->input('driver_code'),
+                'driver_code' => $request->driver_code,
             ];
             $user->update($driverCode);
             try {
                 $userEmail = [
                     'title' => 'Driver 4-Digit Code',
                     'body' => 'Your Email Has Been Generated.',
-                    'name' =>  $data->name,
-                    'email' =>  $data->email,
-                    'driver_code' => $data->driver_code,
+                    'name' =>  $user->name,
+                    'email' =>  $user->email,
+                    'driver_code' => $user->driver_code,
                 ];
     
-                Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
+                Mail::to($user->email)->send(new \App\Mail\driverCodeMail($userEmail));
             }
             catch (\Throwable $error) {
                 Report($error);
