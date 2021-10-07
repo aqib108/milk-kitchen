@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Models\AssignWarehouse;
 use Auth;
 use DB;
 use Validator;
@@ -80,7 +81,17 @@ class UserManagementController extends Controller
     public function getWarehouses()
     {
         $warehouses=Warehouse::whereStatus(1)->get();
-          $arr=  Warehouse::whereStatus(1)->get('id')->toArray();
+        if(request()->user_id)
+        {
+            $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
+            ->select('warehouses.*')->whereStatus(1)->pluck('id')->toArray();  
+        }
+        else
+        {
+            $arr=array('');
+        }
+            
+      
         return response()->json([
             'html' => view('admin.users.warehouseSelect', compact('warehouses','arr'))->render()
             ,200, ['Content-Type' => 'application/json']
@@ -104,10 +115,10 @@ class UserManagementController extends Controller
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Update.');
         }
-        // $warehouses_all=implode(',',$request->warehouses);
-        // foreach (explode(',',$warehouses_all) as $key => $value) {
-        //    DB::table('assign_warehouses')->where('user_id',$user->id)->insertOrUpdate(['user_id'=>$user->id,'warehouse_id'=>$value]);
-        // }
+        $warehouses_all=implode(',',$request->warehouses);
+        foreach (explode(',',$warehouses_all) as $key => $value) {
+           AssignWarehouse::where('user_id',$user->id)->updateOrCreate(['user_id'=>$user->id,'warehouse_id'=>$value]);
+        }
         $role = $request->role;
         $user->syncRoles($role);
 
