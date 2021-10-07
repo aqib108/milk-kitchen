@@ -48,10 +48,11 @@
                                     <div class="form-group col-md-6 col-sm-4 col-xs-12">
                                         <label>Permission <span class="required-star">*</span></label>
                                         <select class="form-control" name="permissions[]" multiple style="width: 100%" required>
-                                            @foreach ($permission as $value)
+                                            @foreach($permission as $value)
                                                 <option value="{{ $value->id }}"
                                                     {{ in_array($value->id, $rolePermissions) ? 'selected' : false }}>
-                                                    {{ $value->name }}</option>
+                                                    {{ $value->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('permissions')
