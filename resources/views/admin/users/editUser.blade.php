@@ -64,6 +64,7 @@ Edit User
                                     <input type="text"  class="form-control driver"  name="driver_code" minlength="4" maxlength="4" placeholder="Enter 4-Digit Code Driver" value="{{$user->driver_code}}">
                                     <div id="digit-err" class="alert alert-danger"></div>
                                 </div>
+                                <input type="hidden" id="user_id" value="{{$user->id}}">
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -92,6 +93,7 @@ Edit User
 <script>
     window.onload = function() {
         var role_id = $('#role_id').val();
+        var user_id =$('#user_id').val();
         if(role_id == 4)
         {
             $.ajax({
@@ -100,6 +102,7 @@ Edit User
                 data: {
                     _token: $('meta[name="csrf_token"]').attr('content'),
                     role_id: role_id,
+                    user_id: user_id,
                 },
                 success: function(response) {
                     $('#assign_warehouse').removeClass('hidden'); 
@@ -118,6 +121,7 @@ Edit User
     // Driver 4-Digit Code Assigined By Role OR Warehouse 
     $('#role_id').on('change', function() {
         var role_id = $('#role_id').find(":selected").val();
+        var user_id =$('#user_id').val();
         console.log(role_id);
         if(role_id == 5)
         {
@@ -137,6 +141,7 @@ Edit User
                 data: {
                     _token: $('meta[name="csrf_token"]').attr('content'),
                     role_id: role_id,
+                    user_id: user_id,
                 },
                 success: function(response) {
                     $('#driver').addClass('hidden');
