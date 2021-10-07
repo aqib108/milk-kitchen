@@ -73,15 +73,16 @@ class UserManagementController extends Controller
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Edit.');
         }
-        $role = $user->roles->pluck('name');
         $roles = Role::where('name','!=','Customer')->get();
 
-        return view('admin.users.editUser',compact('user','role','roles'));
+        return view('admin.users.editUser',compact('user','roles'));
     }
-    public function getWarehouses()
+
+    public function getWarehouses(Request $request)
     {
-        $warehouses=Warehouse::whereStatus(1)->get();
-        if(request()->user_id)
+        $warehouses = Warehouse::where('status',1)->get();
+        $role = Role::find($request->role_id);
+        if($role->id == 4)
         {
             $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
             ->select('warehouses.*')->whereStatus(1)->pluck('id')->toArray();  
@@ -90,8 +91,7 @@ class UserManagementController extends Controller
         {
             $arr=array('');
         }
-            
-      
+
         return response()->json([
             'html' => view('admin.users.warehouseSelect', compact('warehouses','arr'))->render()
             ,200, ['Content-Type' => 'application/json']
@@ -115,10 +115,33 @@ class UserManagementController extends Controller
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Update.');
         }
-        $warehouses_all=implode(',',$request->warehouses);
-        foreach (explode(',',$warehouses_all) as $key => $value) {
-           AssignWarehouse::where('user_id',$user->id)->updateOrCreate(['user_id'=>$user->id,'warehouse_id'=>$value]);
+
+        if($request->role == 4){
+            $warehouses_all=implode(',',$request->warehouses);
+            foreach (explode(',',$warehouses_all) as $key => $value) {
+                DB::table('assign_warehouses')->insert(['user_id'=>$user->id,'warehouse_id'=>$value]);
+            }
+        }elseif($request->role == 5){
+            $driverCode = [
+                'driver_code' => $request->input('driver_code'),
+            ];
+            $user->update($driverCode);
+            try {
+                $userEmail = [
+                    'title' => 'Driver 4-Digit Code',
+                    'body' => 'Your Email Has Been Generated.',
+                    'name' =>  $data->name,
+                    'email' =>  $data->email,
+                    'driver_code' => $data->driver_code,
+                ];
+    
+                Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
+            }
+            catch (\Throwable $error) {
+                Report($error);
+            }
         }
+
         $role = $request->role;
         $user->syncRoles($role);
 
@@ -157,58 +180,45 @@ class UserManagementController extends Controller
 
     public function createNewUser(Request $request)
     {
-        if($request->role == 4)
-        {
-            $data = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+        $data = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        if($request->role == 4){
             $warehouses_all=implode(',',$request->warehouses);
             foreach (explode(',',$warehouses_all) as $key => $value) {
                 DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
             }
-            $data->assignRole($request->role);
-        }
-        else
-        {
-            $data = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-
-            if($request->role == 5){
-                $driverCode = [
-                    'driver_code' => $request->input('driver_code'),
+        }elseif($request->role == 5){
+            $driverCode = [
+                'driver_code' => $request->input('driver_code'),
+            ];
+            $data->update($driverCode);
+            try {
+                $userEmail = [
+                    'title' => 'Driver 4-Digit Code',
+                    'body' => 'Your Email Has Been Generated.',
+                    'name' =>  $data->name,
+                    'email' =>  $data->email,
+                    'driver_code' => $data->driver_code,
                 ];
-                $data->update($driverCode);
+    
+                Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
             }
-            
-            $role = $data->assignRole($request->role);
-            if($data->wasRecentlyCreated){
-                try {
-                    $userEmail = [
-                        'title' => 'Driver 4-Digit Code',
-                        'body' => 'Your Email Has Been Generated.',
-                        'name' =>  $data->name,
-                        'email' =>  $data->email,
-                        'driver_code' => $data->driver_code,
-                    ];
-        
-                    Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
-                }
-                catch (\Throwable $error) {
-                    Report($error);
-                }
+            catch (\Throwable $error) {
+                Report($error);
+            }
+        }
+        $role = $data->assignRole($request->role);
 
-                $response = array(
-                    'data' => [],
-                    'message' => 'Data Successfully Added',
-                    'status' => 'success',
-                );
-                return $response;
-            }
+        if($data->wasRecentlyCreated){
+            $response = array(
+                'data' => [],
+                'message' => 'Data Successfully Added',
+                'status' => 'success',
+            );
+            return $response;
         }
     }
 
