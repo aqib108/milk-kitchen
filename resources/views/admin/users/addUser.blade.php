@@ -60,6 +60,9 @@ Add New User
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden" id="assign_warehouse">
+                                              
+                                    </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden"  id="driver">
                                         <label>Driver Code<span class="required-star">*</span></label>
                                         <input type="text"  class="form-control driver"  name="driver_code" minlength="4" maxlength="4" placeholder="Enter 4-Digit Code Driver" value="{{ old('driver_code') }}">
@@ -77,20 +80,7 @@ Add New User
                                             name="password_confirmation" id="confirmPassword"
                                             placeholder="Enter Again Password... ">
                                         <div id="confirm-password-err" class="alert alert-danger"></div>
-                                    </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                        <label>Role's <span class="required-star">*</span></label>
-                                        <select name="role" class="form-control" id="roleId">
-                                            <option selected disabled>Select Role</option>
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">
-                                                    {{ $role->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4 col-sm-6 col-xs-12" id="assign_warehouse">
-                                              
-                                    </div>
+                                    </div>  
                                 </div>
                             </div>
                             <!-- /.card-body -->
@@ -116,32 +106,6 @@ Add New User
 @section('scripts')
 
 <script>
-
-    $(document).ready(function() {
-         $('#roleId').on('change', function() {
-        var role_id = $('#roleId').val();
-       if(role_id == 4)
-       {
-                $.ajax({
-                    method: "get",
-                    url: "{{route('getWarehouses')}}",
-                    data: {
-                        _token: $('meta[name="csrf_token"]').attr('content'),
-                        id: role_id,
-                    },
-                    success: function(response) {
-                        $('#assign_warehouse').empty();
-                        $('#assign_warehouse').append(response.html);
-                    }
-                });
-       }
-            else
-            {
-                $('#assign_warehouse').empty();  
-            }
-
-    });
-    });
     document.getElementById("registrationForm").onsubmit = function(e) {
         firstNameValidation();
         // lastNameValidation();
@@ -303,17 +267,40 @@ Add New User
         confirmPasswordValidation();
     }
 
-    // Driver 4-Digit Code Assigined By Role
+    // Driver 4-Digit Code Assigined By Role OR Warehouse 
     $('#role_id').on('change', function() {
-        var role = $('#role_id').find(":selected").val();
-        console.log(role);
-        if(role == 5)
+        var role_id = $('#role_id').find(":selected").val();
+        console.log(role_id);
+        if(role_id == 5)
         {
-            $('#driver').removeClass('hidden'); 
+            $('#driver').removeClass('hidden');
+            $('#assign_warehouse').addClass('hidden'); 
         }else{
             $('#driver').addClass('hidden');
+            $('#assign_warehouse').removeClass('hidden'); 
+        }
+
+        if(role_id == 4)
+        {
+            $.ajax({
+                method: "get",
+                url: "{{route('getWarehouses')}}",
+                data: {
+                    _token: $('meta[name="csrf_token"]').attr('content'),
+                    id: role_id,
+                },
+                success: function(response) {
+                    $('#assign_warehouse').removeClass('hidden'); 
+                    $('#driver').addClass('hidden');
+                    $('#assign_warehouse').empty();
+                    $('#assign_warehouse').append(response.html);
+                }
+            });
+        }
+        else
+        {
+            $('#assign_warehouse').empty();  
         }
     });
-
 </script> 
 @endsection

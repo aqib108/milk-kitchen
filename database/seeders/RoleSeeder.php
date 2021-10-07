@@ -38,7 +38,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'id'    => 4,
-                'name' => 'Distributor',
+                'name' => 'Warehouse',
                 'guard_name' => 'web',
                 'created_at' =>\DB::raw('CURRENT_TIMESTAMP'),
                 'updated_at' =>\DB::raw('CURRENT_TIMESTAMP'),
