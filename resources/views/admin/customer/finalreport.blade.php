@@ -225,8 +225,7 @@
                     <hr>
                 </div>
                 <div class="col-lg-4">
-
-                    {!! QrCode::size(150)->merge('https://leadconcept.com/', 0.3, true)->errorCorrection('H')->generate('lead concept') !!}
+                    {!! QrCode::size(150)->generate(route('qr.driverScan',$customerID)); !!}
                 </div>
             </div>
             <section>
