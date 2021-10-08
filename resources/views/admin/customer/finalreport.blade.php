@@ -187,17 +187,19 @@
                                                         @if ($order->quantity == 0)
                                                             @continue;
                                                         @endif
-                                                        @if ($order->product_id == $product->id)
-                                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important; width: 175px; text-align:center;">
-                                                                {{ $product->name }}
-                                                            </td>
-                                                            <td style="background-color: white !important; width: 175px; text-align:center;">
-                                                                <div class="quantity" >
-                                                                    {{ $order->quantity }}
-                                                                </div>
-                                                                <input type="hidden" name="totalCtn[]"
-                                                                    value="{{ $order->quantity }}">
-                                                            </td>
+                                                        @if($order->user_id == $orderDetail->user_id)
+                                                            @if ($order->product_id == $product->id)
+                                                                <td class="table-td-wrapper" scope="row" style="background-color: white !important; width: 175px; text-align:center;">
+                                                                    {{ $product->name }}
+                                                                </td>
+                                                                <td style="background-color: white !important; width: 175px; text-align:center;">
+                                                                    <div class="quantity" >
+                                                                        {{ $order->quantity }}
+                                                                    </div>
+                                                                    <input type="hidden" name="totalCtn[]"
+                                                                        value="{{ $order->quantity }}">
+                                                                </td>
+                                                            @endif
                                                         @endif
                                                     @endforeach
                                                 @endif
@@ -271,24 +273,26 @@
                                                             @if ($order->quantity == 0)
                                                                 @continue;
                                                             @endif
-                                                            @if ($order->product_id == $product->id)
-                                                                @php
-                                                                    $order_id = $orderDetail->id;
-                                                                @endphp
-                                                                <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                                                    {{ $product->name }}</td>
-                                                                <td style="background-color: white !important;">
-                                                                    <div class="quantity">
-                                                                        {{ $order->quantity }}
-                                                                    </div>
-                                                                    <input type="hidden" class="t_ctn"
-                                                                        value="{{ $order->quantity }}">
-                                                                </td>
-                                                                <td style="background-color: white !important;">
-                                                                    <input type="number" class="d_qnty" data-id="{{$orderDetail->day_id}}" style="width: 80px;
-                                                                    text-align: center;" minlength="0"
-                                                                        value="{{ !empty($order->d_qnty)?$order->d_qnty:0 }}">
-                                                                </td>
+                                                            @if($order->user_id == $orderDetail->user_id)
+                                                                @if ($order->product_id == $product->id)
+                                                                    @php
+                                                                        $order_id = $orderDetail->id;
+                                                                    @endphp
+                                                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
+                                                                        {{ $product->name }}</td>
+                                                                    <td style="background-color: white !important;">
+                                                                        <div class="quantity">
+                                                                            {{ $order->quantity }}
+                                                                        </div>
+                                                                        <input type="hidden" class="t_ctn"
+                                                                            value="{{ $order->quantity }}">
+                                                                    </td>
+                                                                    <td style="background-color: white !important;">
+                                                                        <input type="number" class="d_qnty" data-id="{{$orderDetail->day_id}}" style="width: 80px;
+                                                                        text-align: center;" minlength="0"
+                                                                            value="{{ !empty($order->d_qnty)?$order->d_qnty:0 }}">
+                                                                    </td>
+                                                                @endif
                                                             @endif
                                                         @endforeach
                                                     @endif

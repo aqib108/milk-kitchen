@@ -84,7 +84,6 @@ class AdminController extends Controller
                       
                             $product= Region::leftjoin('customer_details','customer_details.delivery_region','regions.region')
                                  ->where('regions.warehouse_id',$warehouse->id)
-                                 ->where('regions.id',2)
                                  ->select('customer_details.user_id')
                                  ->get()->map(function($value){
                                 if(!empty(request()->day_id))

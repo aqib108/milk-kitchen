@@ -21,9 +21,11 @@
                             $qnty = 0;
                             if ($item->productOrder->isNotEmpty()){
                                 foreach ($item->productOrder as $order){
-                                    if($order->product_id == $product->id){
-                                        $qnty = $order->quantity;
-                                    }
+                                   if($order->user_id == $customerID){
+                                        if($order->product_id == $product->id){
+                                            $qnty = $order->quantity;
+                                        }
+                                    } 
                                 }
                             }
                         @endphp
@@ -53,8 +55,10 @@
                         $id = 0;
                         if ($item->productOrder->isNotEmpty()){
                             foreach ($item->productOrder as $order){
-                                if($order->day_id == $item->id){
-                                    $id = $order->id;
+                                if($order->user_id == $customerID){
+                                    if($order->day_id == $item->id){
+                                        $id = $order->id;
+                                    }
                                 }
                             }
                         }
