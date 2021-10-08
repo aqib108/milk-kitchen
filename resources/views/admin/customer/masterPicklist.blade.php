@@ -80,7 +80,8 @@
 @section('scripts')
 <script>
     window.onload = function() {
-        masterpicklist();
+        var warehouse_id = $('#warehouse').val();
+        masterpicklist(warehouse_id);
     };
 
     function masterpicklist(warehouseId = null, dayId = null) {

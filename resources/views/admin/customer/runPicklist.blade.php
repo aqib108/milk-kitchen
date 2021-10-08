@@ -61,7 +61,8 @@
 @section('scripts')
 <script>
     window.onload = function() {
-        runpicklist();  
+        var warehouse_id = $('#warehouse').val();
+        runpicklist(warehouse_id);  
     };
     function runpicklist(warehouse_id = null)
     {
