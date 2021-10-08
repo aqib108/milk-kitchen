@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignWarehouse;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
@@ -49,13 +50,14 @@ class AdminController extends Controller
     public function masterPicklist()
     {
         $days=  WeekDay::whereStatus(1)->get();
-        if(auth()->user()->name != 'admin')
+        if(auth()->user()->name == 'warehouse')
         {
             $warehouses=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
+            ->where('assign_warehouses.user_id',auth()->user()->id)
             ->select('warehouses.*')->whereStatus(1)->get();
-            
         }
-        else{
+        else
+        {
             $warehouses=Warehouse::whereStatus(1)->get();
         }
         return view('admin.customer.masterPicklist',compact('warehouses','days'));
@@ -67,6 +69,7 @@ class AdminController extends Controller
         if(auth()->user()->name != 'admin')
         {
             $warehouses=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
+            ->where('assign_warehouses.user_id',auth()->user()->id)
             ->select('warehouses.*')->whereStatus(1)->get();    
         }
         else
