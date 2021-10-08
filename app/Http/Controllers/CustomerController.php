@@ -102,7 +102,8 @@ class CustomerController extends Controller
 
     public function pastOrder($id)
     {
-        $orders = ProductOrder::with('product')->where('user_id',$id)->get()->groupBy(function($date) {
+        $customer = User::find($id);
+        $orders = ProductOrder::with('product')->where('user_id',$customer->id)->get()->groupBy(function($date) {
             return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
         });
         return view('admin.customer.past-order',compact('orders'));
@@ -110,7 +111,6 @@ class CustomerController extends Controller
 
     public function pastOrderStatement($id)
     {
-
         $orderDetail = ProductOrder::find($id);
         $customerID = $orderDetail->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
@@ -122,7 +122,7 @@ class CustomerController extends Controller
                     }])->get();
         // dd($weekDays);
 
-       return view('admin.customer.past-order.statement',compact('orderDetail','customer','products','weekDays'));
+       return view('admin.customer.past-order.statement',compact('customerID','orderDetail','customer','products','weekDays'));
     }
 
     //Create Customer page

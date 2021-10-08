@@ -116,6 +116,7 @@ class HomeController extends Controller
             'id'=>'required'
         ]);
         $orderDetail = ProductOrder::find($request->id);
+        $customerID = $orderDetail->user_id;
         $products = Product::orderBy('id','DESC')->where('status',1)->get();
         $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                         $q->userDetail($orderDetail->user_id);
@@ -123,7 +124,7 @@ class HomeController extends Controller
                         $q->weekDetail($orderDetail);
                     }])->get();
         return response()->json([
-            'html' => view('customer.specific_week_delivery', compact('weekDays','products'))->render()
+            'html' => view('customer.specific_week_delivery', compact('customerID','weekDays','products'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
     }

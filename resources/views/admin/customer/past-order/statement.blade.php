@@ -180,9 +180,11 @@
                                             $qnty = 0;
                                             if ($item->productOrder->isNotEmpty()){
                                                 foreach ($item->productOrder as $order){
-                                                    if($order->product_id == $product->id){
-                                                        $qnty = $order->quantity;
-                                                    }
+                                                    if($order->user_id == $customerID){
+                                                        if($order->product_id == $product->id){
+                                                            $qnty = $order->quantity;
+                                                        }
+                                                    }   
                                                 }
                                             }
                                         @endphp
@@ -201,8 +203,10 @@
                                         @foreach ($weekDays as $item)
                                             @if ($item->productOrder->isNotEmpty())
                                                 @foreach ($item->productOrder as $order)
-                                                    @if($order->product_id == $product->id)
-                                                        @php $total += $order->quantity; @endphp                                                       
+                                                    @if($order->user_id == $customerID)
+                                                        @if($order->product_id == $product->id)
+                                                            @php $total += $order->quantity; @endphp                                                       
+                                                        @endif
                                                     @endif
                                                 @endforeach
                                             @endif 

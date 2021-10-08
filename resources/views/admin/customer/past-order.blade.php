@@ -22,25 +22,25 @@
                 </thead>
                 <tbody class="week-container-tbl">
                     @if($orders->count() > 0)
-                        @foreach ($orders as $item)
+                        @foreach ($orders as $order)
                             <tr>
                                 <td class="table-td-wrapper" scope="row">
-                                    {{ $item[0]->created_at->subDays(6)->format('d/m')}} - {{$item[0]->created_at->format('d/m')}}
+                                    {{ $order[0]->created_at->subDays(6)->format('d/m')}} - {{$order[0]->created_at->format('d/m')}}
                                 </td>
                                 <td>
                                     @php
                                         $price = 0;
-                                        foreach($item as $arr){
+                                        foreach($order as $arr){
                                             $price += $arr->product->price;
                                         }
                                         echo '$'.$price;
                                     @endphp
                                 </td>
                                 <td>
-                                    <a href="{{route('customer.week-statement', $item[0]->id)}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.week-statement', $order[0]->id)}}" class="view_statements">View</a>
                                 </td> 
                                 <td>
-                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{ $item[0]->id }}">View</a>
+                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{ $order[0]->id }}">View</a>
                                 </td> 
                             </tr>
                         @endforeach

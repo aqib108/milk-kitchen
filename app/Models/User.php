@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AssignWarehouse::class);
     }
+
+    public function wareHouses()
+    {
+        return $this->belongsToMany(Warehouse::class, 'assign_warehouses','','','','','');
+    }
 }
