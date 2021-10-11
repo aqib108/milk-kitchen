@@ -14,6 +14,7 @@ use App\Models\WeekDay;
 use App\Models\CustomerDetail;
 use App\Models\Zone;
 use Validator;
+use DB;
 use App\Models\ProductOrder;
 use App\Models\Region;
 
@@ -89,22 +90,26 @@ class AdminController extends Controller
                                  ->where('regions.warehouse_id',$warehouse->id)
                                  ->select('customer_details.user_id')
                                  ->get()->map(function($value){
+                                   
                                 if(!empty(request()->day_id))
                                 {
                                     $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
                                     ->where(['product_orders.user_id'=>$value->user_id,'product_orders.day_id' => request()->day_id])
-                                    ->select('products.name as name','product_orders.quantity as corton','product_orders.created_at')
+                                    ->select('products.name as name',DB::raw('SUM(product_orders.quantity) as carton'))
+                                     ->groupBy('name')
                                      ->get();
                                 }
                                 else
                                 {
                                     $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
                                     ->where('product_orders.user_id',$value->user_id)
-                                    ->select('products.name as name','product_orders.quantity as corton','product_orders.created_at')
-                                     ->get();
+                                    ->select('products.name as name',DB::raw('SUM(product_orders.quantity) as carton'))
+                                    ->groupBy('name') 
+                                    ->get();
                                 }
                                 return $p;
                                     });
+                                 
                                     $products=$product->first();
                     return response()->json([
                         'html' => view('admin.customer.getmasterPicklist', compact('products','warehouse'))->render()
@@ -123,8 +128,10 @@ class AdminController extends Controller
                                  ->join('regions','regions.region','customer_details.delivery_region')
                                  ->where('regions.warehouse_id',$warehouse->id)
                                  ->select('users.name as name','customer_details.business_address_1 as address',
-                                 'customer_details.delivery_region as subrub','product_orders.quantity as cartons')
+                                 'customer_details.delivery_region as subrub',DB::raw('SUM(product_orders.quantity) as cartons'))
+                                 ->groupBy('name','address','subrub')
                                 ->get();
+            
                         return response()->json([
                             'html' => view('admin.customer.getrunPicklist', compact('products','warehouse'))->render()
                             ,200, ['Content-Type' => 'application/json']

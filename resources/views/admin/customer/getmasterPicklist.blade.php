@@ -3,7 +3,7 @@
         <h2 class="heading-tbl">Warehouses Picklist</h2>
     </div>
     <div class="col-lg-10">
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow: hidden;">
          
             <table class="table table-bordered mb-0">
                 <thead>
@@ -26,7 +26,7 @@
                     @forelse($products as $product)
                     <tr class="week_days">
                         <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                        <td>{{$product->corton}}</td>
+                        <td>{{$product->carton}}</td>
                         <td></td>
                         @php $total += $product->corton @endphp
                     </tr>
