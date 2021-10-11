@@ -24,7 +24,7 @@
                 </thead>
                 <tbody class="week-container-tbl">
                     @php $total = 0; @endphp
-                    @foreach($products as $product)
+                    @forelse($products as $product)
                     <tr class="week_days">
                         <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
                         <td>{{$product->address}}</td>
@@ -32,11 +32,19 @@
                         <td>{{$product->cartons}}</td>
                         @php $total += $product->cartons @endphp
                     </tr>
-                    @endforeach
+                    @if($total > 0 && $loop->last)
+                            <tr>
+                                <td>Total Cortons</td>
+                                <td>{{ $total }}</td>
+                            </tr>
+                            @endif
+                    @empty
                     <tr>
-                        <td>Total Cortons</td>
-                        <td>{{ $total }}</td>
+                        <td class="p-5">
+                            No record
+                        </td>
                     </tr>
+                    @endforelse
                 </tbody>
             </table>
             @else
