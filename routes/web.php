@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
         Route::get('/masterPicklist', 'AdminController@masterPicklist')->name('masterPicklist');
-        Route::post('/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
+        Route::match(['GET','POST'],'/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
         Route::get('/runPicklist','AdminController@runPicklist')->name('runPicklist');  
         Route::get('/getWarehouses','UserManagementController@getWarehouses')->name('getWarehouses');  
         Route::post('/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');  
