@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::match(['GET','POST'],'/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
         Route::get('/runPicklist','AdminController@runPicklist')->name('runPicklist');  
         Route::get('/getWarehouses','UserManagementController@getWarehouses')->name('getWarehouses');  
-        Route::post('/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');  
+        Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');  
         Route::group(['as' => 'admin.'], function () {
             Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
             Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
