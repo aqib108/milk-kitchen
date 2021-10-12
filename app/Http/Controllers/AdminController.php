@@ -120,6 +120,7 @@ class AdminController extends Controller
 
     public function getrunPicklist()
     {
+        $date = Carbon::now(); 
         $current_day = Carbon::Today()->format('l');
         // dd($current_day);
         $dayID = WeekDay::where('name',$current_day)->pluck('id');
@@ -137,7 +138,7 @@ class AdminController extends Controller
                                 ->get();
             
                         return response()->json([
-                            'html' => view('admin.customer.getrunPicklist', compact('products','warehouse'))->render()
+                            'html' => view('admin.customer.getrunPicklist', compact('current_day','date','products','warehouse'))->render()
                             ,200, ['Content-Type' => 'application/json']
                         ]);            
     }

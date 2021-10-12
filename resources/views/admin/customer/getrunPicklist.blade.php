@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <div class="warehouse border text-center">
             <h3 class="table-th-wrapper">Delivery Date</h3>
-            <p>2/10/2021 (saturday)</p>
+            <p>{{date('m/d/Y', strtotime($date))}} - <b>({{$current_day}})</b></p>
         </div>
     </div>
 </div>
