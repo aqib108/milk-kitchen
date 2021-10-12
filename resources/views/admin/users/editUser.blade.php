@@ -112,7 +112,7 @@ Edit User
                 }
             });
         }
-        else
+        else if(role_id == 5)
         {
             $('#driver').removeClass('hidden'); 
             $('#assign_warehouse').addClass('hidden'); 
