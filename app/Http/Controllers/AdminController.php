@@ -17,6 +17,7 @@ use Validator;
 use DB;
 use App\Models\ProductOrder;
 use App\Models\Region;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -66,7 +67,7 @@ class AdminController extends Controller
 
     public function runPicklist()
     {
-        $days=  WeekDay::whereStatus(1)->get();
+        $days=  WeekDay::where('status',1)->get();
         if(auth()->user()->name != 'admin')
         {
             $warehouses=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
@@ -119,14 +120,17 @@ class AdminController extends Controller
 
     public function getrunPicklist()
     {
-         if(isset(request()->id))
+        $current_day = Carbon::Today()->format('l');
+        // dd($current_day);
+        $dayID = WeekDay::where('name',$current_day)->pluck('id');
+        if(isset(request()->id))
             $warehouse= Warehouse::whereId(request()->id)->first();
             else
             $warehouse= Warehouse::first();
             $products=CustomerDetail::join('users','users.id','customer_details.user_id')
                                  ->join('product_orders','product_orders.user_id','customer_details.user_id')
                                  ->join('regions','regions.region','customer_details.delivery_region')
-                                 ->where('regions.warehouse_id',$warehouse->id)
+                                 ->where(['regions.warehouse_id' =>$warehouse->id,'product_orders.day_id'=>$dayID])
                                  ->select('users.name as name','customer_details.business_address_1 as address',
                                  'customer_details.delivery_region as subrub',DB::raw('SUM(product_orders.quantity) as cartons'))
                                  ->groupBy('name','address','subrub')
