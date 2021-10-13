@@ -132,7 +132,9 @@ class UserManagementController extends Controller
                 $user->update($data);
             }
             
-        }elseif($request->role == 5){
+        }
+        elseif($request->role == 5)
+        {
              $assigned_warehouse=AssignWarehouse::where('user_id',$user->id)->get()->map(function($user){
                 $userID =  $user->id;
                 return AssignWarehouse::find($userID)->delete();

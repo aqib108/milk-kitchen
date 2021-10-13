@@ -95,7 +95,7 @@ class AdminController extends Controller
                                 if(!empty(request()->day_id))
                                 {
                                     $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
-                                    ->where(['product_orders.user_id'=>$value->user_id,'product_orders.day_id' => request()->day_id])
+                                    ->where(['product_orders.day_id' => request()->day_id])
                                     ->select('products.name as name',DB::raw('SUM(product_orders.quantity) as carton'))
                                      ->groupBy('name')
                                      ->get();
@@ -103,7 +103,6 @@ class AdminController extends Controller
                                 else
                                 {
                                     $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
-                                    ->where('product_orders.user_id',$value->user_id)
                                     ->select('products.name as name',DB::raw('SUM(product_orders.quantity) as carton'))
                                     ->groupBy('name') 
                                     ->get();
