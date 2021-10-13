@@ -117,7 +117,7 @@ class AdminController extends Controller
                         ,200, ['Content-Type' => 'application/json']
                     ]);
     }
-
+/////////////////All set Work///////////////
     public function getrunPicklist()
     {
         $date = Carbon::now(); 
@@ -128,6 +128,7 @@ class AdminController extends Controller
             $warehouse= Warehouse::whereId(request()->id)->first();
             else
             $warehouse= Warehouse::first();
+
             $products=CustomerDetail::join('users','users.id','customer_details.user_id')
                                  ->join('product_orders','product_orders.user_id','customer_details.user_id')
                                  ->join('regions','regions.region','customer_details.delivery_region')
