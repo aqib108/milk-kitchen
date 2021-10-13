@@ -38,8 +38,10 @@
                     @endif
                     @empty
                     <tr>
-                        <td class="p-5">
-                            No record
+                    <td class="alert alert-danger" colspan="4" role="alert">
+                            <div>
+                                No Result(s) Found !
+                            </div>
                         </td>
                     </tr>
                     @endforelse
