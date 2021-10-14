@@ -19,6 +19,7 @@ class CreateProductOrdersTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('day_id')->unsigned();
             $table->foreign('day_id')->references('id')->on('week_days')->onDelete('cascade');
+            $table->string('region_name')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->tinyInteger('status')->default(1);

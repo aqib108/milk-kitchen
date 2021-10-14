@@ -32,11 +32,11 @@ class AdminController extends Controller
         $this->middleware('auth');
         $this->userRepo = $userRepo;
     }
-    
+
     public function index()
     {
         $user = Auth::user();
-        return view('admin.index',compact('user'));
+        return view('admin.index', compact('user'));
     }
 
     public function mangeDashBoard()
@@ -51,121 +51,135 @@ class AdminController extends Controller
     }
     public function masterPicklist()
     {
-        $days=  WeekDay::whereStatus(1)->get();
-        if(auth()->user()->name == 'warehouse')
-        {
-            $warehouses=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
-            ->where('assign_warehouses.user_id',auth()->user()->id)
-            ->select('warehouses.*')->whereStatus(1)->get();
+        $days =  WeekDay::whereStatus(1)->get();
+        if (auth()->user()->name == 'warehouse') {
+            $warehouses = Warehouse::join('assign_warehouses', 'assign_warehouses.warehouse_id', 'warehouses.id')
+                ->where('assign_warehouses.user_id', auth()->user()->id)
+                ->select('warehouses.*')->whereStatus(1)->get();
+        } else {
+            $warehouses = Warehouse::whereStatus(1)->get();
         }
-        else
-        {
-            $warehouses=Warehouse::whereStatus(1)->get();
-        }
-        return view('admin.customer.masterPicklist',compact('warehouses','days'));
+        return view('admin.customer.masterPicklist', compact('warehouses', 'days'));
     }
 
     public function runPicklist()
     {
-        $days=  WeekDay::where('status',1)->get();
-        if(auth()->user()->name != 'admin')
-        {
-            $warehouses=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
-            ->where('assign_warehouses.user_id',auth()->user()->id)
-            ->select('warehouses.*')->whereStatus(1)->get();    
+        $days =  WeekDay::where('status', 1)->get();
+        if (auth()->user()->name != 'admin') {
+            $warehouses = Warehouse::join('assign_warehouses', 'assign_warehouses.warehouse_id', 'warehouses.id')
+                ->where('assign_warehouses.user_id', auth()->user()->id)
+                ->select('warehouses.*')->whereStatus(1)->get();
+        } else {
+            $warehouses = Warehouse::whereStatus(1)->get();
         }
-        else
-        {
-            $warehouses=Warehouse::whereStatus(1)->get();
-        }   
-        return view('admin.customer.runPicklist',compact('warehouses','days'));
+        return view('admin.customer.runPicklist', compact('warehouses', 'days'));
     }
     public function getmasterPicklist()
     {
-                        if(isset(request()->id))
-                            $warehouse= Warehouse::whereId(request()->id)->first();
-                            else
-                            $warehouse= Warehouse::first();
-                      
-                            $product= Region::leftjoin('customer_details','customer_details.delivery_region','regions.region')
-                                 ->where('regions.warehouse_id',$warehouse->id)
-                                 ->select('customer_details.user_id')
-                                 ->get()->map(function($value){
-                                   
-                                if(!empty(request()->day_id))
-                                {
-                                    $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
-                                    ->where(['product_orders.user_id'=>$value->user_id,'product_orders.day_id' => request()->day_id])
-                                    ->select('products.name as name',DB::raw('SUM(product_orders.quantity) as carton'))
-                                     ->groupBy('name')
-                                     ->get();
-                                }
-                                else
-                                {
-                                    $p= ProductOrder::leftjoin('products','products.id','product_orders.product_id')
-                                    ->where('product_orders.user_id',$value->user_id)
-                                    ->select('products.name as name',DB::raw('SUM(product_orders.quantity) as carton'))
-                                    ->groupBy('name') 
-                                    ->get();
-                                }
-                                return $p;
-                                    });
-                                 
-                                    $products=$product->first();
-                    return response()->json([
-                        'html' => view('admin.customer.getmasterPicklist', compact('products','warehouse'))->render()
-                        ,200, ['Content-Type' => 'application/json']
-                    ]);
+        if (isset(request()->id))
+            $warehouse = Warehouse::whereId(request()->id)->first();
+        else
+            $warehouse = Warehouse::first();
+
+        $product = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.region')
+            ->where('regions.warehouse_id', $warehouse->id)
+            ->select('customer_details.user_id')
+            ->get()->map(function ($value) {
+
+                if (!empty(request()->day_id)) {
+                    $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                        ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => request()->day_id])
+                        ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+                        ->groupBy('name')
+                        ->get();
+                } else {
+                    $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                        ->where('product_orders.user_id', $value->user_id)
+                        ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+                        ->groupBy('name')
+                        ->get();
+                }
+                return $p;
+            });
+
+        $products = $product->first();
+        return response()->json([
+            'html' => view('admin.customer.getmasterPicklist', compact('products', 'warehouse'))->render(), 200, ['Content-Type' => 'application/json']
+        ]);
     }
-/////////////////All set Work///////////////
+    /////////////////All set Work///////////////
     public function getrunPicklist()
     {
-        $date = Carbon::now(); 
+        $date = Carbon::now();
         $current_day = Carbon::Today()->format('l');
         // dd($current_day);
-        $dayID = WeekDay::where('name',$current_day)->pluck('id');
-        if(isset(request()->id))
-            $warehouse= Warehouse::whereId(request()->id)->first();
-            else
-            $warehouse= Warehouse::first();
+        $dayID = WeekDay::where('name', $current_day)->pluck('id');
+        if (isset(request()->id))
+            $warehouse = Warehouse::whereId(request()->id)->first();
+        else
+            $warehouse = Warehouse::first();
+        $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.region')
+            ->where('regions.warehouse_id', $warehouse->id)
+            ->select('customer_details.user_id')
+            ->get()->map(function ($value) use ($dayID) {
+                $p = ProductOrder::
+                    join('customer_details','customer_details.delivery_region', '=', 'product_orders.region_name')
+                    ->join('users', 'users.id', 'product_orders.user_id')
+                    ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $dayID])
+                    ->select(
+                        'users.name as name',
+                        'customer_details.delivery_address_1 as address',
+                        'customer_details.delivery_region as subrub',
+                        DB::raw('SUM(product_orders.quantity) as cartons')
+                    )
+                    ->groupBy('name', 'address', 'subrub')
+                    ->get();
+                return $p;
+            });
+        // dd($products);
+        // $product=ProductOrder::join('product_orders','product_orders.users_id','customer_details.user_id')
+        //                      ->where(['regions.warehouse_id' =>$warehouse->id,'product_orders.day_id'=>$dayID])
+        //                      ->select('customer_details.user_id')
+        //                      ->get()->map(function($value){
+        //                         $p=CustomerDetail::join('users','users.id','customer_details.user_id')
+        //                         ->join('regions','regions.region','customer_details.delivery_region')
+        //                         ->join('product_orders',function($join){
+        //                             $join->on('customer_details.user_id','=','product_orders.user_id')
+        //                              ->orOn('product_orders.region_name','=','customer_details.delivery_region');
+        //                         })
+        //                         ->select('users.name as name','customer_details.delivery_address_1 as address',
+        //                         'customer_details.delivery_region as subrub',DB::raw('SUM(product_orders.quantity) as cartons'))
+        //                         ->where(['product_orders.user_id'=>$value->user_id])
+        //                         ->groupBy('name','address','subrub')
+        //                         ->get();
+        //                        return $p;
+        //                      });
+        //                      dd($product);
+        //                     
 
-            $products=CustomerDetail::join('users','users.id','customer_details.user_id')
-                                 ->join('regions','regions.region','customer_details.delivery_region')
-                                ->join('product_orders',function($join){
-                                    $join->on('customer_details.user_id','=','product_orders.region_name')
-                                     ->orOn('product_orders.region_name','=','customer_details.delivery_region')
-                                     ->orOn('product_orders.region_name','=','customer_details.delivery_region');
-                                })
-                                 ->where(['regions.warehouse_id' =>$warehouse->id,'product_orders.day_id'=>$dayID])
-                                 ->select('users.name as name','customer_details.business_address_1 as address',
-                                 'customer_details.delivery_region as subrub',DB::raw('SUM(product_orders.quantity) as cartons'))
-                                 ->groupBy('name','address','subrub')
-                                ->get();
-            
-                        return response()->json([
-                            'html' => view('admin.customer.getrunPicklist', compact('current_day','date','products','warehouse'))->render()
-                            ,200, ['Content-Type' => 'application/json']
-                        ]);            
+        return response()->json([
+            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'date', 'products', 'warehouse'))->render(), 200, ['Content-Type' => 'application/json']
+        ]);
     }
     /**
-    *****************************************************************************
-    ************************** Admin Password ***********************************
-    *****************************************************************************
-    */
+     *****************************************************************************
+     ************************** Admin Password ***********************************
+     *****************************************************************************
+     */
 
     public function setting(Request $request)
     {
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             dd($request->all());
         }
         return view('admin.setting');
     }
 
     public function checkPassword(Request $request)
-    { 
+    {
         $user = Auth::user();
         $data = $request->all();
-        if (Hash::check($data['current_password'],$user->password)) {
+        if (Hash::check($data['current_password'], $user->password)) {
             echo "true";
         } else {
             echo "false";
@@ -181,22 +195,21 @@ class AdminController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
-        
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all());
         }
 
         $data = $request->all();
-        if (Hash::check($data['current_password'],$user->password)) {
+        if (Hash::check($data['current_password'], $user->password)) {
             if ($data['new_password'] == $data['confirm_password']) {
-                User::where('id',$user->id)->update(['password'=>bcrypt($data['new_password'])]);
-               return redirect()->back()->with(['success' => 'Password Has Been Updated Successfully!']);
+                User::where('id', $user->id)->update(['password' => bcrypt($data['new_password'])]);
+                return redirect()->back()->with(['success' => 'Password Has Been Updated Successfully!']);
             } else {
-               return redirect()->back()->with(['error' => 'New Password & Confirm Password NOT MATCH']);
+                return redirect()->back()->with(['error' => 'New Password & Confirm Password NOT MATCH']);
             }
-            
         } else {
-           return redirect()->back()->with(['error' => 'Your Current Password is INCORRECT']);
+            return redirect()->back()->with(['error' => 'Your Current Password is INCORRECT']);
         }
         return redirect()->back();
     }

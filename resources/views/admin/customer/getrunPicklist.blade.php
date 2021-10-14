@@ -28,52 +28,29 @@
               </tr>
             </thead>
             <tbody class="week-container-tbl">
-                @php $total = 0; @endphp
-                @if($products->count() > 0)
-                    @foreach($products as $product)
+                @foreach($products as $customers)
+                    @if($customers->count() > 0)
+                        @foreach($customers as $customer)
+                            
+                                <tr>
+                                    <td class="table-td-wrapper" scope="row">{{$customer->name}}</td>
+                                    <td>{{$customer->address}}</td>
+                                    <td>{{$customer->subrub}}</td>
+                                    <td>{{$customer->cartons}}</td> 
+                                </tr>
+                            
+                        @endforeach
+                    @else
                         <tr>
-                            <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
-                            <td>{{$product->address}}</td>
-                            <td>{{$product->subrub}}</td>
-                            <td>{{$product->cartons}}</td> 
+                            <td class="alert alert-danger" colspan="4" role="alert">
+                                <div>
+                                    No Result(s) Found !
+                                </div>
+                            </td>
                         </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td class="alert alert-danger" colspan="4" role="alert">
-                            <div>
-                                No Result(s) Found !
-                            </div>
-                        </td>
-                    </tr>
-                @endif
+                    @endif
+                @endforeach
             </tbody>
         </table> 
     </div>
 </div>
-
-
-
-
-
-
-
-
-                   
-{{--                    
-                    <tr class="week_days">
-                       
-                        @php $total += $product->cartons @endphp
-                    </tr>
-                    @empty
-                    <tr>
-                        <td class="p-5">
-                            No record
-                        </td>
-                    </tr>
-                   
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div> --}}

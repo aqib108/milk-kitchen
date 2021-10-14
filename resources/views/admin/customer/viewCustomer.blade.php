@@ -331,7 +331,7 @@
     <script>
         $(document).ready(function() {
             var region_name ='';
-            region_name =`<?php echo $customerDetail->delivery_region; ?>`;
+            region_name =`<?php echo $customerDetail->delivery_region ?? '' ;?>`;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
