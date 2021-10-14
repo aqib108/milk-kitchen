@@ -94,6 +94,7 @@ Edit User
     window.onload = function() {
         var role_id = $('#role_id').val();
         var user_id =$('#user_id').val();
+
         if(role_id == 4)
         {
             $.ajax({
@@ -112,6 +113,7 @@ Edit User
                 }
             });
         }
+
         else if(role_id == 5)
         {
             $('#driver').removeClass('hidden'); 
@@ -130,12 +132,13 @@ Edit User
                 }
             });
         }
+        
     }
     // Driver 4-Digit Code Assigined By Role OR Warehouse 
     $('#role_id').on('change', function() {
         var role_id = $('#role_id').find(":selected").val();
         var user_id =$('#user_id').val();
-        console.log(role_id);
+        
         if(role_id == 5)
         {
             $('#driver').removeClass('hidden');

@@ -267,6 +267,8 @@ Add New User
         confirmPasswordValidation();
     }
 
+    
+
     // Driver 4-Digit Code Assigined By Role OR Warehouse 
     $('#role_id').on('change', function() {
         var role_id = $('#role_id').find(":selected").val();
