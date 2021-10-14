@@ -65,14 +65,14 @@ class PermissionSeeder extends Seeder
                 'updated_at' =>\DB::raw('CURRENT_TIMESTAMP'),
             ],
             [
-                'id'    => 7,
+                'id'    => 8,
                 'name' => 'check Deliveries Record',
                 'guard_name' => 'web',
                 'created_at' =>\DB::raw('CURRENT_TIMESTAMP'),
                 'updated_at' =>\DB::raw('CURRENT_TIMESTAMP'),
             ],
             [
-                'id'    => 7,
+                'id'    => 9,
                 'name' => 'manage dashboard',
                 'guard_name' => 'web',
                 'created_at' =>\DB::raw('CURRENT_TIMESTAMP'),
