@@ -110,25 +110,25 @@ class UserManagementController extends Controller
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Update.');
         }
-
-        if($request->role == 4){
-            
-            if ($request->has('warehouses')) {
+        // Warehouse section //
+        if($request->role == 4)
+        {
+            if ($request->has('warehouses'))
+            {
                 $user->wareHouses()->detach();
                 $warehouse = Warehouse::whereIn('id', $request->warehouses)->get();
                 $user->wareHouses()->attach($warehouse);
             }
             $driverCode = $user->driver_code;
-            if($driverCode != null){
+            if($driverCode != null)
+            {
                 $code = null;
                 $data = [
                     'driver_code' => $code,
                 ];
                 $user->update($data);
-            }
-            
+            }   
         }
-
         elseif($request->role == 5)
         {
             if ($request->has('warehouses')) {
@@ -136,7 +136,6 @@ class UserManagementController extends Controller
                 $warehouse = Warehouse::whereIn('id', $request->warehouses)->get();
                 $user->wareHouses()->attach($warehouse);
             }
-           
             $driverCode = [
                 'driver_code' => $request->driver_code,
             ];
@@ -149,19 +148,18 @@ class UserManagementController extends Controller
                     'email' =>  $user->email,
                     'driver_code' => $user->driver_code,
                 ];
-    
+                // Mail to Driver
                 Mail::to($user->email)->send(new \App\Mail\driverCodeMail($userEmail));
             }
             catch (\Throwable $error) {
                 Report($error);
             }
         }
-
         $role = $request->role;
         $user->syncRoles($role);
-
         return redirect()->route('user.index')->with('success','Your Record Sucessfully Updated!');
     }
+
     public function checkEmail(Request $request)
     {
         $input = $request->only(['email']);
@@ -200,12 +198,16 @@ class UserManagementController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        if($request->role == 4){
+
+        if($request->role == 4)
+        {
             $warehouses_all=implode(',',$request->warehouses);
             foreach (explode(',',$warehouses_all) as $key => $value) {
                 DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
             }
-        }elseif($request->role == 5){
+        }
+        elseif($request->role == 5)
+        {
             $warehouses_all=implode(',',$request->warehouses);
             foreach (explode(',',$warehouses_all) as $key => $value) {
                 DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
@@ -222,6 +224,7 @@ class UserManagementController extends Controller
                     'email' =>  $data->email,
                     'driver_code' => $data->driver_code,
                 ];
+                // Mail To Driver
                 Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
             }
             catch (\Throwable $error) {
@@ -229,8 +232,8 @@ class UserManagementController extends Controller
             }
         }
         $role = $data->assignRole($request->role);
-
-        if($data->wasRecentlyCreated){
+        if($data->wasRecentlyCreated)
+        {
             $response = array(
                 'data' => [],
                 'message' => 'Data Successfully Added',
