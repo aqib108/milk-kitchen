@@ -112,6 +112,7 @@ class UserManagementController extends Controller
         }
 
         if($request->role == 4){
+            
             if ($request->has('warehouses')) {
                 $user->wareHouses()->detach();
                 $warehouse = Warehouse::whereIn('id', $request->warehouses)->get();
@@ -127,6 +128,7 @@ class UserManagementController extends Controller
             }
             
         }
+
         elseif($request->role == 5)
         {
             if ($request->has('warehouses')) {
