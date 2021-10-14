@@ -13,7 +13,8 @@ class ProductOrder extends Model
         'user_id',
         'product_id',
         'day_id',
-        'quantity'
+        'quantity',
+        'region_name'
     ];
 
     public function product()

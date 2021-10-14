@@ -97,7 +97,7 @@ class CustomerController extends Controller
         }])->get();
         // dd($weekDays);
        
-        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','deliveryZoneDay'));
+        return view('admin.customer.viewCustomer',compact('customerID','customer','deliveryRegion','customerDetail','products','weekDays','deliveryZoneDay'));
     }
 
     public function pastOrder($id)
@@ -237,6 +237,7 @@ class CustomerController extends Controller
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => $customer->id,
                 'day_id'     => $request->day_id,
+                'region_name'  => $request->region,
                 'product_id' => $request->product_id],[
                 'quantity' => $request->qnty,
             ]);
