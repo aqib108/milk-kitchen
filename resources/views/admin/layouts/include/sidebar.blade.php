@@ -16,7 +16,7 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="javascript:void(0)" class="d-block">Admin</a>
+                <a href="javascript:void(0)" class="d-block">{{auth()->user()->name}}</a>
             </div>
         </div>
 

@@ -39,7 +39,7 @@
                     src="{{asset('admin-panel/images/admin-placeholder.png')}}"
                 class="user-image img-circle elevation-2" alt="User Image">
                 <span class="d-none d-md-inline">
-                  Admin
+                  {{auth()->user()->name}}
                 </span>
             </a>
             <ul class="dropdown-menu w-25 ">
