@@ -18,10 +18,10 @@ use DB;
 use App\Models\ProductOrder;
 use App\Models\Region;
 use Carbon\Carbon;
-
+use Spatie\Permission\Traits\HasRoles;
 class AdminController extends Controller
 {
-    protected $userRepo;
+    protected $userRepo; use HasRoles;
     /**
      * Create a new controller instance.
      *
@@ -52,7 +52,7 @@ class AdminController extends Controller
     public function masterPicklist()
     {
         $days =  WeekDay::whereStatus(1)->get();
-        if (auth()->user()->name == 'warehouse') {
+        if (auth()->user()->hasRole('Warehouse') || auth()->user()->hasRole('Site Employee') || auth()->user()->hasRole('Sales Member')) {
             $warehouses = Warehouse::join('assign_warehouses', 'assign_warehouses.warehouse_id', 'warehouses.id')
                 ->where('assign_warehouses.user_id', auth()->user()->id)
                 ->select('warehouses.*')->whereStatus(1)->get();
