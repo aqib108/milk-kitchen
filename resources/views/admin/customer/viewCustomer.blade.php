@@ -254,8 +254,9 @@
                                                 $qnty = 0;
                                                 if ($item != null){
                                                     foreach ($item->WeekDay as $order){
-                                                        
-                                                        if($order->product_id == $product->id){
+                                             
+        
+                                                        if($order->product_id == $product->id && $order->region_name == $deliveryRegion){
                                                             $qnty = $order->quantity;
                                                         }
                                                         
@@ -329,6 +330,8 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            var region_name ='';
+            region_name =`<?php echo $customerDetail->delivery_region; ?>`;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -390,6 +393,7 @@
                                 icon: 'success',
                                 title: response.success,
                             });
+                            location.reload();
                         }
                     },
                 });   
@@ -410,11 +414,14 @@
                     });
                     $(this).val(0);
                 } else {
+                    
                     $.ajax({
+
                         type: "POST",
                         data: {
                             'day_id': day_id,
                             'product_id': product_id,
+                            'region' : region_name,
                             'qnty': qnty
                         },
                         url: "{{route('admin.customer-orders',$customer->id)}}",

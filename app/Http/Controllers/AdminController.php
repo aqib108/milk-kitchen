@@ -130,8 +130,12 @@ class AdminController extends Controller
             $warehouse= Warehouse::first();
 
             $products=CustomerDetail::join('users','users.id','customer_details.user_id')
-                                 ->join('product_orders','product_orders.user_id','customer_details.user_id')
                                  ->join('regions','regions.region','customer_details.delivery_region')
+                                ->join('product_orders',function($join){
+                                    $join->on('customer_details.user_id','=','product_orders.region_name')
+                                     ->orOn('product_orders.region_name','=','customer_details.delivery_region')
+                                     ->orOn('product_orders.region_name','=','customer_details.delivery_region');
+                                })
                                  ->where(['regions.warehouse_id' =>$warehouse->id,'product_orders.day_id'=>$dayID])
                                  ->select('users.name as name','customer_details.business_address_1 as address',
                                  'customer_details.delivery_region as subrub',DB::raw('SUM(product_orders.quantity) as cartons'))
