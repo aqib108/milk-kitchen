@@ -274,10 +274,22 @@ Add New User
         if(role_id == 5)
         {
             $('#driver').removeClass('hidden');
-            $('#assign_warehouse').addClass('hidden'); 
+            $.ajax({
+                method: "get",
+                url: "{{route('getWarehouses')}}",
+                data: {
+                    _token: $('meta[name="csrf_token"]').attr('content'),
+                    role_id: role_id,
+                },
+                success: function(response) {
+                    $('#assign_warehouse').removeClass('hidden'); 
+                    $('#assign_warehouse').empty();
+                    $('#assign_warehouse').append(response.html);
+                }
+            });
         }else{
             $('#driver').addClass('hidden');
-            $('#assign_warehouse').removeClass('hidden'); 
+            $('#assign_warehouse').addClass('hidden'); 
         }
 
         if(role_id == 4)

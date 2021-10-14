@@ -82,16 +82,10 @@ class UserManagementController extends Controller
     {
         $warehouses = Warehouse::where('status',1)->get();
         $role = Role::find($request->role_id);
-        if($role->id == 4)
-        {
-            $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
+        $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
             ->where('assign_warehouses.user_id',$request->user_id)
             ->select('warehouses.*')->whereStatus(1)->pluck('id')->toArray();  
-        }
-        else
-        {
-            $arr=array('');
-        }
+    
 
         return response()->json([
             'html' => view('admin.users.warehouseSelect', compact('warehouses','arr'))->render()
@@ -135,10 +129,11 @@ class UserManagementController extends Controller
         }
         elseif($request->role == 5)
         {
-             $assigned_warehouse=AssignWarehouse::where('user_id',$user->id)->get()->map(function($user){
-                $userID =  $user->id;
-                return AssignWarehouse::find($userID)->delete();
-             });
+            if ($request->has('warehouses')) {
+                $user->wareHouses()->detach();
+                $warehouse = Warehouse::whereIn('id', $request->warehouses)->get();
+                $user->wareHouses()->attach($warehouse);
+            }
            
             $driverCode = [
                 'driver_code' => $request->driver_code,
@@ -209,6 +204,10 @@ class UserManagementController extends Controller
                 DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
             }
         }elseif($request->role == 5){
+            $warehouses_all=implode(',',$request->warehouses);
+            foreach (explode(',',$warehouses_all) as $key => $value) {
+                DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
+            }
             $driverCode = [
                 'driver_code' => $request->input('driver_code'),
             ];
@@ -221,7 +220,6 @@ class UserManagementController extends Controller
                     'email' =>  $data->email,
                     'driver_code' => $data->driver_code,
                 ];
-    
                 Mail::to($data->email)->send(new \App\Mail\driverCodeMail($userEmail));
             }
             catch (\Throwable $error) {
