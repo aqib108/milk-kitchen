@@ -115,7 +115,20 @@ Edit User
         else if(role_id == 5)
         {
             $('#driver').removeClass('hidden'); 
-            $('#assign_warehouse').addClass('hidden'); 
+            $.ajax({
+                method: "get",
+                url: "{{route('getWarehouses')}}",
+                data: {
+                    _token: $('meta[name="csrf_token"]').attr('content'),
+                    role_id: role_id,
+                    user_id: user_id,
+                },
+                success: function(response) {
+                    $('#assign_warehouse').removeClass('hidden'); 
+                    $('#assign_warehouse').empty();
+                    $('#assign_warehouse').append(response.html);
+                }
+            });
         }
     }
     // Driver 4-Digit Code Assigined By Role OR Warehouse 
@@ -126,24 +139,35 @@ Edit User
         if(role_id == 5)
         {
             $('#driver').removeClass('hidden');
-            $('#assign_warehouse').addClass('hidden'); 
-        }else{
-            $('#driver').addClass('hidden');
-            $('#assign_warehouse').removeClass('hidden'); 
-        }
-
-        if(role_id == 4)
-        {
-            $('#assign_warehouse').removeClass('hidden'); 
             $.ajax({
                 method: "get",
                 url: "{{route('getWarehouses')}}",
                 data: {
                     _token: $('meta[name="csrf_token"]').attr('content'),
                     role_id: role_id,
-                    user_id: user_id,
                 },
                 success: function(response) {
+                    $('#assign_warehouse').removeClass('hidden'); 
+                    $('#assign_warehouse').empty();
+                    $('#assign_warehouse').append(response.html);
+                }
+            });
+        }else{
+            $('#driver').addClass('hidden');
+            $('#assign_warehouse').addClass('hidden'); 
+        }
+
+        if(role_id == 4)
+        {
+            $.ajax({
+                method: "get",
+                url: "{{route('getWarehouses')}}",
+                data: {
+                    _token: $('meta[name="csrf_token"]').attr('content'),
+                    role_id: role_id,
+                },
+                success: function(response) {
+                    $('#assign_warehouse').removeClass('hidden'); 
                     $('#driver').addClass('hidden');
                     $('#assign_warehouse').empty();
                     $('#assign_warehouse').append(response.html);
