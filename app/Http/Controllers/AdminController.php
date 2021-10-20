@@ -16,6 +16,8 @@ use App\Models\Zone;
 use Validator;
 use DB;
 use App\Models\ProductOrder;
+use App\Models\AssignDriverOrder;
+use App\Models\DriverNotification;
 use App\Models\Region;
 use Carbon\Carbon;
 use Spatie\Permission\Traits\HasRoles;
@@ -74,6 +76,7 @@ class AdminController extends Controller
         }
         return view('admin.customer.runPicklist', compact('warehouses', 'days'));
     }
+
     public function getmasterPicklist()
     {
         if (isset(request()->id))
@@ -118,49 +121,103 @@ class AdminController extends Controller
             $warehouse = Warehouse::whereId(request()->id)->first();
         else
             $warehouse = Warehouse::first();
-        $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.region')
-            ->where('regions.warehouse_id', $warehouse->id)
-            ->select('customer_details.user_id')
-            ->get()->map(function ($value) use ($dayID) {
-                $p = ProductOrder::
-                    join('customer_details','customer_details.delivery_region', '=', 'product_orders.region_name')
-                    ->join('users', 'users.id', 'product_orders.user_id')
-                    ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $dayID])
-                    ->select(
-                        'users.name as name',
-                        'customer_details.delivery_address_1 as address',
-                        'customer_details.delivery_region as subrub',
-                        DB::raw('SUM(product_orders.quantity) as cartons')
-                    )
-                    ->groupBy('name', 'address', 'subrub')
-                    ->get();
-                return $p;
-            });
-        // dd($products);
-        // $product=ProductOrder::join('product_orders','product_orders.users_id','customer_details.user_id')
-        //                      ->where(['regions.warehouse_id' =>$warehouse->id,'product_orders.day_id'=>$dayID])
-        //                      ->select('customer_details.user_id')
-        //                      ->get()->map(function($value){
-        //                         $p=CustomerDetail::join('users','users.id','customer_details.user_id')
-        //                         ->join('regions','regions.region','customer_details.delivery_region')
-        //                         ->join('product_orders',function($join){
-        //                             $join->on('customer_details.user_id','=','product_orders.user_id')
-        //                              ->orOn('product_orders.region_name','=','customer_details.delivery_region');
-        //                         })
-        //                         ->select('users.name as name','customer_details.delivery_address_1 as address',
-        //                         'customer_details.delivery_region as subrub',DB::raw('SUM(product_orders.quantity) as cartons'))
-        //                         ->where(['product_orders.user_id'=>$value->user_id])
-        //                         ->groupBy('name','address','subrub')
-        //                         ->get();
-        //                        return $p;
-        //                      });
-        //                      dd($product);
-        //                     
+            $data = User::role('Driver')->where('status',1)
+            ->join('assign_warehouses','assign_warehouses.user_id','users.id')
+            ->where('warehouse_id',$warehouse->id)
+             ->select('users.name as driverName','users.id as id')->get();
+        
+            $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.region')
+                ->where('regions.warehouse_id', $warehouse->id)
+                ->select('customer_details.user_id')
+                ->get()->map(function ($value) use ($dayID) {
+                    $p = ProductOrder::where('user_id',$value->user_id)->where('day_id',$dayID)
+                        ->get();
+                    return $p;
+                });
+                $orders = array();
+            foreach($products as $pro)
+            {
+                $quantity = 0;
+                $flag=0;
+                foreach($pro as $p)
+                {
+                    $user_id = $p->user_id;
+                    $userName = $p->user->name;
+                    $userDetails = CustomerDetail::where('user_id',$p->user_id)->first(); 
+                    $userAddress = $userDetails->delivery_address_1;
+                    $userRegion = $userDetails->delivery_region;
+                    $quantity = $quantity+$p->quantity;
+                }
+
+                $orders[] = array(
+                    'user_id' => $user_id,
+                    'userName'=>$userName,
+                    'userAddress' => $userAddress,
+                    'userRegion' => $userRegion,
+                    'qty'=>$quantity,
+                    'assign_driver'=>$this->searchdriver($user_id)
+                );           
+            }
+             
 
         return response()->json([
-            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'date', 'products', 'warehouse'))->render(), 200, ['Content-Type' => 'application/json']
+            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
     }
+
+    function searchdriver($user_id){
+        $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->first('driver_id');
+        if(!empty($assignDriver)){
+            $driver = User::where('id',$assignDriver->driver_id)->first();
+            if(!empty($driver)){
+                return $driver->name;
+            }
+        }
+        return false;
+    }
+
+    public function selectCustomer(Request $request)
+    {
+        extract($request->all());
+     
+        if($request->has('customer_id'))
+        {
+            foreach($customer_id as $customer){
+                $data[] = array(
+                    'driver_id'=>$driver_id,
+                    'customer_id'=>$customer,
+                    'is_assign' =>1    
+                );  
+            }
+            $assign =  AssignDriverOrder::insert($data);
+
+            foreach($customer_id as $customer)
+            {
+                $this->generateNotification($customer,$driver_id); 
+            }
+            if($assign){
+                $data1['status'] = 200;
+                $data1['message'] = 'Driver Assign Successfully!';
+            }else{
+                $data1['status'] = 401;
+                $data1['message'] = 'Driver Does Not Assign!';
+            }
+            return response()->json($data1);
+        } 
+    }
+
+    function generateNotification($customerID,$driverID){
+        $now = Carbon::now();
+        $user = User::where('id',$customerID)->first();
+        $driverMessage = auth()->user()->name .' Has Assign You Delivery'. ' ' .$user->name.' '. $now->format('g:i A');
+       
+        DriverNotification::create([
+            'driver_id' => $driverID,
+            'custoner_id' => $customerID,
+            'message' => $driverMessage, 
+        ]);
+    }
+    
     /**
      *****************************************************************************
      ************************** Admin Password ***********************************
