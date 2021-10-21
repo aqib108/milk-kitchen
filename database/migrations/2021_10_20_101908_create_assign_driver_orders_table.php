@@ -15,6 +15,7 @@ class CreateAssignDriverOrdersTable extends Migration
     {
         Schema::create('assign_driver_orders', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id');
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('driver_id');
             $table->boolean('is_assign')->default(FALSE);

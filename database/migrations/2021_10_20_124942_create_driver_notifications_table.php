@@ -16,7 +16,7 @@ class CreateDriverNotificationsTable extends Migration
         Schema::create('driver_notifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('driver_id');
-            $table->unsignedBigInteger('custoner_id');
+            $table->string('order_id');
             $table->string('message');
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         Commands\Repository::class,
-        Commands\OrderDelivery::class,
+        Commands\AssignDriverStatus::class,
     ];
 
     /**
@@ -26,9 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        // $schedule->command('order_delivery')->dailyAt('09:00');
-        $schedule->command('order_delivery')->everyMinute();
+        $schedule->command('assign_driver_status')->daily();
     }
 
     /**

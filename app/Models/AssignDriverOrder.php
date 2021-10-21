@@ -9,5 +9,6 @@ class AssignDriverOrder extends Model
 {
     use HasFactory;
     protected $guarded=[''];
-    
+
+    public $timestamps = True;  
 }
