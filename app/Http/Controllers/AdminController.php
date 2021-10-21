@@ -115,7 +115,6 @@ class AdminController extends Controller
     {
         $date = Carbon::now();
         $current_day = Carbon::Today()->format('l');
-        // dd($current_day);
         $dayID = WeekDay::where('name', $current_day)->pluck('id');
         if (isset(request()->id))
             $warehouse = Warehouse::whereId(request()->id)->first();
@@ -134,7 +133,7 @@ class AdminController extends Controller
                         ->get();
                     return $p;
                 });
-                $orders = array();
+            $orders = array();
             foreach($products as $pro)
             {
                 $quantity = 0;
@@ -166,7 +165,7 @@ class AdminController extends Controller
     }
 
     function searchdriver($user_id){
-        $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->first('driver_id');
+        $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->where('is_assign',1)->first('driver_id');
         if(!empty($assignDriver)){
             $driver = User::where('id',$assignDriver->driver_id)->first();
             if(!empty($driver)){
@@ -183,10 +182,19 @@ class AdminController extends Controller
         if($request->has('customer_id'))
         {
             foreach($customer_id as $customer){
+                $date = Carbon::now();
+                $current_time = $date->toDateTimeString();
+                $current_day = Carbon::Today()->format('l');
+                $dayID = WeekDay::where('name', $current_day)->pluck('id');
+                $todayOrder = ProductOrder::where('day_id',$dayID)->where('user_id',$customer)->get()->toArray();
+                $orderID = array_column($todayOrder, 'id');
+                $order =  implode(",",$orderID);
                 $data[] = array(
+                    'customer_id' => $customer,
+                    'order_id' =>$order,
                     'driver_id'=>$driver_id,
-                    'customer_id'=>$customer,
-                    'is_assign' =>1    
+                    'is_assign' =>1,
+                    'created_at'=> $current_time       
                 );  
             }
             $assign =  AssignDriverOrder::insert($data);
@@ -205,15 +213,21 @@ class AdminController extends Controller
             return response()->json($data1);
         } 
     }
-
-    function generateNotification($customerID,$driverID){
+    function generateNotification($customerID,$driverID)
+    {
         $now = Carbon::now();
         $user = User::where('id',$customerID)->first();
         $driverMessage = auth()->user()->name .' Has Assign You Delivery'. ' ' .$user->name.' '. $now->format('g:i A');
+        $date = Carbon::now();
+        $current_day = Carbon::Today()->format('l');
+        $dayID = WeekDay::where('name', $current_day)->pluck('id');
+        $todayOrder = ProductOrder::where('day_id',$dayID)->where('user_id',$customerID)->get()->toArray();
+        $orderID = array_column($todayOrder, 'id');
+        $order =  implode(",",$orderID);
        
         DriverNotification::create([
+            'order_id' => $order,
             'driver_id' => $driverID,
-            'custoner_id' => $customerID,
             'message' => $driverMessage, 
         ]);
     }

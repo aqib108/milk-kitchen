@@ -145,6 +145,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'sale'], function (){
             Route::get('/','SaleController@reoccurring')->name('sale.index');
         });
+        Route::group(['prefix' => 'driver'], function (){
+            Route::get('/{id?}','NotificationController@driverPicklistIndex')->name('driverPicklist.index');
+            Route::get('/picklist/detail/{id}','NotificationController@picklistDetail')->name('picklist.detail');
+        });
     });
 
     Route::group(['prefix' => 'home'], function () {

@@ -203,13 +203,9 @@
                                 $('#notificationCount').empty();
                                 $('#notificationCount').append(response.notifications.length);
                                 $('#notifications').empty();
-                                response.notifications.forEach(function(notification, index) {
-                                    var notify = `<a href="#" class="dropdown-item" style="white-space: revert !important;">
-                                                    <i class="fas fa-envelope mr-2"></i>
-                                                    ` + notification.message + `
-                                                </a>
-                                                <div class="dropdown-divider"></div>`;
-                                    $('#notifications').append(notify);
+                                response.notifications.forEach(function(driverNotification, index) {
+                                   console.log();
+                                    $('#notifications').append('<a href="'+driverNotification.url+'" class="dropdown-item" style="white-space: revert !important;"><i class="fas fa-envelope mr-2"></i>'+ driverNotification.driverMessage +'</a><div class="dropdown-divider"></div>');
                                 });
                                 playSound();
                             } else {
@@ -222,9 +218,8 @@
                     }
                 });
             }, 2000);
-
             function playSound() {
-                var audio = new Audio('{{ asset('audio/notify.mp3') }}');
+                var audio = new Audio("{{asset('audio/notify.mp3') }}");
                 audio.play();
             }
         </script>
