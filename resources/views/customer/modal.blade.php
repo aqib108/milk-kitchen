@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <img src="images/popup.png" class="img-fluid" alt="">
+                    <img src="" class="img-fluid" alt="">
                 </div>
             </div>
             <div class="modal-footer">
