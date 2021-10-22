@@ -97,7 +97,7 @@ class CustomerController extends Controller
             $p=Service::where('services.product_id',$value->groupId)
             ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
             ->join('products','products.id','services.product_id')
-            ->join('product_orders','product_orders.product_id','services.product_id')
+            // ->join('product_orders','product_orders.product_id','services.product_id')
              ->select('products.*')
             //  ->select('products.name as productName','product_orders.day_id as Day',DB::raw('SUM(product_orders.quantity) as carton'))
             //  ->groupBy('productName','Day')
