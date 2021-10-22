@@ -36,9 +36,17 @@ class ProductOrder extends Model
     {
         return $this->belongsTo(customerDetail::class, 'user_id', 'user_id');
     }
-    public function scopeUserDetail($query, $id)
+    public function scopeUserDetail($query, $id,$name)
     {
-        return $query->where('user_id','=', $id);
+        return $query->where(['user_id'=> $id,'region_name'=>$name]);
+    }
+    public function scopeDeleteOld($query)
+    {
+        return $query->delete();
+    }
+    public function scopeUserProduct($query,$id,$userId)
+    {
+        return $query->where(['product_id'=>$id,'user_id'=>$userId]);
     }
 
     public function orderDeliverd()

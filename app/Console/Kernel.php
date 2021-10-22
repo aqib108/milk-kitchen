@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('standing_order')->weeklyOn(7, '12:00:pm');
         $schedule->command('assign_driver_status')->daily();
     }
 

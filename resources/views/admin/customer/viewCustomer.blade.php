@@ -212,6 +212,15 @@
                 
                                                 </div>
                                             </div>
+                                            <div class="form-group col-md-6 p-0">
+                                                <label class="label-wrapper-custm" for="delivery_zone">Deliver Zone <span class="required-star">*</span></label>
+                                                <input type="text" name="delivery_zone" value="{{$customerDetail->delivery_zone ?? '' }}" placeholder="Enter Zone Name" class="form-control @error('delivery_zone') is-invalid @enderror" id="delivery_zone">
+                                                @error('delivery_zone')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -221,12 +230,69 @@
                 </div>
             </div>
             <div>
-                <div>
-                    <h2 class="heading-tbl">This Weeks Deliveries</h2>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0 weekly_standing_order">
-                        <thead>
+                <h2 class="heading-tbl">This Weeks Deliveries</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0 weekly_standing_order">
+                    <thead>
+                        <tr>
+                            <th class="table-th-wrapper" scope="col">Product Name</th>
+                            <th class="table-th-wrapper" scope="col">Monday</th>
+                            <th class="table-th-wrapper" scope="col">Tuesday</th>
+                            <th class="table-th-wrapper" scope="col">Wednesday</th>
+                            <th class="table-th-wrapper" scope="col">Thursday</th>
+                            <th class="table-th-wrapper" scope="col">Friday</th>
+                            <th class="table-th-wrapper" scope="col">Saturday</th>
+                            <th class="table-th-wrapper" scope="col">Sunday</th>
+                        </tr>
+                    </thead>
+                    <tbody class="week-container-tbl">
+                 
+                        @if($products != null)
+
+                            @foreach ($products as $product)
+                               @if($product != null)
+                           
+                                <tr class="week_days" data-p-id="{{$product->id ?? ''}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name ?? ''}}</td>
+                                
+                                    @foreach ($weekDays as  $key=>$item)
+                                           
+                                        @php $key1 = ++$key; @endphp
+                                        @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                            @php
+                                                $qnty = 0;
+                                                if ($item != null){
+                                                    foreach ($item->WeekDay as $order){
+                                                        if($order->product_id == $product->id){
+                                                            $qnty = $order->quantity;
+                                                        }   
+                                                    } 
+                                                }  
+                                            @endphp
+                                            @if($item->id == 1 && (date('H:i:a') > "14:00:pm") )
+                                            <td style="background-color: white !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="{{$qnty}}" minlength="0" disabled>
+                                            </td>
+                                            @else
+                                            <td style="background-color: white !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="{{$qnty}}" minlength="0">
+                                            </td>
+                                            @endif
+                                        
+                                        @else
+                                            <td style="background-color: aliceblue !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="0" minlength="0" disabled>
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                                @endif
+                            @endforeach
+                        @else
                             <tr>
                                 <th class="table-th-wrapper" scope="col">Product Name</th>
                                 <th class="table-th-wrapper" scope="col">Monday</th>
@@ -312,39 +378,68 @@
                     </table>
                 </div>
             </div>
-            <div class="mb-40-wrapper">
-                <div>
-                    <h2 class="heading-tbl">Weekly Standing Order</h2>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th class="table-th-wrapper" scope="col">Product Name</th>
-                                <th class="table-th-wrapper" scope="col">Monday</th>
-                                <th class="table-th-wrapper" scope="col">Tuesday</th>
-                                <th class="table-th-wrapper" scope="col">Wednesday</th>
-                                <th class="table-th-wrapper" scope="col">Thursday</th>
-                                <th class="table-th-wrapper" scope="col">Friday</th>
-                                <th class="table-th-wrapper" scope="col">Saturday</th>
-                                <th class="table-th-wrapper" scope="col">Sunday</th>
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0 standing_orders">
+                    <thead>
+                        <tr>
+                            <th class="table-th-wrapper" scope="col">Product Name</th>
+                            <th class="table-th-wrapper" scope="col">Monday</th>
+                            <th class="table-th-wrapper" scope="col">Tuesday</th>
+                            <th class="table-th-wrapper" scope="col">Wednesday</th>
+                            <th class="table-th-wrapper" scope="col">Thursday</th>
+                            <th class="table-th-wrapper" scope="col">Friday</th>
+                            <th class="table-th-wrapper" scope="col">Saturday</th>
+                            <th class="table-th-wrapper" scope="col">Sunday</th>
 
-                            </tr>
-                        </thead>
-                        <tbody class="week-container-tbl">
+                        </tr>
+                    </thead>
+                    <tbody class="week-container-tbl">
+                    @if($products != null)
+
+                        @foreach ($products as $product)
+                        @if($product != null)
+                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
+                                
+                                    @foreach ($WeekDayForStandingOrder as  $key=>$item)
+
+                                        @php $key1 = ++$key; @endphp
+                                        @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                            @php
+                                                $qnty = 0;
+                                                if ($item != null){
+                                                    foreach ($item->WeekDayForStandingOrder as $order){
+                                                        if($order->product_id == $product->id){
+                                                            $qnty = $order->quantity;
+                                                        }   
+                                                    } 
+                                                }  
+                                            @endphp
+                                            <td style="background-color: white !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="{{$qnty}}" minlength="0">
+                                            </td>
+                                        @else
+                                            <td style="background-color: aliceblue !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="0" minlength="0" disabled>
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                                @endif
+                            @endforeach
+                        @else
                             <tr>
-                                <td class="table-td-wrapper" scope="row">Product 1</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td class="alert alert-danger" colspan="8" role="alert">
+                                    <div>
+                                        No Result(s) Found !
+                                    </div>
+                                </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        @endif
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -447,6 +542,58 @@
                             'qnty': qnty
                         },
                         url: "{{route('admin.customer-orders',$customer->id)}}",
+                        success: function(response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'success',
+                                    title: response.message,
+                                });
+                            } else {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    toast: true,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    icon: 'error',
+                                    title: response.success,
+                                });
+                            }
+                        },
+                    });
+                }
+            });
+            $('body').on('change', '.standing_orders .week_days td input', function() {
+              
+                let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
+                let day_id = $(this).attr('data-id');
+                let qnty = $(this).val();
+               
+                if (qnty < 0) {
+                    Swal.fire({
+                        position: 'top-end',
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        icon: 'error',
+                        title: 'Quantity should not be less than 0',
+                    });
+                    $(this).val(0);
+                } else {
+                    
+                    $.ajax({
+
+                        type: "POST",
+                        data: {
+                            'day_id': day_id,
+                            'product_id': product_id,
+                            'region' : region_name,
+                            'qnty': qnty
+                        },
+                        url: "{{route('admin.standing-orders',$customer->id)}}",
                         success: function(response) {
                             if (response.status) {
                                 Swal.fire({
