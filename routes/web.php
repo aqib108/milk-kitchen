@@ -25,6 +25,10 @@ Route::get('/cache-clear', function(){
     Artisan::call('view:clear');
 });
 
+Route::get('/every-day', function(){
+    Artisan::call('assign_driver_status');
+});
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');
     Route::get('/super','RoleManagementController@assign');
