@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function warehouseManagers()
     {
-        return $this->hasMany(AssignWarehouse::class);
+        return $this->hasMany(AssignWarehouse::class,'user_id','id');
     }
 
     public function wareHouses()

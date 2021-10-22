@@ -248,7 +248,7 @@
                 </li>
                 @endcan
                 <!--- End sale --->
-                 @can('manage report')
+                @can('manage report')
                 <li class="nav-item">
                     <a href="{{ route('customer.customer-report') }}" class="nav-link">
                         <i class="nav-icon fas fa-clock"></i>
@@ -258,6 +258,18 @@
                     </a>
                 </li>
                 @endcan
+                @if(auth()->user()->hasRole('Driver'))
+                    @can('runpicklist')
+                    <li class="nav-item">
+                        <a href="{{ route('driverPicklist.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-clock"></i>
+                            <p>
+                                Run Picklist
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
+                @endif
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

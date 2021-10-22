@@ -25,6 +25,10 @@ Route::get('/cache-clear', function(){
     Artisan::call('view:clear');
 });
 
+Route::get('/every-day', function(){
+    Artisan::call('assign_driver_status');
+});
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');
     Route::get('/super','RoleManagementController@assign');
@@ -37,7 +41,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::match(['GET','POST'],'/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
         Route::get('/runPicklist','AdminController@runPicklist')->name('runPicklist');  
         Route::get('/getWarehouses','UserManagementController@getWarehouses')->name('getWarehouses');  
-        Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');  
+        Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');
+        Route::any('/select-customer', 'AdminController@selectCustomer')->name('selectCustomer');  
         Route::group(['as' => 'admin.'], function () {
             Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
             Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
@@ -145,6 +150,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'sale'], function (){
             Route::get('/','SaleController@reoccurring')->name('sale.index');
         });
+        Route::group(['prefix' => 'driver'], function (){
+            Route::get('/{id?}','NotificationController@driverPicklistIndex')->name('driverPicklist.index');
+            Route::get('/picklist/detail/{id}','NotificationController@picklistDetail')->name('picklist.detail');
+        });
     });
 
     Route::group(['prefix' => 'home'], function () {
@@ -156,15 +165,14 @@ Route::group(['middleware' => 'auth'], function () {
     }); 
 });
 //// GENERAL ROUTES
+Route::get('/notification', 'NotificationController@checkDriverNotification')->name('checkDriverNotification');
 Route::group(['prefix' => 'driver'], function () {
+
     Route::get('/brCode/{id}', 'QrController@driverScan')->name('qr.driverScan');
     Route::post('/code', 'QrController@driverCode')->name('qr.driverCode');
     Route::get('/upload/view/{id}', 'QrController@driverUploadView')->name('qr.upload');
     Route::post('/upload/pic/{id}', 'QrController@driverUploadViewCap')->name('qr.uploadCap');
 });
-
-
-
 Route::post('/get-regions','HomeController@getState')->name('getRegions');
 Route::post('/get-cities','HomeController@getCity')->name('getCitiesByRegion');
 Route::get('/', 'HomeController@index');

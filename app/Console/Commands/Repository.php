@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-// use Illuminate\Console\Command;
 use Illuminate\Console\GeneratorCommand;
 
 class Repository extends GeneratorCommand
@@ -44,8 +43,6 @@ class Repository extends GeneratorCommand
      */
     protected function alreadyExists($rawName)
     {
-        // dd($rawName);
-        // dd(class_exists('App\Repository\\'.$rawName));
         return class_exists('App\Repositories\\'.$rawName);
     }
 

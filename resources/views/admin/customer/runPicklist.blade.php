@@ -1,6 +1,24 @@
 @extends('admin.layouts.admin')
 @section('title', 'List Of Customer')
 @section('styles')
+<style>
+    .custom-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        z-index: 999;
+        opacity: 0.9;
+    }
+    .hidden {
+        display: none;
+    }
+</style>
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('customer-panel/css/style.css') }}" />
 @endsection
@@ -56,14 +74,25 @@
         <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+<div class="custom-loader hidden">
+    <img src="{{asset('admin-panel/images/ajaxloader.gif')}}" style="width:100px;height:100px">
+</div>
 @endsection
 
 @section('scripts')
+
 <script>
     window.onload = function() {
         var warehouse_id = $('#warehouse').val();
         runpicklist(warehouse_id);  
     };
+    $(document).ready(function() {
+        $('#warehouse').on('change', function() {
+            var warehouse_id = $('#warehouse').val();
+            runpicklist(warehouse_id);   
+        });
+    });
+    
     function runpicklist(warehouse_id = null)
     {
         $.ajax({
@@ -78,14 +107,8 @@
                     $('#deliverRecord').append(response.html);
                 }
             });
-    }
-    $(document).ready(function() {
-        $('#warehouse').on('change', function() {
-            var warehouse_id = $('#warehouse').val();
-            runpicklist(warehouse_id);   
-        });
-    });
-</script>
+    }  
+</script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="{{ asset('customer-panel/js/index.js') }}"></script>
 @endsection
