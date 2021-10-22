@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignGroup;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\ProductOrder;
+use App\Models\StandingOrder;
 use App\Models\OrderDeliverd;
 use App\Models\CustomerDetail;
 use App\Models\WeekDay;
@@ -14,6 +16,8 @@ use App\Models\Zone;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use App\Models\GroupCustomer;
+use App\Models\Service;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -84,20 +88,49 @@ class CustomerController extends Controller
 
     public function viewCustomer($id)
     {
+
+       
+        $products=AssignGroup::join('users','users.id','assign_groups.user_id')
+           ->where('assign_groups.user_id',$id)
+           ->select('assign_groups.assign_group_id as groupId')
+           ->get()->map(function($value){
+            $p=Service::where('services.product_id',$value->groupId)
+            ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
+            ->join('products','products.id','services.product_id')
+            ->join('product_orders','product_orders.product_id','services.product_id')
+             ->select('products.*')
+            //  ->select('products.name as productName','product_orders.day_id as Day',DB::raw('SUM(product_orders.quantity) as carton'))
+            //  ->groupBy('productName','Day')
+             ->distinct()->first();
+             return $p;
+           });
+         
+     
+        // dd("dkdk");
         $customerID = $id;
+         
+       
+           
         $customer = User::find($customerID);
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
         $deliveryRegion = $customerDetail->delivery_region ?? '';
-        $ZoneID = Zone::join('regions','regions.id','zones.id')
-        ->select('zones.id as id')->where('regions.region',$deliveryRegion ?? '')->get();
-        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id ?? '')->where('status',1)->pluck('day_id','day_id');
-        $products = Product::orderBy('id','DESC')->where('status',1)->get();
-        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID){
-            $q->userDetail($customerID);
-        }])->get();
-        // dd($weekDays);
+        // $ZoneID = Zone::join('regions','regions.id','zones.id')
+        // ->select('zones.id as id')->where(['regions.region'=>$customerDetail->delivery_region,
+        // 'zones.name'=>$customerDetail->delivery_zone])->get();
+        $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
+        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
+     
+        // $products = Product::orderBy('id','DESC')->where('status',1)->get();
        
-        return view('admin.customer.viewCustomer',compact('customerID','customer','deliveryRegion','customerDetail','products','weekDays','deliveryZoneDay'));
+        // dd("dmdk");  
+        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
+            $q->userDetail($customerID,$deliveryRegion);
+        }])->get();
+        $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($customerID,$deliveryRegion){
+            $q->userDetail($customerID,$deliveryRegion);
+        }])->get();
+       
+        return view('admin.customer.viewCustomer',compact('customerID','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
 
     public function pastOrder($id)
@@ -128,7 +161,9 @@ class CustomerController extends Controller
     //Create Customer page
     public function newCustomerCreate()
     {
-        return view('admin.customer.createCustomer');
+         $groups= GroupCustomer::whereStatus(1)->get();
+         $arr= array('');
+        return view('admin.customer.createCustomer',compact('groups','arr'));
     }
 
     //Create New Customer
@@ -140,6 +175,7 @@ class CustomerController extends Controller
             'password' => Hash::make($request->password),
         ]);
         $data->assignRole('Customer');
+         $data->groups()->sync($request->groups);
         if($data->wasRecentlyCreated){
             $response = array(
                 'data' => [],
@@ -166,7 +202,11 @@ class CustomerController extends Controller
     public function editCustomer($id)
     {
         $customer = User::find($id);
-        return view('admin.customer.editCustomer',compact('customer'));
+        $groups= GroupCustomer::whereStatus(1)->get();
+        $arr=GroupCustomer::join('assign_groups','assign_groups.assign_group_id','group_customers.id')
+        ->where('assign_groups.user_id',$customer->id)
+        ->select('group_customers.*')->pluck('id')->toArray(); 
+        return view('admin.customer.editCustomer',compact('customer','arr','groups'));
     }
 
     //Update Customer
@@ -180,6 +220,8 @@ class CustomerController extends Controller
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');
         $Customer->save();
+        $Customer->groups()->sync($request->groups);
+      
 
         return redirect()->route('customer.index')->with('success','Customer updated successfully');
     }
@@ -259,6 +301,43 @@ class CustomerController extends Controller
             ],401);
         }
     }
+    public function StandingOrderAdmin(Request $request,$id)
+    {
+        $validate = $request->validate([
+            'day_id' => 'required',
+            'product_id' => 'required',
+            'qnty' => 'required',
+        ]);
+
+        $customerID = $id;
+        $customer = User::find($customerID);
+        
+        if($validate){
+            $data = StandingOrder::updateOrCreate([
+                'user_id'    => $customer->id,
+                'day_id'     => $request->day_id,
+                'region_name'  => $request->region,
+                'product_id' => $request->product_id],[
+                'quantity' => $request->qnty,
+            ]);
+            if($data->wasRecentlyCreated){
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Your Order Successfully created',
+                ]);
+            }else{
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Your Order Successfully updated',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong, Please try again!',
+            ],401);
+        }
+    }
 
     public function packingslip()
     {
@@ -280,7 +359,7 @@ class CustomerController extends Controller
             $deliverOrder = ProductOrder::where('day_id',$orderDetail->day_id)->where('user_id',$customerID)->where('product_id',$orderDetail->product_id)->get();
                 
             $weekDays = 
-                WeekDay::with(['productOrder' => function($q) use ($orderDetail){
+                WeekDay::with(['productOrder' => function($q) use ($customerID){
                     $q->userDetail($customerID);
                 }])->with(['productOrder' => function($q) use ($orderDetail,$deliverOrder) {
                     $q->weekDetail($orderDetail);

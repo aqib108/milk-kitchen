@@ -15,6 +15,11 @@ class WeekDay extends Model
         return $this->hasMany(ProductOrder::class,'day_id','id');
     }
 
+    public function WeekDayForStandingOrder()
+    {
+        return $this->hasMany(StandingOrder::class,'day_id','id');
+    }
+
     public function orderByUserID()
     {
         return $this->WeekDay()->where('user_id','=', Auth::id());

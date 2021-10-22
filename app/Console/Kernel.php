@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        // $schedule->command('order_delivery')->dailyAt('09:00');
+       $schedule->command('standing_order')->weeklyOn(7, '12:00:pm');
         $schedule->command('order_delivery')->everyMinute();
     }
 

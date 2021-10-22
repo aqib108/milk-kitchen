@@ -30,7 +30,8 @@ class CreateCustomerDetailsTable extends Migration
             $table->longText('delivery_address_2')->nullable();
             $table->string('delivery_country');
             $table->string('delivery_city');
-            $table->string('delivery_region');
+            $table->string('delivery_region')->nullable();
+            $table->string('delivery_zone')->nullable();
             $table->longText('delivery_notes')->nullable();
             $table->timestamps();
         });

@@ -65,6 +65,21 @@
                                             name="password_confirmation" placeholder="Enter Again Password... " >
                                             <div id="confirm-password-err" class="alert alert-danger"></div>
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12 ">
+                                    <label> Assign Group<span class="required-star">*</span></label>
+                                    <select class="form-control" name="groups[]" multiple style="width: 100%" required>
+                                        @foreach ($groups as $value)   
+                                        <option value="{{ $value->id }}" {{ in_array($value->id,$arr) ? 'selected' : false }}>
+                                            {{ $value->group_name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @error('groups')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.card-body -->
@@ -269,5 +284,22 @@
 
         confirmPasswordValidation();
     }
+</script>
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 select box
+        $("select[name=\"validation-select2\"]").select2({
+            allowClear: true,
+            placeholder: "Select gear...",
+        }).change(function() {
+            $(this).valid();
+        });
+        // Initialize Select2 multiselect box
+        $("select[name=\"groups[]\"]").select2({
+            placeholder: "Select groups...",
+        }).change(function() {
+            $(this).valid();
+        });
+    });
 </script>
 @endsection

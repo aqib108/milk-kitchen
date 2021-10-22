@@ -71,6 +71,7 @@ class CustomerDetailController extends Controller
             'delivery_address_2' => $request->input('delivery_address_2'),
             'delivery_country' => $request->input('delivery_country'),
             'delivery_region' => $request->input('delivery_region'),
+            'delivery_zone' => $request->input('delivery_zone'),
             'delivery_city' => $request->input('delivery_city'),
             'delivery_notes' => $request->input('delivery_notes'),
         ];
@@ -126,6 +127,7 @@ class CustomerDetailController extends Controller
             'delivery_address_2' => $request->input('delivery_address_2'),
             'delivery_country' => $request->input('delivery_country'),
             'delivery_region' => $request->input('delivery_region'),
+            'delivery_zone' => $request->input('delivery_zone'),
             'delivery_city' => $request->input('delivery_city'),
             'delivery_notes' => $request->input('delivery_notes'),
         ]);

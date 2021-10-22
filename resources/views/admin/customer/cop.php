@@ -251,17 +251,12 @@
                         </tr>
                     </thead>
                     <tbody class="week-container-tbl">
-                 
-                        @if($products != null)
-
+                        @if($products->count() > 0)
                             @foreach ($products as $product)
-                               @if($product != null)
-                           
-                                <tr class="week_days" data-p-id="{{$product->id ?? ''}}">
-                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name ?? ''}}</td>
+                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
                                 
                                     @foreach ($weekDays as  $key=>$item)
-                                           
                                         @php $key1 = ++$key; @endphp
                                         @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
                                             @php
@@ -274,18 +269,10 @@
                                                     } 
                                                 }  
                                             @endphp
-                                            @if($item->id == 1 && (date('H:i:a') > "14:00:pm") )
-                                            <td style="background-color: white !important;">
-                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                            text-align: center;" value="{{$qnty}}" minlength="0" disabled>
-                                            </td>
-                                            @else
                                             <td style="background-color: white !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                             text-align: center;" value="{{$qnty}}" minlength="0">
                                             </td>
-                                            @endif
-                                        
                                         @else
                                             <td style="background-color: aliceblue !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
@@ -294,7 +281,6 @@
                                         @endif
                                     @endforeach
                                 </tr>
-                                @endif
                             @endforeach
                         @else
                             <tr>
@@ -314,7 +300,7 @@
                 <h2 class="heading-tbl">Weekly Standing Order</h2>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered mb-0 standing_orders">
+                <table class="table table-bordered mb-0">
                     <thead>
                         <tr>
                             <th class="table-th-wrapper" scope="col">Product Name</th>
@@ -329,51 +315,37 @@
                         </tr>
                     </thead>
                     <tbody class="week-container-tbl">
-                    @if($products != null)
-
-                        @foreach ($products as $product)
-                        @if($product != null)
-                                <tr class="week_days" data-p-id="{{$product->id}}">
-                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
+                    @foreach ($productData as $key=>$product)
+                                <tr class="week_days" data-p-id="{{$product[$key]['productId']}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product[$key]['productName']}}</td>
                                 
-                                    @foreach ($WeekDayForStandingOrder as  $key=>$item)
-
-                                        @php $key1 = ++$key; @endphp
-                                        @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                
+                                    @foreach ($weekDays as  $key=>$item)
+                                      {{dump( $product[$key]['carton'] ?? '')}}
+                                            
+                                        @if(isset($product[$key]['Day']) &&  ($product[$key]['Day'] == $item->id))
                                             @php
                                                 $qnty = 0;
-                                                if ($item != null){
-                                                    foreach ($item->WeekDayForStandingOrder as $order){
-                                                        if($order->product_id == $product->id){
-                                                            $qnty = $order->quantity;
-                                                        }   
-                                                    } 
-                                                }  
+                                                            $qnty = $product[$key]['carton'];
                                             @endphp
                                             <td style="background-color: white !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                             text-align: center;" value="{{$qnty}}" minlength="0">
                                             </td>
                                         @else
+                                           @php
+                                           $key1= --$key;
+                                           @endphp
                                             <td style="background-color: aliceblue !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                             text-align: center;" value="0" minlength="0" disabled>
                                             </td>
                                         @endif
                                     @endforeach
+                                
                                 </tr>
-                                @endif
                             @endforeach
-                        @else
-                            <tr>
-                                <td class="alert alert-danger" colspan="8" role="alert">
-                                    <div>
-                                        No Result(s) Found !
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                    </tbody>
+                     </tbody>
                 </table>
             </div>
         </div>
@@ -478,58 +450,6 @@
                             'qnty': qnty
                         },
                         url: "{{route('admin.customer-orders',$customer->id)}}",
-                        success: function(response) {
-                            if (response.status) {
-                                Swal.fire({
-                                    position: 'top-end',
-                                    toast: true,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    icon: 'success',
-                                    title: response.message,
-                                });
-                            } else {
-                                Swal.fire({
-                                    position: 'top-end',
-                                    toast: true,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    icon: 'error',
-                                    title: response.success,
-                                });
-                            }
-                        },
-                    });
-                }
-            });
-            $('body').on('change', '.standing_orders .week_days td input', function() {
-              
-                let product_id = $(this).parent('td').parent('tr').attr('data-p-id');
-                let day_id = $(this).attr('data-id');
-                let qnty = $(this).val();
-               
-                if (qnty < 0) {
-                    Swal.fire({
-                        position: 'top-end',
-                        toast: true,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        icon: 'error',
-                        title: 'Quantity should not be less than 0',
-                    });
-                    $(this).val(0);
-                } else {
-                    
-                    $.ajax({
-
-                        type: "POST",
-                        data: {
-                            'day_id': day_id,
-                            'product_id': product_id,
-                            'region' : region_name,
-                            'qnty': qnty
-                        },
-                        url: "{{route('admin.standing-orders',$customer->id)}}",
                         success: function(response) {
                             if (response.status) {
                                 Swal.fire({
