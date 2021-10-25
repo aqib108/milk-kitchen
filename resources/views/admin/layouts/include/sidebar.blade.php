@@ -270,6 +270,16 @@
                     </li>
                     @endcan
                 @endif
+                @can('manage setting')
+                <li class="nav-item">
+                    <a href="{{ route('scriptSetting') }}" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                           Setting
+                        </p>
+                    </a>
+                </li>
+                @endcan
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
