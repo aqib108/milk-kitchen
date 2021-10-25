@@ -80,7 +80,7 @@ class NotificationController extends Controller
             $date = Carbon::now();
             $current_day = Carbon::Today()->format('l');
             $dayID = WeekDay::where('name', $current_day)->pluck('id');
-            $warehouse = Region::where('region',$customerDetail->delivery_region)->first();
+            $warehouse = Region::where('name',$customerDetail->delivery_region)->first();
             $zone = Zone::where('region_id',$warehouse->id)->first();
             $productOrder = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
                 ->where(['product_orders.user_id' => $customerDetail->user_id, 'product_orders.day_id' => $dayID])

@@ -15,6 +15,9 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Region;
+use App\Models\Setting;
+use App\Models\Service;
+use App\Models\AssignGroup;
 use App\Models\Warehouse;
 use Carbon\Carbon;
 use DateTime;
@@ -42,17 +45,39 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $date=Carbon::now();
+        $today=$date->englishDayOfWeek;
+        $cutt_of_time = Setting::whereName('Cutt Off Time')->first();
+        if(isset($cutt_of_time)){
+            $cuttOfTime = $cutt_of_time->value;
+        }else{
+            $cuttOfTime = "2:00";
+        }
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $deliveryRegion = $customerDetail->delivery_region ?? '';
-       $ZoneID = Zone::join('regions','regions.id','zones.id')
-        ->select('zones.id as id')->where('regions.region',$deliveryRegion ?? '')->get();
-        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID[0]->id ?? '')->where('status',1)->pluck('day_id','day_id');
-       $products = Product::orderBy('id','DESC')->where('status',1)->get();
-       $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user){
-                    $q->userDetail($user);
-                    }])->get();
-       return view('customer.index',compact('user','customerDetail','products','weekDays','deliveryZoneDay'));
+       $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
+       $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
+
+        $products=AssignGroup::join('users','users.id','assign_groups.user_id')
+            ->where('assign_groups.user_id',$user)
+            ->select('assign_groups.assign_group_id as groupId')
+            ->get()->map(function($value){
+                $p=Service::where('services.product_id',$value->groupId)
+                    ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
+                    ->join('products','products.id','services.product_id')
+                    ->select('products.*')
+                    ->distinct()->first();
+                return $p;
+            });
+
+        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user,$deliveryRegion){
+            $q->userDetail($user,$deliveryRegion);
+        }])->get();
+        $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($user,$deliveryRegion){
+            $q->userDetail($user,$deliveryRegion);
+        }])->get();
+       return view('customer.index',compact('today','cuttOfTime','user','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
     public function getState(Request $request)
     {

@@ -2,21 +2,11 @@
     @csrf
     @method('PUT')
     <div class="modal-body">
-        <!-- <div class="mb-3 error-placeholder">
-            <label class="label-wrapper-custm" for="country">Suburb <span class="required-star">*</span></label>
-            <input type="text" maxlength="50" class="form-control @error('country') is-invalid @enderror" name="country" id="country"
-            value="{{$region->country}}" placeholder="Enter Country Name" >
-            @error('country')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </div> -->
         <div class="mb-3 error-placeholder">
-            <label class="label-wrapper-custm" for="region">Region <span class="required-star">*</span></label>
-            <input type="text" maxlength="50" class="form-control @error('region') is-invalid @enderror" name="region" id="region"
-            value="{{$region->region}}" placeholder="Enter Region Name" >
-            @error('region')
+            <label class="label-wrapper-custm" for="name">Name <span class="required-star">*</span></label>
+            <input type="text" maxlength="50" class="form-control @error('name') is-invalid @enderror" name="name" id="name"
+            value="{{$region->name}}">
+            @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>

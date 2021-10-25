@@ -85,7 +85,7 @@ class AdminController extends Controller
         else
             $warehouse = Warehouse::first();
 
-        $product = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.region')
+        $product = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
             ->where('regions.warehouse_id', $warehouse->id)
             ->select('customer_details.user_id')
             ->get()->map(function ($value) {
@@ -127,7 +127,7 @@ class AdminController extends Controller
             ->where('warehouse_id',$warehouse->id)
              ->select('users.name as driverName','users.id as id')->get();
         
-            $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.region')
+            $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
                 ->where('regions.warehouse_id', $warehouse->id)
                 ->select('customer_details.user_id')
                 ->get()->map(function ($value) use ($dayID) {
@@ -149,17 +149,16 @@ class AdminController extends Controller
                     $userRegion = $userDetails->delivery_region;
                     $quantity = $quantity+$p->quantity;
                 }
-
+                
                 $orders[] = array(
-                    'user_id' => $user_id,
-                    'userName'=>$userName,
-                    'userAddress' => $userAddress,
-                    'userRegion' => $userRegion,
-                    'qty'=>$quantity,
-                    'assign_driver'=>$this->searchdriver($user_id)
+                    'user_id' => $user_id  ?? '',
+                    'userName'=>$userName  ?? '',
+                    'userAddress' => $userAddress  ?? '',
+                    'userRegion' => $userRegion  ?? '',
+                    'qty'=>$quantity  ?? '',
+                    'assign_driver'=>$this->searchdriver($user_id  ?? '')
                 );           
-            }
-             
+            }  
 
         return response()->json([
             'html' => view('admin.customer.getrunPicklist', compact('current_day', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']

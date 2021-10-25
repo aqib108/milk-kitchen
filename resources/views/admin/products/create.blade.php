@@ -150,7 +150,7 @@
                                                         <td>
                                                             <input type="text" maxlength="100" class="form-control price bottlePrice" name="bottle_price[]"
                                                                 id="bottlePrice-{{$group->id}}" data-id="{{$group->id}}" placeholder="Enter Bottle Price"
-                                                                value="{{ old('bottle_price[]') }}" >
+                                                                value="{{ old('bottle_price[]') }}" readonly >
                                                         </td>
                                                         <td class="text-center"><input type="checkbox" class="form-control"
                                                             value="1" name="saleable[]" data-size="xs" data-toggle="toggle">

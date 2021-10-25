@@ -25,6 +25,7 @@ class CustomerDetail extends Model
     'delivery_address_2',
     'delivery_country',
     'delivery_city',
+    'delivery_zone',
     'delivery_region',
     'delivery_notes',
   ];

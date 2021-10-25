@@ -89,41 +89,34 @@ class CustomerController extends Controller
 
     public function viewCustomer($id)
     {
-
-        $cutt_of_time=Setting::whereName('Cutt Off Time')->first();
-        $products=AssignGroup::join('users','users.id','assign_groups.user_id')
-           ->where('assign_groups.user_id',$id)
-           ->select('assign_groups.assign_group_id as groupId')
-           ->get()->map(function($value){
-            $p=Service::where('services.product_id',$value->groupId)
-            ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
-            ->join('products','products.id','services.product_id')
-            // ->join('product_orders','product_orders.product_id','services.product_id')
-             ->select('products.*')
-            //  ->select('products.name as productName','product_orders.day_id as Day',DB::raw('SUM(product_orders.quantity) as carton'))
-            //  ->groupBy('productName','Day')
-             ->distinct()->first();
-             return $p;
-           });
-         
-     
-        // dd("dkdk");
+        $date=Carbon::now();
+        $today=$date->englishDayOfWeek;
         $customerID = $id;
-         
-       
-           
+        $cutt_of_time=Setting::whereName('Cutt Off Time')->first();
+        if(isset($cutt_of_time)){
+            $cuttOfTime = $cutt_of_time->value;
+        }else{
+            $cuttOfTime = "2:00";
+        }
+        $products=AssignGroup::join('users','users.id','assign_groups.user_id')
+            ->where('assign_groups.user_id',$id)
+            ->select('assign_groups.assign_group_id as groupId')
+            ->get()->map(function($value){
+                $p=Service::where('services.product_id',$value->groupId)
+                    ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
+                    ->join('products','products.id','services.product_id')
+                    ->select('products.*')
+                    ->distinct()->first();
+                return $p;
+            });
+
         $customer = User::find($customerID);
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
         $deliveryRegion = $customerDetail->delivery_region ?? '';
-        // $ZoneID = Zone::join('regions','regions.id','zones.id')
-        // ->select('zones.id as id')->where(['regions.region'=>$customerDetail->delivery_region,
-        // 'zones.name'=>$customerDetail->delivery_zone])->get();
+
         $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
         $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
-     
-        // $products = Product::orderBy('id','DESC')->where('status',1)->get();
-       
-        // dd("dmdk");  
+        //this Weekend 
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail($customerID,$deliveryRegion);
         }])->get();
@@ -131,7 +124,7 @@ class CustomerController extends Controller
             $q->userDetail($customerID,$deliveryRegion);
         }])->get();
        
-        return view('admin.customer.viewCustomer',compact('customerID','cutt_of_time','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
+        return view('admin.customer.viewCustomer',compact('today','customerID','cuttOfTime','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
 
     public function pastOrder($id)
@@ -259,10 +252,8 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($id){
             $q->userDetail($id);
         }])->get(); 
+        
         return view('admin.customer.pdfReport',compact('customer','products','weekDays','orders'));
-
-        // $pdf = PDF::loadView('admin.customer.pdfReport',compact('customer','products','weekDays','orders'));
-        // return $pdf->download('customerReport.pdf');
     }
 
     public function productOrderAdmin(Request $request,$id)

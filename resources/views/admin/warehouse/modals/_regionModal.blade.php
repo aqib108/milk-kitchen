@@ -24,20 +24,10 @@
             <form action="{{ route('region.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <!-- <div class="mb-3 error-placeholder">
-                        <label class="label-wrapper-custm" for="country_id">Suburb <span class="required-star">*</span></label>
-                        <input type="text" maxlength="50" class="form-control @error('country') is-invalid @enderror" name="country" id="country"
-                        value="{{ old('country') }}" placeholder="Enter Country Name" required>
-                        @error('country')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div> -->
                     <div class="mb-3 error-placeholder">
-                        <label class="label-wrapper-custm" for="region">Region <span class="required-star">*</span></label>
-                        <input type="text" maxlength="50" class="form-control @error('region') is-invalid @enderror" name="region" id="region"
-                        value="{{ old('region') }}" placeholder="Enter Region Name" required>
+                        <label class="label-wrapper-custm" for="name">Name <span class="required-star">*</span></label>
+                        <input type="text" maxlength="50" class="form-control @error('name') is-invalid @enderror" name="name" id="region"
+                        value="{{ old('name') }}" placeholder="Enter Region Name" required>
                         @error('region')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

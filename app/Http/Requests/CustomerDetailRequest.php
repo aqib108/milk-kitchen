@@ -38,6 +38,7 @@ class CustomerDetailRequest extends FormRequest
             'delivery_country' => 'required',
             'delivery_city'  => 'required',
             'delivery_region' => 'required',
+            'delivery_zone' => 'required',
         ];
     }
 }
