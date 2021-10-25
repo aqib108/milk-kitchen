@@ -293,7 +293,7 @@
                                                         } 
                                                     }  
                                                 @endphp
-                                                @if($item->id == 1 && (date('H:i:a') > "14:00:pm") )
+                                                @if($item->id == 1 && (date('H:i:a') > $cutt_of_time->value) )
                                                 <td style="background-color: white !important;">
                                                     <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                                 text-align: center;" value="{{$qnty}}" minlength="0" disabled>

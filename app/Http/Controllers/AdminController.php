@@ -20,6 +20,7 @@ use App\Models\AssignDriverOrder;
 use App\Models\DriverNotification;
 use App\Models\Region;
 use Carbon\Carbon;
+use App\Models\Setting;
 use Spatie\Permission\Traits\HasRoles;
 class AdminController extends Controller
 {
@@ -110,6 +111,7 @@ class AdminController extends Controller
             'html' => view('admin.customer.getmasterPicklist', compact('products', 'warehouse'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
     }
+
     /////////////////All set Work///////////////
     public function getrunPicklist()
     {
@@ -244,6 +246,25 @@ class AdminController extends Controller
             dd($request->all());
         }
         return view('admin.setting');
+    }
+    public function scriptSetting(Request $request)
+    {
+         $result=Setting::whereName('Cutt Off Time')->first();
+        return view('admin.scriptSetting',compact('result'));
+    }
+    public function saveSetting(Request $request)
+    {
+          $setting=Setting::whereName('Cutt Off Time')->first();
+  
+          if(isset($setting))
+          {
+            Setting::whereName('Cutt Off Time')->update(['value' => $request->value]);
+          }
+          else{
+            Setting::create($request->all()); 
+          }
+     
+          return redirect()->back();
     }
 
     public function checkPassword(Request $request)

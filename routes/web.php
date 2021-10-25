@@ -35,7 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'admin'], function (){
         Route::get('/', 'AdminController@index')->name('dashboard');
-        
+        Route::get('/script-settings', 'AdminController@scriptSetting')->name('scriptSetting');
+        Route::post('/save-settings', 'AdminController@saveSetting')->name('update-scriptSetting');
         Route::get('/manage-dashboard', 'AdminController@mangeDashBoard')->name('manage.dashboard');
         Route::get('/masterPicklist', 'AdminController@masterPicklist')->name('masterPicklist');
         Route::match(['GET','POST'],'/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
