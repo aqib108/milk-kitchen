@@ -256,11 +256,11 @@
                             @foreach ($products as $product)
                                 <tr class="week_days" data-p-id="{{$product->id ?? ''}}">
                                     <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#exampleModalCenter-{{$product->id ?? ''}}">
+                                        <a  class="" data-toggle="modal" data-target="#thisWeekOrders-{{$product->id ?? ''}}">
                                             {{$product->name ?? ''}}
                                         </a>
-                                        <div class="modal fade" id="exampleModalCenter-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal fade" id="thisWeekOrders-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="thisWeekOrdersTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -270,9 +270,13 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div>
-                                                            <img src="" id="image"
-                                                            class="w-25 mt-2" />
+                                                        <div class="row">
+                                                            <div class="form-group col-md-12">
+                                                                <img src="{{ asset('storage/' . $product->image_url) }}" id="image" style=" width:80% ! important;">
+                                                            </div>
+                                                            <div class="from-group col-md-12">
+                                                            <p>Pack Size:({{$product->pack_size}}) * Bottle Price:({{$product->price}}) = CTN Price:{{$product->pack_size * $product->price }}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -353,7 +357,38 @@
                                 @foreach ($products as $product)
                                     @if($product != null)
                                         <tr class="week_days" data-p-id="{{$product->id}}">
-                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
+                                        <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
+                                        <a  class="" data-toggle="modal" data-target="#standingOrders-{{$product->id ?? ''}}">
+                                            {{$product->name ?? ''}}
+                                        </a>
+                                        <div class="modal fade" id="standingOrders-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="standingOrdersTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{$product->name ?? ''}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-12">
+                                                                <img src="{{ asset('storage/' . $product->image_url) }}" id="image" style=" width:80% ! important;">
+                                                            </div>
+                                                            <div class="from-group col-md-12">
+                                                            <p>Pack Size:({{$product->pack_size}}) * Bottle Price:({{$product->price}}) = CTN Price:{{$product->pack_size * $product->price }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </td>
                                             @foreach ($WeekDayForStandingOrder as  $key=>$item)
                                                 @php $key1 = ++$key; @endphp
                                                 @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
