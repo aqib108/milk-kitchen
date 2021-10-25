@@ -4,21 +4,23 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\WeekDay;
-class StandingOrder extends Command
+use App\Models\StandingOrder;
+
+class WeeklyStandingOrder extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'weekly_standing_order';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command for standing order';
 
     /**
      * Create a new command instance.
@@ -40,13 +42,13 @@ class StandingOrder extends Command
         StandingOrder::query()
         ->each(function ($oldRecord) {
           $newRecord = $oldRecord->replicate();
-          WeekDay::with(['WeekDay' => function($q){
-            $q->deleteOld();
-            }])->get();
           $newRecord->setTable('product_orders');
           $newRecord->save();
           $oldRecord->delete();
         });
+        // WeekDay::with(['WeekDay' => function($q){
+        //   $q->deleteOld();
+        //   }])->get();
         
     }
 }

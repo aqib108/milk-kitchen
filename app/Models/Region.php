@@ -9,8 +9,7 @@ class Region extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'country',
-        'region',
+        'name',
         'warehouse_id',
     ];
 

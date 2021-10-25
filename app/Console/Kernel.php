@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         //
         Commands\Repository::class,
         Commands\AssignDriverStatus::class,
+        Commands\WeeklyStandingOrder::class,
     ];
 
     /**
@@ -26,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('standing_order')->weeklyOn(7, '12:00:pm');
+        $schedule->command('weekly_standing_order')->weekly();
         $schedule->command('assign_driver_status')->daily();
     }
 

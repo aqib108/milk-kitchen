@@ -39,7 +39,7 @@
                             <option value="" selected disabled>Select Region</option>
                             @foreach ($regions as $region)
                                 <option
-                                    value="{{$region->id}}">{{ $region->region }}
+                                    value="{{$region->id}}">{{ $region->name }}
                                 </option>
                             @endforeach
                         </select>

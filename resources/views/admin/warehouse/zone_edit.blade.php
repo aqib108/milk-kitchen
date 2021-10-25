@@ -15,7 +15,7 @@
             <select name="region_id" class="form-control @error('region_id') is-invalid @enderror" id="region_id">
                 @foreach ($regions as $regionName)
                 <option @if ($zone->region_id == $regionName->id) selected @endif
-                    value="{{$regionName->id}}">{{ $regionName->region }}</option>
+                    value="{{$regionName->id}}">{{ $regionName->name }}</option>
                 @endforeach
             </select>
             @error('region_id')

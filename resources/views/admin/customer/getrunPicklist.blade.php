@@ -47,8 +47,9 @@
                 </tr>
             </thead>
             <tbody class="week-container-tbl">
-                {{-- @if($orders->count() > 0) --}}
-                    @foreach($orders as $customer)  
+               
+                @foreach($orders as $customer)  
+                    @if(!empty($customer))
                         <tr>
                             <td class="table-td-wrapper" scope="row">
                                 <div class="row">
@@ -74,17 +75,17 @@
                             @else
                                 <td>-- --</td>
                             @endif
-                        </tr>  
-                    @endforeach
-                {{-- @else
-                    <tr>
-                        <td class="alert alert-danger" colspan="4" role="alert">
-                            <div>
-                                No Result(s) Found !
-                            </div>
-                        </td>
-                    </tr>
-                @endif --}}
+                        </tr>
+                    @else
+                        <tr>
+                            <td class="alert alert-danger" colspan="5" role="alert">
+                                <div>
+                                    No Result(s) Found !
+                                </div>
+                            </td>
+                        </tr>
+                    @endif  
+                @endforeach
             </tbody>
         </table> 
     </div>

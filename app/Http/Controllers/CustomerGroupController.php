@@ -53,16 +53,17 @@ class CustomerGroupController extends Controller
    }
 
    public function store(Request $request)
-   {
-       $validated = $request->validate([
-           'group_name' => ['required', 'string', 'max:255'],
-       ]);
+    {
+        $validated = $request->validate([
+           'group_name' => 'required|unique:group_customers',
+        ]);
 
-       $data = GroupCustomer::create([
+        $data = GroupCustomer::create([
            'group_name' => $request->group_name,
-       ]);
+        ]);
+
        return redirect()->route('customer-group.index')->with('success','New Customer Group Created!');
-   }
+    }
 
    public function status(Request $request)
    {

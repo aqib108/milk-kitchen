@@ -28,6 +28,10 @@ Route::get('/cache-clear', function(){
 Route::get('/every-day', function(){
     Artisan::call('assign_driver_status');
 });
+Route::get('/weekend', function(){
+    $command = Artisan::call('weekly_standing_order');
+    dd($command);
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/permission','RoleManagementController@permission');

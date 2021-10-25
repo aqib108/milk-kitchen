@@ -20,7 +20,7 @@ class ZoneController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('region_id', function(Zone $data){
-                    $region = $data->regionName->region;
+                    $region = $data->regionName->name;
                     return $region;
 
                 })

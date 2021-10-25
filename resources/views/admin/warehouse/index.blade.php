@@ -120,7 +120,7 @@
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>
-                                        <th>Region </th>
+                                        <th>Name </th>
                                         <th>Warehouse</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
@@ -310,8 +310,8 @@
                         searchable: false
                     },
                     {
-                        data: 'region',
-                        name: 'region'
+                        data: 'name',
+                        name: 'name'
                     },
                     {
                         data: 'warehouse_id',

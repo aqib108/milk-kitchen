@@ -195,7 +195,20 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                           
                                         </div>
+                                        <div class="row">
+                                                <div class="col-md-6"></div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="label-wrapper-custm" for="delivery_zone">Deliver Zone <span class="required-star">*</span></label>
+                                                    <input type="text" name="delivery_zone" value="{{$customerDetail->delivery_zone ?? '' }}" placeholder="Enter Zone Name" class="form-control @error('delivery_zone') is-invalid @enderror" id="delivery_zone">
+                                                    @error('delivery_zone')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                            </div> 
                                         <div class="row mb-40-wrapper">
                                             <div class="col-lg-12">
                                                 <div class="form-group">
@@ -212,15 +225,7 @@
                 
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-6 p-0">
-                                                <label class="label-wrapper-custm" for="delivery_zone">Deliver Zone <span class="required-star">*</span></label>
-                                                <input type="text" name="delivery_zone" value="{{$customerDetail->delivery_zone ?? '' }}" placeholder="Enter Zone Name" class="form-control @error('delivery_zone') is-invalid @enderror" id="delivery_zone">
-                                                @error('delivery_zone')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </form>
@@ -249,71 +254,68 @@
                     <tbody class="week-container-tbl">
                         @if($products != null)
                             @foreach ($products as $product)
-                               
-                                    <tr class="week_days" data-p-id="{{$product->id ?? ''}}">
-                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                                <a  class="" data-toggle="modal" data-target="#exampleModalCenter-{{$product->id ?? ''}}">
-                                                    {{$product->name ?? ''}}
-                                                </a>
-                                                <div class="modal fade" id="exampleModalCenter-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">{{$product->name ?? ''}}</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close"><span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div>
-                                                                    <img src="" id="image"
-                                                                    class="w-25 mt-2" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
-                                                            </div>
+                                <tr class="week_days" data-p-id="{{$product->id ?? ''}}">
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
+                                        <a  class="" data-toggle="modal" data-target="#exampleModalCenter-{{$product->id ?? ''}}">
+                                            {{$product->name ?? ''}}
+                                        </a>
+                                        <div class="modal fade" id="exampleModalCenter-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{$product->name ?? ''}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div>
+                                                            <img src="" id="image"
+                                                            class="w-25 mt-2" />
                                                         </div>
                                                     </div>
-                                                </div> 
-                                            </td>
-                                    
-                                        @foreach ($weekDays as  $key=>$item)  
-                                            @php $key1 = ++$key; @endphp
-                                            @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
-                                                @php
-                                                    $qnty = 0;
-                                                    if ($item != null){
-                                                        foreach ($item->WeekDay as $order){
-                                                            if($order->product_id == $product->id){
-                                                                $qnty = $order->quantity;
-                                                            }   
-                                                        } 
-                                                    }  
-                                                @endphp
-                                                @if($item->id == 1 && (date('H:i:a') > $cutt_of_time->value) )
-                                                <td style="background-color: white !important;">
-                                                    <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                text-align: center;" value="{{$qnty}}" minlength="0" disabled>
-                                                </td>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </td>
+                                    @foreach ($weekDays as  $key=>$item)  
+                                        @php $key1 = ++$key; @endphp
+                                        @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                            @php
+                                                $qnty = 0;
+                                                if ($item != null){
+                                                    foreach ($item->WeekDay as $order){
+                                                        if($order->product_id == $product->id){
+                                                            $qnty = $order->quantity;
+                                                        }   
+                                                    } 
+                                                }  
+                                            @endphp
+                                                @if($item->name == $today && time() == date('h:i') < $cuttOfTime)
+                                                    <td style="background-color: white !important;">
+                                                        <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                                    text-align: center;" value="{{$qnty}}" minlength="0" disabled>
+                                                    </td>
                                                 @else
-                                                <td style="background-color: white !important;">
-                                                    <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                text-align: center;" value="{{$qnty}}" minlength="0">
-                                                </td>
+                                                    <td style="background-color: white !important;">
+                                                        <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                                    text-align: center;" value="{{$qnty}}" minlength="0">
+                                                    </td>
                                                 @endif
-                                            
-                                            @else
-                                                <td style="background-color: aliceblue !important;">
-                                                    <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                text-align: center;" value="0" minlength="0" disabled>
-                                                </td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                               
+                                          
+                                        @else
+                                            <td style="background-color: aliceblue !important;">
+                                                <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                            text-align: center;" value="0" minlength="0" disabled>
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                </tr>
                             @endforeach
                         @else
                             <tr>
@@ -332,7 +334,7 @@
                     <h2 class="heading-tbl">Weekly Standing Order</h2>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
+                    <table class="table table-bordered mb-0 standing_orders">
                         <thead>
                             <tr>
                                 <th class="table-th-wrapper" scope="col">Product Name</th>
@@ -348,47 +350,45 @@
                         </thead>
                         <tbody class="week-container-tbl">
                             @if($products != null)
-                            @foreach ($products as $product)
-                            @if($product != null)
-                                    <tr class="week_days" data-p-id="{{$product->id}}">
-                                        <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
-                                    
-                                        @foreach ($WeekDayForStandingOrder as  $key=>$item)
-
-                                            @php $key1 = ++$key; @endphp
-                                            @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
-                                                @php
-                                                    $qnty = 0;
-                                                    if ($item != null){
-                                                        foreach ($item->WeekDayForStandingOrder as $order){
-                                                            if($order->product_id == $product->id){
-                                                                $qnty = $order->quantity;
-                                                            }   
-                                                        } 
-                                                    }  
-                                                @endphp
-                                                <td style="background-color: white !important;">
-                                                    <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                text-align: center;" value="{{$qnty}}" minlength="0">
-                                                </td>
-                                            @else
-                                                <td style="background-color: aliceblue !important;">
-                                                    <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                text-align: center;" value="0" minlength="0" disabled>
-                                                </td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
+                                @foreach ($products as $product)
+                                    @if($product != null)
+                                        <tr class="week_days" data-p-id="{{$product->id}}">
+                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important;">{{$product->name}}</td>
+                                            @foreach ($WeekDayForStandingOrder as  $key=>$item)
+                                                @php $key1 = ++$key; @endphp
+                                                @if(isset($deliveryZoneDay[$key1]) && $deliveryZoneDay[$key1])
+                                                    @php
+                                                        $qnty = 0;
+                                                        if ($item != null){
+                                                            foreach ($item->WeekDayForStandingOrder as $order){
+                                                                if($order->product_id == $product->id){
+                                                                    $qnty = $order->quantity;
+                                                                }   
+                                                            } 
+                                                        }  
+                                                    @endphp
+                                                    <td style="background-color: white !important;">
+                                                        <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                                    text-align: center;" value="{{$qnty}}" minlength="0">
+                                                    </td>
+                                                @else
+                                                    <td style="background-color: aliceblue !important;">
+                                                        <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
+                                                                    text-align: center;" value="0" minlength="0" disabled>
+                                                    </td>
+                                                @endif
+                                            @endforeach
+                                        </tr> 
+                                    @else
+                                        <tr>
+                                            <td class="alert alert-danger" colspan="8" role="alert">
+                                                <div>
+                                                    No Result(s) Found !
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endif
                                 @endforeach
-                            @else
-                                <tr>
-                                    <td class="alert alert-danger" colspan="8" role="alert">
-                                        <div>
-                                            No Result(s) Found !
-                                        </div>
-                                    </td>
-                                </tr>
                             @endif
                         </tbody>
                     </table>
