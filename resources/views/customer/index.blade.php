@@ -177,7 +177,7 @@
                                             </div>
                                            
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                                 <div class="col-md-6"></div>
                                                 <div class="form-group col-md-6">
                                                     <label class="label-wrapper-custm" for="delivery_zone">Deliver Zone <span class="required-star">*</span></label>
@@ -188,7 +188,7 @@
                                                     </span>
                                                     @enderror
                                                 </div>
-                                            </div> 
+                                            </div>  -->
                                         <div class="row mb-40-wrapper">
                                             <div class="col-lg-12">
                                                 <div class="form-group">
@@ -236,17 +236,17 @@
                     <tbody class="week-container-tbl">
                         @if($products != null)
                             @foreach ($products as $product)
-                                <tr class="week_days" data-p-id="{{$product->id ?? ''}}">
+                                <tr class="week_days" data-p-id="{{$product['id'] ?? ''}}">
                                 <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#thisWeekOrder-{{$product->id ?? ''}}">
-                                            {{$product->name ?? ''}}
+                                        <a  class="" data-toggle="modal" data-target="#thisWeekOrder-{{$product['id'] ?? ''}}">
+                                            {{$product['name'] ?? ''}}
                                         </a>
-                                        <div class="modal fade" id="thisWeekOrder-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
+                                        <div class="modal fade" id="thisWeekOrder-{{$product['id'] ?? ''}}" tabindex="-1" role="dialog"
                                             aria-labelledby="thisWeekOrderTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{$product->name ?? ''}}</h5>
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{$product['name'] ?? ''}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close"><span aria-hidden="true">&times;</span>
                                                         </button>
@@ -254,10 +254,10 @@
                                                     <div class="modal-body">
                                                         <div class="row">
                                                             <div class="form-group col-md-12">
-                                                                <img src="{{ asset('storage/' . $product->image_url) }}" id="image" style=" width:80% ! important;">
+                                                                <img src="{{ asset('storage/' . $product['image_url']) }}" id="image" style=" width:80% ! important;">
                                                             </div>
                                                             <div class="from-group col-md-12">
-                                                            <p>Pack Size:({{$product->pack_size}}) * Bottle Price:({{$product->price}}) = CTN Price:{{$product->pack_size * $product->price }}</p>
+                                                            <p>Pack Size:({{$product['pack_size']}}) * Bottle Price:({{$product['price']}}) = CTN Price:{{$product['pack_size'] * $product['price'] }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -276,7 +276,7 @@
                                                 $qnty = 0;
                                                 if ($item != null){
                                                     foreach ($item->WeekDay as $order){
-                                                        if($order->product_id == $product->id){
+                                                        if($order->product_id == $product['id']){
                                                             $qnty = $order->quantity;
                                                         }   
                                                     } 
@@ -338,17 +338,17 @@
                     <tbody class="week-container-tbl">
                         @foreach ($products as $product)
                             @if($product != null)
-                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                <tr class="week_days" data-p-id="{{$product['id']}}">
                                     <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#standingOrdersModel-{{$product->id ?? ''}}">
-                                            {{$product->name ?? ''}}
+                                        <a  class="" data-toggle="modal" data-target="#standingOrdersModel-{{$product['id'] ?? ''}}">
+                                            {{$product['name'] ?? ''}}
                                         </a>
-                                        <div class="modal fade" id="standingOrdersModel-{{$product->id ?? ''}}" tabindex="-1" role="dialog"
+                                        <div class="modal fade" id="standingOrdersModel-{{$product['id'] ?? ''}}" tabindex="-1" role="dialog"
                                             aria-labelledby="standingOrdersModelTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{$product->name ?? ''}}</h5>
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{$product['name'] ?? ''}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close"><span aria-hidden="true">&times;</span>
                                                         </button>
@@ -356,10 +356,10 @@
                                                     <div class="modal-body">
                                                         <div class="row">
                                                             <div class="form-group col-md-12">
-                                                                <img src="{{ asset('storage/' . $product->image_url) }}" id="image" style ="width:80% ! important;">
+                                                                <img src="{{ asset('storage/' . $product['image_url']) }}" id="image" style ="width:80% ! important;">
                                                             </div>
                                                             <div class="from-group col-md-12">
-                                                                <p>Pack Size:({{$product->pack_size}}) * Bottle Price:({{$product->price}}) = CTN Price:{{$product->pack_size * $product->price }} </p>
+                                                                <p>Pack Size:({{$product['pack_size']}}) * Bottle Price:({{$product['price']}}) = CTN Price:{{$product['pack_size'] * $product['price'] }} </p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -378,7 +378,7 @@
                                                 $qnty = 0;
                                                 if ($item != null){
                                                     foreach ($item->WeekDayForStandingOrder as $order){
-                                                        if($order->product_id == $product->id){
+                                                        if($order->product_id == $product['id']){
                                                             $qnty = $order->quantity;
                                                         }   
                                                     } 

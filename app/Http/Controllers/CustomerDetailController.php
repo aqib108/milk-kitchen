@@ -112,6 +112,7 @@ class CustomerDetailController extends Controller
      */
     public function update(CustomerDetailRequest $request,$id)
     {
+        
         $customerDetail = CustomerDetail::where('user_id',$id)->update([
             'business_name' => $request->input('business_name'),
             'business_address_1' => $request->input('business_address_1'),
