@@ -12,6 +12,7 @@ use App\Models\StandingOrder;
 use App\Models\OrderDeliverd;
 use App\Models\CustomerDetail;
 use App\Models\WeekDay;
+use Illuminate\Support\Collection;
 use App\Models\DeliverySheduleZone;
 use App\Models\Zone;
 use App\Models\Country;
@@ -98,18 +99,44 @@ class CustomerController extends Controller
         }else{
             $cuttOfTime = "2:00";
         }
-        $products=AssignGroup::join('users','users.id','assign_groups.user_id')
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
             ->where('assign_groups.user_id',$id)
             ->select('assign_groups.assign_group_id as groupId')
             ->get()->map(function($value){
-                $p=Service::where('services.product_id',$value->groupId)
-                    ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
+                $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                     ->join('products','products.id','services.product_id')
                     ->select('products.*')
-                    ->distinct()->first();
+                    ->get();
                 return $p;
             });
-
+             $v=$products1->flatten();
+            //  $data = new Collection([
+            //     10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+            //     20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+            //     30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
+            //     40 => ['user' => 4, 'skill' => 2, 'roles' => ['Role_2']],
+            // ]);
+            // $data = new Collection($v);
+            // $result = $data->groupBy(['id', function ($item) {
+            //     return $item['name'];
+            // }], $preserveKeys = true);
+            // dd($result);
+    //    $v=$products1->flatten();
+    //    $p=collect($v->groupBy('name'));
+    //   dd($p->all());
+    // $arr =array_values(array_values($products->toArray()));
+    // dd($arr);
+    $products = array();
+    $ark = array();
+          foreach ($products1 as $value) {
+              foreach ($value as  $value1) {
+                  if(!in_array($value1['id'],$ark))
+                  {
+                      array_push($ark,$value1['id']);
+                      $products[] =$value1; 
+                  }
+              }
+          }
         $customer = User::find($customerID);
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
         $deliveryRegion = $customerDetail->delivery_region ?? '';
@@ -123,8 +150,9 @@ class CustomerController extends Controller
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail($customerID,$deliveryRegion);
         }])->get();
+        $zones=Zone::whereStatus(1)->get();
        
-        return view('admin.customer.viewCustomer',compact('today','customerID','cuttOfTime','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
+        return view('admin.customer.viewCustomer',compact('zones','today','customerID','cuttOfTime','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
 
     public function pastOrder($id)
@@ -356,7 +384,7 @@ class CustomerController extends Controller
                 }])->with(['productOrder' => function($q) use ($orderDetail,$deliverOrder) {
                     $q->weekDetail($orderDetail);
                 }])->get();
-
+             
            
             // dd($weekDays);
             return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays'));

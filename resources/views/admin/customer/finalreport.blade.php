@@ -290,7 +290,7 @@
                                                                     <td style="background-color: white !important;">
                                                                         <input type="number" class="d_qnty" data-id="{{$orderDetail->day_id}}" style="width: 80px;
                                                                         text-align: center;" minlength="0"
-                                                                            value="{{ !empty($order->d_qnty)?$order->d_qnty:0 }}">
+                                                                            value="{{ !empty($order->d_qnty)?$order->d_qnty:0 }}" disabled>
                                                                     </td>
                                                                 @endif
                                                             @endif
