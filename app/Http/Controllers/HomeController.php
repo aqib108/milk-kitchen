@@ -59,17 +59,29 @@ class HomeController extends Controller
        $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
        $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
 
-        $products=AssignGroup::join('users','users.id','assign_groups.user_id')
-            ->where('assign_groups.user_id',$user)
-            ->select('assign_groups.assign_group_id as groupId')
-            ->get()->map(function($value){
-                $p=Service::where('services.product_id',$value->groupId)
-                    ->join('assign_groups','assign_groups.assign_group_id','services.group_id')
-                    ->join('products','products.id','services.product_id')
-                    ->select('products.*')
-                    ->distinct()->first();
-                return $p;
-            });
+       $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+       ->where('assign_groups.user_id',$user)
+       ->select('assign_groups.assign_group_id as groupId')
+       ->get()->map(function($value){
+           $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+               ->join('products','products.id','services.product_id')
+               ->select('products.*')
+               ->get();
+           return $p;
+       });
+        $v=$products1->flatten();
+    
+$products = array();
+$ark = array();
+     foreach ($products1 as $value) {
+         foreach ($value as  $value1) {
+             if(!in_array($value1['id'],$ark))
+             {
+                 array_push($ark,$value1['id']);
+                 $products[] =$value1; 
+             }
+         }
+     }
 
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user,$deliveryRegion){
             $q->userDetail($user,$deliveryRegion);

@@ -99,18 +99,7 @@ class CustomerController extends Controller
         }else{
             $cuttOfTime = "2:00";
         }
-        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
-            ->where('assign_groups.user_id',$id)
-            ->select('assign_groups.assign_group_id as groupId')
-            ->get()->map(function($value){
-                $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
-                    ->join('products','products.id','services.product_id')
-                    ->select('products.*')
-                    ->get();
-                return $p;
-            });
-             $v=$products1->flatten();
-            //  $data = new Collection([
+           //  $data = new Collection([
             //     10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
             //     20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
             //     30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
@@ -126,6 +115,18 @@ class CustomerController extends Controller
     //   dd($p->all());
     // $arr =array_values(array_values($products->toArray()));
     // dd($arr);
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+            ->where('assign_groups.user_id',$id)
+            ->select('assign_groups.assign_group_id as groupId')
+            ->get()->map(function($value){
+                $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                    ->join('products','products.id','services.product_id')
+                    ->select('products.*')
+                    ->get();
+                return $p;
+            });
+             $v=$products1->flatten();
+         
     $products = array();
     $ark = array();
           foreach ($products1 as $value) {
