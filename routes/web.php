@@ -19,10 +19,20 @@ Route::get('/migrate',function(){
     $data = Artisan::call('migrate');
     dd($data);
 });
+Route::get('/storage-link',function(){
+    $data = Artisan::call('storage:link');
+    dd($data);
+});
+Route::get('/version',function(){
+    $data = Artisan::call('--version');
+    dd($data);
+});
+
 Route::get('/cache-clear', function(){
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
-    Artisan::call('view:clear');
+    $data =Artisan::call('view:clear');
+    dd($data);
 });
 
 Route::get('/every-day', function(){
