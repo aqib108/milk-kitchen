@@ -14,6 +14,9 @@
                                 <h3 class="title-wrapper-three text-center">Login</h3>
                             </div>
                             <div class="card-body Card__wrapper--innerbox">
+                            @if (session('message'))
+                                    <div class="alert alert-danger">{{ session('message') }}</div>
+                                @endif
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
                                     <div class="form-group input-group">

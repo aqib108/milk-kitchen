@@ -44,6 +44,7 @@
                                         <th>Customer Name</th>
                                         <th>Customer Email</th>
                                         <th>View</th>
+                                        <th>Status</th>
                                         <th>Created at</th>
                                         <th class="no-sort" style="width: 200px">Action</th>
                                     </tr>
@@ -94,6 +95,10 @@
                         name: 'view'
                     },
                     {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
                         data: 'created_at',
                         name: 'created_at'
                     },
@@ -111,5 +116,39 @@
                 }
             });
         });
+        function changeStatus(id, status) {
+            var result =
+                Swal.fire({
+                    title: "Are you sure change this Status?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Change it!"
+                }).then(result => {
+                    if (result.value) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('user.status') }}",
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                'id': id,
+                                'status': status
+                            },
+                            success: function(response) {
+                                if(response.status == 1)
+                                    {
+                                        Swal.fire("Activated!", response.message, "success");
+                                        $('#Customer').DataTable().ajax.reload();
+                                    }
+                                else{
+                                    Swal.fire("Suspended!", response.message, "success");
+                                    $('#Customer').DataTable().ajax.reload();
+                                }
+                            }
+                        });
+                    }
+                });
+        };
     </script>
 @endsection
