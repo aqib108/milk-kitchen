@@ -40,10 +40,28 @@ class LoginController extends Controller
 
     protected function authenticated($request, $user)
     {
-        
-        if($user->hasRole('Admin') || $user->hasRole('Warehouse') || $user->hasRole('Driver') || $user->hasRole('Site Employee') || $user->hasRole('Sales Member')) {
-            return redirect('admin');
-        }
-        return redirect('home');
+      
+          if($user->hasRole('Admin') && $user->status == 0)
+          {
+            $this->guard()->logout();
+
+            $request->session()->invalidate();
+    
+            $request->session()->regenerateToken();
+    
+            return redirect()->route('login')->withMessage("Your account is currently inactive");
+          }
+          else
+          {
+            if($user->hasRole('Admin') || $user->hasRole('Warehouse') || $user->hasRole('Driver') || $user->hasRole('Site Employee') || $user->hasRole('Sales Member')) {
+                return redirect('admin');
+            }
+            else
+            {
+                return redirect('home');
+            }
+          }
+      
+      
     }
 }

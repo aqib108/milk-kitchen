@@ -10,17 +10,11 @@ use App\Models\Product;
 use App\Models\Zone;
 use App\Models\WeekDay;
 use App\Models\ProductOrder;
-use App\Models\OrderDeliverd;
-use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
-use App\Models\Region;
-use App\Models\Setting;
 use App\Models\Service;
 use App\Models\AssignGroup;
-use App\Models\Warehouse;
 use Carbon\Carbon;
-use DateTime;
 use DB;
 
 
@@ -64,18 +58,18 @@ class HomeController extends Controller
            return $p;
        });
         $v=$products1->flatten();
-    
-$products = array();
-$ark = array();
-     foreach ($products1 as $value) {
-         foreach ($value as  $value1) {
-             if(!in_array($value1['id'],$ark))
-             {
-                 array_push($ark,$value1['id']);
-                 $products[] =$value1; 
-             }
-         }
-     }
+                
+            $products = array();
+            $ark = array();
+                foreach ($products1 as $value) {
+                    foreach ($value as  $value1) {
+                        if(!in_array($value1['id'],$ark))
+                        {
+                            array_push($ark,$value1['id']);
+                            $products[] =$value1; 
+                        }
+                    }
+                }
 
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user,$deliveryRegion){
             $q->userDetail($user,$deliveryRegion);

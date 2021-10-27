@@ -76,13 +76,30 @@ class CustomerController extends Controller
                     $btn2 = '<a href="'.route('customer.customerView',$data->id).'" class="btn btn-sm btn-primary">View</a>';
                     return $btn2; 
                 })
+                ->addColumn('status', function(User $data){
+
+                    if($data->status == 1){
+                        $status = '<span class="badge badge-success">Active</span>';
+                    }
+                    else{
+                        $status = '<span class="badge badge-danger">Suspended</span>';
+                    }
+                    return $status;
+                })
                 ->addColumn('action', function(User $data){
                     $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" 
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
+                    if($data->status == 1){
+                        $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger ">Suspend</a>';
+                    }
+                    else{
+                        $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
+                    }
                     $btn2 = '<a href="customer/edit/'.$data->id.'" class="btn btn-sm btn-primary">Edit</a>';
-                    return $btn.' '.$btn2;    
+                    return $btn.' '.$btn2.' '.$status;    
                 })
-                ->rawColumns(['action','view'])
+                
+                ->rawColumns(['action','view','status'])
                 ->make(true);
         }
         return view('admin.customer.customers');
