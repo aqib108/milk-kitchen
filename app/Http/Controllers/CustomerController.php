@@ -90,15 +90,25 @@ class CustomerController extends Controller
 
     public function viewCustomer($id)
     {
+        
         $date=Carbon::now();
-        $today=$date->englishDayOfWeek;
+        $today1=$date->dayOfWeek;
         $customerID = $id;
         $cutt_of_time=Setting::whereName('Cutt Off Time')->first();
         if(isset($cutt_of_time)){
             $cuttOfTime = $cutt_of_time->value;
         }else{
-            $cuttOfTime = "2:00";
+            $cuttOfTime = "2:00:pm";
         }
+        if(date('h:i:a') >  $cuttOfTime)
+        {
+            $today=++$today1;
+        }
+        else
+        {
+            $today=$today1;  
+        }
+      
            //  $data = new Collection([
             //     10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
             //     20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
@@ -153,7 +163,7 @@ class CustomerController extends Controller
         }])->get();
         $zones=Zone::whereStatus(1)->get();
        
-        return view('admin.customer.viewCustomer',compact('zones','today','customerID','cuttOfTime','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
+        return view('admin.customer.viewCustomer',compact('zones','today','customerID','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
 
     public function pastOrder($id)
