@@ -45,14 +45,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $date=Carbon::now();
-        $today=$date->englishDayOfWeek;
-        $cutt_of_time = Setting::whereName('Cutt Off Time')->first();
-        if(isset($cutt_of_time)){
-            $cuttOfTime = $cutt_of_time->value;
-        }else{
-            $cuttOfTime = "2:00";
-        }
+      
+    
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $deliveryRegion = $customerDetail->delivery_region ?? '';
@@ -89,7 +83,7 @@ $ark = array();
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($user,$deliveryRegion){
             $q->userDetail($user,$deliveryRegion);
         }])->get();
-       return view('customer.index',compact('today','cuttOfTime','user','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
+       return view('customer.index',compact('user','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
     public function getState(Request $request)
     {

@@ -170,8 +170,8 @@
                                                     <div class="form-group col-md-6 p-0">
                                                         <label class="label-wrapper-custm" for="">Next DD
                                                             payments</label>
-                                                        <p class="form-inner-section">$159.65 </p>
-                                                        <p class="form-inner-section">8/23/2021</p>
+                                                        <!-- <p class="form-inner-section">$159.65 </p>
+                                                        <p class="form-inner-section">8/23/2021</p> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -281,17 +281,11 @@
                                                     } 
                                                 }  
                                             @endphp
-                                            @if($item->name == $today && time() == date('h:i') < $cuttOfTime)
+                                            
                                                 <td style="background-color: white !important;">
                                                     <input id="{{ $item->name }}" data-id-user="{{ $user }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                         text-align: center;" value="{{$qnty}}" minlength="0" disabled>
                                                 </td>
-                                            @else
-                                                <td style="background-color: white !important;">
-                                                    <input id="{{ $item->name }}" data-id-user="{{ $user }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                        text-align: center;" value="{{$qnty}}" minlength="0">
-                                                </td>
-                                            @endif
                                         @else
                                             <td style="background-color: aliceblue !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $user }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
@@ -385,7 +379,7 @@
                                             @endphp
                                             <td style="background-color: white !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $user }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                    text-align: center;" value="{{$qnty}}" minlength="0">
+                                                    text-align: center;" value="{{$qnty}}" minlength="0" disabled>
                                             </td>
                                         @else
                                             <td style="background-color: aliceblue !important;">
