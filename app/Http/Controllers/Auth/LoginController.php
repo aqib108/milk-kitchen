@@ -41,8 +41,9 @@ class LoginController extends Controller
     protected function authenticated($request, $user)
     {
       
-          if($user->hasRole('Admin') && $user->status == 0)
+          if($user->hasRole('Customer') && $user->status == 0)
           {
+              
             $this->guard()->logout();
 
             $request->session()->invalidate();

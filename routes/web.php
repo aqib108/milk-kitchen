@@ -185,8 +185,8 @@ Route::group(['prefix' => 'driver'], function () {
 
     Route::get('/brCode/{id}', 'QrController@driverScan')->name('qr.driverScan');
     Route::post('/code', 'QrController@driverCode')->name('qr.driverCode');
-    Route::get('/upload/view/{id}', 'QrController@driverUploadView')->name('qr.upload');
-    Route::post('/upload/pic/{id}', 'QrController@driverUploadViewCap')->name('qr.uploadCap');
+    Route::get('/upload/view/{id}/{driverId}', 'QrController@driverUploadView')->name('qr.upload');
+    Route::post('/upload/pic', 'QrController@driverUploadViewCap')->name('qr.uploadCap');
 });
 Route::post('/get-regions','HomeController@getState')->name('getRegions');
 Route::post('/get-cities','HomeController@getCity')->name('getCitiesByRegion');
