@@ -15,9 +15,7 @@ use App\Models\WeekDay;
 use Illuminate\Support\Collection;
 use App\Models\DeliverySheduleZone;
 use App\Models\Zone;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
+use App\Models\Pod;
 use App\Models\GroupCustomer;
 use App\Models\Service;
 use Yajra\DataTables\DataTables;
@@ -107,7 +105,6 @@ class CustomerController extends Controller
 
     public function viewCustomer($id)
     {
-        
         $date=Carbon::now();
         $today1=$date->dayOfWeek;
         $customerID = $id;
@@ -125,23 +122,6 @@ class CustomerController extends Controller
         {
             $today=$today1;  
         }
-      
-           //  $data = new Collection([
-            //     10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
-            //     20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
-            //     30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
-            //     40 => ['user' => 4, 'skill' => 2, 'roles' => ['Role_2']],
-            // ]);
-            // $data = new Collection($v);
-            // $result = $data->groupBy(['id', function ($item) {
-            //     return $item['name'];
-            // }], $preserveKeys = true);
-            // dd($result);
-    //    $v=$products1->flatten();
-    //    $p=collect($v->groupBy('name'));
-    //   dd($p->all());
-    // $arr =array_values(array_values($products->toArray()));
-    // dd($arr);
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
             ->where('assign_groups.user_id',$id)
             ->select('assign_groups.assign_group_id as groupId')
@@ -154,17 +134,17 @@ class CustomerController extends Controller
             });
              $v=$products1->flatten();
          
-    $products = array();
-    $ark = array();
-          foreach ($products1 as $value) {
-              foreach ($value as  $value1) {
-                  if(!in_array($value1['id'],$ark))
-                  {
-                      array_push($ark,$value1['id']);
-                      $products[] =$value1; 
-                  }
-              }
-          }
+            $products = array();
+            $ark = array();
+                foreach ($products1 as $value) {
+                    foreach ($value as  $value1) {
+                        if(!in_array($value1['id'],$ark))
+                        {
+                            array_push($ark,$value1['id']);
+                            $products[] =$value1; 
+                        }
+                    }
+                }
         $customer = User::find($customerID);
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
         $deliveryRegion = $customerDetail->delivery_region ?? '';
@@ -404,18 +384,20 @@ class CustomerController extends Controller
             $customerID = $orderDetail->user_id;
             $customer = CustomerDetail::where('user_id',$customerID)->get();
             $products = Product::orderBy('id','DESC')->where('status',1)->get();
-            $deliverOrder = ProductOrder::where('day_id',$orderDetail->day_id)->where('user_id',$customerID)->where('product_id',$orderDetail->product_id)->get();
+            $deliverOrder = ProductOrder::where('day_id',$orderDetail->day_id)
+            ->where('user_id',$customerID)->where('product_id',$orderDetail->product_id)
+            ->get();
                 
             $weekDays = 
                 WeekDay::with(['productOrder' => function($q) use ($customerID){
                     $q->userDetail($customerID);
-                }])->with(['productOrder' => function($q) use ($orderDetail,$deliverOrder) {
+                }])->with(['productOrder' => function($q) use ($orderDetail) {
                     $q->weekDetail($orderDetail);
                 }])->get();
-             
-           
+            
+            $driver_image =Pod::where('customer_id',$customerID)->first();
             // dd($weekDays);
-            return view('admin.customer.finalreport',compact('orderDetail','customerID','customer','products','weekDays'));
+            return view('admin.customer.finalreport',compact( 'driver_image','orderDetail','customerID','customer','products','weekDays'));
         }
        
     }

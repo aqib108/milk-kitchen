@@ -212,7 +212,7 @@
                         <table class="table table-bordered mb-0 weekly_standing_order">
                             <tbody class="week-container-tbl">
                                 <tr>
-                                    <th style="width: 172px; text-align: center;">Total Carton</th>
+                                    <th style="width: 175px; text-align: center;">Total Carton</th>
                                     <td id="total_ctns">
 
                                     </td>
@@ -226,9 +226,20 @@
                     <b>Received in full</b>
                     <hr>
                 </div>
-                <div class="col-lg-4">
-                    {!! QrCode::size(150)->generate(route('qr.driverScan',$customerID)); !!}
-                </div>
+                @if(auth()->user()->hasRole('Driver') || auth()->user()->hasRole('Admin'))
+                    <div class="col-lg-4">
+                        {!! QrCode::size(150)->generate(route('qr.driverScan',$customerID)); !!}
+                    </div>
+                @else
+                    <div class="col-lg-4">
+                        @if(isset($driver_image))
+                            <img src="{{ asset('storage/'.$driver_image->image_url) }}" id="image"
+                                                    class="w-25 mt-2" />
+                        @else
+                            <img src="{{asset('admin-panel/images/no-image.png')}}" alt=""  class="w-25 mt-2">
+                        @endif
+                    </div>
+                @endif 
             </div>
             <section>
                 <div class="row">

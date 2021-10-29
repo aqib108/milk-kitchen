@@ -150,6 +150,8 @@ display: none;
         </div>
         <form method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
+            <input type="hidden" value="{{$driverId}}" id="driverId">
+            <input type="hidden" value="{{$customer->id}}" id="customerId">
             <div class="row ">
                 <div class="col-md-6 custom-upload col-md-offset-3 center">
                     <div class="btn-container text-center">
@@ -195,7 +197,8 @@ display: none;
     $("#file-1").fileinput({
         theme: 'fa',
         type: "POST",
-        uploadUrl: "{{route('qr.uploadCap',$customer->id)}}",
+        data: { customerId : $('#customerId').val(),driverId : $('#driverId').val()},
+        uploadUrl: "{{route('qr.uploadCap')}}",
         allowedFileExtensions: ['jpg', 'png','jpeg', 'gif'],
         overwriteInitial: false,
         maxFileSize:15000,
