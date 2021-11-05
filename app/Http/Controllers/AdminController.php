@@ -253,13 +253,18 @@ class AdminController extends Controller
     }
     public function saveSetting(Request $request)
     {
+       
           $setting=Setting::whereName('Cutt Off Time')->first();
   
           if(isset($setting))
           {
-            Setting::whereName('Cutt Off Time')->update(['value' => $request->value]);
+            Setting::whereName('Cutt Off Time')->update([
+                'value' => $request->value,
+                'footer_value'=>$request->footer_value,
+            ]);
           }
-          else{
+          else
+          {
             Setting::create($request->all()); 
           }
      

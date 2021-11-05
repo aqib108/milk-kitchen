@@ -41,7 +41,7 @@
                                         <label>Name <span class="required-star">*</span></label>
                                         <input type="text" maxlength="50"
                                             class="form-control" name="name"  id="firstName"
-                                             placeholder="Enter Product Name" >
+                                             placeholder="Enter Customer Name" >
                                              <div id="first-name-err" class="alert alert-danger"></div>
                                     </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">

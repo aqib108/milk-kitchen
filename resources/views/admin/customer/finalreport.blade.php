@@ -222,7 +222,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-4 text-center">
+                <div class="col-lg-2 text-center">
                     <b>Received in full</b>
                     <hr>
                 </div>
@@ -233,10 +233,10 @@
                 @else
                     <div class="col-lg-4">
                         @if(isset($driver_image))
-                            <img src="{{ asset('storage/'.$driver_image->image_url) }}" id="image"
-                                                    class="w-25 mt-2" />
+                            <img src="{{ asset('storage/'.$driver_image->image_url) }}" id="image" 
+                            style="width: 75%;" />
                         @else
-                            <img src="{{asset('admin-panel/images/no-image.png')}}" alt=""  class="w-25 mt-2">
+                            <img src="{{asset('admin-panel/images/no-image.png')}}" alt=""  style="width: 75%;">
                         @endif
                     </div>
                 @endif 

@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-4 col-xs-12">
                                         <label>Price <span class="required-star">*</span></label>
-                                        <input type="text" maxlength="100" class="form-control price" name="price"
+                                        <input  type="text" inputmode="decimal"  class="form-control price" name="price"
                                             placeholder="Enter Product Price" value="{{ $product->price }}" required>
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">

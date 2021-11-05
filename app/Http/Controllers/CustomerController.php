@@ -105,6 +105,16 @@ class CustomerController extends Controller
 
     public function viewCustomer($id)
     {
+        // $customer= User::whereId(2)->first();
+        // $driver= User::whereId(4)->first();
+        // $products = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+        // ->where(['product_orders.user_id' => 2])
+        // ->select('products.name as name','products.description as desc','products.price as price', DB::raw('SUM(product_orders.quantity) as carton'))
+        // ->groupBy('name','desc','price')
+        // ->get();
+        // return view('mail.customerDeliveryMail',compact('products','customer','driver'));
+
+
         $date=Carbon::now();
         $today1=$date->dayOfWeek;
         $customerID = $id;
@@ -128,23 +138,26 @@ class CustomerController extends Controller
             ->get()->map(function($value){
                 $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                     ->join('products','products.id','services.product_id')
-                    ->select('products.*')
+                    ->select('products.id as id','products.name as name','products.price as price'
+                             ,'products.image_url as image_url','products.pack_size as pack_size',
+                             DB::raw('min(services.ctn_price) as ctnPrice'))
+                             ->groupBy('id','name','image_url','price','pack_size')
                     ->get();
                 return $p;
             });
-             $v=$products1->flatten();
-         
+            $v=$products1->flatten();
+            $value=$v->sortBy('ctnPrice');
+
             $products = array();
-            $ark = array();
-                foreach ($products1 as $value) {
+            $ark = array(); 
                     foreach ($value as  $value1) {
+                       
                         if(!in_array($value1['id'],$ark))
                         {
                             array_push($ark,$value1['id']);
                             $products[] =$value1; 
                         }
                     }
-                }
         $customer = User::find($customerID);
         $customerDetail = CustomerDetail::where('user_id',$customer->id)->first();
         $deliveryRegion = $customerDetail->delivery_region ?? '';
@@ -165,25 +178,50 @@ class CustomerController extends Controller
 
     public function pastOrder($id)
     {
+            if ($id != auth()->user()->id && auth()->user()->hasRole('Admin')!=true)
+             {
+               return redirect()->back();
+             }
         $customer = User::find($id);
         $orders = ProductOrder::with('product')->where('user_id',$customer->id)->get()->groupBy(function($date) {
             return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
         });
-        return view('admin.customer.past-order',compact('orders'));
+        return view('admin.customer.past-order',compact('orders','customer'));
     }
 
     public function pastOrderStatement($id)
     {
-        $orderDetail = ProductOrder::find($id);
+        $orderDetail = ProductOrder::whereUserId($id)->first();
         $customerID = $orderDetail->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
-        $products = Product::orderBy('id','DESC')->where('status',1)->get();
-        $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
-                        $q->userDetail($orderDetail->user_id);
-                    }])->with(['productOrder' => function($q) use ($orderDetail) {
-                        $q->weekDetail($orderDetail);
-                    }])->get();
-        // dd($weekDays);
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+        ->where('assign_groups.user_id',$customerID)
+        ->select('assign_groups.assign_group_id as groupId')
+        ->get()->map(function($value){
+            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                ->join('products','products.id','services.product_id')
+                ->select('products.*')
+                ->get();
+            return $p;
+        });
+         $v=$products1->flatten();
+     
+        $products = array();
+        $ark = array();
+            foreach ($products1 as $value) {
+                foreach ($value as  $value1) {
+                    if(!in_array($value1['id'],$ark))
+                    {
+                        array_push($ark,$value1['id']);
+                        $products[] =$value1; 
+                    }
+                }
+            }
+            $customerDetail = CustomerDetail::where('user_id', $customerID)->first();
+            $deliveryRegion = $customerDetail->delivery_region ?? '';
+            $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
+                $q->userDetail($customerID,$deliveryRegion);
+            }])->get();
 
        return view('admin.customer.past-order.statement',compact('customerID','orderDetail','customer','products','weekDays'));
     }
@@ -249,10 +287,9 @@ class CustomerController extends Controller
         $Customer = User::find($id);
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');
+        $Customer->password = Hash::make($request->input('password'));
         $Customer->save();
         $Customer->groups()->sync($request->groups);
-      
-
         return redirect()->route('customer.index')->with('success','Customer updated successfully');
     }
 
@@ -281,13 +318,42 @@ class CustomerController extends Controller
 
     public function generatePDF($id)
     {
-        $customer = CustomerDetail::where('user_id',$id)->with('user')->with('bcountry')->with('bstate')->with('bcity')->with('dcountry')->with('dstate')->with('dcity')->get();
+        $customerDetail = CustomerDetail::where('user_id',$id)->first();
+        $deliveryRegion = $customerDetail->delivery_region ?? '';
+        $customer = CustomerDetail::where('user_id',$id)->with('user')->get();
         $getCustomer = ProductOrder::where('user_id',$id)->distinct()->pluck('product_id');
-        $products = Product::whereIn('id',$getCustomer)->get();
+        // $products = Product::whereIn('id',$getCustomer)->get();
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+        ->where('assign_groups.user_id',$id)
+        ->select('assign_groups.assign_group_id as groupId')
+        ->get()->map(function($value) use($getCustomer){
+            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                ->join('products','products.id','services.product_id')
+                ->whereIn('products.id',$getCustomer)
+                ->select('products.id as id','products.name as name','products.price as price'
+                         ,'products.image_url as image_url','products.pack_size as pack_size',
+                         DB::raw('min(services.ctn_price) as ctnPrice'))
+                         ->groupBy('id','name','image_url','price','pack_size')
+                ->get();
+            return $p;
+        });
+         $v=$products1->flatten();
+     
+        $products = array();
+        $ark = array();
+            foreach ($products1 as $value) {
+                foreach ($value as  $value1) {
+                    if(!in_array($value1['id'],$ark))
+                    {
+                        array_push($ark,$value1['id']);
+                        $products[] =$value1; 
+                    }
+                }
+            }
         $orders = ProductOrder::where('user_id',$id)->get();
-        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($id){
-            $q->userDetail($id);
-        }])->get(); 
+        $weekDays = WeekDay::with(['WeekDay' => function($q) use ($id,$deliveryRegion){
+            $q->userDetail($id,$deliveryRegion);
+        }])->get();
         
         return view('admin.customer.pdfReport',compact('customer','products','weekDays','orders'));
     }

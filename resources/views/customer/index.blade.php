@@ -237,7 +237,7 @@
                             @foreach ($products as $product)
                                 <tr class="week_days" data-p-id="{{$product['id'] ?? ''}}">
                                 <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#thisWeekOrder-{{$product['id'] ?? ''}}">
+                                        <a  style="cursor: pointer;" class="" data-toggle="modal" data-target="#thisWeekOrder-{{$product['id'] ?? ''}}">
                                             {{$product['name'] ?? ''}}
                                         </a>
                                         <div class="modal fade" id="thisWeekOrder-{{$product['id'] ?? ''}}" tabindex="-1" role="dialog"
@@ -256,7 +256,7 @@
                                                                 <img src="{{ asset('storage/' . $product['image_url']) }}" id="image" style=" width:80% ! important;">
                                                             </div>
                                                             <div class="from-group col-md-12">
-                                                            <p>Pack Size:({{$product['pack_size']}}) * Bottle Price:({{$product['price']}}) = CTN Price:{{$product['pack_size'] * $product['price'] }}</p>
+                                                            <p> Price:${{$product['ctnPrice'] }} / {{$product['pack_size']}} PK Carton</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -333,7 +333,7 @@
                             @if($product != null)
                                 <tr class="week_days" data-p-id="{{$product['id']}}">
                                     <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#standingOrdersModel-{{$product['id'] ?? ''}}">
+                                        <a  style="cursor: pointer;" class="" data-toggle="modal" data-target="#standingOrdersModel-{{$product['id'] ?? ''}}">
                                             {{$product['name'] ?? ''}}
                                         </a>
                                         <div class="modal fade" id="standingOrdersModel-{{$product['id'] ?? ''}}" tabindex="-1" role="dialog"
@@ -352,7 +352,7 @@
                                                                 <img src="{{ asset('storage/' . $product['image_url']) }}" id="image" style ="width:80% ! important;">
                                                             </div>
                                                             <div class="from-group col-md-12">
-                                                                <p>Pack Size:({{$product['pack_size']}}) * Bottle Price:({{$product['price']}}) = CTN Price:{{$product['pack_size'] * $product['price'] }} </p>
+                                                            <p> Price:${{$product['ctnPrice'] }} / {{$product['pack_size']}} PK Carton</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -379,7 +379,7 @@
                                             @endphp
                                             <td style="background-color: white !important;">
                                                 <input id="{{ $item->name }}" data-id-user="{{ $user }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                    text-align: center;" value="{{$qnty}}" minlength="0" disabled>
+                                                    text-align: center;" value="{{$qnty}}" minlength="0" >
                                             </td>
                                         @else
                                             <td style="background-color: aliceblue !important;">
@@ -403,6 +403,10 @@
                 </table>
             </div>
         </div>
+        @php
+        $footervalue= \App\Models\Setting::whereName('Cutt Off Time')->value('footer_value');
+        @endphp
+        <h4 style="margin-left: 30%;">{{ $footervalue }}</h4>
     </div>
 @endsection 
 @section('scripts')

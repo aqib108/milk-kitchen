@@ -204,15 +204,9 @@
                                                     <select name="delivery_zone" class="form-control @error('zone') is-invalid @enderror" id="delivery_zone" required>
                                                         @foreach($zones as $zone) 
                                                                                                
-                                                            <option value="{{$zone->name}}"  @if($customerDetail->delivery_zone == $zone->name) selected @endif>{{$zone->name}}</option>
+                                                            <option value="{{$zone->name}}"  @if(isset($customerDetail->delivery_zone) && $customerDetail->delivery_zone == $zone->name) selected @endif>{{$zone->name}}</option>
                                                         @endforeach
                                                     </select>   
-                                                    <!-- <input type="text" name="delivery_zone" value="{{$customerDetail->delivery_zone ?? '' }}" placeholder="Enter Zone Name" class="form-control @error('delivery_zone') is-invalid @enderror" id="delivery_zone">
-                                                    @error('delivery_zone')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror -->
                                                 </div>
                                             </div> 
                                         <div class="row mb-40-wrapper">
@@ -261,8 +255,9 @@
                         @if($products != null)
                             @foreach ($products as $product)
                                 <tr class="week_days" data-p-id="{{$product['id'] ?? ''}}">
-                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#thisWeekOrders-{{$product['id'] ?? ''}}">
+                                    <td class="table-td-wrapper cursor-pointer" scope="row" style="background-color: white !important;">
+                                        <a  style="cursor: pointer;"
+                                        class="cursor-pointer" data-toggle="modal" data-target="#thisWeekOrders-{{$product['id'] ?? ''}}">
                                             {{$product['name'] ?? ''}}
                                         </a>
                                         <div class="modal fade" id="thisWeekOrders-{{$product['id'] ?? ''}}" tabindex="-1" role="dialog"
@@ -281,7 +276,7 @@
                                                                 <img src="{{ asset('storage/' . $product['image_url']) }}" id="image" style=" width:80% ! important;">
                                                             </div>
                                                             <div class="from-group col-md-12">
-                                                            <p>Pack Size:({{$product['pack_size']}}) * Bottle Price:({{$product['price']}}) = CTN Price:{{$product['pack_size'] * $product['price'] }}</p>
+                                                            <p> Price:${{$product['ctnPrice'] }} / {{$product['pack_size']}} PK Carton</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -366,7 +361,7 @@
                                     @if($product != null)
                                         <tr class="week_days" data-p-id="{{$product['id']}}">
                                         <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        <a  class="" data-toggle="modal" data-target="#standingOrders-{{$product['id'] ?? ''}}">
+                                        <a  style="cursor: pointer;" class="" data-toggle="modal" data-target="#standingOrders-{{$product['id'] ?? ''}}">
                                             {{$product['name'] ?? ''}}
                                         </a>
                                         <div class="modal fade" id="standingOrders-{{$product['id'] ?? ''}}" tabindex="-1" role="dialog"
@@ -385,7 +380,7 @@
                                                                 <img src="{{ asset('storage/' . $product['image_url']) }}" id="image" style=" width:80% ! important;">
                                                             </div>
                                                             <div class="from-group col-md-12">
-                                                            <p>Pack Size:({{$product['pack_size']}}) * Bottle Price:({{$product['price']}}) = CTN Price:{{$product['pack_size'] * $product['price'] }}</p>
+                                                            <p> Price:${{$product['ctnPrice'] }} / {{$product['pack_size']}} PK Carton</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -410,17 +405,12 @@
                                                             } 
                                                         }  
                                                     @endphp
-                                                    @if($item->id <= $today)
-                                                    <td style="background-color: white !important;">
-                                                        <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
-                                                                    text-align: center;" value="{{$qnty}}" minlength="0" disabled>
-                                                    </td>
-                                                @else
+                                                  
                                                     <td style="background-color: white !important;">
                                                         <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;
                                                                     text-align: center;" value="{{$qnty}}" minlength="0">
                                                     </td>
-                                                @endif
+                                          
                                                 @else
                                                     <td style="background-color: aliceblue !important;">
                                                         <input id="{{ $item->name }}" data-id-user="{{ $customer->id }}" data-id="{{ $item->id }}" type="number" name="{{ strtolower($item->name) }}" style="width: 80px;

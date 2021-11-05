@@ -59,6 +59,14 @@
                                             </span>
                                         @enderror
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Password <span class="required-star">*</span></label>
+                                        <input type="password" maxlength="50"
+                                            class="form-control" name="password"  id="password"
+                                            placeholder="Update Password " >
+                                            <div id="password-err" class="alert alert-danger"></div>
+                                    </div>
+                                    
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 ">
                                     <label> Assign Group<span class="required-star">*</span></label>
                                         <select class="form-control" name="groups[]" multiple style="width: 100%" required>

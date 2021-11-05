@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Statement Pdf</title>
-    <link href="http://localhost/milk-kitchen/public/pdf.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://localhost/milk-kitchen/public/admin-panel/customer-view/css/font-awesome.min.css" />
+    <link href="http://www.milkkitchen.leadconcept.info/public/pdf.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://www.milkkitchen.leadconcept.info/public/admin-panel/customer-view/css/font-awesome.min.css" />
     
 </head>
 <body>
@@ -17,15 +17,10 @@
         <div class="">
             <div class="flex-wraper" style="display:flex; ">
                 <div>
-                    <img src="data:image/png;base64,{{ $image }}" style="width: 200px; height:50px;" class="img-fluid" alt="">
+                    <img src="data:image/png;base64,{{ $image ?? '' }}" style="width: 200px; height:50px;" class="img-fluid" alt="">
                 </div>
                 <div>
-                    <h2 class="heading-one-banner" style=" margin: 0px; margin-top: 16px; font-size: 20px; color: #ffffff;
-                    font-weight: 700;
-                    font-family: 'Roboto-Medium';
-                    text-align: center;
-                    text-transform: uppercase;
-                    ">FOOD SERVICE PORTAL</h2>
+                    <h2 class="heading-one-banner" style="margin: 0px; margin-top: 16px; font-size: 20px; color: #ffffff;font-weight: 700;font-family: 'Roboto-Medium';text-align: center;text-transform: uppercase;">FOOD SERVICE PORTAL</h2>
                 </div>
                 
             </div>
@@ -193,14 +188,14 @@
                                 $subtotal=0;
                             @endphp
                             @foreach ($products as $product)
-                                <tr class="week_days" data-p-id="{{$product->id}}">
-                                    <td class="table-td-wrapper" scope="row">{{$product->name}}</td>
+                                <tr class="week_days" data-p-id="{{$product['id']}}">
+                                    <td class="table-td-wrapper" scope="row">{{$product['name']}}</td>
                                     @php $total=0;  @endphp
                                     @foreach ($weekDays as $item)
-                                        @php $qnty=0; $price=$product->price; $discount=($price/ 100) * 10;@endphp
+                                        @php $qnty=0; $price=$product['price']; $discount=($price/ 100) * 10;@endphp
                                         @if($item->productOrder->isNotEmpty())
                                             @foreach ($item->productOrder as $order)
-                                                @if($order->product_id == $product->id)
+                                                @if($order->product_id == $product['id'])
                                                     @php
                                                         $total += $order->quantity;
                                                         $qnty = $order->quantity;
