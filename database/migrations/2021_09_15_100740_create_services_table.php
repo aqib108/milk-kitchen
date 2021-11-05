@@ -19,8 +19,8 @@ class CreateServicesTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('group_id');
             $table->foreign('group_id')->references('id')->on('group_customers')->onDelete('cascade');
-            $table->integer('ctn_price')->nullable();
-            $table->integer('bottle_price')->nullable();
+            $table->float('ctn_price')->nullable();
+            $table->float('bottle_price')->nullable();
             $table->boolean('saleable')->default(FALSE);
             $table->timestamps();
         });

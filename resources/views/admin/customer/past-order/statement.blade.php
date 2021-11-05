@@ -171,9 +171,9 @@
                         </thead>
                         <tbody class="week-container-tbl">
                             @foreach ($products as $product)
-                                <tr class="week_days" data-p-id="{{$product->id}}">
+                                <tr class="week_days" data-p-id="{{$product['id']}}">
                                     <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
-                                        {{$product->name}}
+                                        {{$product['name']}}
                                     </td>
                                     @foreach ($weekDays as $item)
                                         @php
@@ -181,7 +181,7 @@
                                             if ($item->productOrder->isNotEmpty()){
                                                 foreach ($item->productOrder as $order){
                                                     if($order->user_id == $customerID){
-                                                        if($order->product_id == $product->id){
+                                                        if($order->product_id == $product['id']){
                                                             $qnty = $order->quantity;
                                                         }
                                                     }   
@@ -204,7 +204,7 @@
                                             @if ($item->productOrder->isNotEmpty())
                                                 @foreach ($item->productOrder as $order)
                                                     @if($order->user_id == $customerID)
-                                                        @if($order->product_id == $product->id)
+                                                        @if($order->product_id == $product['id'])
                                                             @php $total += $order->quantity; @endphp                                                       
                                                         @endif
                                                     @endif
@@ -214,14 +214,14 @@
                                         {{ $total }}
                                     </td>
                                     <td style="background-color: white !important;">
-                                        {{ '$' . $product->price }}
+                                        {{ '$' . number_format($product['price'],2) }}
                                     </td>
                                     <td style="background-color: white !important;">
-                                        {{ '$' . ($product->price/ 100) * 10 }}
+                                        {{ '$' . ($product['price']/ 100) * 10 }}
                                     </td>
                                     <td style="background-color: white !important;">
-                                        {{ '$' . ($product->price  - (($product->price / 100) * 10)) * $total}}
-                                        <input type="hidden" class="extention" value="{{($product->price  - (($product->price / 100) * 10)) * $total}}">
+                                        {{ '$' . number_format(($product['price']  - (($product['price'] / 100) * 10)) * $total,2)}}
+                                        <input type="hidden" class="extention" value="{{($product['price']  - (($product['price'] / 100) * 10)) * $total}}">
                                     </td>
                                 </tr> 
                             @endforeach
@@ -261,6 +261,7 @@
         </div>
         <!-- /.col -->
         <br>
+       
     </section>
     <!-- /.content -->
 @endsection
@@ -272,11 +273,11 @@
                 value += +$(this).val();
             });
 
-            $('.subtotal').val('$' + value);
+            $('.subtotal').val('$' + value.toFixed(2));
             var gst = (value * 15) /100;
             var total =parseFloat(value)+parseFloat(gst);
-            $('.gst').val('$' + gst);
-            $('.totalprice').val('$' + total);
+            $('.gst').val('$' + gst.toFixed(2));
+            $('.totalprice').val('$' + total.toFixed(2));
         });
     </script>
 @endsection

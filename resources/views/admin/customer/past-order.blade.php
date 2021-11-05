@@ -37,7 +37,7 @@
                                     @endphp
                                 </td>
                                 <td>
-                                    <a href="{{route('customer.week-statement', $order[0]->id)}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.week-statement', $customer->id)}}" class="view_statements">View</a>
                                 </td> 
                                 <td>
                                     <a href="javascript:;" class="view_delivery_detail" data-id="{{ $order[0]->id }}">View</a>

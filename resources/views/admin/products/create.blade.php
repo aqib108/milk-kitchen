@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                         <label>Price <span class="required-star">*</span></label>
-                                        <input type="text" maxlength="50"
+                                        <input type="number"  step="any"
                                             class="form-control price @error('price') is-invalid @enderror" name="price" id="price"
                                             value="{{ old('price') }}" placeholder="Enter Product Price" >
                                         @error('price')

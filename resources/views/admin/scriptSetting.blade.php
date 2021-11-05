@@ -72,6 +72,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label>Footer text <span class="required-star">*</span></label>
+                                        <input type="text"
+                                            class="form-control @error('name') is-invalid @enderror"
+                                            name="footer_value" value="{{$result->footer_value}}"  placeholder="Enter footer text" required>
+                                        @error('nafooter_valueme')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Submit</button>

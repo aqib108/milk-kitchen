@@ -53,23 +53,26 @@ class HomeController extends Controller
        ->get()->map(function($value){
            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                ->join('products','products.id','services.product_id')
-               ->select('products.*')
+               ->select('products.id as id','products.name as name','products.price as price'
+               ,'products.image_url as image_url','products.pack_size as pack_size',
+                     DB::raw('min(services.ctn_price) as ctnPrice'))
+               ->groupBy('id','name','image_url','price','pack_size')
                ->get();
            return $p;
        });
         $v=$products1->flatten();
-                
+            $value=$v->sortBy('ctnPrice');
+
             $products = array();
-            $ark = array();
-                foreach ($products1 as $value) {
+            $ark = array(); 
                     foreach ($value as  $value1) {
+                       
                         if(!in_array($value1['id'],$ark))
                         {
                             array_push($ark,$value1['id']);
                             $products[] =$value1; 
                         }
                     }
-                }
 
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user,$deliveryRegion){
             $q->userDetail($user,$deliveryRegion);
@@ -143,7 +146,29 @@ class HomeController extends Controller
         ]);
         $orderDetail = ProductOrder::find($request->id);
         $customerID = $orderDetail->user_id;
-        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+        ->where('assign_groups.user_id',auth()->user()->id)
+        ->select('assign_groups.assign_group_id as groupId')
+        ->get()->map(function($value){
+            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                ->join('products','products.id','services.product_id')
+                ->select('products.*')
+                ->get();
+            return $p;
+        });
+         $v=$products1->flatten();
+     
+        $products = array();
+        $ark = array();
+            foreach ($products1 as $value) {
+                foreach ($value as  $value1) {
+                    if(!in_array($value1['id'],$ark))
+                    {
+                        array_push($ark,$value1['id']);
+                        $products[] =$value1; 
+                    }
+                }
+            }
         $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                         $q->userDetail($orderDetail->user_id);
                     }])->with(['productOrder' => function($q) use ($orderDetail) {

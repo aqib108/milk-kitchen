@@ -14,15 +14,15 @@
         </thead>
         <tbody class="week-container-tbl">
             @foreach ($products as $product)
-                <tr class="week_days" data-p-id="{{$product->id}}">
-                    <td class="table-td-wrapper" scope="row" style="width: 149px; background-color: white !important;">{{$product->name}}</td>
+                <tr class="week_days" data-p-id="{{$product['id']}}">
+                    <td class="table-td-wrapper" scope="row" style="width: 149px; background-color: white !important;">{{$product['name']}}</td>
                     @foreach ($weekDays as $item)
                         @php
                             $qnty = 0;
                             if ($item->productOrder->isNotEmpty()){
                                 foreach ($item->productOrder as $order){
                                    if($order->user_id == $customerID){
-                                        if($order->product_id == $product->id){
+                                        if($order->product_id == $product['id']){
                                             $qnty = $order->quantity;
                                         }
                                     } 

@@ -51,14 +51,13 @@ class QrController extends Controller
   public function driverUploadViewCap()
   {
      $customerID= session()->get('customerId');
-      $user=User::whereId($customerID)->get();
+      $customer=User::whereId($customerID)->first();
     $productData = [
       'customer_id' => $customerID,
       'driver_id' => session()->get('driverId'),
     ];
     $product = Pod::create($productData);
     if (request()->image_url != NULL || request()->has('image_url')) {
-
       $productImageDirectory = 'pod';
       if (request()->hasFile('image_url')) {
         $fileName = request()->file('image_url')->getClientOriginalName();
@@ -68,7 +67,7 @@ class QrController extends Controller
         $imageUrl = Storage::putFile($productImageDirectory, new File(request()->file('image_url')));
         $product->update(['image_url' => $imageUrl]);
       $customer=  Pod::whereCustomerId($customerID)->first();
-        Mail::to("ghulammadina2016@gmail.com")->send(new CustomerMail($customer));
+        Mail::to($customer->email)->send(new CustomerMail($customer));
       }
 
     }
