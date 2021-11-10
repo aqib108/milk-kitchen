@@ -187,37 +187,37 @@
         </script>
         <script>
             var notID = 0;
-            setInterval(function() {
-                $.ajax({
-                    type: "get",
-                    url: '{{ route('checkDriverNotification') }}',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response !=null) {
-                            if (response.notifications.length > notID) {
-                                $('#messageDropdown svg').addClass('notification-heart');
-                                $('#notificationCount').addClass('notification-heart');
-                                notID = response.notifications.length;
-                                $('#notificationCount').empty();
-                                $('#notificationCount').append(response.notifications.length);
-                                $('#notifications').empty();
-                                response.notifications.forEach(function(driverNotification, index) {
-                                   console.log();
-                                    $('#notifications').append('<a href="'+driverNotification.url+'" class="dropdown-item" style="white-space: revert !important;"><i class="fas fa-envelope mr-2"></i>'+ driverNotification.driverMessage +'</a><div class="dropdown-divider"></div>');
-                                });
-                                playSound();
-                            } else {
-                                $('#messageDropdown svg').removeClass('notification-heart');
-                                $('#notificationCount').removeClass('notification-heart');
-                            }
-                        } else {
+            // setInterval(function() {
+            //     $.ajax({
+            //         type: "get",
+            //         url: '{{ route('checkDriverNotification') }}',
+            //         data: {
+            //             _token: $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         success: function(response) {
+            //             if (response !=null) {
+            //                 if (response.notifications.length > notID) {
+            //                     $('#messageDropdown svg').addClass('notification-heart');
+            //                     $('#notificationCount').addClass('notification-heart');
+            //                     notID = response.notifications.length;
+            //                     $('#notificationCount').empty();
+            //                     $('#notificationCount').append(response.notifications.length);
+            //                     $('#notifications').empty();
+            //                     response.notifications.forEach(function(driverNotification, index) {
+            //                        console.log();
+            //                         $('#notifications').append('<a href="'+driverNotification.url+'" class="dropdown-item" style="white-space: revert !important;"><i class="fas fa-envelope mr-2"></i>'+ driverNotification.driverMessage +'</a><div class="dropdown-divider"></div>');
+            //                     });
+            //                     playSound();
+            //                 } else {
+            //                     $('#messageDropdown svg').removeClass('notification-heart');
+            //                     $('#notificationCount').removeClass('notification-heart');
+            //                 }
+            //             } else {
                             
-                        }
-                    }
-                });
-            }, 2000);
+            //             }
+            //         }
+            //     });
+            // }, 2000);
             function playSound() {
                 var audio = new Audio("{{asset('audio/notify.mp3') }}");
                 audio.play();
