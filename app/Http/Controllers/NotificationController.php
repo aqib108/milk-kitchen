@@ -9,14 +9,64 @@ use App\Models\ProductOrder;
 use App\Models\WeekDay;
 use App\Models\Region;
 use App\Models\Zone;
+use App\Models\User;
+use App\Models\AssignGroup;
+use App\Models\CasualOrder;
+use App\Models\Service;
 use Carbon\Carbon;
+use App\Mail\CasualMail;
 use Auth;
+use Mail;
 use DB;
 
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+
+    public function getProducts(Request $request)
+    {
+        $date=Carbon::now();
+        $today=$date->dayOfWeek;
+        $userId=$request->id;
+         $customer=User::whereId($userId)->first();
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+        ->where('assign_groups.user_id',$userId)
+        ->select('assign_groups.assign_group_id as groupId')
+        ->get()->map(function($value){
+            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                ->join('products','products.id','services.product_id')
+                ->select('products.id as id','products.name as name','products.price as price'
+                ,'products.image_url as image_url','products.pack_size as pack_size')
+                ->get();
+            return $p;
+        });
+         $v=$products1->flatten();
+             $value=$v->sortBy('ctnPrice');
+ 
+             $products = array();
+             $ark = array(); 
+                     foreach ($value as  $value1) {
+                        
+                         if(!in_array($value1['id'],$ark))
+                         {
+                             array_push($ark,$value1['id']);
+                             $products[] =$value1; 
+                         }
+                     }
+                     $customerDetail = CustomerDetail::where('user_id',$userId)->first();
+                     $deliveryRegion = $customerDetail->delivery_region ?? '';
+             
+                     $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
+                     $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
+                     //this Weekend 
+                     $weekDays = WeekDay::with(['WeekDay' => function($q) use ($userId,$deliveryRegion){
+                         $q->userDetail($userId,$deliveryRegion);
+                     }])->get();
+                     return response()->json([
+                        'html' => view('admin.driver.getproducts',compact('products','deliveryRegion','customer','today','weekDays','deliveryZoneDay'))->render(), 200, ['Content-Type' => 'application/json']
+                    ]);
+    }
     public function checkDriverNotification(Request $request)
     {
         $driver =  Auth::user()->id;
@@ -91,5 +141,32 @@ class NotificationController extends Controller
             return view('admin.driver.picklist-detail',compact('warehouse','zone','date','current_day','productOrder'));
         }
        
+    }
+
+    public function casualOrder()
+    {
+        $customers = User::role('Customer')->get(); 
+       return view('admin.driver.casual-orders',compact('customers'));
+    }
+  
+    public function deliveredProducts(Request $request)
+    {
+        $products=$request->productIds;
+     if(!isset($products))
+        return redirect()->back()->with(['error' => 'First select Customer and enter quantity']);
+        foreach ($products as $key => $value) {  
+            $customerId= $request->customer;
+            $data = [
+                'product_id' => $value,
+                'quantity' => $request->quantity[$key],
+                'driver_id' => auth()->user()->id,
+                'customer_id' => $customerId,
+                ];
+            CasualOrder::create($data);
+        }
+        $customer=  CasualOrder::whereCustomerId($customerId)->first();
+        $customerEmail= User::whereId($customer->customer_id)->first()->email;
+        Mail::to($customerEmail)->send(new CasualMail($customer));
+        return redirect()->back()->with(['success' => 'Record Saved and Emailed Successfully']);
     }
 }

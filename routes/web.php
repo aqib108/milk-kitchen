@@ -166,8 +166,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','SaleController@reoccurring')->name('sale.index');
         });
         Route::group(['prefix' => 'driver'], function (){
+            Route::post('/get-products','NotificationController@getProducts')->name('getProducts');
+            Route::get('/casual-orders','NotificationController@casualOrder')->name('casualOrders');
+            Route::post('/deliveredProducts','NotificationController@deliveredProducts')->name('deliveredProducts');
+            
+           
             Route::get('/{id?}','NotificationController@driverPicklistIndex')->name('driverPicklist.index');
             Route::get('/picklist/detail/{id}','NotificationController@picklistDetail')->name('picklist.detail');
+         
         });
     });
 

@@ -268,6 +268,14 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('casualOrders') }}" class="nav-link">
+                            <i class="nav-icon fas fa-clock"></i>
+                            <p>
+                                Casual Orders
+                            </p>
+                        </a>
+                    </li>
                     @endcan
                 @endif
                 @can('manage setting')
