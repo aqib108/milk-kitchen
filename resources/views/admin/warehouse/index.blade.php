@@ -501,7 +501,7 @@
                 },
                 success: function(response) {
                     console.log(response.html);
-                    $('body').find('#updateWarehouse .form').html(response.html);
+                    $('body').find('#updateupdateWarehouseWarehouse .form').html(response.html);
                     $('#updateWarehouse').modal('show');
                 }
             });

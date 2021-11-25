@@ -103,7 +103,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/standing-orders/{id}','CustomerController@StandingOrderAdmin')->name('admin.standing-orders');
             Route::get('/past-orders/{id}','CustomerController@pastOrder')->name('customer.past-orders');
             Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
-            Route::get('/final-report/{id}','CustomerController@finalreport')->name('customer.final-report');
+            Route::get('/final-report/{id}/{customerId}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}','CustomerController@pastOrderStatement')->name('customer.week-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
             Route::get('/statement/pdf/{id}', 'CustomerController@statementPrint')->name('customer.statementPdf');
@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','SaleController@reoccurring')->name('sale.index');
         });
         Route::group(['prefix' => 'driver'], function (){
+            Route::get('/printDeliveryDocket/{id}','NotificationController@printDeliveryDocket')->name('printDeliveryDocket');
             Route::post('/get-products','NotificationController@getProducts')->name('getProducts');
             Route::get('/casual-orders','NotificationController@casualOrder')->name('casualOrders');
             Route::post('/deliveredProducts','NotificationController@deliveredProducts')->name('deliveredProducts');
@@ -189,7 +190,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/notification', 'NotificationController@checkDriverNotification')->name('checkDriverNotification');
 Route::group(['prefix' => 'driver'], function () {
 
-    Route::get('/brCode/{id}', 'QrController@driverScan')->name('qr.driverScan');
+    Route::get('/brCode/{id}/{type?}{productId?}', 'QrController@driverScan')->name('qr.driverScan');
     Route::post('/code', 'QrController@driverCode')->name('qr.driverCode');
     Route::get('/upload/view/{id}/{driverId}', 'QrController@driverUploadView')->name('qr.upload');
     Route::post('/upload/pic', 'QrController@driverUploadViewCap')->name('qr.uploadCap');

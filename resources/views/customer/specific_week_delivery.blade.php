@@ -65,11 +65,11 @@
                     @endphp
                     @if($id != 0)
                         <td style="width: 149px;">
-                            <a href="{{route('customer.final-report',$id)}}">view</a>
+                            <a href="{{route('customer.final-report',[$id,$customerID])}}">view</a>
                         </td>
                     @else
                         <td style="background-color: aliceblue !important; width: 149px;">
-                            <a href="{{route('customer.final-report',$id)}}">view</a>
+                            <a href="{{route('customer.final-report',[$id,$customerID])}}"></a>
                         </td>
                     @endif
                    

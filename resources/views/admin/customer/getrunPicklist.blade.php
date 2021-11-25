@@ -1,7 +1,8 @@
 <div class="col-lg-12">
     <h2 class="heading-tbl">Warehouses Picklist</h2>
 </div> <br>
- <div class="row">
+
+<div class="row">
     <div class="col-md-4">
         <div class="warehouse border text-center">
             <h3 class="table-th-wrapper">Warehouse</h3>
@@ -12,19 +13,19 @@
         <div class="warehouse border text-center">
             <h3 class="table-th-wrapper">Assigned By Driver</h3>
             <p>
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <select class="form-control" name="assigned_driver" id="assigned_driver_id" disabled onchange="assignByDriver(this.value)">
-                            <option selected disabled style="text-align: center;">-- Assigned By Driver --</option>
-                            @foreach ($data as $driver)
-                                <option value="{{$driver->id}}">{{$driver->driverName}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2"></div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <select class="form-control" name="assigned_driver" id="assigned_driver_id" disabled onchange="assignByDriver(this.value)">
+                        <option selected disabled style="text-align: center;">-- Assigned By Driver --</option>
+                        @foreach ($data as $driver)
+                        <option value="{{$driver->id}}">{{$driver->driverName}}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </p> 
+                <div class="col-md-2"></div>
+            </div>
+            </p>
         </div>
     </div>
     <div class="col-md-4">
@@ -42,93 +43,138 @@
                     <th class="table-th-wrapper" scope="col">CUSTOMER</th>
                     <th class="table-th-wrapper" scope="col">ADRESS</th>
                     <th class="table-th-wrapper" scope="col">SUBRUB</th>
-                    <th  class="table-th-wrapper"scope="col">CARTONS</th>
-                    <th  class="table-th-wrapper"scope="col">Assign By Driver</th>
+                    <th class="table-th-wrapper" scope="col">CARTONS</th>
+                    <th class="table-th-wrapper" scope="col">Assign By Driver</th>
                 </tr>
             </thead>
             <tbody class="week-container-tbl">
+                @php 
+                $arr =array();
+                @endphp
+                @if(!empty($orders))
+                @foreach($zones as $zone)
+                @foreach($orders as $customer)
+
+                @if(!empty($customer))
+              
+                @if($zone->name == $customer['userZone'])
+
+             
+                    
+                 
+                 <!-- @if(!in_array($zone->name,$arr)) -->
                
-                @foreach($orders as $customer)  
-                    @if(!empty($customer))
-                        <tr>
-                            <td class="table-td-wrapper" scope="row">
-                                <div class="row">
-                                    @if($customer['assign_driver'] != false)
-                                        <div class="col-md-4" style="margin-bottom: 23px;">
-                                            
-                                        </div>
-                                    @else
-                                        <div class="col-md-4" style="margin-bottom: 23px;" >
-                                            <input type="checkbox" class="form-check-input abcd customer-{{$customer['user_id']}}"  data-target="customer-{{$customer['user_id']}}" onclick="checkBox('{{$customer['user_id']}}');" name="customer[]" value="{{$customer['user_id']}}">
-                                        </div>
-                                    @endif
-                                    <div class="col-md-4" style="text-align: center;">
-                                        {{$customer['userName']}}
-                                    </div>
-                                </div> 
-                            </td>
-                            <td>{{$customer['userAddress']}}</td>
-                            <td>{{$customer['userRegion']}}</td>
-                            <td>{{$customer['qty']}}</td> 
+              <tr>
+                  <td>
+                  <div class="table-td-wrapper row"   scope="row">
+                    <h4>{{$zone->name}}</h>
+                    @php
+                    array_push($arr,$zone->name);
+                    @endphp
+                    </div>
+                  </td>
+              </tr>
+     
+                <!-- @else
+                   <tr>
+                   <td>
+                   <div class="table-td-wrapper row"   scope="row">
+                     <h4>{{$zone->name}}</h>
+                     
+                     </div>
+                   </td>
+               </tr>
+          @endif -->
+                <tr>
+              
+                    <td class="table-td-wrapper" scope="row">
+                  
+                        <div class="row">
+
                             @if($customer['assign_driver'] != false)
-                                <td>{{$customer['assign_driver']}}</td>
+                            <div class="col-md-4" style="margin-bottom: 23px;">
+
+                            </div>
                             @else
-                                <td>-- --</td>
+                            <div class="col-md-4" style="margin-bottom: 23px;">
+                                <input type="checkbox" class="form-check-input abcd customer-{{$customer['user_id']}}" data-target="customer-{{$customer['user_id']}}" onclick="checkBox('{{$customer['user_id']}}');" name="customer[]" value="{{$customer['user_id']}}">
+                            </div>
                             @endif
-                        </tr>
+                            <div class="col-md-4" style="text-align: center;">
+                                {{$customer['userName']}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{$customer['userAddress']}}</td>
+                    <td>{{$customer['userRegion']}}</td>
+                    <td>{{$customer['qty']}}</td>
+                    @if($customer['assign_driver'] != false)
+                    <td>{{$customer['assign_driver']}}</td>
                     @else
-                        <tr>
-                            <td class="alert alert-danger" colspan="5" role="alert">
-                                <div>
-                                    No Result(s) Found !
-                                </div>
-                            </td>
-                        </tr>
-                    @endif  
+                    <td>-- --</td>
+                    @endif
+                </tr>
+                @endif
+               
+                @else
+                <tr>
+                    <td class="alert alert-danger" colspan="5" role="alert">
+                        <div>
+                            No Result(s) Found !
+                        </div>
+                    </td>
+                </tr>
+                @endif
                 @endforeach
+                @endforeach
+                @else
+                <tr>
+                    <td class="alert alert-danger" colspan="5" role="alert">
+                        <div>
+                            No Result(s) Found !
+                        </div>
+                    </td>
+                </tr>
+                @endif
             </tbody>
-        </table> 
+        </table>
     </div>
 </div>
 <script>
     function checkBox(customer_id) {
         var customer_id =
-        $("input[name='customer[]']:checked").map(function()
-            {
+            $("input[name='customer[]']:checked").map(function() {
                 return $(this).val();
-            }
-            ).get();
-        $("#assigned_driver_id").removeAttr('disabled'); 
-        
+            }).get();
+        $("#assigned_driver_id").removeAttr('disabled');
+
     }
+
     function assignByDriver(driver_id) {
         var customer_id =
-            $("input[name='customer[]']:checked").map(function()
-                {
-                    return $(this).val();
-                }
-                ).get();
+            $("input[name='customer[]']:checked").map(function() {
+                return $(this).val();
+            }).get();
         $.ajax({
             method: "POST",
             url: '{{route('selectCustomer')}}',
-            dataType:'json',
+            dataType: 'json',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 'customer_id[]': customer_id,
                 'driver_id': driver_id,
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $(".custom-loader").removeClass('hidden');
             },
-            success: function (response) {
-                if(response.status == 200){
+            success: function(response) {
+                if (response.status == 200) {
                     $(".custom-loader").addClass('hidden');
-                    location.reload(); 
-                }
-                else{
+                    location.reload();
+                } else {
                     $(".custom-loader").removeClass('hidden');
-                }     
+                }
             }
-        }); 
+        });
     }
 </script>

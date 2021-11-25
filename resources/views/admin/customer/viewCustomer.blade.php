@@ -68,7 +68,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="business_country">Suburb <span class="required-star">*</span></label>
-                                                        <input type="text" name="business_country" value="{{$customerDetail->business_country ?? ''}}" placeholder="Enter Country Name" class="form-control @error('business_country') is-invalid @enderror" id="business_country">
+                                                        <input type="text" name="business_country" value="{{$customerDetail->business_country ?? ''}}" placeholder="Enter Subrub Name" class="form-control @error('business_country') is-invalid @enderror" id="business_country">
                                                         @error('business_country')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -156,7 +156,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_country">Suburb <span class="required-star">*</span></label>
-                                                        <input type="text" name="delivery_country" value="{{$customerDetail->delivery_country ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_country') is-invalid @enderror" id="delivery_country">
+                                                        <input type="text" name="delivery_country" value="{{$customerDetail->delivery_country ?? '' }}" placeholder="Enter Subrub Name" class="form-control @error('delivery_country') is-invalid @enderror" id="delivery_country">
                                                         @error('delivery_country')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -165,7 +165,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="label-wrapper-custm" for="delivery_region">Region <span class="required-star">*</span></label>
-                                                        <input type="text" name="delivery_region" value="{{$customerDetail->delivery_region ?? '' }}" placeholder="Enter Country Name" class="form-control @error('delivery_region') is-invalid @enderror" id="delivery_region">
+                                                        <input type="text" name="delivery_region" value="{{$customerDetail->delivery_region ?? '' }}" placeholder="Enter Region Name" class="form-control @error('delivery_region') is-invalid @enderror" id="delivery_region">
                                                         @error('delivery_region')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>

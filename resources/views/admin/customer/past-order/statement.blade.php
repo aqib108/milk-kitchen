@@ -25,7 +25,7 @@
         <div class="container-fluid">
             <div>
                 <div class="text-center">
-                    <h2 class="heading-wrapper">INVOICE / STATEMENT</h2>
+                    <h2 class="heading-wrapper">STATEMENT</h2>
                 </div>
                 <div class="___class_+?10___">
                     <div class="form-container pt-4">
@@ -84,21 +84,53 @@
                             <div class="col-lg-6">
                                 <div>
                                     <h2 class="heading-inner-top">
-                                        @isset($customer[0]->delivery_name){{ $customer[0]->delivery_name }}@endisset
+                                        <!-- @isset($customer[0]->delivery_name){{ $customer[0]->delivery_name }}@endisset -->
+                                          Milk Kitchen Ltd
                                     </h2>
                                 </div>
                                 <div>
                                     <div>
                                         <p class="label-wrapper-custm">
-                                            Address 1:  <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
+                                             <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
                                         </p>
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <p class="label-wrapper-custm">
                                             Address 2: <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
                                         </p>
+                                    </div> -->
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            GST : <span>301-508-383</span>
+                                        </p> 
                                     </div>
                                     <div>
+                                        <p class="label-wrapper-custm">
+                                        @foreach ($orders as $order)
+                                        @if($loop->first)
+                                       Date :<span>{{ $order[0]->created_at->subDays(6)->format('d/m/Y')}}</span>
+                                       @endif
+                                         @endforeach
+                                        </p>
+                                    </div> 
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                        @foreach ($orders as $order)
+                                        @if($loop->first)
+                                        
+                                            Sales Period :<span>{{ $order[0]->created_at->subDays(6)->format('d/m')}} --- {{$order[0]->created_at->format('d/m')}}</span>
+                                        @endif
+                                       
+                                         @endforeach
+                                        </p>
+                                    </div> 
+                                    <div>
+                                        <p class="label-wrapper-custm">
+                                            Payment Will be deducted from your bank account 10 days from the date of this statement. 
+                                        </p>
+                                        
+                                    </div>
+                                    <!-- <div>
                                         <p class="label-wrapper-custm">
                                             Suburb: <span>@isset($customer[0]->delivery_country){{ $customer[0]->delivery_country }}@endisset</span>
                                         </p>
@@ -112,14 +144,8 @@
                                         <p class="label-wrapper-custm">
                                             Region: <span>@isset($customer[0]->delivery_region){{ $customer[0]->delivery_region }}@endisset</span>
                                         </p>
-                                    </div>
-                                    <div>
-                                        <p class="label-wrapper-custm">
-                                            GST Number: <span>33030400923</span>
-                                        </p>
-                                        
-                                    </div>
-                                    <div>
+                                    </div> -->
+                                    <!-- <div>
                                         <p class="label-wrapper-custm">
                                             Invoice Number: <span>33030400923</span>
                                         </p>
@@ -130,11 +156,11 @@
                                             Period Covered:  <span>-------------</span>
                                         </p>
                                         
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-40-wrapper">
+                        <!-- <div class="row mb-40-wrapper">
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="" class="label-wrapper-custm">Delivery Notes:</label>
@@ -143,7 +169,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

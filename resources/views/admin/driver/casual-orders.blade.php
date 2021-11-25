@@ -51,10 +51,15 @@
                                     <label class="label-wrapper-custm" for="delivery_zone">Customers<span class="required-star">*</span></label>
                                     <select name="customer" class="form-control @error('zone') is-invalid @enderror" id="customer" required>
                                       <option disabled selected>Select Customer</option>   
-                                     @foreach($customers as $customer)                                   
-                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                     @foreach($customers as $customer)          
+                                            <option value="{{$customer->id}}">{{$customer->delivery_name}}</option>
                                      @endforeach
                                     </select> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <input type="date" name="date" value="{{date('Y-m-d')}}" class="form-control" id="date">
                                     </div>
                                 </div>
                                  <div class="row">

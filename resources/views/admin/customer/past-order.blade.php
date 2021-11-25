@@ -21,28 +21,30 @@
                     </tr>
                 </thead>
                 <tbody class="week-container-tbl">
-                    @if($orders->count() > 0)
-                        @foreach ($orders as $order)
+                    @if($orders)
+                        @foreach ($orders as $key=>$value)
+                                @if(!empty($value['productscount'][$key]))
                             <tr>
                                 <td class="table-td-wrapper" scope="row">
-                                    {{ $order[0]->created_at->subDays(6)->format('d/m')}} - {{$order[0]->created_at->format('d/m')}}
+                                    {{ $value['productscount'][$key]->created_at->subDays(6)->format('d/m')}} - {{$value['productscount'][$key]->created_at->format('d/m')}}
                                 </td>
                                 <td>
                                     @php
                                         $price = 0;
-                                        foreach($order as $arr){
-                                            $price += $arr->product->price;
-                                        }
+                                    
+                                        $price=$value['productscount']->sum('quantity')*$value->price;
+                                      
                                         echo '$'.$price;
                                     @endphp
                                 </td>
                                 <td>
-                                    <a href="{{route('customer.week-statement', $customer->id)}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.week-statement', $value['productscount'][$key]->id)}}" class="view_statements">View</a>
                                 </td> 
                                 <td>
-                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{ $order[0]->id }}">View</a>
+                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{$value['productscount'][$key]->id}}">View</a>
                                 </td> 
                             </tr>
+                              @endif
                         @endforeach
                     @else
                         <tr>
@@ -70,6 +72,7 @@
 @endsection
 @section('scripts')
     <script>
+         var customerId= `<?php echo $customer->id; ?>`;
         $(document).ready(function(){
             $('body').on('click','.view_delivery_detail',function(){
                 let id = $(this).attr('data-id');
@@ -78,7 +81,8 @@
                     url: "{{ route('customer.deliveryDetails') }}",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id
+                        'id': id,
+                        'customerId':customerId
                     },
                     success: function(response) {
                         console.log(response);

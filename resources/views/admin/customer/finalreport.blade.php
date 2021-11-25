@@ -228,7 +228,7 @@
                 </div>
                 @if(auth()->user()->hasRole('Driver') || auth()->user()->hasRole('Admin'))
                     <div class="col-lg-4">
-                        {!! QrCode::size(150)->generate(route('qr.driverScan',$customerID)); !!}
+                        {!! QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customerID,'productId'=>$productOrderId])) !!}
                     </div>
                 @else
                     <div class="col-lg-4">

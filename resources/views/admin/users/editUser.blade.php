@@ -63,6 +63,13 @@
                                         <input type="text"  class="form-control driver"  name="driver_code" minlength="4" maxlength="4" placeholder="Enter 4-Digit Code Driver" value="{{$user->driver_code}}">
                                         <div id="digit-err" class="alert alert-danger"></div>
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Password <span class="required-star">*</span></label>
+                                        <input type="password" maxlength="50"
+                                            class="form-control" name="password"  id="password"
+                                            placeholder="Update Password " >
+                                            <div id="password-err" class="alert alert-danger"></div>
+                                    </div>
                                     <input type="hidden" id="user_id" value="{{$user->id}}">
                                 </div>
                             </div>

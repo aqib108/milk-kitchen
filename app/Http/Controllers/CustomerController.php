@@ -12,8 +12,6 @@ use App\Models\StandingOrder;
 use App\Models\OrderDeliverd;
 use App\Models\CustomerDetail;
 use App\Models\WeekDay;
-use Illuminate\Support\Collection;
-use App\Models\DeliverySheduleZone;
 use App\Models\Zone;
 use App\Models\Pod;
 use App\Models\GroupCustomer;
@@ -182,16 +180,20 @@ class CustomerController extends Controller
              {
                return redirect()->back();
              }
-        $customer = User::find($id);
-        $orders = ProductOrder::with('product')->where('user_id',$customer->id)->get()->groupBy(function($date) {
-            return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
-        });
+             $customer = User::find($id);
+
+               $products= Product::all();
+               $orders = $products->map(function($p) use($customer) {                   
+                   $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$customer->id )->get();
+                   return $p;                
+               });
+             
         return view('admin.customer.past-order',compact('orders','customer'));
     }
 
     public function pastOrderStatement($id)
     {
-        $orderDetail = ProductOrder::whereUserId($id)->first();
+        $orderDetail = ProductOrder::whereId($id)->first();
         $customerID = $orderDetail->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
@@ -219,11 +221,19 @@ class CustomerController extends Controller
             }
             $customerDetail = CustomerDetail::where('user_id', $customerID)->first();
             $deliveryRegion = $customerDetail->delivery_region ?? '';
-            $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
-                $q->userDetail($customerID,$deliveryRegion);
+            // $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
+            //     $q->userDetail($customerID,$deliveryRegion);
+            // }])->get();
+            $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
+                $q->userDetail($orderDetail->user_id);
+            }])->with(['productOrder' => function($q) use ($orderDetail) {
+                $q->weekDetail($orderDetail);
             }])->get();
 
-       return view('admin.customer.past-order.statement',compact('customerID','orderDetail','customer','products','weekDays'));
+            $orders = ProductOrder::with('product')->where('user_id',$customerID)->get()->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
+            });
+            return view('admin.customer.past-order.statement',compact('orders','customerID','orderDetail','customer','products','weekDays'));
     }
 
     //Create Customer page
@@ -438,8 +448,9 @@ class CustomerController extends Controller
         return view('admin.customer.packingslip');
     }
 
-    public function finalreport($id)
+    public function finalreport($id,$customerId)
     {
+        $productOrderId=$id;
         if($id == 0){
             return redirect()->back()->with('success','No Record Found To This Delivery!.');
         }else{
@@ -449,11 +460,33 @@ class CustomerController extends Controller
             }
             $customerID = $orderDetail->user_id;
             $customer = CustomerDetail::where('user_id',$customerID)->get();
-            $products = Product::orderBy('id','DESC')->where('status',1)->get();
+            $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+        ->where('assign_groups.user_id',$customerId)
+        ->select('assign_groups.assign_group_id as groupId')
+        ->get()->map(function($value){
+            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                ->join('products','products.id','services.product_id')
+                ->select('products.*')
+                ->get();
+            return $p;
+        });
+         $v=$products1->flatten();
+     
+        $products = array();
+        $ark = array();
+            foreach ($products1 as $value) {
+                foreach ($value as  $value1) {
+                    if(!in_array($value1['id'],$ark))
+                    {
+                        array_push($ark,$value1['id']);
+                        $products[] =$value1; 
+                    }
+                }
+            }
             $deliverOrder = ProductOrder::where('day_id',$orderDetail->day_id)
             ->where('user_id',$customerID)->where('product_id',$orderDetail->product_id)
             ->get();
-                
+    
             $weekDays = 
                 WeekDay::with(['productOrder' => function($q) use ($customerID){
                     $q->userDetail($customerID);
@@ -462,8 +495,7 @@ class CustomerController extends Controller
                 }])->get();
             
             $driver_image =Pod::where('customer_id',$customerID)->first();
-            // dd($weekDays);
-            return view('admin.customer.finalreport',compact( 'driver_image','orderDetail','customerID','customer','products','weekDays'));
+            return view('admin.customer.finalreport',compact( 'productOrderId','driver_image','orderDetail','customerID','customer','products','weekDays'));
         }
        
     }
@@ -502,7 +534,29 @@ class CustomerController extends Controller
         $order = ProductOrder::find($id);
         $customerID = $order->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
-        $products = Product::orderBy('id','DESC')->where('status',1)->get();
+        $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+        ->where('assign_groups.user_id',$customerID)
+        ->select('assign_groups.assign_group_id as groupId')
+        ->get()->map(function($value){
+            $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+                ->join('products','products.id','services.product_id')
+                ->select('products.*')
+                ->get();
+            return $p;
+        });
+         $v=$products1->flatten();
+     
+        $products = array();
+        $ark = array();
+            foreach ($products1 as $value) {
+                foreach ($value as  $value1) {
+                    if(!in_array($value1['id'],$ark))
+                    {
+                        array_push($ark,$value1['id']);
+                        $products[] =$value1; 
+                    }
+                }
+            }
         $weekDays = WeekDay::with(['productOrder' => function($q) use ($order){
                         $q->userDetail($order->user_id);
                     }])->with(['productOrder' => function($q) use ($order) {

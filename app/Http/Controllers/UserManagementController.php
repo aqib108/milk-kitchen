@@ -125,6 +125,7 @@ class UserManagementController extends Controller
                 $code = null;
                 $data = [
                     'driver_code' => $code,
+                    'password' => Hash::make($request->input('password')),
                 ];
                 $user->update($data);
             }   
@@ -138,6 +139,7 @@ class UserManagementController extends Controller
             }
             $driverCode = [
                 'driver_code' => $request->driver_code,
+                'password' => Hash::make($request->input('password')),
             ];
             $user->update($driverCode);
             try {
@@ -154,6 +156,16 @@ class UserManagementController extends Controller
             catch (\Throwable $error) {
                 Report($error);
             }
+        }
+        else
+        {
+             if(isset($request->password))
+             {
+                $data = [
+                    'password' => Hash::make($request->input('password')),
+                ];
+                $user->update($data);  
+             }
         }
         $role = $request->role;
         $user->syncRoles($role);

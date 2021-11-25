@@ -33,6 +33,8 @@
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('customer.customer-report') }}" class="btn btn-dark">Back</a>
                     </li>
+                    <li class="breadcrumb-item"><a class="btn btn-white print" style="color: white; background-color:#94d60a">Print</a>
+                    </li>
                 </ol>
             </div>
         </div>
@@ -87,6 +89,9 @@
         runpicklist(warehouse_id);  
     };
     $(document).ready(function() {
+        $('.print').on('click',function () {
+            window.print();
+        });
         $('#warehouse').on('change', function() {
             var warehouse_id = $('#warehouse').val();
             runpicklist(warehouse_id);   
