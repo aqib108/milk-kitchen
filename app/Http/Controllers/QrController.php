@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CustomerMail;
+use App\Mail\CasualMail;
 use Mail;
 use App\Models\User;
+use App\Models\CasualOrder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\File;
@@ -12,12 +14,14 @@ use App\Models\Pod;
 
 class QrController extends Controller
 {
-  public function driverScan($id)
+
+  public function driverScan($id,$type=null,$productId=null)
   {
-    $customerID = $id;
+    $customerID = $id; 
+     session()->put(['type'=>$type,'receivingCustomerId' =>$id]);
     $customer = User::find($customerID);
     if ($customerID == $customer->id) {
-      return view('admin.driver-scan', compact('customerID'));
+      return view('admin.driver-scan',compact('customerID'));
     }
   }
 
@@ -32,7 +36,7 @@ class QrController extends Controller
     $driver = User::where('driver_code', $driverCode)->first();
     $driverId = $driver->id;
     if (isset($driver->driver_code) && ($driver->driver_code == $driverCode)) {
-      return redirect()->route('qr.upload', [$customerID, $driverId]);
+      return redirect()->route('qr.upload', ['id'=>$customerID, 'driverId'=>$driverId]);
     } else {
       return redirect()->back()->with('error', 'Incorrect Code.Please try again!');
     }
@@ -51,11 +55,11 @@ class QrController extends Controller
   public function driverUploadViewCap()
   {
      $customerID= session()->get('customerId');
-      $customer=User::whereId($customerID)->first();
-    $productData = [
-      'customer_id' => $customerID,
-      'driver_id' => session()->get('driverId'),
-    ];
+      $customer1=User::whereId($customerID)->first();
+      $productData = [
+        'customer_id' => $customerID,
+        'driver_id' => session()->get('driverId'),
+      ];
     $product = Pod::create($productData);
     if (request()->image_url != NULL || request()->has('image_url')) {
       $productImageDirectory = 'pod';
@@ -67,7 +71,20 @@ class QrController extends Controller
         $imageUrl = Storage::putFile($productImageDirectory, new File(request()->file('image_url')));
         $product->update(['image_url' => $imageUrl]);
       $customer=  Pod::whereCustomerId($customerID)->first();
-        Mail::to($customer->email)->send(new CustomerMail($customer));
+      $type= session()->get('type');
+      $receivingCustomerId= session()->get('receivingCustomerId');
+      if($type == 'deliverydockets')
+      {
+        $customerReceivingId=  CasualOrder::whereCustomerId($receivingCustomerId)->first();
+        $customerEmail= User::whereId($customerReceivingId->customer_id)->first()->email;
+        Mail::to($customerEmail)->send(new CasualMail($customer));
+      }
+      else
+      {
+        $productOrderId= session()->get('type');
+        Mail::to($customer1->email)->send(new CustomerMail($customer, $productOrderId));
+      }
+        
       }
 
     }

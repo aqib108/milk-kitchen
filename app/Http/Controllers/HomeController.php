@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
 use Auth;
+use App\Models\Setting;
 use App\Models\CustomerDetail;
 use App\Models\Product;
 use App\Models\Zone;
@@ -39,8 +40,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-      
-    
+        $date=Carbon::now();
+        $today1=$date->dayOfWeek;
+        $cutt_of_time=Setting::whereName('Cutt Off Time')->first();
+        if(isset($cutt_of_time)){
+            $cuttOfTime = $cutt_of_time->value;
+        }else{
+            $cuttOfTime = "2:00:pm";
+        }
+        if(date('h:i:a') >  $cuttOfTime)
+        {
+            $today=++$today1;
+        }
+        else
+        {
+            $today=$today1;  
+        }
        $user = Auth::user()->id;
        $customerDetail = CustomerDetail::where('user_id',$user)->first();
        $deliveryRegion = $customerDetail->delivery_region ?? '';
@@ -80,7 +95,7 @@ class HomeController extends Controller
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($user,$deliveryRegion){
             $q->userDetail($user,$deliveryRegion);
         }])->get();
-       return view('customer.index',compact('user','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
+       return view('customer.index',compact('user','today','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
     public function getState(Request $request)
     {
@@ -141,13 +156,16 @@ class HomeController extends Controller
 
     public function deliveryDetails(Request $request)
     {
+       
         $request->validate([
             'id'=>'required'
         ]);
         $orderDetail = ProductOrder::find($request->id);
+        
+        // $orderDetail = ProductOrder::whereDate('created_at',$request->id)->get();
         $customerID = $orderDetail->user_id;
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
-        ->where('assign_groups.user_id',auth()->user()->id)
+        ->where('assign_groups.user_id',$request->customerId)
         ->select('assign_groups.assign_group_id as groupId')
         ->get()->map(function($value){
             $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
@@ -169,11 +187,14 @@ class HomeController extends Controller
                     }
                 }
             }
+            // \DB::enableQueryLog();
         $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                         $q->userDetail($orderDetail->user_id);
                     }])->with(['productOrder' => function($q) use ($orderDetail) {
                         $q->weekDetail($orderDetail);
                     }])->get();
+        // dd(\DB::getQueryLog());
+                 
         return response()->json([
             'html' => view('customer.specific_week_delivery', compact('customerID','weekDays','products'))->render()
             ,200, ['Content-Type' => 'application/json']

@@ -54,8 +54,16 @@ class LoginController extends Controller
           }
           else
           {
-            if($user->hasRole('Admin') || $user->hasRole('Warehouse') || $user->hasRole('Driver') || $user->hasRole('Site Employee') || $user->hasRole('Sales Member')) {
+            if($user->hasRole('Admin')   || $user->hasRole('Site Employee') || $user->hasRole('Sales Member')) {
                 return redirect('admin');
+            }
+            elseif($user->hasRole('Driver'))
+            {
+              return redirect('admin/driver');
+            }
+            elseif($user->hasRole('Warehouse'))
+            {
+              return redirect('admin/masterPicklist');
             }
             else
             {

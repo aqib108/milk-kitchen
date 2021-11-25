@@ -126,42 +126,71 @@ class AdminController extends Controller
             ->join('assign_warehouses','assign_warehouses.user_id','users.id')
             ->where('warehouse_id',$warehouse->id)
              ->select('users.name as driverName','users.id as id')->get();
-        
-            $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
-                ->where('regions.warehouse_id', $warehouse->id)
-                ->select('customer_details.user_id')
-                ->get()->map(function ($value) use ($dayID) {
-                    $p = ProductOrder::where('user_id',$value->user_id)->where('day_id',$dayID)
+         $data=[];
+            $products = CustomerDetail::join('zones', 'zones.name', 'customer_details.delivery_zone')
+            ->join('regions', 'regions.name', 'customer_details.delivery_region')
+            // ->join('customer_details', 'customer_details.delivery_zone', 'zones.name')
+            // ->join('zones', 'zones.region_id', 'regions.id')
+                ->where(['regions.warehouse_id'=>$warehouse->id])
+                ->select('customer_details.user_id','zones.name','regions.id')
+                ->get()->map(function ($value) use($data)  {
+                    $pr = ProductOrder::where('user_id',$value->user_id)
                         ->get();
-                    return $p;
+                        foreach ($pr as $key => $p) {
+                            $data['quantity'] = $p->quantity;
+                            $data['user_id'] = $p->user_id;
+                            $data['zone'] =$value->name;
+                            $data['userName'] =$p->user->name;
+                        }
+                    
+                    return $data;
                 });
-            $orders = array();
-            foreach($products as $pro)
-            {
+        
+              $zones=Zone::whereStatus(1)->get();
+            $orders = array();  
+            $ark = array();    
+            foreach($products as $p)
+            {   
+
                 $quantity = 0;
                 $flag=0;
-                foreach($pro as $p)
+                if(isset($p['user_id']))
                 {
-                    $user_id = $p->user_id;
-                    $userName = $p->user->name;
-                    $userDetails = CustomerDetail::where('user_id',$p->user_id)->first(); 
+                    $user_id = $p['user_id'];
+                    $userName = $p['userName'];
+                    $userZone = $p['zone'];
+                    $userDetails = CustomerDetail::where('user_id',$p['user_id'])->first(); 
                     $userAddress = $userDetails->delivery_address_1;
                     $userRegion = $userDetails->delivery_region;
-                    $quantity = $quantity+$p->quantity;
+                    $quantity = $quantity+$p['quantity'];    
                 }
-                
-                $orders[] = array(
-                    'user_id' => $user_id  ?? '',
-                    'userName'=>$userName  ?? '',
-                    'userAddress' => $userAddress  ?? '',
-                    'userRegion' => $userRegion  ?? '',
-                    'qty'=>$quantity  ?? '',
-                    'assign_driver'=>$this->searchdriver($user_id  ?? '')
-                );           
-            }  
+         
+            
+                if(isset($user_id))
+                { 
+                    if(!in_array($userName,$ark))
+                    { 
+                        array_push($ark,$userName);
+                        $orders[] = array(
+                            'user_id' => $user_id,
+                            'userName'=>$userName,
+                            'userAddress' => $userAddress,
+                            'userRegion' => $userRegion,
+                            'userZone' =>   $userZone,
+                            'qty'=>$quantity,
+                            'assign_driver'=>$this->searchdriver($user_id)
+                        );
+                       
+                    }
+               
+                }
+              
+                        
+            } 
+         
 
         return response()->json([
-            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']
+            'html' => view('admin.customer.getrunPicklist', compact('current_day','zones', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
     }
 

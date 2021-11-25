@@ -114,8 +114,7 @@ class NotificationController extends Controller
                     foreach($data1 as $dat){
                         $btn1 = '<a href="'.route('picklist.detail', $dat->user_id).'" class="btn btn-primary btn-sm"> Detail </a>';
                         return $btn1;
-                    }
-                    
+                    }                 
                 })
             ->rawColumns(['name','address','action'])
             ->make(true);    
@@ -123,7 +122,8 @@ class NotificationController extends Controller
         return view('admin.driver.runpicklist'); 
     }
 
-    public function picklistDetail($id){
+    public function picklistDetail($id)
+    {
         $customerDetail = CustomerDetail::where('user_id',$id)->first();
         if($customerDetail != null)
         {
@@ -139,20 +139,21 @@ class NotificationController extends Controller
                 ->get();
 
             return view('admin.driver.picklist-detail',compact('warehouse','zone','date','current_day','productOrder'));
-        }
-       
+        }   
     }
 
     public function casualOrder()
     {
-        $customers = User::role('Customer')->get(); 
+
+        $customers = User::role('Customer')->join('customer_details','customer_details.user_id','users.id')
+         ->select('customer_details.delivery_name as delivery_name','users.id as id')->get();
        return view('admin.driver.casual-orders',compact('customers'));
     }
   
     public function deliveredProducts(Request $request)
     {
         $products=$request->productIds;
-     if(!isset($products))
+       if(!isset($products))
         return redirect()->back()->with(['error' => 'First select Customer and enter quantity']);
         foreach ($products as $key => $value) {  
             $customerId= $request->customer;
@@ -164,9 +165,25 @@ class NotificationController extends Controller
                 ];
             CasualOrder::create($data);
         }
-        $customer=  CasualOrder::whereCustomerId($customerId)->first();
-        $customerEmail= User::whereId($customer->customer_id)->first()->email;
-        Mail::to($customerEmail)->send(new CasualMail($customer));
-        return redirect()->back()->with(['success' => 'Record Saved and Emailed Successfully']);
+        $customerReceivingId=  CasualOrder::whereCustomerId($customerId)->first();
+        session()->put('customerReceivingId',$customerId);
+        // $customerEmail= User::whereId($customer1->customer_id)->first()->email;
+        // Mail::to($customerEmail)->send(new CasualMail($customer));
+        $customer= $request->customer;
+        return view('admin.driver.confirmation',compact('customer'));
     }
+      public function printDeliveryDocket($id)
+      {
+        $time=CasualOrder::orderBy('created_at','desc')->latest()->first()->created_at;
+        $customerId=decrypt($id);
+        $customer= CustomerDetail::whereUserId($customerId)->first();
+        $products= CasualOrder::join('products','products.id','casual_orders.product_id')
+                      ->where(['casual_orders.customer_id'=> $customerId])
+                     ->whereBetween('casual_orders.created_at', [$time, now()])
+                     ->select('products.name as name',DB::raw('SUM(casual_orders.quantity) as quantity'))
+                     ->groupBy('name')
+                     ->get();
+                     $receiverId=session()->get('customerReceivingId');
+        return view('admin.driver.delivery_docket',compact('customer','products','receiverId'));
+      }
 }
