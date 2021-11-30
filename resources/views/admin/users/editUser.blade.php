@@ -49,7 +49,7 @@
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                         <label>Role's <span class="required-star">*</span></label>
                                         <select name="role" class="form-control" id="role_id">
-                                            @foreach ($roles as $role)
+                                            @foreach ($roles as $role) 
                                                 <option @if ($role->id == $user->roles[0]->id) selected @endif
                                                     value="{{$role->id}}">{{$role->name }}</option>
                                             @endforeach
@@ -58,6 +58,9 @@
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden" id="assign_warehouse">
 
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden" id="assign_drivers">
+                                              
+                                              </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden"  id="driver">
                                         <label>Driver Code<span class="required-star">*</span></label>
                                         <input type="text"  class="form-control driver"  name="driver_code" minlength="4" maxlength="4" placeholder="Enter 4-Digit Code Driver" value="{{$user->driver_code}}">
@@ -131,15 +134,17 @@
                         user_id: user_id,
                     },
                     success: function(response) {
-                        $('#assign_warehouse').removeClass('hidden'); 
-                        $('#assign_warehouse').empty();
-                        $('#assign_warehouse').append(response.html);
+                        $('#drivers').removeClass('hidden'); 
+                        $('#assign_drivers').removeClass('hidden'); 
+                        $('#assign_drivers').empty();
+                        $('#assign_drivers').append(response.html);
                     }
                 });
             }  
         }
         // Driver 4-Digit Code Assigined By Role OR Warehouse 
         $('#role_id').on('change', function() {
+          
             var role_id = $('#role_id').find(":selected").val();
             var user_id =$('#user_id').val();
             // Role On-Change Driver //
@@ -154,16 +159,17 @@
                         role_id: role_id,
                     },
                     success: function(response) {
-                        $('#assign_warehouse').removeClass('hidden'); 
-                        $('#assign_warehouse').empty();
-                        $('#assign_warehouse').append(response.html);
+                        $('#drivers').removeClass('hidden'); 
+                        $('#assign_drivers').removeClass('hidden'); 
+                        $('#assign_drivers').empty();
+                        $('#assign_drivers').append(response.html);
                     }
                 });
             }
             else
             {
                 $('#driver').addClass('hidden');
-                $('#assign_warehouse').addClass('hidden'); 
+                $('#assign_drivers').addClass('hidden'); 
             }
             // Role On-Change WareHouse Manager //
             if(role_id == 4)

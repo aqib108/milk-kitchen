@@ -164,7 +164,7 @@ class CustomerController extends Controller
         $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
         //this Weekend 
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
-            $q->userDetail($customerID,$deliveryRegion);
+            $q->userDetail1($customerID,$deliveryRegion);
         }])->get();
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail($customerID,$deliveryRegion);
@@ -184,24 +184,55 @@ class CustomerController extends Controller
 
                $products= Product::all();
                $orders = $products->map(function($p) use($customer) {                   
-                   $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$customer->id )->get();
+                   $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$customer->id )->get()->groupBy(function($date) {
+                    return Carbon::parse($date->updated_at)->format('d-m-Y');
+                   });
                    return $p;                
                });
+            //  dd($orders);
+
+            //    $orders1 = ProductOrder::with('product')->where(['product_id' =>$id,'region_name'=>$region ])->orderBy('updated_at','desc')->get()->groupBy(function($date) {
+            //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
+            // });
+            //    dd($orders);
+            //    ->groupBy(function($date) {
+            //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
+            // })->toArray()
+            //    dd($orders);
+          
+            
+            //    DB::enableQueryLog();
+            //    $dt=Product::join('product_orders','product_orders.product_id','products.id')->where('product_orders.user_id',$customer->id )
+            //             ->select(DB::raw('sum(product_orders.quantity * products.price) as quantity'),'products.id as id','products.price as price')
+            //              ->groupBy('id','price')
+            //             ->get();
+                        // dd(DB::getQueryLog());
+            //             $array1=[];
+            //             foreach ($orders as $key => $value) {
+            //                 $time=$value->productscount[$key]->created_at->subDays(6)->format('d/m/Y');
+            //                  array_push($array1,$time);
+            //                 dd($time);
+            //             }
+            //    dd($dt);
              
         return view('admin.customer.past-order',compact('orders','customer'));
     }
 
-    public function pastOrderStatement($id)
+    public function pastOrderStatement($id,$start,$end,$region)
     {
-        $orderDetail = ProductOrder::whereId($id)->first();
+        $productId=$id;
+        $startDate=$start;
+        $endDate=$end;
+        $orderDetail = ProductOrder::whereProductId($id)->whereRegionName($region)->first();
         $customerID = $orderDetail->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
         ->where('assign_groups.user_id',$customerID)
         ->select('assign_groups.assign_group_id as groupId')
-        ->get()->map(function($value){
+        ->get()->map(function($value) use ($id){
             $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                 ->join('products','products.id','services.product_id')
+                ->where('products.id',$id)
                 ->select('products.*')
                 ->get();
             return $p;
@@ -219,21 +250,25 @@ class CustomerController extends Controller
                     }
                 }
             }
-            $customerDetail = CustomerDetail::where('user_id', $customerID)->first();
+            $customerDetail = CustomerDetail::where(['user_id'=> $customerID,'delivery_region'=>$orderDetail->region_name])->first();
             $deliveryRegion = $customerDetail->delivery_region ?? '';
-            // $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
-            //     $q->userDetail($customerID,$deliveryRegion);
-            // }])->get();
-            $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
-                $q->userDetail($orderDetail->user_id);
-            }])->with(['productOrder' => function($q) use ($orderDetail) {
-                $q->weekDetail($orderDetail);
-            }])->get();
 
-            $orders = ProductOrder::with('product')->where('user_id',$customerID)->get()->groupBy(function($date) {
+            // $weekDays = WeekDay::with(['productOrder' => function($q) use ($startDate,$endDate) {
+            //     $q->weekDetail($startDate,$endDate);
+            // }])->get();
+
+            
+            $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail,$productId){
+                $q->userDetail($orderDetail->user_id,$productId);
+            }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
+                $q->weekDetail($startDate,$endDate);
+            }])->get();
+      
+            $orders = ProductOrder::with('product')->where(['user_id'=>$customerID,'product_id' =>$id,'region_name'=>$region ])->get()->groupBy(function($date) {
                 return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
             });
-            return view('admin.customer.past-order.statement',compact('orders','customerID','orderDetail','customer','products','weekDays'));
+         
+            return view('admin.customer.past-order.statement',compact('orders','startDate','endDate','productId','customerID','orderDetail','customer','products','weekDays'));
     }
 
     //Create Customer page
@@ -448,13 +483,16 @@ class CustomerController extends Controller
         return view('admin.customer.packingslip');
     }
 
-    public function finalreport($id,$customerId)
+    public function finalreport($id,$customerId,$startDate,$endDate)
     {
+        $startDate=$startDate;
+        $endDate=$endDate;
         $productOrderId=$id;
         if($id == 0){
             return redirect()->back()->with('success','No Record Found To This Delivery!.');
         }else{
             $orderDetail = ProductOrder::find($id);
+            $productId= $orderDetail->id;
             if ($orderDetail == NULL) {
                 return redirect()->back()->with('error','No Record Found');
             }
@@ -490,12 +528,12 @@ class CustomerController extends Controller
             $weekDays = 
                 WeekDay::with(['productOrder' => function($q) use ($customerID){
                     $q->userDetail($customerID);
-                }])->with(['productOrder' => function($q) use ($orderDetail) {
-                    $q->weekDetail($orderDetail);
+                }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
+                    $q->weekDetail($startDate,$endDate);
                 }])->get();
             
             $driver_image =Pod::where('customer_id',$customerID)->first();
-            return view('admin.customer.finalreport',compact( 'productOrderId','driver_image','orderDetail','customerID','customer','products','weekDays'));
+            return view('admin.customer.finalreport',compact( 'productOrderId','orderDetail','startDate','endDate','driver_image','productId','customerID','customer','products','weekDays'));
         }
        
     }
@@ -528,18 +566,62 @@ class CustomerController extends Controller
         }
     }
 
-    public function statementPrint($id)
+    // public function statementPrint($id,$startDate,$endDate)
+    // {
+    //     $startDate=$startDate;
+    //     $endDate=$endDate;
+    //     ini_set('max_execution_time', 300); //300 seconds = 5 minutes 
+    //     $order = ProductOrder::find($id);
+    //     $customerID = $order->user_id;
+    //     $customer = CustomerDetail::where('user_id',$customerID)->get();
+    //     $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
+    //     ->where('assign_groups.user_id',$customerID)
+    //     ->select('assign_groups.assign_group_id as groupId')
+    //     ->get()->map(function($value){
+    //         $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
+    //             ->join('products','products.id','services.product_id')
+    //             ->select('products.*')
+    //             ->get();
+    //         return $p;
+    //     });
+    //      $v=$products1->flatten();
+     
+    //     $products = array();
+    //     $ark = array();
+    //         foreach ($products1 as $value) {
+    //             foreach ($value as  $value1) {
+    //                 if(!in_array($value1['id'],$ark))
+    //                 {
+    //                     array_push($ark,$value1['id']);
+    //                     $products[] =$value1; 
+    //                 }
+    //             }
+    //         }
+    //         $weekDays = 
+    //         WeekDay::with(['productOrder' => function($q) use ($customerID){
+    //             $q->userDetail($customerID);
+    //         }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
+    //             $q->weekDetail($startDate,$endDate);
+    //         }])->get();
+    //     $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
+    //     $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true, 'isPhpEnabled'=>true,'isRemoteEnabled' => TRUE,])->loadView('admin.customer.pdfReport',['weekDays' => $weekDays,'products' => $products,'customer' => $customer,'image' => $image,'order'=>$order])->setPaper('a4', 'porttrait');
+    //     return $pdf->download('report.pdf');
+    // }
+    public function statementPrint($id,$startDate,$endDate)
     {
-        ini_set('max_execution_time', 300); //300 seconds = 5 minutes 
-        $order = ProductOrder::find($id);
-        $customerID = $order->user_id;
+        $productId=$id;
+        $start=$startDate;
+        $end=$endDate;
+        $orderDetail = ProductOrder::whereProductId($id)->first();
+        $customerID = $orderDetail->user_id;
         $customer = CustomerDetail::where('user_id',$customerID)->get();
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
         ->where('assign_groups.user_id',$customerID)
         ->select('assign_groups.assign_group_id as groupId')
-        ->get()->map(function($value){
+        ->get()->map(function($value) use ($id){
             $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                 ->join('products','products.id','services.product_id')
+                ->where('products.id',$id)
                 ->select('products.*')
                 ->get();
             return $p;
@@ -557,13 +639,32 @@ class CustomerController extends Controller
                     }
                 }
             }
-        $weekDays = WeekDay::with(['productOrder' => function($q) use ($order){
-                        $q->userDetail($order->user_id);
-                    }])->with(['productOrder' => function($q) use ($order) {
-                        $q->weekDetail($order);
-                    }])->get();
-        $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
-        $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true, 'isPhpEnabled'=>true,'isRemoteEnabled' => TRUE,])->loadView('admin.customer.pdfReport',['weekDays' => $weekDays,'products' => $products,'customer' => $customer,'image' => $image,'order'=>$order])->setPaper('a4', 'porttrait');
-        return $pdf->download('report.pdf');
-    }
+            $customerDetail = CustomerDetail::where(['user_id'=> $customerID,'delivery_region'=>$orderDetail->region_name])->first();
+            $deliveryRegion = $customerDetail->delivery_region ?? '';
+
+            // $weekDays = WeekDay::with(['productOrder' => function($q) use ($startDate,$endDate) {
+            //     $q->weekDetail($startDate,$endDate);
+            // }])->get();
+
+            
+            $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail,$productId){
+                $q->userDetail($orderDetail->user_id,$productId);
+            }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
+                $q->weekDetail($startDate,$endDate);
+            }])->get();
+      
+            $orders = ProductOrder::with('product')->where(['user_id'=>$customerID,'product_id' =>$id ])->get()->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
+            });
+         
+                $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
+                
+                // return view('admin.customer.past-order.statement',compact('orders','startDate','endDate','productId','customerID','orderDetail','customer','products','weekDays'));
+                    $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true, 'isPhpEnabled'=>true,'isRemoteEnabled' => TRUE,])
+                    ->loadView('admin.customer.past-order.statement',compact('orders','startDate','endDate',
+                    'productId','customerID','orderDetail','customer','products','weekDays'))->setPaper('a4', 'porttrait');
+                    return $pdf->download('invoice.pdf');
+            }
+    
+
 }

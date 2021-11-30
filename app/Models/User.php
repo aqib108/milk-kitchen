@@ -60,7 +60,11 @@ class User extends Authenticatable
 
     public function wareHouses()
     {
-        return $this->belongsToMany(Warehouse::class, 'assign_warehouses','','','','','');
+        return $this->belongsToMany(Warehouse::class, 'assign_warehouses','warehouse_id','user_id','id');
+    }
+    public function zones()
+    {
+        return $this->belongsToMany(Zone::class, 'assign_drivers','driver_id','zone_id','id');
     }
     public function groups()
     {

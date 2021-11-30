@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="warehouse border text-center">
+        <!-- <div class="warehouse border text-center">
             <h3 class="table-th-wrapper">Assigned By Driver</h3>
             <p>
             <div class="row">
@@ -26,7 +26,7 @@
                 <div class="col-md-2"></div>
             </div>
             </p>
-        </div>
+        </div> -->
     </div>
     <div class="col-md-4">
         <div class="warehouse border text-center">

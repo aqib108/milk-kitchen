@@ -62,6 +62,9 @@
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden" id="assign_warehouse">
                                               
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden" id="assign_drivers">
+                                              
+                                    </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 hidden"  id="driver">
                                         <label>Driver Code<span class="required-star">*</span></label>
                                         <input type="text"  class="form-control driver"  name="driver_code" minlength="4" maxlength="4" placeholder="Enter 4-Digit Code Driver" value="{{ old('driver_code') }}">
@@ -280,9 +283,9 @@
                         role_id: role_id,
                     },
                     success: function(response) {
-                        $('#assign_warehouse').removeClass('hidden'); 
-                        $('#assign_warehouse').empty();
-                        $('#assign_warehouse').append(response.html);
+                        $('#assign_drivers').removeClass('hidden'); 
+                        $('#assign_drivers').empty();
+                        $('#assign_drivers').append(response.html);
                     }
                 });
             }

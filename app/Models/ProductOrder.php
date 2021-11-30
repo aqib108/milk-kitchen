@@ -36,7 +36,11 @@ class ProductOrder extends Model
     {
         return $this->belongsTo(customerDetail::class, 'user_id', 'user_id');
     }
-    public function scopeUserDetail($query, $id,$name)
+    public function scopeUserDetail($query,$productId,$name)
+    {
+        return $query->where(['product_id'=> $productId,'region_name'=>$name]);
+    }
+    public function scopeUserDetail1($query,$id,$name)
     {
         return $query->where(['user_id'=> $id,'region_name'=>$name]);
     }
@@ -54,9 +58,14 @@ class ProductOrder extends Model
         return $this->hasMany(OrderDeliverd::class,'product_order_id','id');
     }
 
-    public function scopeWeekDetail($query,$arr)
+    // public function scopeWeekDetail($query,$arr)
+    // {
+    //     return $query->whereBetween('product_orders.created_at',[$arr->created_at->subDays(6)->format('Y-m-d 00:00:00'),$arr->created_at->format('Y-m-d 23:59:59')])
+    //     ->leftJoin('order_deliverds','product_orders.id', '=', 'order_deliverds.product_order_id')->select('product_orders.*', 'order_deliverds.quantity as d_qnty')->get();
+    // }
+    public function scopeWeekDetail($query,$start,$end)
     {
-        return $query->whereBetween('product_orders.created_at',[$arr->created_at->subDays(6)->format('Y-m-d 00:00:00'),$arr->created_at->format('Y-m-d 23:59:59')])->leftJoin('order_deliverds','product_orders.id', '=', 'order_deliverds.product_order_id')->select('product_orders.*', 'order_deliverds.quantity as d_qnty')->get();
+        return $query->whereBetween('updated_at',array($start,$end))->get();
     }
     
 }

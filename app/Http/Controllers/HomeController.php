@@ -160,17 +160,21 @@ class HomeController extends Controller
         $request->validate([
             'id'=>'required'
         ]);
-        $orderDetail = ProductOrder::find($request->id);
-        
+        $startDate=$request->start;
+        $endDate=$request->end;
+        $orderDetail = ProductOrder::whereProductId($request->id)->whereUserId($request->customerId)
+        ->whereRegionName($request->region)->first();
+        $productId=$request->id;
         // $orderDetail = ProductOrder::whereDate('created_at',$request->id)->get();
         $customerID = $orderDetail->user_id;
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
         ->where('assign_groups.user_id',$request->customerId)
         ->select('assign_groups.assign_group_id as groupId')
-        ->get()->map(function($value){
+        ->get()->map(function($value) use ($productId){
             $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                 ->join('products','products.id','services.product_id')
                 ->select('products.*')
+                 ->where('products.id',$productId)
                 ->get();
             return $p;
         });
@@ -188,15 +192,15 @@ class HomeController extends Controller
                 }
             }
             // \DB::enableQueryLog();
-        $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
-                        $q->userDetail($orderDetail->user_id);
-                    }])->with(['productOrder' => function($q) use ($orderDetail) {
-                        $q->weekDetail($orderDetail);
+        $weekDays = WeekDay::with(['productOrder' => function($q) use ($startDate,$endDate) {
+                        $q->weekDetail($startDate,$endDate);
                     }])->get();
+
+                   
         // dd(\DB::getQueryLog());
                  
         return response()->json([
-            'html' => view('customer.specific_week_delivery', compact('customerID','weekDays','products'))->render()
+            'html' => view('customer.specific_week_delivery', compact('customerID','weekDays','startDate','endDate','products'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);
     }

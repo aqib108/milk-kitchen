@@ -103,10 +103,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/standing-orders/{id}','CustomerController@StandingOrderAdmin')->name('admin.standing-orders');
             Route::get('/past-orders/{id}','CustomerController@pastOrder')->name('customer.past-orders');
             Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
-            Route::get('/final-report/{id}/{customerId}','CustomerController@finalreport')->name('customer.final-report');
-            Route::get('/statement/{id}','CustomerController@pastOrderStatement')->name('customer.week-statement');
+            Route::get('/final-report/{id}/{customerId}/{startDate?}/{endDate?}','CustomerController@finalreport')->name('customer.final-report');
+            Route::get('/statement/{id}/{start}/{end}/{region?}','CustomerController@pastOrderStatement')->name('customer.week-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
-            Route::get('/statement/pdf/{id}', 'CustomerController@statementPrint')->name('customer.statementPdf');
+            Route::get('/statement2/pdf/{id}/{start}/{end}', 'CustomerController@statementPrint')->name('customer.statementPdf');
            
         });
         Route::group(['prefix' => 'customer-group'], function (){
