@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Models\Warehouse;
-use App\Models\AssignWarehouse;
+use App\Models\Zone;
 use Auth;
 use DB;
 use Validator;
@@ -42,7 +42,6 @@ class UserManagementController extends Controller
                     return $role;
                 })
                 ->addColumn('status', function(User $data){
-
                     if($data->status == 1){
                         $status = '<span class="badge badge-success">Active</span>';
                     }
@@ -70,6 +69,7 @@ class UserManagementController extends Controller
     public function editUser($id)
     {
         $user = User::findOrFail($id);
+          
         if ($user == null) {
             return redirect()->back()->with('error', 'No Record Found To Edit.');
         }
@@ -80,18 +80,26 @@ class UserManagementController extends Controller
 
     public function getWarehouses(Request $request)
     {
-        $warehouses = Warehouse::where('status',1)->get();
-        $role = Role::find($request->role_id);
-        $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
+        $roleId=$request->role_id;
+        if($roleId == 4)
+        {
+            $warehouses = Warehouse::where('status',1)->get();
+           $arr=Warehouse::join('assign_warehouses','assign_warehouses.warehouse_id','warehouses.id')
             ->where('assign_warehouses.user_id',$request->user_id)
             ->select('warehouses.*')->whereStatus(1)->pluck('id')->toArray();  
-    
-
+        }
+        else
+        {
+            $warehouses = Zone::where('status',1)->get();
+            $arr=Zone::join('assign_drivers','assign_drivers.zone_id','zones.id')
+                ->where('assign_drivers.driver_id',$request->user_id)
+                ->select('zones.*')->whereStatus(1)->pluck('id')->toArray();  
+        }
         return response()->json([
-            'html' => view('admin.users.warehouseSelect', compact('warehouses','arr'))->render()
+            'html' => view('admin.users.warehouseSelect', compact('warehouses','arr','roleId'))->render()
             ,200, ['Content-Type' => 'application/json']
         ]);   
-    } 
+    }  
 
     public function status(Request $request)
     {
@@ -133,9 +141,9 @@ class UserManagementController extends Controller
         elseif($request->role == 5)
         {
             if ($request->has('warehouses')) {
-                $user->wareHouses()->detach();
-                $warehouse = Warehouse::whereIn('id', $request->warehouses)->get();
-                $user->wareHouses()->attach($warehouse);
+                $user->zones()->detach();
+                $warehouse = Zone::whereIn('id', $request->warehouses)->get();
+                $user->zones()->attach($warehouse);
             }
             $driverCode = [
                 'driver_code' => $request->driver_code,
@@ -222,7 +230,7 @@ class UserManagementController extends Controller
         {
             $warehouses_all=implode(',',$request->warehouses);
             foreach (explode(',',$warehouses_all) as $key => $value) {
-                DB::table('assign_warehouses')->insert(['user_id'=>$data->id,'warehouse_id'=>$value]);
+                DB::table('assign_drivers')->insert(['driver_id'=>$data->id,'zone_id'=>$value]);
             }
             $driverCode = [
                 'driver_code' => $request->input('driver_code'),

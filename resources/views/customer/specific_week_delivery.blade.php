@@ -47,16 +47,18 @@
         </tbody>
     </table>
     <table class="table table-bordered mb-0 weekly_standing_order">
-        <tbody class="week-container-tbl">  
+        <tbody class="week-container-tbl"> 
+        @foreach ($products as $product) 
             <tr>
                 <td style="width: 145px;"></td>
+                
                 @foreach ($weekDays as $item)
                     @php
                         $id = 0;
                         if ($item->productOrder->isNotEmpty()){
                             foreach ($item->productOrder as $order){
                                 if($order->user_id == $customerID){
-                                    if($order->day_id == $item->id){
+                                    if($order->day_id == $item->id && $order->product_id == $product['id'] ){
                                         $id = $order->id;
                                     }
                                 }
@@ -65,7 +67,7 @@
                     @endphp
                     @if($id != 0)
                         <td style="width: 149px;">
-                            <a href="{{route('customer.final-report',[$id,$customerID])}}">view</a>
+                            <a href="{{route('customer.final-report',[$id,$customerID,$startDate,$endDate])}}">view</a>
                         </td>
                     @else
                         <td style="background-color: aliceblue !important; width: 149px;">
@@ -74,7 +76,9 @@
                     @endif
                    
                 @endforeach 
+               
             </tr>
+            @endforeach
         </tbody>
     </table>  
 </div>

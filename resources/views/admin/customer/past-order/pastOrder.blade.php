@@ -24,43 +24,32 @@
                 <tbody class="week-container-tbl">
                     @if($orders)
                         @foreach ($orders as $key=>$value)
-                                @if(!empty($value['productscount']))
-                                @foreach ($value['productscount'] as $key => $value1) 
-                                    @php 
-                                    $date = Carbon\Carbon::parse($key);
-                                   $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
-                                    $end = $date->endOfWeek()->format('Y-m-d');
-                                    $start1 = $date->startOfWeek()->format('d/m'); // 2016-10-17 00:00:00.000000
-                                    $end1 = $date->endOfWeek()->format('d/m');
-                                    @endphp
+                                @if(!empty($value['productscount'][$key]))
+                               
                             <tr>
                                 <td class="table-td-wrapper" scope="row">
-
-                                {{ $start1}} - {{$end1}} 
+                                    {{ $value['productscount'][$key]->updated_at->subDays(6)->format('d/m')}} - {{$value['productscount'][$key]->updated_at->format('d/m')}}
                                 </td>
                                 <td>
                                     {{$value->name}}
                                 </td>
-        
                                 <td>
                                     @php
                                         $price = 0;
                                     
-                                        $price=$value1->sum('quantity')* $value->price;
+                                        $price=$value['productscount']->sum('quantity')*$value->price;
                                       
                                         echo '$'.$price;
                                     @endphp
                                 </td>
                                 <td>
-                                    <a href="{{route('customer.week-statement',['id'=> $value->id,'start'=>$start,'end'=>$end,'region'=>$value1->first()->region_name])}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.week-statement',['id'=> $value->id,'region'=>$value['productscount'][$key]->region_name])}}" class="view_statements">View</a>
                                 </td> 
                                 <td>
-                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{$value->id}}" data-region="{{$value1->first()->region_name}}" data-startDate="{{$start}}"
-                                    data-endDate="{{$end}}" >View</a>
+                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{$value->id}}" data-region="{{$value['productscount'][$key]->region_name}}">View</a>
                                 </td> 
                             </tr>
-                            @endforeach  
-                            @endif
+                              @endif
                         @endforeach
                     @else
                         <tr>
@@ -93,9 +82,6 @@
             $('body').on('click','.view_delivery_detail',function(){
                 let id = $(this).attr('data-id');
                 let region = $(this).attr('data-region');
-                let start = $(this).attr('data-startDate');
-                let  end = $(this).attr('data-endDate');
-               
                 $.ajax({
                     method: "GET",
                     url: "{{ route('customer.deliveryDetails') }}",
@@ -103,9 +89,7 @@
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         'id': id,
                          'region':region,
-                        'customerId':customerId,
-                          'start' : start,
-                          'end'  : end
+                        'customerId':customerId
                     },
                     success: function(response) {
                         console.log(response);

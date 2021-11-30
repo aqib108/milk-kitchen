@@ -13,7 +13,7 @@
                     <h4 ><b>STATEMENT</b></h4>  
                 </div>
                 <div class="downad" style="margin-left: 420px; font-size: 20px;">
-                    <a href="{{route('customer.statementPdf',$orderDetail->id)}}">
+                    <a href="{{route('customer.statementPdf',[$productId,$startDate,$endDate])}}">
                         <i class="fas fa-download" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -89,11 +89,11 @@
                                     </h2>
                                 </div>
                                 <div>
-                                    <div>
+                                    <!-- <div>
                                         <p class="label-wrapper-custm">
                                              <span>@isset($customer[0]->delivery_address_1){{ $customer[0]->delivery_address_1 }}@endisset</span>
                                         </p>
-                                    </div>
+                                    </div> -->
                                     <!-- <div>
                                         <p class="label-wrapper-custm">
                                             Address 2: <span>@isset($customer[0]->delivery_address_2){{ $customer[0]->delivery_address_2 }}@endisset</span>
@@ -101,27 +101,22 @@
                                     </div> -->
                                     <div>
                                         <p class="label-wrapper-custm">
-                                            GST : <span>301-508-383</span>
+                                            GST : <span>101-508-838</span>
                                         </p> 
                                     </div>
                                     <div>
                                         <p class="label-wrapper-custm">
-                                        @foreach ($orders as $order)
-                                        @if($loop->first)
-                                       Date :<span>{{ $order[0]->created_at->subDays(6)->format('d/m/Y')}}</span>
-                                       @endif
-                                         @endforeach
+                                       
+                                       Date :<span>{{ $endDate}}</span>
+                                      
                                         </p>
                                     </div> 
                                     <div>
                                         <p class="label-wrapper-custm">
-                                        @foreach ($orders as $order)
-                                        @if($loop->first)
+                                      
                                         
-                                            Sales Period :<span>{{ $order[0]->created_at->subDays(6)->format('d/m')}} --- {{$order[0]->created_at->format('d/m')}}</span>
-                                        @endif
+                                            Sales Period :<span>{{ $startDate }} --- {{$endDate}}</span>
                                        
-                                         @endforeach
                                         </p>
                                     </div> 
                                     <div>
@@ -202,6 +197,7 @@
                                         {{$product['name']}}
                                     </td>
                                     @foreach ($weekDays as $item)
+
                                         @php
                                             $qnty = 0;
                                             if ($item->productOrder->isNotEmpty()){
