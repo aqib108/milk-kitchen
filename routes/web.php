@@ -106,7 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/final-report/{id}/{customerId}/{startDate?}/{endDate?}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}/{start}/{end}/{region?}','CustomerController@pastOrderStatement')->name('customer.week-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
-            Route::get('/statement2/pdf/{id}/{start}/{end}', 'CustomerController@statementPrint')->name('customer.statementPdf');
+            Route::get('/statement2/pdf/{id}/{start}/{end}/{region}', 'CustomerController@statementPrint')->name('customer.statementPdf');
            
         });
         Route::group(['prefix' => 'customer-group'], function (){

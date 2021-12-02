@@ -131,7 +131,7 @@ class AdminController extends Controller
             $products = CustomerDetail::join('zones', 'zones.name', 'customer_details.delivery_zone')
             ->join('regions', 'regions.name', 'customer_details.delivery_region')
                 ->where(['regions.warehouse_id'=>$warehouse->id])
-                ->select('customer_details.user_id','zones.name','zones.id','regions.id')
+                ->select('customer_details.user_id','zones.name','zones.id as zoneId','regions.id')
                 ->get()->map(function ($value) use($data)  {
                     $pr = ProductOrder::where('user_id',$value->user_id)
                         ->get();
@@ -139,7 +139,7 @@ class AdminController extends Controller
                             $data['quantity'] = $p->quantity;
                             $data['user_id'] = $p->user_id;
                             $data['zone'] =$value->name;
-                            $data['id'] =$value->id;
+                            $data['zoneId'] =$value->zoneId;
                             $data['userName'] =$p->user->name;
                         }                   
                     return $data;
@@ -158,7 +158,7 @@ class AdminController extends Controller
                     $user_id = $p['user_id'];
                     $userName = $p['userName'];
                     $userZone = $p['zone'];
-                    $zoneId = $p['id'];
+                    $zoneId = $p['zoneId'];
                     $userDetails = CustomerDetail::where('user_id',$p['user_id'])->first(); 
                     $userAddress = $userDetails->delivery_address_1;
                     $userRegion = $userDetails->delivery_region;
@@ -178,25 +178,25 @@ class AdminController extends Controller
                             'userRegion' => $userRegion,
                             'userZone' =>   $userZone,
                             'qty'=>$quantity,
-                            'assign_driver'=>$this->searchdriver($user_id,$zoneId)
+                            'assign_driver'=>$this->searchdriver($zoneId)
                         );
                        
                     }
                
-                }                      
+                }                     
             } 
         return response()->json([
             'html' => view('admin.customer.getrunPicklist', compact('current_day','zones', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
     }
 
-    function searchdriver($user_id,$zoneId){
-      
+    function searchdriver($zoneId){
+       
         // $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->where('is_assign',1)->first('driver_id');
         $assignDriver = AssignDriver::where('zone_id',$zoneId)->first();
-      ;
         if(!empty($assignDriver)){
             $driver = User::where('id',$assignDriver->driver_id)->first();
+          
             if(!empty($driver)){
                 return $driver->name;
             }

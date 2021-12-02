@@ -156,13 +156,9 @@ class HomeController extends Controller
 
     public function deliveryDetails(Request $request)
     {
-       
-        $request->validate([
-            'id'=>'required'
-        ]);
         $startDate=$request->start;
         $endDate=$request->end;
-        $orderDetail = ProductOrder::whereProductId($request->id)->whereUserId($request->customerId)
+        $orderDetail = ProductOrder::whereUserId($request->customerId)
         ->whereRegionName($request->region)->first();
         $productId=$request->id;
         // $orderDetail = ProductOrder::whereDate('created_at',$request->id)->get();
@@ -170,11 +166,10 @@ class HomeController extends Controller
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
         ->where('assign_groups.user_id',$request->customerId)
         ->select('assign_groups.assign_group_id as groupId')
-        ->get()->map(function($value) use ($productId){
+        ->get()->map(function($value) {
             $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                 ->join('products','products.id','services.product_id')
                 ->select('products.*')
-                 ->where('products.id',$productId)
                 ->get();
             return $p;
         });

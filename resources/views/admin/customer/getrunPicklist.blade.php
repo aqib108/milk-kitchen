@@ -91,7 +91,7 @@
                   
                         <div class="row">
 
-                            @if($customer['assign_driver'] != false)
+                            <!-- @if($customer['assign_driver'] != false)
                             <div class="col-md-4" style="margin-bottom: 23px;">
 
                             </div>
@@ -99,7 +99,7 @@
                             <div class="col-md-4" style="margin-bottom: 23px;">
                                 <input type="checkbox" class="form-check-input abcd customer-{{$customer['user_id']}}" data-target="customer-{{$customer['user_id']}}" onclick="checkBox('{{$customer['user_id']}}');" name="customer[]" value="{{$customer['user_id']}}">
                             </div>
-                            @endif
+                            @endif -->
                             <div class="col-md-4" style="text-align: center;">
                                 {{$customer['userName']}}
                             </div>
@@ -108,11 +108,12 @@
                     <td>{{$customer['userAddress']}}</td>
                     <td>{{$customer['userRegion']}}</td>
                     <td>{{$customer['qty']}}</td>
-                    @if($customer['assign_driver'] != false)
+                    <td>{{$customer['assign_driver']}}</td>
+                    <!-- @if($customer['assign_driver'] != false)
                     <td>{{$customer['assign_driver']}}</td>
                     @else
                     <td>-- --</td>
-                    @endif
+                    @endif -->
                 </tr>
                 @endif
                
@@ -141,14 +142,14 @@
     </div>
 </div>
 <script>
-    function checkBox(customer_id) {
-        var customer_id =
-            $("input[name='customer[]']:checked").map(function() {
-                return $(this).val();
-            }).get();
-        $("#assigned_driver_id").removeAttr('disabled');
+    // function checkBox(customer_id) {
+    //     var customer_id =
+    //         $("input[name='customer[]']:checked").map(function() {
+    //             return $(this).val();
+    //         }).get();
+    //     $("#assigned_driver_id").removeAttr('disabled');
 
-    }
+    // }
 
     function assignByDriver(driver_id) {
         var customer_id =

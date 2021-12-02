@@ -15,53 +15,41 @@
                 <thead>
                     <tr>
                         <th class="table-th-wrapper" scope="col">Week</th>
-                        <th class="table-th-wrapper" scope="col">Product Name</th>
                         <th class="table-th-wrapper" scope="col">Statement Value</th>
                         <th class="table-th-wrapper" scope="col">Statement</th>
                         <th class="table-th-wrapper" scope="col">Delivery Details</th>
                     </tr>
                 </thead>
                 <tbody class="week-container-tbl">
-                    @if($orders)
-                        @foreach ($orders as $key=>$value)
-                                @if(!empty($value['productscount']))
-                                @foreach ($value['productscount'] as $key => $value1) 
-                                    @php 
-                                    $date = Carbon\Carbon::parse($key);
-                                   $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
-                                    $end = $date->endOfWeek()->format('Y-m-d');
-                                    $start1 = $date->startOfWeek()->format('d/m'); // 2016-10-17 00:00:00.000000
-                                    $end1 = $date->endOfWeek()->format('d/m');
-                                    @endphp
+                    @php $arr=array(); @endphp
+                    @if($resultant)
+                        @foreach ($resultant as $key=>$value)
+                            @if(!in_array($value['start'],$arr)) 
                             <tr>
+                                @php array_push($arr,$value['start']); @endphp
                                 <td class="table-td-wrapper" scope="row">
 
-                                {{ $start1}} - {{$end1}} 
-                                </td>
-                                <td>
-                                    {{$value->name}}
+                                {{ $value['start']}} - {{$value['end']}} 
                                 </td>
         
                                 <td>
                                     @php
-                                        $price = 0;
-                                    
-                                        $price=$value1->sum('quantity')* $value->price;
-                                      
-                                        echo '$'.$price;
+                                        $price=$value['statementPrice'] + ($value['statementPrice'] * 15) /100;
+                                           $totalprice= $price - ($price/ 100) * 10 ;
+                                        echo '$'.$totalprice;
                                     @endphp
                                 </td>
                                 <td>
-                                    <a href="{{route('customer.week-statement',['id'=> $value->id,'start'=>$start,'end'=>$end,'region'=>$value1->first()->region_name])}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.week-statement',['id'=>$customer->id,'start'=>$value['start'],'end'=>$value['end'],'region'=>$value['region']])}}" class="view_statements">View</a>
                                 </td> 
                                 <td>
-                                    <a href="javascript:;" class="view_delivery_detail" data-id="{{$value->id}}" data-region="{{$value1->first()->region_name}}" data-startDate="{{$start}}"
-                                    data-endDate="{{$end}}" >View</a>
+                                    <a href="javascript:;" class="view_delivery_detail" data-region="{{$value['region']}}" data-startDate="{{$value['start']}}"
+                                    data-endDate="{{$value['end']}}" >View</a>
                                 </td> 
                             </tr>
-                            @endforeach  
                             @endif
-                        @endforeach
+                            @endforeach  
+                           
                     @else
                         <tr>
                             <td class="alert alert-danger" colspan="4" role="alert">
@@ -91,7 +79,6 @@
          var customerId= `<?php echo $customer->id; ?>`;
         $(document).ready(function(){
             $('body').on('click','.view_delivery_detail',function(){
-                let id = $(this).attr('data-id');
                 let region = $(this).attr('data-region');
                 let start = $(this).attr('data-startDate');
                 let  end = $(this).attr('data-endDate');
@@ -101,7 +88,6 @@
                     url: "{{ route('customer.deliveryDetails') }}",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
-                        'id': id,
                          'region':region,
                         'customerId':customerId,
                           'start' : start,
