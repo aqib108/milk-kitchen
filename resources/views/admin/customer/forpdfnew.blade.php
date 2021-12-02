@@ -8,41 +8,22 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Statement Pdf</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
     <link href="http://www.milkkitchen.leadconcept.info/public/pdf.css" rel="stylesheet">
     <link rel="stylesheet" href="http://www.milkkitchen.leadconcept.info/public/admin-panel/customer-view/css/font-awesome.min.css" />
     
 </head>
 <body>
-    <section style="background-color: #757170; padding: 6px 0; height: 50px !important;">
-        <div class="">
-            <div class="flex-wraper" style="display:flex; ">
-                <div>
-                    <img src="data:image/png;base64,{{ $image ?? '' }}" style="width: 200px; height:50px;" class="img-fluid" alt="">
-                </div>
-                <div>
-                    <h2 class="heading-one-banner" style="margin: 0px; margin-top: 16px; font-size: 20px; color: #ffffff;font-weight: 700;font-family: 'Roboto-Medium';text-align: center;text-transform: uppercase;">FOOD SERVICE PORTAL</h2>
-                </div>
-                
-            </div>
 
-
-        </div>
-    </section>
-    <section  style="padding:0px !important;">
-        <div class="container">
+  
+        <div class="container-fluid">
             <div>
                 <div class="text-center">
-                    <h2 style=" font-size: 22px;
-                    color: #010101;
-                    padding: 10px 0;
-                    margin: 0px;    
-                    font-weight: 700;
-                    font-family: 'Roboto-Bold';
-                    text-align: center;">INVOICE / STATEMENT</h2>
+                    <h2 class="heading-wrapper">STATEMENT</h2>
                 </div>
-                <div>
+                <div class="___class_+?10___">
                     <div class="form-container pt-4">
-                    <div class="row">
+                        <div class="row">
                             <div class="col-lg-6 border-riht-clr">
                                 <div>
                                     <h2 class="heading-inner-top">
@@ -168,104 +149,125 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                         
+                        <!-- <div class="row mb-40-wrapper">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="" class="label-wrapper-custm">Delivery Notes:</label>
+                                    <div class="box1">
+                                        <span>@isset($customer[0]->delivery_notes){{ $customer[0]->delivery_notes }}@endisset</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
                 </div>
             </div>
             <div>
                 <div>
                     <h2 class="heading-tbl">Related Deliveries</h2>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0 w-100" style="width:100%;">
+                <div class="table-responsive" style="overflow: hidden;">
+                    <table class="table table-bordered mb-0">
                         <thead>
                             <tr>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Product Name</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Monday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Tuesday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Wednesday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Thursday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Friday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Saturday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Sunday</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Total Ctns</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Price</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Discount</th>
-                                <th style="background-color: #94d60a; font-size: 11px; color: #ffffff; font-weight: 500; font-family: 'Roboto-Medium'; text-align:center !important; padding: 5px 6px;" scope="col">Extention</th>
+                                <th class="table-th-wrapper" scope="col">Product Name</th>
+                                <th class="table-th-wrapper" scope="col">Monday</th>
+                                <th class="table-th-wrapper" scope="col">Tuesday</th>
+                                <th class="table-th-wrapper" scope="col">Wednesday</th>
+                                <th class="table-th-wrapper" scope="col">Thursday</th>
+                                <th class="table-th-wrapper" scope="col">Friday</th>
+                                <th class="table-th-wrapper" scope="col">Saturday</th>
+                                <th class="table-th-wrapper" scope="col">Sunday</th>
+                                <th class="table-th-wrapper" scope="col">Total Ctns</th>
+                                <th class="table-th-wrapper" scope="col">Price</th>
+                                <th class="table-th-wrapper" scope="col">Discount</th>
+                                <th class="table-th-wrapper" scope="col">Extention</th>
                             </tr>
                         </thead>
                         <tbody class="week-container-tbl">
-                            @php
-                                $subtotal=0;
-                            @endphp
                             @foreach ($products as $product)
-                                 
                                 <tr class="week_days" data-p-id="{{$product['id']}}">
-                                    <td class="table-td-wrapper" scope="row">{{$product['name']}}</td>
-                                    @php $total=0;  $extention=0; @endphp
+                                    <td class="table-td-wrapper" scope="row" style="background-color: white !important;">
+                                        {{$product['name']}}
+                                    </td>
                                     @foreach ($weekDays as $item)
-                                        @php $qnty=0; $price=$product['price'];
-                                         $discount=($price/ 100) * 10;@endphp
-                                        @if($item->productOrder->isNotEmpty())
-                                            @foreach ($item->productOrder as $order)
-                                                @if($order->product_id == $product['id'] && $order->user_id == $customerID)
-                                                    @php
-                                                        $total += $order->quantity;
-                                                        $qnty = $order->quantity;
-                                                       
-                                                    @endphp 
-                                                @endif
-                                            @endforeach
-                                           
+
+                                        @php
+                                            $qnty = 0;
+                                            if ($item->productOrder->isNotEmpty()){
+                                                foreach ($item->productOrder as $order){
+                                                    if($order->user_id == $customerID){
+                                                        if($order->product_id == $product['id']){
+                                                            $qnty = $order->quantity;
+                                                        }
+                                                    }   
+                                                }
+                                            }
+                                        @endphp
+                                        @if($qnty != null)
+                                            <td style="background-color: white !important;">
+                                                {{ $qnty }}
+                                            </td>
+                                        @else
+                                            <td disabled style="background-color: aliceblue !important;">
+                                               0 
+                                            </td>
                                         @endif
-                                        <td>
-                                            {{$qnty}}
-                                        </td>
-                                    @endforeach 
-                                    <td>
-                                        {{$total}}
+                                    @endforeach
+                                    <td style="background-color: white !important;">
+                                        @php $total=0; @endphp
+                                        @foreach ($weekDays as $item)
+                                            @if ($item->productOrder->isNotEmpty())
+                                                @foreach ($item->productOrder as $order)
+                                                    @if($order->user_id == $customerID)
+                                                        @if($order->product_id == $product['id'])
+                                                            @php $total += $order->quantity; @endphp                                                       
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            @endif 
+                                        @endforeach
+                                        {{ $total }}
                                     </td>
-                                    <td>
-                                        {{ '$' . $price }}
+                                    <td style="background-color: white !important;">
+                                        {{ '$' . number_format($product['price'],2) }}
                                     </td>
-                                    <td>
-                                        {{ '$' . $discount }}
+                                    <td style="background-color: white !important;">
+                                        {{ '$' . ($product['price']/ 100) * 10 }}
                                     </td>
-                                    <td>
-                                    @php 
-                                        $extention = ($price  - (($price / 100) * 10)) * $total;
-                                        $subtotal  = $subtotal + $extention @endphp
-                                        {{ '$' . $extention}}
-                                        
+                                    <td style="background-color: white !important;">
+                                        {{ '$' . number_format(($product['price']  - (($product['price'] / 100) * 10)) * $total,2)}}
+                                        <input type="hidden" class="extention" value="{{($product['price']  - (($product['price'] / 100) * 10)) * $total}}">
                                     </td>
                                 </tr> 
                             @endforeach
                             <tr>
-                                <td class="custom-colspan" colspan="8"></td>
-                                <td colspan="3" class="text-left-wrapper">Sub Total</td>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper">Sub Total</td>
                                 <td class="text-right-wrapper">
-                                    {{$subtotal}}
+                                    <input style="border:none;background:none;" class="text-center subtotal"
+                                        disabled="disabled" readonly>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="custom-colspan" colspan="8"></td>
-                                <td colspan="3" class="text-left-wrapper">Freight</td>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper">Freight</td>
                                 <td class="text-right-wrapper">$ -</td>
                             </tr>
                             <tr>
-                                <td class="custom-colspan" colspan="8"></td>
-                                <td colspan="3" class="text-left-wrapper">GST 15%</td>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper">GST 15%</td>
                                 <td class="text-right-wrapper gst">
-                                    {{ ($subtotal * 15) /100 }}
-                                    @php
-                                        $gst = ($subtotal * 15) /100;
-                                    @endphp
+                                    <input style="border:none;background:none;" class="text-center gst"
+                                        disabled="disabled" readonly>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="custom-colspan" colspan="8"></td>
-                                <td colspan="3" class="text-left-wrapper grand-total"> Total</td>
+                                <td class="custom-colspan" colspan="10"></td>
+                                <td class="text-left-wrapper grand-total"> Total</td>
                                 <td class="text-right-wrapper grand-total-value">
-                                    {{$subtotal+$gst}}
+                                    <input style="border:none;background:none;" class="text-center totalprice"
+                                        disabled="disabled" readonly>
                                 </td>
                             </tr>
                         </tbody>
@@ -273,28 +275,22 @@
                 </div>
             </div>
         </div>
-        <br>
-    </section>
-    <table style=" background-color: #757170;  padding:0; height:40px; width:100%;">
-        <tr>
-            <td>
-                <div style="padding:5px;">
-                    <p class="m-0" style="font-size: 12px;  color: #ffffff; margin: 0px !important;  font-weight: 400; font-family: 'Roboto-Regular'; margin: 0px">© Copyright 2021 Milk Kitchen Ltd. All rights reserved </p>
-                </div>
-            </td>
-            <td>
-                <div style="text-align: right; padding:5px;">
-                    <p class="m-0" style="  font-size: 12px;  color: #ffffff; margin: 0px !important; font-weight: 400; font-family: 'Roboto-Regular'; margin: 0px">Designed & Developed by <a href="https://leadconcept.com/"
-                       style="font-size: 12px;  color: #ffffff; margin: 0px !important; font-weight: 400; font-family: 'Roboto-Regular';"     target="_blank">LEADconcept</a></p>
-                </div>
-            </td>
-        </tr>
-    </table>
-    <style>
-        .main-container{
-            width: 50%;
-            float: left !important;
-        }
-    </style>
+
+
+    <script>
+            
+        $(document).ready(function() {
+            var value = 0;
+            $(".extention").each(function(){
+                value += +$(this).val();
+            });
+
+            $('.subtotal').val('$' + value.toFixed(2));
+            var gst = (value * 15) /100;
+            var total =parseFloat(value)+parseFloat(gst);
+            $('.gst').val('$' + gst.toFixed(2));
+            $('.totalprice').val('$' + total.toFixed(2));
+        });
+    </script>
 </body>
 </html>

@@ -48,7 +48,7 @@
     </table>
     <table class="table table-bordered mb-0 weekly_standing_order">
         <tbody class="week-container-tbl"> 
-        @foreach ($products as $product) 
+      
             <tr>
                 <td style="width: 145px;"></td>
                 
@@ -58,7 +58,7 @@
                         if ($item->productOrder->isNotEmpty()){
                             foreach ($item->productOrder as $order){
                                 if($order->user_id == $customerID){
-                                    if($order->day_id == $item->id && $order->product_id == $product['id'] ){
+                                    if($order->day_id == $item->id){
                                         $id = $order->id;
                                     }
                                 }
@@ -78,7 +78,7 @@
                 @endforeach 
                
             </tr>
-            @endforeach
+        
         </tbody>
     </table>  
 </div>

@@ -13,7 +13,7 @@
                     <h4 ><b>STATEMENT</b></h4>  
                 </div>
                 <div class="downad" style="margin-left: 420px; font-size: 20px;">
-                    <a href="{{route('customer.statementPdf',[$productId,$startDate,$endDate])}}">
+                    <a href="{{route('customer.statementPdf',[$customerID,$startDate,$endDate,$region])}}">
                         <i class="fas fa-download" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -24,9 +24,6 @@
     <section class="content">
         <div class="container-fluid">
             <div>
-                <div class="text-center">
-                    <h2 class="heading-wrapper">STATEMENT</h2>
-                </div>
                 <div class="___class_+?10___">
                     <div class="form-container pt-4">
                         <div class="row">
