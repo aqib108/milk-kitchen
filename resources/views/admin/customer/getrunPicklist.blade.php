@@ -1,5 +1,7 @@
 <div class="col-lg-12">
-    <h2 class="heading-tbl">Warehouses Picklist</h2>
+    <h2 class="heading-tbl">Warehouses Picklist</h2><h2 class="heading-tbl text-right">
+    <a href="{{ route('batchPickists',['id'=>$warehouse->id]) }}"> Print Picklists</a>    
+    </h2>
 </div> <br>
 
 <div class="row">

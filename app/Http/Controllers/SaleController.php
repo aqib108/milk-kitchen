@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Yajra\DataTables\DataTables;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\ProductOrder;
+use App\Models\User;
+use File;
+use Illuminate\Support\Carbon;
+use Response;
 use Auth;
 
 class SaleController extends Controller
@@ -16,30 +18,131 @@ class SaleController extends Controller
         $this->middleware('auth');
     }
 
-    public function reoccurring(Request $request)
+    public function weekelySales(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Product::all(); 
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('status', function(Product $data){
 
-                    if($data->status == 1){
-                        $status = '<span class="badge badge-success">Active</span>';
+        $products = Product::all();
+        $orders = $products->map(function ($p) {
+            $p->productscount = ProductOrder::where('product_id', $p->id)->latest()->get()->groupBy(function ($date) {
+                return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
+            });
+            return $p;
+        });
+        $array1 = array();
+        $array2 = array();
+        $resultant = array();
+        $statementvalue = 0;
+        foreach ($orders as $key => $value) {
+            $productPrice = $value->price;
+            foreach ($value->productscount as $key => $value1) {
+                $statementPrice=0;
+                $date = Carbon::parse($key);
+                $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
+                $end = $date->endOfWeek()->format('Y-m-d');
+                $regionName = $value1->first()->region_name;
+                if (!in_array($key, $array1)) {
+                    array_push($array1, $key);
+                    $statementvalue = $value1->sum('quantity') * $productPrice;
+                    $array2 = [
+                        'start' => $start,
+                        'end'   => $end,
+                        'region' => $regionName,
+                        'statementPrice' => $statementvalue,
+                    ];
+                    array_push($resultant, $array2);
+                } else {
+
+                    foreach ($resultant as $key => $value) {
+                        if ($value['start'] == $start && $value['end'] == $end) {
+                            $resultant[$key]['statementPrice'] = $value['statementPrice'] + $value1->sum('quantity') * $productPrice;
+                        }
                     }
-                    else{
-                        $status = '<span class="badge badge-danger">Suspended</span>';
-                    }
-                    return $status;
-                })
-                ->addColumn('action', function(Product $data){
-                    $btn = '<a onclick="" href="javascript:void(0)" class="btn btn-sm btn-danger">Delete</a>';
-                    $btn2 = '<a href="javascript::void(0);" class="btn btn-sm btn-primary" data-id="'.$data->id.'">Edit</a>';
-                    return $btn.' '.$btn2;
-                })
-                ->rawColumns(['action','status'])
-                ->make(true);
+                }
+            }
         }
-        return view('admin.sale.reoccurring');
+
+
+        return view('admin.sale.directDebiting', compact('resultant'));
+    }
+    public function getCsv($start,$end){
+        
+      $startDate=$start;
+      $endDate=$end;
+        $products = Product::all();
+        $orders = $products->map(function ($p) use ($start,$end) {
+            $p->productscount = ProductOrder::whereDate('updated_at','>=',$start)->whereDate('updated_at','<=',$end)->where('product_id', $p->id)->get();
+            return $p;
+        });
+        $array1 = array();
+        $array2 = array();
+        $resultant = array();
+        $statementvalue = 0;
+        foreach ($orders as $key => $value) {
+            $productPrice = $value->price;
+            foreach ($value->productscount as $key => $value1) {
+                $statementPrice=0;
+                $regionName = $value1->region_name;
+                if (!in_array($value1->user_id, $array1)) {
+                
+                    array_push($array1, $value1->user_id);
+                    $statementvalue = $value1->quantity * $productPrice;
+                    $array2 = [
+                        'start' => $startDate,
+                        'end'   => $endDate,
+                        'user_id' => $value1->user_id,
+                        'name' =>User::whereId($value1->user_id)->first()->name,
+                        'region' => $regionName,
+                        'statementPrice' => $statementvalue,
+                    ];
+                    array_push($resultant, $array2);
+                } else {
+                    $statementPrice = $value1->quantity * $productPrice;
+                    foreach ($resultant as $key => $value) {
+                        if ($value['user_id'] == $value1->user_id) {
+                            $resultant[$key]['statementPrice'] = $value['statementPrice'] + $statementPrice;
+                        }
+                    }
+                }
+            }
+        }
+        // these are the headers for the csv file.
+        $headers = array(
+            'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-Disposition' => 'attachment; filename=download.csv',
+            'Expires' => '0',
+            'Pragma' => 'public',
+        );
+
+
+        //I am storing the csv file in public >> files folder. So that why I am creating files folder
+        if (!File::exists(public_path()."/files")) {
+            File::makeDirectory(public_path() . "/files");
+        }
+
+        //creating the download file
+        $filename =  public_path("files/download.csv");
+        $handle = fopen($filename, 'w');
+
+        //adding the first row
+        fputcsv($handle, [
+            "Name",
+            "statementPrice",
+            'start',
+            'end'
+        ]);
+
+        //adding the data from the array
+        foreach ($resultant as $each_user) {
+            fputcsv($handle, [
+                $each_user['name'],
+                $each_user['statementPrice'],
+            ]);
+
+        }
+        fclose($handle);
+
+        //download command
+        return Response::download($filename, "download.csv", $headers);
     }
 }

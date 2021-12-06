@@ -16,6 +16,7 @@
                     <tr>
                         <th class="table-th-wrapper" scope="col">Week</th>
                         <th class="table-th-wrapper" scope="col">Statement Value</th>
+                        <th class="table-th-wrapper" scope="col">Balance Owning</th>
                         <th class="table-th-wrapper" scope="col">Statement</th>
                         <th class="table-th-wrapper" scope="col">Delivery Details</th>
                     </tr>
@@ -39,6 +40,9 @@
                                         echo '$'.$totalprice;
                                     @endphp
                                 </td>
+                                <td>
+                                    <a href="{{route('customer.financial-statement',['id'=>$customer->id,'start'=>$value['start'],'end'=>$value['end'],'region'=>$value['region']])}}" class="view_statements">{{$totalprice}}</a>
+                                </td> 
                                 <td>
                                     <a href="{{route('customer.week-statement',['id'=>$customer->id,'start'=>$value['start'],'end'=>$value['end'],'region'=>$value['region']])}}" class="view_statements">View</a>
                                 </td> 
@@ -73,11 +77,21 @@
 
         </div>
     </div>
+    <div class="container financials" style="display: none;margin-bottom: 50px;">
+        <div>
+            <div class="text-center">
+                <h2 class="heading-wrapper">Statement Financial</h2>
+            </div>
+        </div>
+        <div class="financials_details">
+
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script>
          var customerId= `<?php echo $customer->id; ?>`;
-        $(document).ready(function(){
+          $(document).ready(function(){
             $('body').on('click','.view_delivery_detail',function(){
                 let region = $(this).attr('data-region');
                 let start = $(this).attr('data-startDate');
@@ -94,14 +108,11 @@
                           'end'  : end
                     },
                     success: function(response) {
-                        console.log(response);
                         $('body').find('.specfic_deliveries .table_details').html(response.html);
                         $('.specfic_deliveries').fadeIn('slow');
                     }
                 });
             });
-
-            
         });
     </script>
 

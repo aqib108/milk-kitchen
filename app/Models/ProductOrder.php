@@ -65,7 +65,7 @@ class ProductOrder extends Model
     // }
     public function scopeWeekDetail($query,$start,$end)
     {
-        return $query->whereBetween('updated_at',array($start,$end))->get();
+        return $query->whereDate('updated_at','>=',$start)->whereDate('updated_at','<=',$end)->get();
     }
     
 }

@@ -32,7 +32,7 @@ class CustomerController extends Controller
         $this->middleware('auth');
     }
     
-    //Email validation's
+    //Email  validation's Of Users in Admin
     public function checkEmail(Request $request)
     {
         $input = $request->only(['email']);
@@ -58,7 +58,7 @@ class CustomerController extends Controller
         }
     }
 
-   //Display all customers
+   //Display all In Admin Panel customers
     public function customers(Request $request)
     {
         if ($request->ajax()) {
@@ -101,18 +101,9 @@ class CustomerController extends Controller
         return view('admin.customer.customers');
     }
 
+    //In Admin Panel View Individual customers Detail
     public function viewCustomer($id)
     {
-        // $customer= User::whereId(2)->first();
-        // $driver= User::whereId(4)->first();
-        // $products = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
-        // ->where(['product_orders.user_id' => 2])
-        // ->select('products.name as name','products.description as desc','products.price as price', DB::raw('SUM(product_orders.quantity) as carton'))
-        // ->groupBy('name','desc','price')
-        // ->get();
-        // return view('mail.customerDeliveryMail',compact('products','customer','driver'));
-
-
         $date=Carbon::now();
         $today1=$date->dayOfWeek;
         $customerID = $id;
@@ -148,8 +139,8 @@ class CustomerController extends Controller
 
             $products = array();
             $ark = array(); 
-                    foreach ($value as  $value1) {
-                       
+                    foreach ($value as  $value1) 
+                    {
                         if(!in_array($value1['id'],$ark))
                         {
                             array_push($ark,$value1['id']);
@@ -214,29 +205,18 @@ class CustomerController extends Controller
                             array_push($resultant,$array2);
                     }
                     else
-                    {
-                        $statementPrice=$statementvalue+$value1->sum('quantity')*$productPrice;
-                        
-                          $array1= [
-                            'start' => $start,
-                            'end'   => $end,
-                            'region' =>$regionName,
-                            'statementPrice' => $statementPrice,
-                                  ];
-                                
-                                
+                    {  
                              foreach ($resultant as $key => $value) {
-                                 if($value['start'] == $start || $value['end'] == $end)
+                                 if($value['start'] == $start && $value['end'] == $end)
                                  {
-                                   $resultant[$key]=$array1;
+                                   $resultant[$key]['statementPrice']=$value['statementPrice']+$value1->sum('quantity')*$productPrice;
                                  }
-                        }
-                    }         
+                             }
+                         }         
 
                    }
                }
-        //   dd("dkkd");
-            //  dd($orders);
+      
 
             //    $orders1 = ProductOrder::with('product')->where(['product_id' =>$id,'region_name'=>$region ])->orderBy('updated_at','desc')->get()->groupBy(function($date) {
             //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
@@ -535,7 +515,9 @@ class CustomerController extends Controller
         $productOrderId=$id;
         if($id == 0){
             return redirect()->back()->with('success','No Record Found To This Delivery!.');
-        }else{
+        }
+        else
+        {
             $orderDetail = ProductOrder::find($id);
             $productId= $orderDetail->id;
             if ($orderDetail == NULL) {
@@ -544,9 +526,9 @@ class CustomerController extends Controller
             $customerID = $orderDetail->user_id;
             $customer = CustomerDetail::where('user_id',$customerID)->get();
             $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
-        ->where('assign_groups.user_id',$customerId)
-        ->select('assign_groups.assign_group_id as groupId')
-        ->get()->map(function($value){
+                ->where('assign_groups.user_id',$customerId)
+                ->select('assign_groups.assign_group_id as groupId')
+                ->get()->map(function($value){
             $p=Service::where('services.group_id',$value->groupId)->whereSaleable(1)
                 ->join('products','products.id','services.product_id')
                 ->select('products.*')
@@ -666,7 +648,5 @@ class CustomerController extends Controller
                 $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true,'isPhpEnabled'=>true,'isRemoteEnabled' => true])
                     ->loadView('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'))->setPaper('a4', 'porttrait');
                     return $pdf->download('statement.pdf');
-            }
-    
-
-}
+        }
+    }

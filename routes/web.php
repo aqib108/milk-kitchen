@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/masterPicklist', 'AdminController@masterPicklist')->name('masterPicklist');
         Route::match(['GET','POST'],'/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
         Route::get('/runPicklist','AdminController@runPicklist')->name('runPicklist');  
+        Route::get('/batchPickists/{id?}','AdminController@batchPickists')->name('batchPickists');  
         Route::get('/getWarehouses','UserManagementController@getWarehouses')->name('getWarehouses');  
         Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');
         Route::any('/select-customer', 'AdminController@selectCustomer')->name('selectCustomer');  
@@ -105,6 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
             Route::get('/final-report/{id}/{customerId}/{startDate?}/{endDate?}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}/{start}/{end}/{region?}','CustomerController@pastOrderStatement')->name('customer.week-statement');
+            Route::get('/financial-statement/{id}/{start}/{end}/{region?}','CustomerController@financialStatement')->name('customer.financial-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
             Route::get('/statement2/pdf/{id}/{start}/{end}/{region}', 'CustomerController@statementPrint')->name('customer.statementPdf');
            
@@ -162,8 +164,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','OrderController@index')->name('order.index');
             Route::get('/detail/{id}','OrderController@show')->name('order.detail');
         });
-        Route::group(['prefix' => 'sale'], function (){
-            Route::get('/','SaleController@reoccurring')->name('sale.index');
+        Route::group(['prefix' => 'weekelySales'], function (){
+            Route::get('/','SaleController@weekelySales')->name('sale.index');
+            Route::get('/get-csv/{start}/{end}','SaleController@getCsv')->name('sale.csv');
+            Route::get('/get-import-txt','SaleController@getCsv')->name('sale.import-txt');
         });
         Route::group(['prefix' => 'driver'], function (){
             Route::get('/printDeliveryDocket/{id}','NotificationController@printDeliveryDocket')->name('printDeliveryDocket');
