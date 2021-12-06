@@ -126,7 +126,8 @@ class AdminController extends Controller
             $data = User::role('Driver')->where('status',1)
             ->join('assign_warehouses','assign_warehouses.user_id','users.id')
             ->where('warehouse_id',$warehouse->id)
-             ->select('users.name as driverName','users.id as id')->get();
+             ->select('users.name as driverName','users.id as id')
+             ->get();
          $data=[];
             $products = CustomerDetail::join('zones', 'zones.name', 'customer_details.delivery_zone')
             ->join('regions', 'regions.name', 'customer_details.delivery_region')
@@ -150,7 +151,6 @@ class AdminController extends Controller
             $ark = array();    
             foreach($products as $p)
             {   
-
                 $quantity = 0;
                 $flag=0;
                 if(isset($p['user_id']))
@@ -164,8 +164,6 @@ class AdminController extends Controller
                     $userRegion = $userDetails->delivery_region;
                     $quantity = $quantity+$p['quantity'];    
                 }
-         
-            
                 if(isset($user_id))
                 { 
                     if(!in_array($userName,$ark))
@@ -188,6 +186,32 @@ class AdminController extends Controller
         return response()->json([
             'html' => view('admin.customer.getrunPicklist', compact('current_day','zones', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
+    }
+    public function batchPickists($id)
+    {
+        $day=date('N', strtotime( date('Y-m-d')));
+        $product = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
+            ->where('regions.warehouse_id', $id)
+            ->select('customer_details.user_id')
+            ->get()->map(function ($value) use($day){
+                    $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                        ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
+                        // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+                        // ->groupBy('name')
+                        ->select('products.name as name', 'product_orders.quantity as carton','product_orders.user_id as userId')
+                        ->get()->toArray();  
+                return $p;
+            });
+            $arr1=array();
+            $arr2=array();
+            $arr3=array();
+          foreach ($product as $key => $pro) {
+               if(isset($pro))
+               {
+                 $customer=CustomerDetail::whereUserId($pro['user_id'])->get();
+                   return view('finalreport',compact('customer','$pro')) ; 
+               }
+          }
     }
 
     function searchdriver($zoneId){
