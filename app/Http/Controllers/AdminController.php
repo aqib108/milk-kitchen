@@ -15,6 +15,7 @@ use App\Models\CustomerDetail;
 use App\Models\Zone;
 use Validator;
 use DB;
+use PDF;
 use App\Models\ProductOrder;
 use App\Models\AssignDriverOrder;
 use App\Models\AssignDriver;
@@ -23,9 +24,11 @@ use App\Models\Region;
 use Carbon\Carbon;
 use App\Models\Setting;
 use Spatie\Permission\Traits\HasRoles;
+
 class AdminController extends Controller
 {
-    protected $userRepo; use HasRoles;
+    protected $userRepo;
+    use HasRoles;
     /**
      * Create a new controller instance.
      *
@@ -118,110 +121,112 @@ class AdminController extends Controller
     {
         $date = Carbon::now();
         $current_day = Carbon::Today()->format('l');
+        $currentday = Carbon::Today()->format('N');
         $dayID = WeekDay::where('name', $current_day)->pluck('id');
         if (isset(request()->id))
             $warehouse = Warehouse::whereId(request()->id)->first();
         else
             $warehouse = Warehouse::first();
-            $data = User::role('Driver')->where('status',1)
-            ->join('assign_warehouses','assign_warehouses.user_id','users.id')
-            ->where('warehouse_id',$warehouse->id)
-             ->select('users.name as driverName','users.id as id')
-             ->get();
-         $data=[];
-            $products = CustomerDetail::join('zones', 'zones.name', 'customer_details.delivery_zone')
+        // $data = User::role('Driver')->where('status', 1)
+        //     ->join('assign_warehouses', 'assign_warehouses.user_id', 'users.id')
+        //     ->where('warehouse_id', $warehouse->id)
+        //     ->select('users.name as driverName', 'users.id as id')
+        //     ->get();
+        $data = [];
+        $products = CustomerDetail::join('zones', 'zones.name', 'customer_details.delivery_zone')
             ->join('regions', 'regions.name', 'customer_details.delivery_region')
-                ->where(['regions.warehouse_id'=>$warehouse->id])
-                ->select('customer_details.user_id','zones.name','zones.id as zoneId','regions.id')
-                ->get()->map(function ($value) use($data)  {
-                    $pr = ProductOrder::where('user_id',$value->user_id)
-                        ->get();
-                        foreach ($pr as $key => $p) {
-                            $data['quantity'] = $p->quantity;
-                            $data['user_id'] = $p->user_id;
-                            $data['zone'] =$value->name;
-                            $data['zoneId'] =$value->zoneId;
-                            $data['userName'] =$p->user->name;
-                        }                   
-                    return $data;
-                });
-        
-              $zones=Zone::whereStatus(1)->get();
-            $orders = array();  
-            $ark = array();    
-            foreach($products as $p)
-            {   
-                $quantity = 0;
-                $flag=0;
-                if(isset($p['user_id']))
-                {
-                    $user_id = $p['user_id'];
-                    $userName = $p['userName'];
-                    $userZone = $p['zone'];
-                    $zoneId = $p['zoneId'];
-                    $userDetails = CustomerDetail::where('user_id',$p['user_id'])->first(); 
-                    $userAddress = $userDetails->delivery_address_1;
-                    $userRegion = $userDetails->delivery_region;
-                    $quantity = $quantity+$p['quantity'];    
+            ->where(['regions.warehouse_id' => $warehouse->id])
+            ->select('customer_details.user_id', 'zones.name', 'zones.id as zoneId', 'regions.id')
+            ->get()->map(function ($value) use ($data,$currentday) {
+            
+                $pr = ProductOrder::where('user_id', $value->user_id)->where('day_id',$currentday)
+                    ->get();
+                foreach ($pr as $key => $p) {
+                    $data['quantity'] = $pr->sum('quantity');
+                    $data['user_id'] = $p->user_id;
+                    $data['zone'] = $value->name;
+                    $data['zoneId'] = $value->zoneId;
+                    $data['userName'] = $p->user->name;
                 }
-                if(isset($user_id))
-                { 
-                    if(!in_array($userName,$ark))
-                    { 
-                        array_push($ark,$userName);
-                        $orders[] = array(
-                            'user_id' => $user_id,
-                            'userName'=>$userName,
-                            'userAddress' => $userAddress,
-                            'userRegion' => $userRegion,
-                            'userZone' =>   $userZone,
-                            'qty'=>$quantity,
-                            'assign_driver'=>$this->searchdriver($zoneId)
-                        );
-                       
-                    }
-               
-                }                     
-            } 
+                return $data;
+            });
+
+        $zones = Zone::whereStatus(1)->get();
+        $orders = array();
+        $ark = array();
+        foreach ($products as $p) {
+            $quantity = 0;
+            $flag = 0;
+            if (isset($p['user_id'])) {
+                $user_id = $p['user_id'];
+                $userName = $p['userName'];
+                $userZone = $p['zone'];
+                $zoneId = $p['zoneId'];
+                $userDetails = CustomerDetail::where('user_id', $p['user_id'])->first();
+                $userAddress = $userDetails->delivery_address_1;
+                $userRegion = $userDetails->delivery_region;
+                $quantity = $quantity + $p['quantity'];
+            }
+            if (isset($user_id)) {
+                if (!in_array($userName, $ark)) {
+                    array_push($ark, $userName);
+                    $orders[] = array(
+                        'user_id' => $user_id,
+                        'userName' => $userName,
+                        'userAddress' => $userAddress,
+                        'userRegion' => $userRegion,
+                        'userZone' =>   $userZone,
+                        'qty' => $quantity,
+                        'assign_driver' => $this->searchdriver($zoneId)
+                    );
+                }
+            }
+        }
         return response()->json([
-            'html' => view('admin.customer.getrunPicklist', compact('current_day','zones', 'date', 'orders', 'warehouse','data'))->render(), 200, ['Content-Type' => 'application/json']
+            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'zones', 'date', 'orders', 'warehouse', 'data'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
     }
     public function batchPickists($id)
     {
-        $day=date('N', strtotime( date('Y-m-d')));
-        $product = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
+        $day = date('N', strtotime(date('Y-m-d')));
+        $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
             ->where('regions.warehouse_id', $id)
             ->select('customer_details.user_id')
-            ->get()->map(function ($value) use($day){
-                    $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
-                        ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
-                        // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
-                        // ->groupBy('name')
-                        ->select('products.name as name', 'product_orders.quantity as carton','product_orders.user_id as userId')
-                        ->get()->toArray();  
+            ->get()->map(function ($value) use ($day) {
+                $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                    ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
+                    // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+                    // ->groupBy('name')
+                    ->select('products.name as name', 'product_orders.quantity as carton', 'product_orders.user_id as userId')
+                    ->get();
                 return $p;
             });
-            $arr1=array();
-            $arr2=array();
-            $arr3=array();
-          foreach ($product as $key => $pro) {
-               if(isset($pro))
-               {
-                 $customer=CustomerDetail::whereUserId($pro['user_id'])->get();
-                   return view('finalreport',compact('customer','$pro')) ; 
-               }
-          }
+            return view('admin.customer.forpdfnew',compact('products'));
+            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products'))->setPaper('a4', 'porttrait');
+            return  $pdf->download('statement.pdf');
+        // foreach ($product1 as $key => $products) {
+         
+        //     if (!empty($products)) {
+          
+        //         $customer = CustomerDetail::whereUserId($products[$key]['userId'])->get();
+        //         //   return view('admin.customer.forpdfnew',compact('customer','products'));
+        //         $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('customer', 'products'))->setPaper('a4', 'porttrait');
+        //          return  $pdf->download('statement.pdf');
+        //         //    return view('admin.customer.picklist',compact('customer','products')); 
+        //     }
+            
+        // }
     }
 
-    function searchdriver($zoneId){
-       
+    function searchdriver($zoneId)
+    {
+
         // $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->where('is_assign',1)->first('driver_id');
-        $assignDriver = AssignDriver::where('zone_id',$zoneId)->first();
-        if(!empty($assignDriver)){
-            $driver = User::where('id',$assignDriver->driver_id)->first();
-          
-            if(!empty($driver)){
+        $assignDriver = AssignDriver::where('zone_id', $zoneId)->first();
+        if (!empty($assignDriver)) {
+            $driver = User::where('id', $assignDriver->driver_id)->first();
+
+            if (!empty($driver)) {
                 return $driver->name;
             }
         }
@@ -231,60 +236,58 @@ class AdminController extends Controller
     public function selectCustomer(Request $request)
     {
         extract($request->all());
-     
-        if($request->has('customer_id'))
-        {
-            foreach($customer_id as $customer){
+
+        if ($request->has('customer_id')) {
+            foreach ($customer_id as $customer) {
                 $date = Carbon::now();
                 $current_time = $date->toDateTimeString();
                 $current_day = Carbon::Today()->format('l');
                 $dayID = WeekDay::where('name', $current_day)->pluck('id');
-                $todayOrder = ProductOrder::where('day_id',$dayID)->where('user_id',$customer)->get()->toArray();
+                $todayOrder = ProductOrder::where('day_id', $dayID)->where('user_id', $customer)->get()->toArray();
                 $orderID = array_column($todayOrder, 'id');
-                $order =  implode(",",$orderID);
+                $order =  implode(",", $orderID);
                 $data[] = array(
                     'customer_id' => $customer,
-                    'order_id' =>$order,
-                    'driver_id'=>$driver_id,
-                    'is_assign' =>1,
-                    'created_at'=> $current_time       
-                );  
+                    'order_id' => $order,
+                    'driver_id' => $driver_id,
+                    'is_assign' => 1,
+                    'created_at' => $current_time
+                );
             }
             $assign =  AssignDriverOrder::insert($data);
 
-            foreach($customer_id as $customer)
-            {
-                $this->generateNotification($customer,$driver_id); 
+            foreach ($customer_id as $customer) {
+                $this->generateNotification($customer, $driver_id);
             }
-            if($assign){
+            if ($assign) {
                 $data1['status'] = 200;
                 $data1['message'] = 'Driver Assign Successfully!';
-            }else{
+            } else {
                 $data1['status'] = 401;
                 $data1['message'] = 'Driver Does Not Assign!';
             }
             return response()->json($data1);
-        } 
+        }
     }
-    function generateNotification($customerID,$driverID)
+    function generateNotification($customerID, $driverID)
     {
         $now = Carbon::now();
-        $user = User::where('id',$customerID)->first();
-        $driverMessage = auth()->user()->name .' Has Assign You Delivery'. ' ' .$user->name.' '. $now->format('g:i A');
+        $user = User::where('id', $customerID)->first();
+        $driverMessage = auth()->user()->name . ' Has Assign You Delivery' . ' ' . $user->name . ' ' . $now->format('g:i A');
         $date = Carbon::now();
         $current_day = Carbon::Today()->format('l');
         $dayID = WeekDay::where('name', $current_day)->pluck('id');
-        $todayOrder = ProductOrder::where('day_id',$dayID)->where('user_id',$customerID)->get()->toArray();
+        $todayOrder = ProductOrder::where('day_id', $dayID)->where('user_id', $customerID)->get()->toArray();
         $orderID = array_column($todayOrder, 'id');
-        $order =  implode(",",$orderID);
-       
+        $order =  implode(",", $orderID);
+
         DriverNotification::create([
             'order_id' => $order,
             'driver_id' => $driverID,
-            'message' => $driverMessage, 
+            'message' => $driverMessage,
         ]);
     }
-    
+
     /**
      *****************************************************************************
      ************************** Admin Password ***********************************
@@ -300,27 +303,24 @@ class AdminController extends Controller
     }
     public function scriptSetting(Request $request)
     {
-         $result=Setting::whereName('Cutt Off Time')->first();
-        return view('admin.scriptSetting',compact('result'));
+        $result = Setting::whereName('Cutt Off Time')->first();
+        return view('admin.scriptSetting', compact('result'));
     }
     public function saveSetting(Request $request)
     {
-       
-          $setting=Setting::whereName('Cutt Off Time')->first();
-  
-          if(isset($setting))
-          {
+
+        $setting = Setting::whereName('Cutt Off Time')->first();
+
+        if (isset($setting)) {
             Setting::whereName('Cutt Off Time')->update([
                 'value' => $request->value,
-                'footer_value'=>$request->footer_value,
+                'footer_value' => $request->footer_value,
             ]);
-          }
-          else
-          {
-            Setting::create($request->all()); 
-          }
-     
-          return redirect()->back();
+        } else {
+            Setting::create($request->all());
+        }
+
+        return redirect()->back();
     }
 
     public function checkPassword(Request $request)

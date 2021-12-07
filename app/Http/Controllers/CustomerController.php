@@ -440,6 +440,7 @@ class CustomerController extends Controller
         $customer = User::find($customerID);
         
         if($validate){
+           dd() QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer->id,'productId'=>$request->product_id]));
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => $customer->id,
                 'day_id'     => $request->day_id,
@@ -645,8 +646,7 @@ class CustomerController extends Controller
 
                 $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
                 // return view('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'));    
-                $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true,'isPhpEnabled'=>true,'isRemoteEnabled' => true])
-                    ->loadView('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'))->setPaper('a4', 'porttrait');
+                $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true,'isPhpEnabled'=>true,'isRemoteEnabled' => true])->loadView('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'))->setPaper('a4', 'porttrait');
                     return $pdf->download('statement.pdf');
         }
     }
