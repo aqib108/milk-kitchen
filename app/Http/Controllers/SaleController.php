@@ -10,7 +10,7 @@ use File;
 use Illuminate\Support\Carbon;
 use Response;
 use Auth;
-
+use DB;
 class SaleController extends Controller
 {
     public function __construct()
@@ -66,13 +66,13 @@ class SaleController extends Controller
     }
     public function getCsv($start,$end){
         
-      $startDate=$start;
-      $endDate=$end;
-        $products = Product::all();
-        $orders = $products->map(function ($p) use ($start,$end) {
-            $p->productscount = ProductOrder::whereDate('updated_at','>=',$start)->whereDate('updated_at','<=',$end)->where('product_id', $p->id)->get();
-            return $p;
-        });
+        $startDate=$start;
+        $endDate=$end;
+            $products = Product::all();
+            $orders = $products->map(function ($p) use ($start,$end) {
+                $p->productscount = ProductOrder::whereDate('updated_at','>=',$start)->whereDate('updated_at','<=',$end)->where('product_id', $p->id)->get();
+                return $p;
+            });
         $array1 = array();
         $array2 = array();
         $resultant = array();
@@ -144,5 +144,54 @@ class SaleController extends Controller
 
         //download command
         return Response::download($filename, "download.csv", $headers);
+    }
+    
+    public function customerOwingReport()
+    {
+        $products = Product::all();
+        $users = User::all();
+      
+
+        // $orders = $users->map(function ($p) {
+        //     $p->productscount = ProductOrder::where('user_id', $p->id)->latest()->get()->groupBy(function ($date) {
+        //         return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
+        //     });
+        //     if($p->productscount->isNotEmpty())
+        //      return $p;
+        //      else
+        //       return 0;
+        // });
+        // dd($orders);
+        foreach ($users as $key => $value) {
+            
+        $orders = $products->map(function ($p) use($value) {   
+                        $p->productscount = ProductOrder::where('product_id', $p->id)
+                        ->where('user_id', $value->id)
+                        ->latest()
+                        ->get()
+                        ->groupBy(function ($date) {
+                            return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
+                        });
+                     return $p;    
+        });
+    }
+        dd($orders);
+    //  foreach ($orders as $key => $value1) {
+    //        foreach ($users as $key => $value) {
+    //            dd($value1->productscount);
+    //             $p=$value1->productscount->groupBy($value->id)->get();
+    //             dd($p);          
+    //        }
+    //  }
+
+        //    $pro=ProductOrder::join('products','products.id','product_orders.product_id')
+        //                  ->join('users','users.id','product_orders.user_id')
+        //                  ->select('users.name as userName', DB::raw('SUM(product_orders.quantity*products.price) as carton'))
+        //                  ->groupBy('userName')
+        //                   ->get();
+        //                   dd($pro);
+
+               
+      return view('admin.customer.customerOwingReport');
     }
 }

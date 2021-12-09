@@ -33,8 +33,6 @@
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('customer.customer-report') }}" class="btn btn-dark">Back</a>
                     </li>
-                    <li class="breadcrumb-item"><a  href="{{ route('batchPickists') }}" class="btn btn-white print" style="color: white; background-color:#94d60a">Print</a>
-                    </li>
                 </ol>
             </div>
         </div>

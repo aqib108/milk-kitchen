@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/getWarehouses','UserManagementController@getWarehouses')->name('getWarehouses');  
         Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');
         Route::any('/select-customer', 'AdminController@selectCustomer')->name('selectCustomer');  
+        Route::get('/customer-purchasing/{id}','AdminController@purchasingHistory')->name('customerPurchasing');
         Route::group(['as' => 'admin.'], function () {
             Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
             Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
@@ -106,7 +107,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
             Route::get('/final-report/{id}/{customerId}/{startDate?}/{endDate?}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}/{start}/{end}/{region?}','CustomerController@pastOrderStatement')->name('customer.week-statement');
-            Route::get('/financial-statement/{id}/{start}/{end}/{region?}','CustomerController@financialStatement')->name('customer.financial-statement');
+            Route::get('/financial-statement/{total}/{start}/{end}','CustomerController@financialStatement')->name('customer.financial-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
             Route::get('/statement2/pdf/{id}/{start}/{end}/{region}', 'CustomerController@statementPrint')->name('customer.statementPdf');
            
@@ -168,14 +169,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','SaleController@weekelySales')->name('sale.index');
             Route::get('/get-csv/{start}/{end}','SaleController@getCsv')->name('sale.csv');
             Route::get('/get-import-txt','SaleController@getCsv')->name('sale.import-txt');
+            Route::get('/customer-owing-report','SaleController@customerOwingReport')->name('sale.customer-owing-report');
         });
         Route::group(['prefix' => 'driver'], function (){
             Route::get('/printDeliveryDocket/{id}','NotificationController@printDeliveryDocket')->name('printDeliveryDocket');
             Route::post('/get-products','NotificationController@getProducts')->name('getProducts');
             Route::get('/casual-orders','NotificationController@casualOrder')->name('casualOrders');
             Route::post('/deliveredProducts','NotificationController@deliveredProducts')->name('deliveredProducts');
-            
-           
             Route::get('/{id?}','NotificationController@driverPicklistIndex')->name('driverPicklist.index');
             Route::get('/picklist/detail/{id}','NotificationController@picklistDetail')->name('picklist.detail');
          

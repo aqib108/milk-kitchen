@@ -241,9 +241,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('sale.customer-owing-report') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Report's</p>
+                                <p>Customer Owning Report's</p>
                             </a>
                         </li>
                     </ul>
