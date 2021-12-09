@@ -1,6 +1,6 @@
 <div class="col-lg-12">
     <h2 class="heading-tbl">Warehouses Picklist</h2><h2 class="heading-tbl text-right">
-    <a href="{{ route('batchPickists',['id'=>$warehouse->id]) }}"> Print Picklists</a>    
+    <button style="background-color: #94d60a; color :white"> <a href="{{ route('batchPickists',['id'=>$warehouse->id]) }}"> Print Picklists</a>  </button>  
     </h2>
 </div> <br>
 

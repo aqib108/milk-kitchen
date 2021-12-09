@@ -16,7 +16,12 @@
                     <tr>
                         <th class="table-th-wrapper" scope="col">Week</th>
                         <th class="table-th-wrapper" scope="col">Statement Value</th>
+                        @if(auth()->user()->hasRole('Customer'))
                         <th class="table-th-wrapper" scope="col">Balance Owning</th>
+                        @endif
+                        @if(auth()->user()->hasRole('Admin'))
+                        <th class="table-th-wrapper" scope="col">Purchasing History</th>
+                        @endif
                         <th class="table-th-wrapper" scope="col">Statement</th>
                         <th class="table-th-wrapper" scope="col">Delivery Details</th>
                     </tr>
@@ -40,9 +45,16 @@
                                         echo '$'.$totalprice;
                                     @endphp
                                 </td>
+                                @if(auth()->user()->hasRole('Customer'))
                                 <td>
-                                    <a href="{{route('customer.financial-statement',['id'=>$customer->id,'start'=>$value['start'],'end'=>$value['end'],'region'=>$value['region']])}}" class="view_statements">{{$totalprice}}</a>
+                                    <a href="{{route('customer.financial-statement',['total'=>$totalprice,'start'=>$value['start'],'end'=>$value['end']])}}" class="view_statements">{{$totalprice}}</a>
                                 </td> 
+                                @endif
+                                @if(auth()->user()->hasRole('Admin'))
+                                <td>
+                                    <a href="{{route('customerPurchasing',['id'=>$customer->id])}}" class="view_statements">View</a>
+                                </td> 
+                                @endif
                                 <td>
                                     <a href="{{route('customer.week-statement',['id'=>$customer->id,'start'=>$value['start'],'end'=>$value['end'],'region'=>$value['region']])}}" class="view_statements">View</a>
                                 </td> 

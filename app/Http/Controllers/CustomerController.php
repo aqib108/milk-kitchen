@@ -216,31 +216,6 @@ class CustomerController extends Controller
 
                    }
                }
-      
-
-            //    $orders1 = ProductOrder::with('product')->where(['product_id' =>$id,'region_name'=>$region ])->orderBy('updated_at','desc')->get()->groupBy(function($date) {
-            //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
-            // });
-            //    dd($orders);
-            //    ->groupBy(function($date) {
-            //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
-            // })->toArray()
-            //    dd($orders);
-          
-            
-            //    DB::enableQueryLog();
-            //    $dt=Product::join('product_orders','product_orders.product_id','products.id')->where('product_orders.user_id',$customer->id )
-            //             ->select(DB::raw('sum(product_orders.quantity * products.price) as quantity'),'products.id as id','products.price as price')
-            //              ->groupBy('id','price')
-            //             ->get();
-                        // dd(DB::getQueryLog());
-            //             $array1=[];
-            //             foreach ($orders as $key => $value) {
-            //                 $time=$value->productscount[$key]->created_at->subDays(6)->format('d/m/Y');
-            //                  array_push($array1,$time);
-            //                 dd($time);
-            //             }
-            //    dd($dt);
              
         return view('admin.customer.past-order',compact('resultant','customer'));
     }
@@ -295,6 +270,14 @@ class CustomerController extends Controller
          
             return view('admin.customer.past-order.statement',compact('startDate','endDate', 'region','customerID','orderDetail','customer','products','weekDays'));
     }
+    public function financialStatement($total,$start,$end)
+    {   
+        return view('admin.customer.financial-statement',compact('total','start','end'));
+    }
+
+     //customerOwingReport
+
+    
 
     //Create Customer page
     public function newCustomerCreate()
@@ -440,7 +423,6 @@ class CustomerController extends Controller
         $customer = User::find($customerID);
         
         if($validate){
-           dd() QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer->id,'productId'=>$request->product_id]));
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => $customer->id,
                 'day_id'     => $request->day_id,
