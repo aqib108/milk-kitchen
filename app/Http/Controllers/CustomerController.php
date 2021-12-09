@@ -31,7 +31,7 @@ class CustomerController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     //Email  validation's Of Users in Admin
     public function checkEmail(Request $request)
     {
@@ -62,15 +62,15 @@ class CustomerController extends Controller
     public function customers(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::role('Customer')->get(); 
-            return Datatables::of($data) 
+            $data = User::role('Customer')->get();
+            return Datatables::of($data)
             ->editColumn('created_at', function (User $data) {
-                return $data->created_at->format('d, M Y'); 
+                return $data->created_at->format('d, M Y');
               })
                 ->addIndexColumn()
                 ->addColumn('view',function(User $data){
                     $btn2 = '<a href="'.route('customer.customerView',$data->id).'" class="btn btn-sm btn-primary">View</a>';
-                    return $btn2; 
+                    return $btn2;
                 })
                 ->addColumn('status', function(User $data){
 
@@ -83,7 +83,7 @@ class CustomerController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function(User $data){
-                    $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete" 
+                    $btn = '<a data-id="'.$data->id.'" data-tab="Customer" data-url="customer/customerDelete"
                     href="javascript:void(0)" class="del_btn btn btn-sm btn-danger">Delete</a>';
                     if($data->status == 1){
                         $status = '<a onclick="changeStatus('.$data->id.',0)" href="javascript:void(0)" class="btn btn-sm btn-danger ">Suspend</a>';
@@ -92,9 +92,9 @@ class CustomerController extends Controller
                         $status = '<a onclick="changeStatus('.$data->id.',1)" href="javascript:void(0)" class="btn btn-sm btn-success">Activate</a>';
                     }
                     $btn2 = '<a href="customer/edit/'.$data->id.'" class="btn btn-sm btn-primary">Edit</a>';
-                    return $btn.' '.$btn2.' '.$status;    
+                    return $btn.' '.$btn2.' '.$status;
                 })
-                
+
                 ->rawColumns(['action','view','status'])
                 ->make(true);
         }
@@ -119,7 +119,7 @@ class CustomerController extends Controller
         }
         else
         {
-            $today=$today1;  
+            $today=$today1;
         }
         $products1=AssignGroup::join('users','users.id','assign_groups.user_id')
             ->where('assign_groups.user_id',$id)
@@ -138,13 +138,13 @@ class CustomerController extends Controller
             $value=$v->sortBy('ctnPrice');
 
             $products = array();
-            $ark = array(); 
-                    foreach ($value as  $value1) 
+            $ark = array();
+                    foreach ($value as  $value1)
                     {
                         if(!in_array($value1['id'],$ark))
                         {
                             array_push($ark,$value1['id']);
-                            $products[] =$value1; 
+                            $products[] =$value1;
                         }
                     }
         $customer = User::find($customerID);
@@ -153,7 +153,7 @@ class CustomerController extends Controller
 
         $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
         $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
-        //this Weekend 
+        //this Weekend
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail1($customerID,$deliveryRegion);
         }])->get();
@@ -161,7 +161,7 @@ class CustomerController extends Controller
             $q->userDetail($customerID,$deliveryRegion);
         }])->get();
         $zones=Zone::whereStatus(1)->get();
-       
+
         return view('admin.customer.viewCustomer',compact('zones','today','customerID','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
     }
 
@@ -174,11 +174,11 @@ class CustomerController extends Controller
              $customer = User::find($id);
 
                $products= Product::all();
-               $orders = $products->map(function($p) use($customer) {                   
+               $orders = $products->map(function($p) use($customer) {
                    $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$customer->id )->latest()->get()->groupBy(function($date) {
                     return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
                    });
-                   return $p;                
+                   return $p;
                });
                $array1=array();
                $array2=array();
@@ -186,12 +186,12 @@ class CustomerController extends Controller
                $statementvalue=0;
                foreach ($orders as $key => $value) {
                 $productPrice= $value->price;
-                   foreach ($value->productscount as $key => $value1) {    
+                   foreach ($value->productscount as $key => $value1) {
                     $date = Carbon::parse($key);
                     $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
                     $end = $date->endOfWeek()->format('Y-m-d');
                        $regionName=$value1->first()->region_name;
-                      
+
                     if(!in_array($key,$array1))
                     {
                             array_push($array1,$key);
@@ -205,18 +205,18 @@ class CustomerController extends Controller
                             array_push($resultant,$array2);
                     }
                     else
-                    {  
+                    {
                              foreach ($resultant as $key => $value) {
                                  if($value['start'] == $start && $value['end'] == $end)
                                  {
                                    $resultant[$key]['statementPrice']=$value['statementPrice']+$value1->sum('quantity')*$productPrice;
                                  }
                              }
-                         }         
+                         }
 
                    }
                }
-      
+
 
             //    $orders1 = ProductOrder::with('product')->where(['product_id' =>$id,'region_name'=>$region ])->orderBy('updated_at','desc')->get()->groupBy(function($date) {
             //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
@@ -226,8 +226,8 @@ class CustomerController extends Controller
             //     return Carbon::parse($date->updated_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
             // })->toArray()
             //    dd($orders);
-          
-            
+
+
             //    DB::enableQueryLog();
             //    $dt=Product::join('product_orders','product_orders.product_id','products.id')->where('product_orders.user_id',$customer->id )
             //             ->select(DB::raw('sum(product_orders.quantity * products.price) as quantity'),'products.id as id','products.price as price')
@@ -241,7 +241,7 @@ class CustomerController extends Controller
             //                 dd($time);
             //             }
             //    dd($dt);
-             
+
         return view('admin.customer.past-order',compact('resultant','customer'));
     }
 
@@ -263,7 +263,7 @@ class CustomerController extends Controller
             return $p;
         });
          $v=$products1->flatten();
-     
+
         $products = array();
         $ark = array();
             foreach ($products1 as $value) {
@@ -271,7 +271,7 @@ class CustomerController extends Controller
                     if(!in_array($value1['id'],$ark))
                     {
                         array_push($ark,$value1['id']);
-                        $products[] =$value1; 
+                        $products[] =$value1;
                     }
                 }
             }
@@ -282,17 +282,17 @@ class CustomerController extends Controller
             //     $q->weekDetail($startDate,$endDate);
             // }])->get();
 
-            
+
             $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                 $q->userDetail($orderDetail->user_id,$orderDetail->region_name);
             }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
                 $q->weekDetail($startDate,$endDate);
             }])->get();
-    
+
             // $orders = ProductOrder::with('product')->where(['user_id'=>$customerID,'product_id' =>$orderDetail->id,'region_name'=>$region ])->get()->groupBy(function($date) {
             //     return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
             // });
-         
+
             return view('admin.customer.past-order.statement',compact('startDate','endDate', 'region','customerID','orderDetail','customer','products','weekDays'));
     }
 
@@ -320,7 +320,7 @@ class CustomerController extends Controller
                 'message' => 'Data Successfully Added',
                 'status' => 'success',
             );
-            return $response;        
+            return $response;
         }
     }
 
@@ -343,7 +343,7 @@ class CustomerController extends Controller
         $groups= GroupCustomer::whereStatus(1)->get();
         $arr=GroupCustomer::join('assign_groups','assign_groups.assign_group_id','group_customers.id')
         ->where('assign_groups.user_id',$customer->id)
-        ->select('group_customers.*')->pluck('id')->toArray(); 
+        ->select('group_customers.*')->pluck('id')->toArray();
         return view('admin.customer.editCustomer',compact('customer','arr','groups'));
     }
 
@@ -353,7 +353,7 @@ class CustomerController extends Controller
         $this->validate($request, [
             'name' => 'required|string',
             'email' => 'required|email',
-        ]); 
+        ]);
         $Customer = User::find($id);
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');
@@ -374,11 +374,11 @@ class CustomerController extends Controller
         if ($request->ajax()) {
             $nilai = DB::table('product_orders')->distinct()->pluck('user_id');
             $data = User::whereIn('id',$nilai)->get();
-            return Datatables::of($data) 
+            return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function(User $data){
                     $btn = '<a href="generate-pdf/'.$data->id.'" class="btn btn-sm btn-info">View</a>';
-                    return $btn; 
+                    return $btn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -408,7 +408,7 @@ class CustomerController extends Controller
             return $p;
         });
          $v=$products1->flatten();
-     
+
         $products = array();
         $ark = array();
             foreach ($products1 as $value) {
@@ -416,7 +416,7 @@ class CustomerController extends Controller
                     if(!in_array($value1['id'],$ark))
                     {
                         array_push($ark,$value1['id']);
-                        $products[] =$value1; 
+                        $products[] =$value1;
                     }
                 }
             }
@@ -424,7 +424,7 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($id,$deliveryRegion){
             $q->userDetail($id,$deliveryRegion);
         }])->get();
-        
+
         return view('admin.customer.pdfReport',compact('customer','products','weekDays','orders'));
     }
 
@@ -438,9 +438,8 @@ class CustomerController extends Controller
 
         $customerID = $id;
         $customer = User::find($customerID);
-        
+
         if($validate){
-           dd() QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer->id,'productId'=>$request->product_id]));
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => $customer->id,
                 'day_id'     => $request->day_id,
@@ -476,7 +475,7 @@ class CustomerController extends Controller
 
         $customerID = $id;
         $customer = User::find($customerID);
-        
+
         if($validate){
             $data = StandingOrder::updateOrCreate([
                 'user_id'    => $customer->id,
@@ -537,7 +536,7 @@ class CustomerController extends Controller
             return $p;
         });
          $v=$products1->flatten();
-     
+
         $products = array();
         $ark = array();
             foreach ($products1 as $value) {
@@ -545,27 +544,27 @@ class CustomerController extends Controller
                     if(!in_array($value1['id'],$ark))
                     {
                         array_push($ark,$value1['id']);
-                        $products[] =$value1; 
+                        $products[] =$value1;
                     }
                 }
             }
             $deliverOrder = ProductOrder::where('day_id',$orderDetail->day_id)
             ->where('user_id',$customerID)->where('product_id',$orderDetail->product_id)
             ->get();
-    
-            $weekDays = 
+
+            $weekDays =
                 WeekDay::with(['productOrder' => function($q) use ($customerID){
                     $q->userDetail($customerID);
                 }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
                     $q->weekDetail($startDate,$endDate);
                 }])->get();
-            
+
             $driver_image =Pod::where('customer_id',$customerID)->first();
             return view('admin.customer.finalreport',compact( 'productOrderId','orderDetail','startDate','endDate','driver_image','productId','customerID','customer','products','weekDays'));
         }
-       
+
     }
-    
+
     public function editDeliveryOrders(Request $request,$id)
     {
         $userID = $id;
@@ -574,18 +573,18 @@ class CustomerController extends Controller
             'product_id' => 'required',
             'qnty' => 'required',
         ]);
-        
+
         if($validate){
             $data = OrderDeliverd::updateOrCreate([
                 'product_order_id' => $order[0]->id],[
                 'quantity' => $request->qnty,
             ]);
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Your Record Successfully updated',
             ]);
-            
+
         }else{
             return response()->json([
                 'status' => false,
@@ -597,7 +596,7 @@ class CustomerController extends Controller
 
     public function statementPrint($id,$start,$end,$region)
     {
-        
+
         $startDate=$start;
         $endDate=$end;
         $orderDetail = ProductOrder::whereDate('updated_at','>=',$start)->whereDate('updated_at','<=',$end)->whereUserId($id)->whereRegionName($region)->first();
@@ -614,7 +613,7 @@ class CustomerController extends Controller
             return $p;
         });
          $v=$products1->flatten();
-     
+
         $products = array();
         $ark = array();
             foreach ($products1 as $value) {
@@ -622,7 +621,7 @@ class CustomerController extends Controller
                     if(!in_array($value1['id'],$ark))
                     {
                         array_push($ark,$value1['id']);
-                        $products[] =$value1; 
+                        $products[] =$value1;
                     }
                 }
             }
@@ -633,19 +632,19 @@ class CustomerController extends Controller
             //     $q->weekDetail($startDate,$endDate);
             // }])->get();
 
-            
+
             $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail,$region){
                 $q->userDetail($orderDetail->user_id,$region);
             }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
                 $q->weekDetail($startDate,$endDate);
             }])->get();
-      
+
             $orders = ProductOrder::with('product')->where(['user_id'=>$customerID,'product_id' =>$id,'region_name'=>$region ])->get()->groupBy(function($date) {
                 return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
             });
 
                 $image = base64_encode(file_get_contents(public_path('/admin-panel/images/logo.png')));
-                // return view('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'));    
+                // return view('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'));
                 $pdf = PDF::setOptions(['images' => true, 'debugCss' =>true,'isPhpEnabled'=>true,'isRemoteEnabled' => true])->loadView('admin.customer.pdfReport',compact('orders','startDate','endDate','customerID','orderDetail','customer','products','weekDays'))->setPaper('a4', 'porttrait');
                     return $pdf->download('statement.pdf');
         }

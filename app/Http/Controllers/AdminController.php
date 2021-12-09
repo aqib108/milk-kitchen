@@ -24,6 +24,7 @@ use App\Models\Region;
 use Carbon\Carbon;
 use App\Models\Setting;
 use Spatie\Permission\Traits\HasRoles;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AdminController extends Controller
 {
@@ -138,7 +139,7 @@ class AdminController extends Controller
             ->where(['regions.warehouse_id' => $warehouse->id])
             ->select('customer_details.user_id', 'zones.name', 'zones.id as zoneId', 'regions.id')
             ->get()->map(function ($value) use ($data,$currentday) {
-            
+
                 $pr = ProductOrder::where('user_id', $value->user_id)->where('day_id',$currentday)
                     ->get();
                 foreach ($pr as $key => $p) {
@@ -201,21 +202,11 @@ class AdminController extends Controller
                     ->get();
                 return $p;
             });
-            return view('admin.customer.forpdfnew',compact('products'));
-            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products'))->setPaper('a4', 'porttrait');
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->errorCorrection('H')->generate('string'));
+            // return view('admin.customer.forpdfnew',compact('products','qrCode'));
+            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products','qrCode'))->setPaper('a4', 'porttrait');
+            // return $pdf->stream();
             return  $pdf->download('statement.pdf');
-        // foreach ($product1 as $key => $products) {
-         
-        //     if (!empty($products)) {
-          
-        //         $customer = CustomerDetail::whereUserId($products[$key]['userId'])->get();
-        //         //   return view('admin.customer.forpdfnew',compact('customer','products'));
-        //         $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('customer', 'products'))->setPaper('a4', 'porttrait');
-        //          return  $pdf->download('statement.pdf');
-        //         //    return view('admin.customer.picklist',compact('customer','products')); 
-        //     }
-            
-        // }
     }
 
     function searchdriver($zoneId)

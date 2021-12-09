@@ -8,7 +8,7 @@
     <title>MILK KITCHEN</title>
     <link rel="stylesheet" href="{{ asset('admin-panel/customer-view/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin-panel/customer-view/css/font-awesome.min.css') }}" />
-   
+
 </head>
 <body>
 @foreach($products as $key=>$product)
@@ -42,7 +42,7 @@ $total=0;
                     margin: 0px 20px;
                     ">FOOD SERVICE PORTAL</h2>
                 </div>
-                
+
             </div>
 
 
@@ -56,7 +56,7 @@ $total=0;
                     <h2 style=" font-size: 22px;
                     color: #010101;
                     padding: 10px 0;
-                    margin: 0px;    
+                    margin: 0px;
                     font-weight: 700;
                     font-family: 'Roboto-Bold';
                     text-align: center;">INVOICE / STATEMENT</h2>
@@ -191,10 +191,10 @@ $total=0;
                             </div>
                         </div>
                     </div>
-                </div>                       
+                </div>
                 </div>
             </div>
-            
+
         </div>
         <br>
     </section>
@@ -243,15 +243,15 @@ $total=0;
         </div>
         <div class="col-lg-4 text-center">
             <p class="custom-border-1" style="text-align: center; position: relative; margin-top: -70px;  ">Received in full</p>
-            
+
         </div>
         <div class="col-lg-4" style="position: relative; float: right; margin-top: -80px; right: 10%;">
-        <!-- {!! QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer[0]->id])) !!} -->
-              <img src="data:image/png;base64,{{!! base64_encode( QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer[0]->id])))!!}}" style="size:35px" class="img-fluid" alt=""> 
+            {{-- {{ QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer->id])) }} --}}
+              <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(150)->generate(route('qr.driverScan',['id'=>$customer[0]->id])))!!}"  class="img-fluid" alt="">
         </div>
     </div>
     @endif
-        @endforeach  
+        @endforeach
 
 
         <style>
@@ -308,7 +308,7 @@ $total=0;
                     border:1px solid #ced4da;
                     height: 80px;
                     background-color: #fff;
-    
+
                     }
                     .heading-tbl{
                     font-size: 24px;
@@ -343,3 +343,6 @@ $total=0;
         </style>
 </body>
 </html>
+@php
+    die()
+@endphp

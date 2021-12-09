@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\Repository::class,
         Commands\AssignDriverStatus::class,
         Commands\WeeklyStandingOrder::class,
+        Commands\DuePayments::class,
     ];
 
     /**
