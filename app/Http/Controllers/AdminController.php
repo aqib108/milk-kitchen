@@ -64,7 +64,8 @@ class AdminController extends Controller
             $warehouses = Warehouse::join('assign_warehouses', 'assign_warehouses.warehouse_id', 'warehouses.id')
                 ->where('assign_warehouses.user_id', auth()->user()->id)
                 ->select('warehouses.*')->whereStatus(1)->get();
-        } else {
+        } else
+        {
             $warehouses = Warehouse::whereStatus(1)->get();
         }
         return view('admin.customer.masterPicklist', compact('warehouses', 'days'));
@@ -198,20 +199,33 @@ class AdminController extends Controller
                     ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
                     // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
                     // ->groupBy('name')
-                    ->select('products.name as name', 'product_orders.quantity as carton', 'product_orders.user_id as userId')
+                    ->select('products.name as name', 'product_orders.quantity as carton', 'product_orders.user_id as userId','product_orders.user_id as userId')
                     ->get();
                 return $p;
             });
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->errorCorrection('H')->generate('string'));
-            // return view('admin.customer.forpdfnew',compact('products','qrCode'));
-            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products','qrCode'))->setPaper('a4', 'porttrait');
-            // return $pdf->stream();
+            // return view('admin.customer.forpdfnew',compact('products'));
+            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products'))->setPaper('a4', 'porttrait');
             return  $pdf->download('statement.pdf');
     }
 
+     public function purchasingHistory($id)
+     {
+        $products= Product::all();
+        $orders = $products->map(function($p) use ($id) {
+            $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$id )->latest()->get()->groupBy(function($date) {
+             return Carbon::parse($date->updated_at)->format('W');
+            });
+            return $p;
+        });
+         return view('admin.customer.purchasingHistory',compact('orders'));
+     }
+      public function customerOwingReport()
+     {
+       return view('admin.customer.customerOwingReport');
+     }
+
     function searchdriver($zoneId)
     {
-
         // $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->where('is_assign',1)->first('driver_id');
         $assignDriver = AssignDriver::where('zone_id', $zoneId)->first();
         if (!empty($assignDriver)) {
