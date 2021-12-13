@@ -60,6 +60,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');
         Route::any('/select-customer', 'AdminController@selectCustomer')->name('selectCustomer');  
         Route::get('/customer-purchasing/{id}','AdminController@purchasingHistory')->name('customerPurchasing');
+        Route::get('/allocate-payment/{id}/{name}/{qnty}/{start}/{end}','AdminController@allocatePayment')->name('allocatePayment');
+        Route::post('/saveAllocatePayment','AdminController@saveAllocatePayment')->name('saveAllocatePayment');
         Route::group(['as' => 'admin.'], function () {
             Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
             Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
@@ -107,7 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
             Route::get('/final-report/{id}/{customerId}/{startDate?}/{endDate?}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}/{start}/{end}/{region?}','CustomerController@pastOrderStatement')->name('customer.week-statement');
-            Route::get('/financial-statement/{total}/{start}/{end}','CustomerController@financialStatement')->name('customer.financial-statement');
+            Route::get('/financial-statement/{paid}/{paidDate}/{total}/{start}/{end}','CustomerController@financialStatement')->name('customer.financial-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
             Route::get('/statement2/pdf/{id}/{start}/{end}/{region}', 'CustomerController@statementPrint')->name('customer.statementPdf');
            
@@ -190,16 +192,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/customer-delivery-details','HomeController@deliveryDetails')->name('customer.deliveryDetails');
     }); 
 });
-//// GENERAL ROUTES
-Route::get('/notification', 'NotificationController@checkDriverNotification')->name('checkDriverNotification');
-Route::group(['prefix' => 'driver'], function () {
+    //// GENERAL ROUTES
+    Route::get('/notification', 'NotificationController@checkDriverNotification')->name('checkDriverNotification');
+    Route::group(['prefix' => 'driver'], function () {
 
-    Route::get('/brCode/{id}/{type?}{productId?}', 'QrController@driverScan')->name('qr.driverScan');
-    Route::post('/code', 'QrController@driverCode')->name('qr.driverCode');
-    Route::get('/upload/view/{id}/{driverId}', 'QrController@driverUploadView')->name('qr.upload');
-    Route::post('/upload/pic', 'QrController@driverUploadViewCap')->name('qr.uploadCap');
-});
-Route::post('/get-regions','HomeController@getState')->name('getRegions');
-Route::post('/get-cities','HomeController@getCity')->name('getCitiesByRegion');
-Route::get('/', 'HomeController@index');
-Auth::routes();
+        Route::get('/brCode/{id}/{type?}{productId?}', 'QrController@driverScan')->name('qr.driverScan');
+        Route::post('/code', 'QrController@driverCode')->name('qr.driverCode');
+        Route::get('/upload/view/{id}/{driverId}', 'QrController@driverUploadView')->name('qr.upload');
+        Route::post('/upload/pic', 'QrController@driverUploadViewCap')->name('qr.uploadCap');
+    });
+    Route::post('/get-regions','HomeController@getState')->name('getRegions');
+    Route::post('/get-cities','HomeController@getCity')->name('getCitiesByRegion');
+    Route::get('/', 'HomeController@index');
+    Auth::routes();
