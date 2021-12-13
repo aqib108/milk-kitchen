@@ -17,21 +17,51 @@
                         <th class="table-th-wrapper" scope="col">customer</th>
                         <th class="table-th-wrapper" scope="col">Period</th>
                         <th class="table-th-wrapper" scope="col">Amount</th>
+                        <th class="table-th-wrapper" scope="col"></th>
                     </tr>
                 </thead>
                 <tbody class="week-container-tbl">
-                  
+                           @foreach($supper as  $result)
+                            @if(!empty($result))
+                            @php $arr1= array();@endphp
+                            @foreach($result as $res)  
+                            @php
+                            $price=$res['price'] + ($res['price'] * 15) /100;
+                                           $totalprice1= $price - ($price/ 100) * 10 ; 
+                            $t=App\Models\AllocatePayment::when('customerId',function($q) use($res){
+                                     return $q->where('customerId',$res['userId']);
+                                    })->when('start',function($q) use($res){
+                                        return $q->where('start',$res['start1']);
+                                     })
+                                    ->when('end',function($q) use($res){
+                                        return $q->where('end',$res['end1']);
+                                    })->get();
+                                    $paid=$t->sum('amount');
+
+                                    $totalprice =$totalprice1-$paid;
+                            @endphp
                             <tr>   
+                                 @if(!in_array($res['name'],$arr1))
+                                 @php array_push($arr1,$res['name']); @endphp
+                                 <td>
+                                {{$res['name']}}                       
+                                </td>
+                                @else
+                                 <td></td>
+                                 @endif
                                 <td>
-                                Statement Value                         
+                                 {{$res['start']}} - {{$res['end']}}
                                 </td>
                                 <td>
-                            
-                                </td>
+                                  {{$totalprice}}
+                                </td> 
                                 <td>
-                               
+                                  <a href="{{route('allocatePayment',['id'=>$res['userId'],'name' => $res['name'],'qnty' => $totalprice,'start'=> $res['start1'],'end'=> $res['end1']])}}">allocatte Payment</a>
                                 </td> 
                             </tr>
+                            @endforeach
+                            @endif
+                           @endforeach
                 </tbody>
             </table>
         </div>

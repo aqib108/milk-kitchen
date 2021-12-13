@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllocatePayment;
 use App\Models\AssignWarehouse;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
@@ -228,11 +229,55 @@ class AdminController extends Controller
             });
             return $p;                
         });
+        // $orders = ProductOrder::where('user_id',$id )->get()->groupBy(function($date) {
+        //     return Carbon::parse($date->updated_at)->format('W');
+        //    });
+        $array1=array();
+        $array2=array();
+        $resultant=array();
+        $statementvalue=0;
+        foreach ($orders as $key => $value) {
+         $productName= $value->name;
+            foreach ($value->productscount as $key => $value1) {    
+                $date = Carbon::parse($key);
+             $start = $date->startOfWeek()->format('d-m-Y h:i'); // 2016-10-17 00:00:00.000000
+             $end = $date->endOfWeek()->format('d-m-Y h:i');
+                $regionName=$value1->first()->region_name;
+                     $statementvalue=$value1->sum('quantity');
+                     $array2= [
+                        // 'start' => $start,
+                        // 'end'   => $end,
+                        'key'   => $key,
+                         'product' =>$productName,
+                         'quantity' => $statementvalue,
+                     ];
+                     array_push($resultant,$array2);       
+            }
+        
+        }   
+
+        foreach($resultant as $val){
+            
+        }
+        
+   dd($resultant);
          return view('admin.customer.purchasingHistory',compact('orders'));
+     }
+     public function allocatePayment($id,$name,$price,$start,$end)
+     {
+        return view('admin.customer.allocatePayment',compact('id','name','price','start','end'));
      }
       public function customerOwingReport()
      {
        return view('admin.customer.customerOwingReport');
+     }
+     public function saveAllocatePayment()
+     {
+         $data=AllocatePayment::create(request()->all());
+          if($data)
+          {
+            return redirect()->route('sale.customer-owing-report')->with('success', 'inserted Successfully');   
+          }
      }
 
     function searchdriver($zoneId)
