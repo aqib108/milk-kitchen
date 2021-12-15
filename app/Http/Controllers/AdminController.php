@@ -222,46 +222,58 @@ class AdminController extends Controller
 
      public function purchasingHistory($id)
      {
+        $currentWeek = date('W');
+         $v=ProductOrder::orderBy('updated_at','asc')->first()->updated_at;
+       $pastWeek =Carbon::parse($v)->format('W');
         $products= Product::all();
         $orders = $products->map(function($p) use ($id) {                   
-            $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$id )->latest()->get()->groupBy(function($date) {
+            $p->productscount = ProductOrder::where('product_id', $p->id)->orderBy('updated_at','desc')->where('user_id',$id )->latest()->get()->groupBy(function($date) {
              return Carbon::parse($date->updated_at)->format('W');
             });
             return $p;                
         });
+        // foreach ($orders as $key => $value) {
+        //     $productId =$value->id;
+        //     foreach ($value->productscount as $key => $value) {
+        //          dump($value->sum('quantity'));
+        //          dump($key);
+        //          dump($productId);
+        //     }
+        // }
+        // dd("djjdfj");
         // $orders = ProductOrder::where('user_id',$id )->get()->groupBy(function($date) {
         //     return Carbon::parse($date->updated_at)->format('W');
         //    });
-        $array1=array();
-        $array2=array();
-        $resultant=array();
-        $statementvalue=0;
-        foreach ($orders as $key => $value) {
-         $productName= $value->name;
-            foreach ($value->productscount as $key => $value1) {    
-                $date = Carbon::parse($key);
-             $start = $date->startOfWeek()->format('d-m-Y h:i'); // 2016-10-17 00:00:00.000000
-             $end = $date->endOfWeek()->format('d-m-Y h:i');
-                $regionName=$value1->first()->region_name;
-                     $statementvalue=$value1->sum('quantity');
-                     $array2= [
-                        // 'start' => $start,
-                        // 'end'   => $end,
-                        'key'   => $key,
-                         'product' =>$productName,
-                         'quantity' => $statementvalue,
-                     ];
-                     array_push($resultant,$array2);       
-            }
+//         $array1=array();
+//         $array2=array();
+//         $resultant=array();
+//         $statementvalue=0;
+//         foreach ($orders as $key => $value) {
+//          $productName= $value->name;
+//             foreach ($value->productscount as $key => $value1) {    
+//                 $date = Carbon::parse($key);
+//              $start = $date->startOfWeek()->format('d-m-Y h:i'); // 2016-10-17 00:00:00.000000
+//              $end = $date->endOfWeek()->format('d-m-Y h:i');
+//                 $regionName=$value1->first()->region_name;
+//                      $statementvalue=$value1->sum('quantity');
+//                      $array2= [
+//                         // 'start' => $start,
+//                         // 'end'   => $end,
+//                         'key'   => $key,
+//                          'product' =>$productName,
+//                          'quantity' => $statementvalue,
+//                      ];
+//                      array_push($resultant,$array2);       
+//             }
         
-        }   
+//         }   
 
-        foreach($resultant as $val){
+//         foreach($resultant as $val){
             
-        }
+//         }
         
-   dd($resultant);
-         return view('admin.customer.purchasingHistory',compact('orders'));
+//    dd($resultant);
+         return view('admin.customer.purchasingHistory',compact('orders','currentWeek','pastWeek'));
      }
      public function allocatePayment($id,$name,$price,$start,$end)
      {
@@ -364,23 +376,16 @@ class AdminController extends Controller
     }
     public function scriptSetting(Request $request)
     {
-        $result = Setting::whereName('Cutt Off Time')->first();
+        $result = Setting::all();
         return view('admin.scriptSetting', compact('result'));
     }
     public function saveSetting(Request $request)
     {
-
-        $setting = Setting::whereName('Cutt Off Time')->first();
-
-        if (isset($setting)) {
-            Setting::whereName('Cutt Off Time')->update([
-                'value' => $request->value,
-                'footer_value' => $request->footer_value,
-            ]);
-        } else {
-            Setting::create($request->all());
+        foreach ($request->except('_token') as $key => $value) {
+                $v=Setting::where('name',$key)->first();
+                $v->value = $value;
+                $v->save();
         }
-
         return redirect()->back();
     }
 

@@ -45,6 +45,7 @@
                                         return $q->where('end',$value['end']);
                                     })->get();
                                     $paid=$t->sum('amount');
+                                   
                                      if($t->isNotEmpty())
                                      {
                                         $date=$t->first()->created_at->format('d-m-Y');

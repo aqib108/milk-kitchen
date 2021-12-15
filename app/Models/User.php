@@ -26,7 +26,9 @@ class User extends Authenticatable
         'email',
         'password',
         'driver_code',
-        'status'
+        'status',
+        'athority_number',
+        'account_number'
     ];
 
     /**

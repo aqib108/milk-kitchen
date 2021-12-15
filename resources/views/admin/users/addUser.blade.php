@@ -83,6 +83,7 @@
                                             placeholder="Enter Again Password... ">
                                         <div id="confirm-password-err" class="alert alert-danger"></div>
                                     </div>  
+                                  
                                 
                                 </div>
                             </div>

@@ -2,8 +2,14 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('admin-panel/customer-view/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin-panel/customer-view/css/font-awesome.min.css') }}" />
-@endsection
+    <style>
+.disabled-link {
+  pointer-events: none;
+}
+</style>
+    @endsection
 @section('content')
+
     <div class="container">
         <div>
             <div class="text-center">
@@ -17,7 +23,7 @@
                         <th class="table-th-wrapper" scope="col">Week</th>
                         <th class="table-th-wrapper" scope="col">Statement Value</th>
                         <th class="table-th-wrapper" scope="col">Payment Date</th>
-                        <th class="table-th-wrapper" scope="col">Export File to Deduct Money</th>
+                        <th class="table-th-wrapper" scope="col">Export File to Deduct Money(Enabled on Payment Date)</th>
                         <th class="table-th-wrapper" scope="col">Manual Payment Allocation </th>
                     </tr>
                 </thead>
@@ -40,14 +46,23 @@
                                         echo '$'.$totalprice;
                                     @endphp
                                 </td>
+                                
                                 <td>
                                     {{ date('Y-m-d', strtotime($value['end']. ' + 10 days'))}}
                                 </td>
+                                @if(date('Y-m-d') == date($value['paymentDate']))
                                 <td>
-                                <a href="{{route('sale.csv',['start'=>$value['start'],'end'=>$value['end']])}}"><img src="https://img.icons8.com/material-two-tone/24/000000/export-csv.png"/></a>
+                                <a href="{{route('sale.csv',['start'=>$value['start'],'end'=>$value['end']])}}" ><img src="https://img.icons8.com/material-two-tone/24/000000/export-csv.png"/></a>
                                 </td>
+                                @else
                                 <td>
-                                <img src="https://img.icons8.com/fluency-systems-regular/48/000000/import-file.png"/>
+                                <a href="{{route('sale.csv',['start'=>$value['start'],'end'=>$value['end']])}}" class="disabled-link"><img src="https://img.icons8.com/material-two-tone/24/000000/export-csv.png"/></a>
+                                </td>
+                                @endif
+                              
+                                <td>
+                                <a href="{{route('sale.csvblade')}}">
+                                    <img src="https://img.icons8.com/fluency-systems-regular/48/000000/import-file.png"/></a>
                                 </td>
                                
                             </tr>

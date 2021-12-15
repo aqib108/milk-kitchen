@@ -296,6 +296,8 @@ class CustomerController extends Controller
         $data = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'athority_number'=>$request->athority_number,
+            'account_number'=>$request->account_number,
             'password' => Hash::make($request->password),
         ]);
         $data->assignRole('Customer');
@@ -343,6 +345,8 @@ class CustomerController extends Controller
         $Customer = User::find($id);
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');
+        $Customer->athority_number=$request->athority_number;
+        $Customer->account_number=$request->account_number;
         $Customer->password = Hash::make($request->input('password'));
         $Customer->save();
         $Customer->groups()->sync($request->groups);

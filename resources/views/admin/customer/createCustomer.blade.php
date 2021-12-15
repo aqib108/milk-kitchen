@@ -80,6 +80,17 @@
                                     </span>
                                     @enderror
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Debit Authority Number<span class="required-star">(Optional)</span></label>
+                                        <input type="text"  class="form-control driver"  name="athority_number" minlength="4" maxlength="60"
+                                         placeholder="Enter athority number" value="{{ old('athority_number') }}">
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Account Number<span class="required-star">(Optional)</span></label>
+                                        <input type="text"  class="form-control driver"  name="account_number" minlength="4" maxlength="60"
+                                         placeholder="Enter account number" value="{{ old('account_number') }}">
+                                    </div>
+                                  
                                 </div>
                             </div>
                             <!-- /.card-body -->
