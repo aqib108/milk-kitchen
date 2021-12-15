@@ -2,29 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssignWarehouse;
-use Illuminate\Http\Request;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
-use Auth;
-use App\Models\User;
+use App\Models\AssignDriver;
+use App\Models\AssignDriverOrder;
+use App\Models\CustomerDetail;
+use App\Models\DriverNotification;
 use App\Models\Product;
+use App\Models\ProductOrder;
+use App\Models\Region;
+use App\Models\Setting;
+use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WeekDay;
-use App\Models\CustomerDetail;
 use App\Models\Zone;
-use Validator;
-use DB;
-use PDF;
-use App\Models\ProductOrder;
-use App\Models\AssignDriverOrder;
-use App\Models\AssignDriver;
-use App\Models\DriverNotification;
-use App\Models\Region;
+use App\Repositories\UserRepository;
+use Auth;
 use Carbon\Carbon;
-use App\Models\Setting;
+use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use PDF;
 use Spatie\Permission\Traits\HasRoles;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -59,13 +57,12 @@ class AdminController extends Controller
     }
     public function masterPicklist()
     {
-        $days =  WeekDay::whereStatus(1)->get();
+        $days = WeekDay::whereStatus(1)->get();
         if (auth()->user()->hasRole('Warehouse') || auth()->user()->hasRole('Site Employee') || auth()->user()->hasRole('Sales Member')) {
             $warehouses = Warehouse::join('assign_warehouses', 'assign_warehouses.warehouse_id', 'warehouses.id')
                 ->where('assign_warehouses.user_id', auth()->user()->id)
                 ->select('warehouses.*')->whereStatus(1)->get();
-        } else
-        {
+        } else {
             $warehouses = Warehouse::whereStatus(1)->get();
         }
         return view('admin.customer.masterPicklist', compact('warehouses', 'days'));
@@ -73,7 +70,7 @@ class AdminController extends Controller
 
     public function runPicklist()
     {
-        $days =  WeekDay::where('status', 1)->get();
+        $days = WeekDay::where('status', 1)->get();
         if (auth()->user()->name != 'admin') {
             $warehouses = Warehouse::join('assign_warehouses', 'assign_warehouses.warehouse_id', 'warehouses.id')
                 ->where('assign_warehouses.user_id', auth()->user()->id)
@@ -86,35 +83,36 @@ class AdminController extends Controller
 
     public function getmasterPicklist()
     {
-        if (isset(request()->id))
+        if (isset(request()->id)) {
             $warehouse = Warehouse::whereId(request()->id)->first();
-        else
+        } else {
             $warehouse = Warehouse::first();
+        }
 
         $product = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
             ->where('regions.warehouse_id', $warehouse->id)
             ->select('customer_details.user_id')
             ->get()->map(function ($value) {
 
-                if (!empty(request()->day_id)) {
-                    $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
-                        ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => request()->day_id])
-                        ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
-                        ->groupBy('name')
-                        ->get();
-                } else {
-                    $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
-                        ->where('product_orders.user_id', $value->user_id)
-                        ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
-                        ->groupBy('name')
-                        ->get();
-                }
-                return $p;
-            });
+            if (!empty(request()->day_id)) {
+                $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                    ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => request()->day_id])
+                    ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+                    ->groupBy('name')
+                    ->get();
+            } else {
+                $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                    ->where('product_orders.user_id', $value->user_id)
+                    ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+                    ->groupBy('name')
+                    ->get();
+            }
+            return $p;
+        });
 
         $products = $product->first();
         return response()->json([
-            'html' => view('admin.customer.getmasterPicklist', compact('products', 'warehouse'))->render(), 200, ['Content-Type' => 'application/json']
+            'html' => view('admin.customer.getmasterPicklist', compact('products', 'warehouse'))->render(), 200, ['Content-Type' => 'application/json'],
         ]);
     }
 
@@ -125,10 +123,12 @@ class AdminController extends Controller
         $current_day = Carbon::Today()->format('l');
         $currentday = Carbon::Today()->format('N');
         $dayID = WeekDay::where('name', $current_day)->pluck('id');
-        if (isset(request()->id))
+        if (isset(request()->id)) {
             $warehouse = Warehouse::whereId(request()->id)->first();
-        else
+        } else {
             $warehouse = Warehouse::first();
+        }
+
         // $data = User::role('Driver')->where('status', 1)
         //     ->join('assign_warehouses', 'assign_warehouses.user_id', 'users.id')
         //     ->where('warehouse_id', $warehouse->id)
@@ -139,19 +139,19 @@ class AdminController extends Controller
             ->join('regions', 'regions.name', 'customer_details.delivery_region')
             ->where(['regions.warehouse_id' => $warehouse->id])
             ->select('customer_details.user_id', 'zones.name', 'zones.id as zoneId', 'regions.id')
-            ->get()->map(function ($value) use ($data,$currentday) {
+            ->get()->map(function ($value) use ($data, $currentday) {
 
-                $pr = ProductOrder::where('user_id', $value->user_id)->where('day_id',$currentday)
-                    ->get();
-                foreach ($pr as $key => $p) {
-                    $data['quantity'] = $pr->sum('quantity');
-                    $data['user_id'] = $p->user_id;
-                    $data['zone'] = $value->name;
-                    $data['zoneId'] = $value->zoneId;
-                    $data['userName'] = $p->user->name;
-                }
-                return $data;
-            });
+            $pr = ProductOrder::where('user_id', $value->user_id)->where('day_id', $currentday)
+                ->get();
+            foreach ($pr as $key => $p) {
+                $data['quantity'] = $pr->sum('quantity');
+                $data['user_id'] = $p->user_id;
+                $data['zone'] = $value->name;
+                $data['zoneId'] = $value->zoneId;
+                $data['userName'] = $p->user->name;
+            }
+            return $data;
+        });
 
         $zones = Zone::whereStatus(1)->get();
         $orders = array();
@@ -177,15 +177,15 @@ class AdminController extends Controller
                         'userName' => $userName,
                         'userAddress' => $userAddress,
                         'userRegion' => $userRegion,
-                        'userZone' =>   $userZone,
+                        'userZone' => $userZone,
                         'qty' => $quantity,
-                        'assign_driver' => $this->searchdriver($zoneId)
+                        'assign_driver' => $this->searchdriver($zoneId),
                     );
                 }
             }
         }
         return response()->json([
-            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'zones', 'date', 'orders', 'warehouse', 'data'))->render(), 200, ['Content-Type' => 'application/json']
+            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'zones', 'date', 'orders', 'warehouse', 'data'))->render(), 200, ['Content-Type' => 'application/json'],
         ]);
     }
     public function batchPickists($id)
@@ -195,36 +195,59 @@ class AdminController extends Controller
             ->where('regions.warehouse_id', $id)
             ->select('customer_details.user_id')
             ->get()->map(function ($value) use ($day) {
-                $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
-                    ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
-                    // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
-                    // ->groupBy('name')
-                    ->select('products.name as name', 'product_orders.quantity as carton', 'product_orders.user_id as userId','product_orders.user_id as userId')
-                    ->get();
-                return $p;
-            });
-            // return view('admin.customer.forpdfnew',compact('products'));
-            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products'))->setPaper('a4', 'porttrait');
-            return  $pdf->download('statement.pdf');
-    }
-
-     public function purchasingHistory($id)
-     {
-        $products= Product::all();
-        $orders = $products->map(function($p) use ($id) {
-            $p->productscount = ProductOrder::where('product_id', $p->id)->where('user_id',$id )->latest()->get()->groupBy(function($date) {
-             return Carbon::parse($date->updated_at)->format('W');
-            });
+            $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
+                ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
+            // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
+            // ->groupBy('name')
+                ->select('products.name as name', 'product_orders.quantity as carton', 'product_orders.user_id as userId', 'product_orders.user_id as userId')
+                ->get();
             return $p;
         });
-         return view('admin.customer.purchasingHistory',compact('orders'));
-     }
-      public function customerOwingReport()
-     {
-       return view('admin.customer.customerOwingReport');
-     }
+        // return view('admin.customer.forpdfnew',compact('products'));
+        $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products'))->setPaper('a4', 'porttrait');
+        return $pdf->download('statement.pdf');
+    }
 
-    function searchdriver($zoneId)
+    public function purchasingHistory($id)
+    {
+
+        // \DB::enableQueryLog();
+        // $orders = DB::select(DB::raw("select *,SUM(quantity) as qnty from `product_orders` where `user_id` = 2 GROUP BY `product_orders`.`product_id`, FROM_DAYS(TO_DAYS(`product_orders`.`updated_at`) -MOD(TO_DAYS(`product_orders`.`updated_at`) -1, 7))")  );
+        $orders = DB::table('product_orders')
+            ->selectRaw('*,SUM(quantity) as qnty')
+            ->where('user_id', $id)
+            ->groupBy('product_orders.product_id, FROM_DAYS(TO_DAYS(updated_at) -MOD(TO_DAYS(updated_at) -1, 7))')
+            ->get();
+        // dd(\DB::getQueryLog());
+        dd($orders);
+        // $orders = $orders->map(function($data){
+        //     dd($data->groupBy($data->product_id));
+        //     // return collect($data);
+        //     // return $data->map(function($d){
+        //     //     return $d->groupBy($d->product_id);
+        //     // });
+        // });
+        // $orders = ProductOrder::where('user_id',$id )->get()->groupBy('product_id',function($date) {
+        //     return Carbon::parse($date->updated_at)->format('W');
+        //    });
+        $orders = ProductOrder::where('user_id', $id);
+
+        dd($orders);
+        // $products= Product::all();
+        // $orders = $products->map(function($p) use ($id) {
+        //     $p->productscount = ProductOrder::where('user_id',$id )->->get()->groupBy('product_id',function($date) {
+        //      return Carbon::parse($date->updated_at)->format('W');
+        //     });
+        //     return $p;
+        // });
+        return view('admin.customer.purchasingHistory', compact('orders'));
+    }
+    public function customerOwingReport()
+    {
+        return view('admin.customer.customerOwingReport');
+    }
+
+    public function searchdriver($zoneId)
     {
         // $assignDriver = AssignDriverOrder::where('customer_id',$user_id)->where('is_assign',1)->first('driver_id');
         $assignDriver = AssignDriver::where('zone_id', $zoneId)->first();
@@ -250,16 +273,16 @@ class AdminController extends Controller
                 $dayID = WeekDay::where('name', $current_day)->pluck('id');
                 $todayOrder = ProductOrder::where('day_id', $dayID)->where('user_id', $customer)->get()->toArray();
                 $orderID = array_column($todayOrder, 'id');
-                $order =  implode(",", $orderID);
+                $order = implode(",", $orderID);
                 $data[] = array(
                     'customer_id' => $customer,
                     'order_id' => $order,
                     'driver_id' => $driver_id,
                     'is_assign' => 1,
-                    'created_at' => $current_time
+                    'created_at' => $current_time,
                 );
             }
-            $assign =  AssignDriverOrder::insert($data);
+            $assign = AssignDriverOrder::insert($data);
 
             foreach ($customer_id as $customer) {
                 $this->generateNotification($customer, $driver_id);
@@ -274,7 +297,7 @@ class AdminController extends Controller
             return response()->json($data1);
         }
     }
-    function generateNotification($customerID, $driverID)
+    public function generateNotification($customerID, $driverID)
     {
         $now = Carbon::now();
         $user = User::where('id', $customerID)->first();
@@ -284,7 +307,7 @@ class AdminController extends Controller
         $dayID = WeekDay::where('name', $current_day)->pluck('id');
         $todayOrder = ProductOrder::where('day_id', $dayID)->where('user_id', $customerID)->get()->toArray();
         $orderID = array_column($todayOrder, 'id');
-        $order =  implode(",", $orderID);
+        $order = implode(",", $orderID);
 
         DriverNotification::create([
             'order_id' => $order,

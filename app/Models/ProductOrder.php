@@ -67,5 +67,5 @@ class ProductOrder extends Model
     {
         return $query->whereDate('updated_at','>=',$start)->whereDate('updated_at','<=',$end)->get();
     }
-    
+
 }
