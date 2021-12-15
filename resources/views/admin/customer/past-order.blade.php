@@ -19,9 +19,6 @@
                         @if(auth()->user()->hasRole('Customer'))
                         <th class="table-th-wrapper" scope="col">Balance Owning</th>
                         @endif
-                        @if(auth()->user()->hasRole('Admin'))
-                        <th class="table-th-wrapper" scope="col">Purchasing History</th>
-                        @endif
                         <th class="table-th-wrapper" scope="col">Statement</th>
                         <th class="table-th-wrapper" scope="col">Delivery Details</th>
                     </tr>
@@ -36,23 +33,41 @@
                                 <td class="table-td-wrapper" scope="row">
 
                                 {{ $value['start']}} - {{$value['end']}} 
+                                @php 
+                                $price=$value['statementPrice'] + ($value['statementPrice'] * 15) /100;
+                                           $totalprice= $price - ($price/ 100) * 10 ;
+                                $t=App\Models\AllocatePayment::when('customerId',function($q) use($customer){
+                                     return $q->where('customerId',$customer->id);
+                                    })->when('start',function($q) use($value){
+                                        return $q->where('start',$value['start']);
+                                     })
+                                    ->when('end',function($q) use($value){
+                                        return $q->where('end',$value['end']);
+                                    })->get();
+                                    $paid=$t->sum('amount');
+                                   
+                                     if($t->isNotEmpty())
+                                     {
+                                        $date=$t->first()->created_at->format('d-m-Y');
+                                     }
+                                     else
+                                     {
+                                         $date = '00-00-0000';
+                                     }
+                                    $owingPrice=$totalprice-$paid;
+                                  
+                                @endphp
                                 </td>
         
                                 <td>
                                     @php
-                                        $price=$value['statementPrice'] + ($value['statementPrice'] * 15) /100;
-                                           $totalprice= $price - ($price/ 100) * 10 ;
+                                       
                                         echo '$'.$totalprice;
                                     @endphp
                                 </td>
                                 @if(auth()->user()->hasRole('Customer'))
                                 <td>
-                                    <a href="{{route('customer.financial-statement',['total'=>$totalprice,'start'=>$value['start'],'end'=>$value['end']])}}" class="view_statements">{{$totalprice}}</a>
-                                </td> 
-                                @endif
-                                @if(auth()->user()->hasRole('Admin'))
-                                <td>
-                                    <a href="{{route('customerPurchasing',['id'=>$customer->id])}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.financial-statement',['paid'=>$paid,'paidDate'=>$date,'total'=>$totalprice,'start'=>$value['start'],'end'=>$value['end']])}}" class="view_statements">{{$owingPrice}}</a>
                                 </td> 
                                 @endif
                                 <td>

@@ -228,7 +228,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fab fa-salesforce"></i>
                         <p>
-                            Sale's
+                            Payment's
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -236,14 +236,14 @@
                         <li class="nav-item">
                             <a href="{{ route('sale.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Direct Debiting Of Bank Accounts</p>
+                                <p>Weekly Sales</p>
 
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('sale.customer-owing-report') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Customer Owning Report's</p>
+                                <p>Owning Report</p>
                             </a>
                         </li>
                     </ul>

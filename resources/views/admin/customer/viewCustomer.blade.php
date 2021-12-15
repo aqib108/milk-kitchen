@@ -187,6 +187,15 @@
                                                             <a href="{{route('customer.past-orders',$customer->id)}}">view</a>
                                                         </div>
                                                     </div>
+                                                    @if(auth()->user()->hasRole('Admin'))
+                                                    <div class="form-group col-md-6">
+                                                        <label class="label-wrapper-custm" for="">Purchasing History</label>
+                                                        <div class="form-inner-section">
+                                                        <a href="{{route('customerPurchasing',['id'=>$customer->id])}}" class="view_statements">View</a>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                   
                                                     <div class="form-group col-md-6 p-0">
                                                         <label class="label-wrapper-custm" for="">Next DD
                                                             payments</label>

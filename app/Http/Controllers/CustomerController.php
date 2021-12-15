@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllocatePayment;
 use App\Models\AssignGroup;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -157,9 +158,11 @@ class CustomerController extends Controller
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail1($customerID,$deliveryRegion);
         }])->get();
+
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail($customerID,$deliveryRegion);
         }])->get();
+
         $zones=Zone::whereStatus(1)->get();
 
         return view('admin.customer.viewCustomer',compact('zones','today','customerID','customer','customerDetail','products','weekDays','deliveryZoneDay','WeekDayForStandingOrder'));
@@ -188,10 +191,9 @@ class CustomerController extends Controller
                 $productPrice= $value->price;
                    foreach ($value->productscount as $key => $value1) {
                     $date = Carbon::parse($key);
-                    $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
-                    $end = $date->endOfWeek()->format('Y-m-d');
+                    $start = $date->startOfWeek()->format('d-m-Y'); // 2016-10-17 00:00:00.000000
+                    $end = $date->endOfWeek()->format('d-m-Y');
                        $regionName=$value1->first()->region_name;
-
                     if(!in_array($key,$array1))
                     {
                             array_push($array1,$key);
@@ -206,13 +208,14 @@ class CustomerController extends Controller
                     }
                     else
                     {
-                             foreach ($resultant as $key => $value) {
+                       foreach ($resultant as $key => $value) {
                                  if($value['start'] == $start && $value['end'] == $end)
                                  {
                                    $resultant[$key]['statementPrice']=$value['statementPrice']+$value1->sum('quantity')*$productPrice;
                                  }
                              }
                          }
+
 
                    }
                }
@@ -270,9 +273,9 @@ class CustomerController extends Controller
 
             return view('admin.customer.past-order.statement',compact('startDate','endDate', 'region','customerID','orderDetail','customer','products','weekDays'));
     }
-    public function financialStatement($total,$start,$end)
+    public function financialStatement($paid,$paidDate,$total,$start,$end)
     {
-        return view('admin.customer.financial-statement',compact('total','start','end'));
+        return view('admin.customer.financial-statement',compact('paid','paidDate','total','start','end'));
     }
 
      //customerOwingReport
@@ -293,6 +296,8 @@ class CustomerController extends Controller
         $data = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'athority_number'=>$request->athority_number,
+            'account_number'=>$request->account_number,
             'password' => Hash::make($request->password),
         ]);
         $data->assignRole('Customer');
@@ -340,6 +345,8 @@ class CustomerController extends Controller
         $Customer = User::find($id);
         $Customer->name = $request->input('name');
         $Customer->email = $request->input('email');
+        $Customer->athority_number=$request->athority_number;
+        $Customer->account_number=$request->account_number;
         $Customer->password = Hash::make($request->input('password'));
         $Customer->save();
         $Customer->groups()->sync($request->groups);

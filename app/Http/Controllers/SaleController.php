@@ -6,16 +6,40 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductOrder;
 use App\Models\User;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AllocatePayment;
 use File;
 use Illuminate\Support\Carbon;
 use Response;
 use Auth;
 use DB;
+use Hamcrest\Core\AllOf;
+
 class SaleController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function index()
+    {
+       return view('admin.customer.import');
+    }
+     /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function importExcelCSV(Request $request,AllocatePayment $allocatePayment) 
+    {
+        $validatedData = $request->validate([
+ 
+           'file' => 'required',
+ 
+        ]);
+        Excel::import($allocatePayment,$request->file('file'));
+ 
+            
+        return redirect()->route('sale.index')->with('status', 'The file has been excel/csv imported to database in laravel 8');
     }
 
     public function weekelySales(Request $request)
@@ -39,6 +63,8 @@ class SaleController extends Controller
                 $date = Carbon::parse($key);
                 $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
                 $end = $date->endOfWeek()->format('Y-m-d');
+                $paymentDate =date('Y-m-d', strtotime($end. ' + 15 days'));
+                
                 $regionName = $value1->first()->region_name;
                 if (!in_array($key, $array1)) {
                     array_push($array1, $key);
@@ -46,12 +72,12 @@ class SaleController extends Controller
                     $array2 = [
                         'start' => $start,
                         'end'   => $end,
+                        'paymentDate' => $paymentDate,
                         'region' => $regionName,
                         'statementPrice' => $statementvalue,
                     ];
                     array_push($resultant, $array2);
                 } else {
-
                     foreach ($resultant as $key => $value) {
                         if ($value['start'] == $start && $value['end'] == $end) {
                             $resultant[$key]['statementPrice'] = $value['statementPrice'] + $value1->sum('quantity') * $productPrice;
@@ -62,10 +88,10 @@ class SaleController extends Controller
         }
 
 
-        return view('admin.sale.directDebiting', compact('resultant'));
+        return view('admin.sale.weeklySales', compact('resultant'));
     }
+
     public function getCsv($start,$end){
-        
         $startDate=$start;
         $endDate=$end;
             $products = Product::all();
@@ -86,11 +112,14 @@ class SaleController extends Controller
                 
                     array_push($array1, $value1->user_id);
                     $statementvalue = $value1->quantity * $productPrice;
+                    $userdata=User::whereId($value1->user_id)->first();
                     $array2 = [
                         'start' => $startDate,
                         'end'   => $endDate,
-                        'user_id' => $value1->user_id,
-                        'name' =>User::whereId($value1->user_id)->first()->name,
+                        'id' => $value1->user_id,
+                        'name' =>$userdata->name,
+                        'athority_number' =>$userdata->athority_number,
+                        'account_number' =>$userdata->account_number,
                         'region' => $regionName,
                         'statementPrice' => $statementvalue,
                     ];
@@ -98,7 +127,7 @@ class SaleController extends Controller
                 } else {
                     $statementPrice = $value1->quantity * $productPrice;
                     foreach ($resultant as $key => $value) {
-                        if ($value['user_id'] == $value1->user_id) {
+                        if ($value['id'] == $value1->user_id) {
                             $resultant[$key]['statementPrice'] = $value['statementPrice'] + $statementPrice;
                         }
                     }
@@ -129,14 +158,20 @@ class SaleController extends Controller
             "Name",
             "statementPrice",
             'start',
-            'end'
+            'end',
+            'AccountNumber',
+            'AthorityNumber'
         ]);
 
         //adding the data from the array
         foreach ($resultant as $each_user) {
             fputcsv($handle, [
-                $each_user['name'],
+                $each_user['id'],
                 $each_user['statementPrice'],
+                $each_user['start'],
+                $each_user['end'],
+                $each_user['account_number'],
+                $each_user['athority_number']
             ]);
 
         }
@@ -149,9 +184,7 @@ class SaleController extends Controller
     public function customerOwingReport()
     {
         $products = Product::all();
-        $users = User::all();
-      
-
+        $users = User::role('Customer')->get(); 
         // $orders = $users->map(function ($p) {
         //     $p->productscount = ProductOrder::where('user_id', $p->id)->latest()->get()->groupBy(function ($date) {
         //         return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
@@ -161,37 +194,74 @@ class SaleController extends Controller
         //      else
         //       return 0;
         // });
-        // dd($orders);
+        // dd($orders);  
+        $supper =array();
         foreach ($users as $key => $value) {
-            
-        $orders = $products->map(function ($p) use($value) {   
-                        $p->productscount = ProductOrder::where('product_id', $p->id)
-                        ->where('user_id', $value->id)
-                        ->latest()
-                        ->get()
-                        ->groupBy(function ($date) {
-                            return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
-                        });
-                     return $p;    
-        });
-    }
-        dd($orders);
-    //  foreach ($orders as $key => $value1) {
-    //        foreach ($users as $key => $value) {
-    //            dd($value1->productscount);
-    //             $p=$value1->productscount->groupBy($value->id)->get();
-    //             dd($p);          
-    //        }
-    //  }
-
+            $userName =$value->name;
+            $userId = $value->id;
+            $orders = $products->map(function ($p) use($value) {   
+                $p->productscount = ProductOrder::where('product_id',$p->id)->where('user_id',$value->id)
+                ->latest()
+                ->get()
+                ->groupBy(function($date) {
+                    return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
+                });
+             return $p;    
+            });
+            $array1=array();
+            $array2=array();
+            $resultant=array();
+            $statementvalue=0;
+            foreach ($orders as $key => $value) {
+                       $productPrice = $value->price;
+                       
+                foreach ($value->productscount as $key => $value1) {   
+                        $date = Carbon::parse($key);
+                        $start = $date->startOfWeek()->format('d/m');
+                        $end = $date->endOfWeek()->format('d/m');
+                        $start1 = $date->startOfWeek()->format('d-m-Y');
+                        $end1 = $date->endOfWeek()->format('d-m-Y');
+                        if(!in_array($key,$array1))
+                        {
+                                array_push($array1,$key);
+                                $statementvalue=$value1->sum('quantity')*$productPrice;
+                                $array2= [
+                                    'start' => $start,
+                                    'end'   => $end,
+                                    'userId' => $userId,
+                                    'start1' => $start1,
+                                    'end1'   => $end1,
+                                    'name' =>$userName,
+                                    'price' => $statementvalue,
+                                ];
+                                array_push($resultant,$array2);
+                        }
+                        else
+                        {  
+                                foreach ($resultant as $key => $value) {
+                                    if($value['start'] == $start && $value['end'] == $end)
+                                    {
+                                        $resultant[$key]['price']=$value['price']+$value1->sum('quantity')*$productPrice;
+                                    }
+                                }
+                        }         
+                    }
+                }
+                 array_push($supper,$resultant);
+        }    
+    
+       
+      
+        
+         
         //    $pro=ProductOrder::join('products','products.id','product_orders.product_id')
         //                  ->join('users','users.id','product_orders.user_id')
-        //                  ->select('users.name as userName', DB::raw('SUM(product_orders.quantity*products.price) as carton'))
+        //                  ->select('users.name as userName', DB::raw('SUM(product_orders.quantity * products.price) as carton'))
         //                  ->groupBy('userName')
-        //                   ->get();
+        //                   ->get()->toArray();
         //                   dd($pro);
 
                
-      return view('admin.customer.customerOwingReport');
+      return view('admin.customer.customerOwingReport',compact('supper'));
     }
 }

@@ -27,7 +27,7 @@
                                 Statement Value                         
                                 </td>
                                 <td>
-                            
+                                
                                 </td>
                                 <td>
                                   {{$total}}
@@ -38,10 +38,10 @@
                                Payment Received                         
                                 </td>
                                 <td>
-                            
+                                 {{$paidDate}}
                                 </td>
                                 <td>
-                                  
+                                  {{-$paid}}
                                 </td> 
                             </tr>
                             <tr>   
@@ -64,6 +64,16 @@
                                 </td>
                                 <td>
                                   
+                                </td> 
+                            </tr>
+                            <tr>   
+                                <td>                      
+                                </td>
+                                <td>
+                                Balance Owing
+                                </td>
+                                <td>
+                                {{$total-$paid}}                                 
                                 </td> 
                             </tr>
                 </tbody>

@@ -216,7 +216,7 @@ class AdminController extends Controller
         $orders = DB::table('product_orders')
             ->selectRaw('*,SUM(quantity) as qnty')
             ->where('user_id', $id)
-            ->groupBy('product_orders.product_id, FROM_DAYS(TO_DAYS(updated_at) -MOD(TO_DAYS(updated_at) -1, 7))')
+            ->groupBy('product_id, FROM_DAYS(TO_DAYS(updated_at) -MOD(TO_DAYS(updated_at) -1, 7))')
             ->get();
         // dd(\DB::getQueryLog());
         dd($orders);

@@ -53,12 +53,16 @@
                         <form action="{{ route('update-scriptSetting') }}" method="POST">
                             @csrf
                             <div class="card-body">
-                                <div class="row">
+                               @foreach($result as $res)
+                               <div class="row">
                                     <div class="form-group col-md-4">
-                                        <label>Name <span class="required-star">*</span></label>
-                                        <input type="text"
+                                        <!-- <label>Name <span class="required-star">*</span></label> -->
+                                        <!-- <input type="hidden"
                                             class="form-control @error('name') is-invalid @enderror"
-                                            name="name" value="{{$result->name ?? ''}}" placeholder="Cutt of time Name" required>
+                                            name="{{$res->name }}" value="{{$res->value }}" placeholder="Cutt of time Name" required> -->
+                                            <input type="text"
+                                            class="form-control @error('name') is-invalid @enderror"
+                                             value="{{$res->name }}" placeholder="Cutt of time Name" required>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -66,30 +70,22 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Value<span class="required-star">*</span></label>
-                                        <input type="time" class="form-control" name="value" value="{{$result->value ?? ''}}"
-                                            placeholder="Enter Cutt of Time Value" required>
+                                        <!-- <label>Value<span class="required-star">*</span></label> -->
+                                         @if($res->name == "Cutt_Off_Time")
+                                          <input type="time" class="form-control" name="{{$res->name }}" value="{{$res->value}}"
+                                            placeholder="{{$res->name}}" required>
+                                          @else
+                                          <input type="text" class="form-control" name="{{$res->name }}" value="{{$res->value}}"
+                                            placeholder="{{$res->name}}" required>
+                                          @endif 
                                     </div>
                                 </div>
+                               @endforeach
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Footer text <span class="required-star">*</span></label>
-                                        <input type="text"
-                                            class="form-control @error('name') is-invalid @enderror"
-                                            name="footer_value" value="{{$result->footer_value}}"  placeholder="Enter footer text" required>
-                                        @error('nafooter_valueme')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
+                        
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>
