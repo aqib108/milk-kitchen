@@ -66,6 +66,16 @@
                                             placeholder="Update Password " >
                                             <div id="password-err" class="alert alert-danger"></div>
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Debit Authority Number<span class="required-star">(Optional)</span></label>
+                                        <input type="text"  class="form-control driver"  name="athority_number" minlength="4" maxlength="64"
+                                         placeholder="Enter athority number" value="{{ $customer->athority_number ?? '' }}">
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <label>Account Number<span class="required-star">(Optional)</span></label>
+                                        <input type="text"  class="form-control driver"  name="account_number" minlength="4" maxlength="64"
+                                         placeholder="Enter account number" value="{{ $customer->account_number ?? '' }}">
+                                    </div>
                                     
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12 ">
                                     <label> Assign Group<span class="required-star">*</span></label>

@@ -170,6 +170,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'weekelySales'], function (){
             Route::get('/','SaleController@weekelySales')->name('sale.index');
             Route::get('/get-csv/{start}/{end}','SaleController@getCsv')->name('sale.csv');
+            Route::get('/get-csv-blade','SaleController@index')->name('sale.csvblade');
+            Route::post('/importExcelCSV','SaleController@importExcelCSV')->name('sale.import-csv');
             Route::get('/get-import-txt','SaleController@getCsv')->name('sale.import-txt');
             Route::get('/customer-owing-report','SaleController@customerOwingReport')->name('sale.customer-owing-report');
         });
