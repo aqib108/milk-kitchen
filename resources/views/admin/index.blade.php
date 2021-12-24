@@ -82,6 +82,15 @@
                         <!-- /.info-box-content -->
                     </div>
                 </div>
+                @foreach ($resultant as $key=>$value)
+                @if(date('Y-m-d') == date($value['paymentDate']))
+                <div class="col-lg-3 col-6">
+                    <div class="info-box">
+                        <a href="{{route('sale.csv',['start'=>$value['start'],'end'=>$value['end']])}}" ><p style="color:red">Click here to download</p></a>        
+                    </div>
+                </div>
+                @endif
+                @endforeach
             </div>
             <!-- /.row -->
         </div>

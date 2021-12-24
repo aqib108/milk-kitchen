@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\AllocatePayment;
 use App\Models\AssignGroup;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -19,10 +17,7 @@ use App\Models\GroupCustomer;
 use App\Models\Service;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
-use Auth;
 use Validator;
 use PDF;
 use DB;
@@ -193,6 +188,8 @@ class CustomerController extends Controller
                     $date = Carbon::parse($key);
                     $start = $date->startOfWeek()->format('d-m-Y'); // 2016-10-17 00:00:00.000000
                     $end = $date->endOfWeek()->format('d-m-Y');
+                    $start1 = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
+                    $end1 = $date->endOfWeek()->format('Y-m-d');
                        $regionName=$value1->first()->region_name;
                     if(!in_array($key,$array1))
                     {     
@@ -201,6 +198,8 @@ class CustomerController extends Controller
                             $array2= [
                                 'start' => $start,
                                 'end'   => $end,
+                                'start1' => $start1,
+                                'end1'   => $end1,
                                 'region' =>$regionName,
                                 'statementPrice' => $statementvalue,
                             ];
@@ -255,27 +254,18 @@ class CustomerController extends Controller
             }
             $customerDetail = CustomerDetail::where(['user_id'=> $customerID,'delivery_region'=>$orderDetail->region_name])->first();
             $deliveryRegion = $customerDetail->delivery_region ?? '';
-
-            // $weekDays = WeekDay::with(['productOrder' => function($q) use ($startDate,$endDate) {
-            //     $q->weekDetail($startDate,$endDate);
-            // }])->get();
-
             
             $weekDays = WeekDay::with(['productOrder' => function($q) use ($orderDetail){
                 $q->userDetail($orderDetail->user_id,$orderDetail->region_name);
             }])->with(['productOrder' => function($q) use ($startDate,$endDate) {
                 $q->weekDetail($startDate,$endDate);
             }])->get();
-    
-            // $orders = ProductOrder::with('product')->where(['user_id'=>$customerID,'product_id' =>$orderDetail->id,'region_name'=>$region ])->get()->groupBy(function($date) {
-            //     return Carbon::parse($date->created_at)->startOfWeek()->subWeeks(10)->format('W'); // grouping by weeks
-            // });
-         
+            
             return view('admin.customer.past-order.statement',compact('startDate','endDate', 'region','customerID','orderDetail','customer','products','weekDays'));
     }
-    public function financialStatement($paid,$paidDate,$total,$start,$end)
+    public function financialStatement($id,$total,$start,$end)
     {            
-        return view('admin.customer.financial-statement',compact('paid','paidDate','total','start','end'));
+        return view('admin.customer.financial-statement',compact('id','total','start','end'));
     }
 
      //customerOwingReport

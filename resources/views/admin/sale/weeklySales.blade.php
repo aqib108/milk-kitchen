@@ -9,7 +9,7 @@
 </style>
     @endsection
 @section('content')
-
+   
     <div class="container">
         <div>
             <div class="text-center">
@@ -50,7 +50,7 @@
                                 <td>
                                     {{ date('Y-m-d', strtotime($value['end']. ' + 10 days'))}}
                                 </td>
-                                @if(date('Y-m-d') == date($value['paymentDate']))
+                                @if(date('Y-m-d') != date($value['paymentDate']))
                                 <td>
                                 <a href="{{route('sale.csv',['start'=>$value['start'],'end'=>$value['end']])}}" ><img src="https://img.icons8.com/material-two-tone/24/000000/export-csv.png"/></a>
                                 </td>

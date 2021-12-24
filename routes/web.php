@@ -19,6 +19,10 @@ Route::get('/migrate',function(){
     $data = Artisan::call('migrate');
     dd($data);
 });
+Route::get('/autoload',function(){
+    $data = Artisan::call('dump:autoload');
+    dd("Autoloaded successfully");
+});
 Route::get('/storage-link',function(){
     $data = Artisan::call('storage:link');
     dd($data);
@@ -29,14 +33,17 @@ Route::get('/version',function(){
 });
 
 Route::get('/cache-clear', function(){
-    Artisan::call('cache:clear');
-    Artisan::call('route:clear');
-    $data =Artisan::call('view:clear');
-    dd($data);
+    // Artisan::call('cache:clear');
+    // Artisan::call('route:clear');
+    // $data =Artisan::call('view:clear');
+    dd("jkdxkj");
 });
 
 Route::get('/every-day', function(){
     Artisan::call('assign_driver_status');
+});
+Route::get('/duepayments', function(){
+    Artisan::call('duepayments');
 });
 Route::get('/weekend', function(){
     $command = Artisan::call('weekly_standing_order');
@@ -109,10 +116,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/packing-slip','CustomerController@packingslip')->name('customer.packing-slip');
             Route::get('/final-report/{id}/{customerId}/{startDate?}/{endDate?}','CustomerController@finalreport')->name('customer.final-report');
             Route::get('/statement/{id}/{start}/{end}/{region?}','CustomerController@pastOrderStatement')->name('customer.week-statement');
-            Route::get('/financial-statement/{paid}/{paidDate}/{total}/{start}/{end}','CustomerController@financialStatement')->name('customer.financial-statement');
+            Route::get('/financial-statement/{id}/{total}/{start}/{end}','CustomerController@financialStatement')->name('customer.financial-statement');
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
             Route::get('/statement2/pdf/{id}/{start}/{end}/{region}', 'CustomerController@statementPrint')->name('customer.statementPdf');
-           
         });
         Route::group(['prefix' => 'customer-group'], function (){
 
@@ -169,8 +175,12 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'weekelySales'], function (){
             Route::get('/','SaleController@weekelySales')->name('sale.index');
+            Route::get('/getplannedPayments','SaleController@getplannedPayments')->name('getplannedPayments');
+            Route::get('/getplannedcsv','SaleController@getplannedcsv')->name('getplannedcsv');
             Route::get('/get-csv/{start}/{end}','SaleController@getCsv')->name('sale.csv');
             Route::get('/get-csv-blade','SaleController@index')->name('sale.csvblade');
+            Route::get('/reverse_payment/{customer?}/{date?}','SaleController@reverse_payment')->name('reverse_payment');
+            Route::post('/planned_payment','SaleController@planned_payment')->name('planned_payment');
             Route::post('/importExcelCSV','SaleController@importExcelCSV')->name('sale.import-csv');
             Route::get('/get-import-txt','SaleController@getCsv')->name('sale.import-txt');
             Route::get('/customer-owing-report','SaleController@customerOwingReport')->name('sale.customer-owing-report');

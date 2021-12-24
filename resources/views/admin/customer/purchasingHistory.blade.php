@@ -15,16 +15,8 @@
             <thead>
                 <tr>
                     <th class="table-th-wrapper" scope="col">Product</th>
-                    <!-- @php $arr1=array(); @endphp
-                    @foreach ($orders as $key => $value)
-                    @foreach ($value->productscount as $key => $value1)
-
-                    @if(!in_array($key,$arr1))
-                    @php array_push($arr1,$key) @endphp
-                    <th class="table-th-wrapper" scope="col">{{$key}}</th>
-                    @endif
-                    @endforeach
-                    @endforeach -->
+                    <th class="table-th-wrapper" scope="col">Last 12mnth $</th>
+                    <th class="table-th-wrapper" scope="col">Last 12mnth units</th>
                     @php $week = 0; @endphp
                     @for($i=$currentWeek;$i>=$pastWeek;$i--)
                     <th class="table-th-wrapper" scope="col">Week {{++$week}}</th>
@@ -36,10 +28,19 @@
                 @foreach ($orders as $key => $value)
                 <tr>
                     <td>{{$value->name}}</td>
-                     @php $currentWeek = date('W'); @endphp
-                    
-                    @foreach ($value->productscount as $key => $value1)
-                      
+                     @php $currentWeek = date('W');$total = 0;$price =0; @endphp
+                     @foreach ($value->productscount as $key => $value1)   
+                    @php 
+                         $total += $value1->sum('quantity');
+                         $price += $value1->sum('quantity')*$value->price;
+                    @endphp   
+                    @endforeach
+                    <td>{{$price}}</td>
+                    <td>{{$total}}</td>
+                    @foreach ($value->productscount as $key => $value1)   
+                    @php 
+                         $total += $value1->sum('quantity');
+                    @endphp     
                     @for($i=$currentWeek;$i>=$pastWeek;$i--)
                      @if($i == $key)
                       @php $currentWeek= --$key; @endphp
@@ -51,9 +52,7 @@
                      @endfor
                     @endforeach   
                 </tr>
-                @endforeach
-              
-                
+                @endforeach       
         </table>
     </div>
 </div>

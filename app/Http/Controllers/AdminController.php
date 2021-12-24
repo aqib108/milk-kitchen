@@ -44,7 +44,49 @@ class AdminController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('admin.index', compact('user'));
+            $products = Product::all();
+        $orders = $products->map(function ($p) {
+            $p->productscount = ProductOrder::where('product_id', $p->id)->latest()->get()->groupBy(function ($date) {
+                return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
+            });
+            return $p;
+        });
+            $array1 = array();
+            $array2 = array();
+            $resultant = array();
+            $statementvalue = 0;
+            foreach ($orders as $key => $value) {
+                $productPrice = $value->price;
+                foreach ($value->productscount as $key => $value1) {
+                    $statementPrice=0;
+                    $date = Carbon::parse($key);
+                    $start = $date->startOfWeek()->format('Y-m-d'); // 2016-10-17 00:00:00.000000
+                    $end = $date->endOfWeek()->format('Y-m-d');
+                    $paymentDate =date('Y-m-d', strtotime($end. ' + 15 days'));
+                    
+                    $regionName = $value1->first()->region_name;
+                    if (!in_array($key, $array1)) {
+                        array_push($array1, $key);
+                        $statementvalue = $value1->sum('quantity') * $productPrice;
+                        $array2 = [
+                            'start' => $start,
+                            'end'   => $end,
+                            'paymentDate' => $paymentDate,
+                            'region' => $regionName,
+                            'statementPrice' => $statementvalue,
+                        ];
+                        array_push($resultant, $array2);
+                    } else {
+                        foreach ($resultant as $key => $value) {
+                            if ($value['start'] == $start && $value['end'] == $end) {
+                                $resultant[$key]['statementPrice'] = $value['statementPrice'] + $value1->sum('quantity') * $productPrice;
+                            }
+                        }
+                    }
+                }
+            }
+    
+        return view('admin.index', compact('user','resultant'));
     }
 
     public function mangeDashBoard()
@@ -288,7 +330,11 @@ class AdminController extends Controller
          $data=AllocatePayment::create(request()->all());
           if($data)
           {
-            return redirect()->route('sale.customer-owing-report')->with('success', 'inserted Successfully');   
+            return redirect()->back()->with('success', 'Payment Allocated Successfully');   
+          }
+          else
+          {
+            return redirect()->back()->with('error', 'Error in  Allocatting Payment');   
           }
      }
 

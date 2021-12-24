@@ -16,9 +16,9 @@
                     <tr>
                         <th class="table-th-wrapper" scope="col">Week</th>
                         <th class="table-th-wrapper" scope="col">Statement Value</th>
-                        @if(auth()->user()->hasRole('Customer'))
+                        <!-- @if(auth()->user()->hasRole('Admin')) -->
                         <th class="table-th-wrapper" scope="col">Balance Owning</th>
-                        @endif
+                        <!-- @endif -->
                         <th class="table-th-wrapper" scope="col">Statement</th>
                         <th class="table-th-wrapper" scope="col">Delivery Details</th>
                     </tr>
@@ -45,7 +45,6 @@
                                         return $q->where('end',$value['end']);
                                     })->get();
                                     $paid=$t->sum('amount');
-                                   
                                      if($t->isNotEmpty())
                                      {
                                         $date=$t->first()->created_at->format('d-m-Y');
@@ -65,17 +64,17 @@
                                         echo '$'.$totalprice;
                                     @endphp
                                 </td>
-                                @if(auth()->user()->hasRole('Customer'))
+                                <!-- @if(auth()->user()->hasRole('Admin')) -->
                                 <td>
-                                    <a href="{{route('customer.financial-statement',['paid'=>$paid,'paidDate'=>$date,'total'=>$totalprice,'start'=>$value['start'],'end'=>$value['end']])}}" class="view_statements">{{$owingPrice}}</a>
+                                    <a href="{{route('customer.financial-statement',['id'=>$customer->id,'total'=>$totalprice,'start'=>$value['start'],'end'=>$value['end']])}}" class="view_statements">{{$owingPrice}}</a>
                                 </td> 
-                                @endif
+                                <!-- @endif -->
                                 <td>
-                                    <a href="{{route('customer.week-statement',['id'=>$customer->id,'start'=>$value['start'],'end'=>$value['end'],'region'=>$value['region']])}}" class="view_statements">View</a>
+                                    <a href="{{route('customer.week-statement',['id'=>$customer->id,'start'=>$value['start1'],'end'=>$value['end1'],'region'=>$value['region']])}}" class="view_statements">View</a>
                                 </td> 
                                 <td>
-                                    <a href="javascript:;" class="view_delivery_detail" data-region="{{$value['region']}}" data-startDate="{{$value['start']}}"
-                                    data-endDate="{{$value['end']}}" >View</a>
+                                    <a href="javascript:;" class="view_delivery_detail" data-region="{{$value['region']}}" data-startDate="{{$value['start1']}}"
+                                    data-endDate="{{$value['end1']}}" >View</a>
                                 </td> 
                             </tr>
                             @endif
