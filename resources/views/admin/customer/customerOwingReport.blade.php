@@ -17,6 +17,7 @@
                         <th class="table-th-wrapper" scope="col">customer</th>
                         <th class="table-th-wrapper" scope="col">Period</th>
                         <th class="table-th-wrapper" scope="col">Amount</th>
+                        <th class="table-th-wrapper" scope="col">Unplanned Amount</th>
                         <th class="table-th-wrapper" scope="col"></th>
                     </tr>
                 </thead>
@@ -26,6 +27,7 @@
                             @php $arr1= array();@endphp
                             @foreach($result as $res)  
                             @php
+                            $planned=0;
                             $price=$res['price'] + ($res['price'] * 15) /100;
                                            $totalprice1= $price - ($price/ 100) * 10 ; 
                             $t=App\Models\AllocatePayment::when('customerId',function($q) use($res){
@@ -37,7 +39,6 @@
                                         return $q->where('end',$res['end1']);
                                     })->get();
                                     $paid=$t->sum('amount');
-
                                     $totalprice =$totalprice1-$paid;
                             @endphp
                             <tr>   
@@ -55,8 +56,15 @@
                                 <td>
                                   {{$totalprice}}
                                 </td> 
+                                @php
+                                $planned=App\Models\AllocatePayment::where('customerId',$res['userId'])->whereReversed(0)
+                                       ->where('start','=',$res['start1'])->where('end','=',$res['end1'])->sum('amount'); 
+                                @endphp
                                 <td>
-                                  <a href="{{route('allocatePayment',['id'=>$res['userId'],'name' => $res['name'],'qnty' => $totalprice,'start'=> $res['start1'],'end'=> $res['end1']])}}">allocatte Payment</a>
+                                  {{$planned}}
+                                </td> 
+                                <td>
+                                  <a href="{{route('customer.financial-statement',['id'=>$res['userId'],'total' => $totalprice,'start'=> $res['start1'],'end'=> $res['end1']])}}">allocatte Payment</a>
                                 </td> 
                             </tr>
                             @endforeach

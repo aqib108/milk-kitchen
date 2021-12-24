@@ -246,6 +246,12 @@
                                 <p>Owning Report</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getplannedPayments') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Planned Payments</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endcan

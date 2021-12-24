@@ -14,9 +14,10 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-        Commands\Repository::class,
-        Commands\AssignDriverStatus::class,
-        Commands\WeeklyStandingOrder::class,
+        Commands\DuePayments::class,
+        // Commands\Repository::class,
+        // Commands\AssignDriverStatus::class,
+        // Commands\WeeklyStandingOrder::class,
     ];
 
     /**
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('weekly_standing_order')->weekly();
         $schedule->command('assign_driver_status')->daily();
+        $schedule->command('duepayments')->weeklyOn(1, '1:00');
     }
 
     /**

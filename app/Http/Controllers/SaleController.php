@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductOrder;
+use App\Models\Setting;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\AllocatePayment;
+use App\Models\AllocatePayment;
+use App\Models\PlannedPayment;
 use File;
 use Illuminate\Support\Carbon;
 use Response;
 use Auth;
+use Yajra\DataTables\DataTables;
 use DB;
 use Hamcrest\Core\AllOf;
 
@@ -32,19 +35,30 @@ class SaleController extends Controller
     public function importExcelCSV(Request $request,AllocatePayment $allocatePayment) 
     {
         $validatedData = $request->validate([
- 
-           'file' => 'required',
- 
+           'file' => 'required|mimes:csv',
         ]);
         Excel::import($allocatePayment,$request->file('file'));
  
             
-        return redirect()->route('sale.index')->with('status', 'The file has been excel/csv imported to database in laravel 8');
+        return redirect()->route('sale.index')->with('success', 'The file imported successfully');
+    }
+
+    public function reverse_payment(Request $request)
+    {
+         $v=AllocatePayment::where('customerId',$request->customer)
+         ->whereDate('updated_at','=',$request->date)
+         ->whereTime('updated_at','=',$request->time)
+         ->update(['reversed'=>1]);
+         return response()->json(['success'=>'Payment Reversed Successfully!.']); 
+    }
+    public function planned_payment(Request $request)
+    {
+         PlannedPayment::create($request->all());
+         return response()->json(['success'=>'Payment Added Successfully!.']); 
     }
 
     public function weekelySales(Request $request)
     {
-
         $products = Product::all();
         $orders = $products->map(function ($p) {
             $p->productscount = ProductOrder::where('product_id', $p->id)->latest()->get()->groupBy(function ($date) {
@@ -90,7 +104,60 @@ class SaleController extends Controller
 
         return view('admin.sale.weeklySales', compact('resultant'));
     }
+    public function reports(Request $request)
+    {
+        if ($request->ajax()) {
+            $nilai = DB::table('product_orders')->distinct()->pluck('user_id');
+            $data = User::whereIn('id',$nilai)->get();
+            return Datatables::of($data) 
+                ->addIndexColumn()
+                ->addColumn('action', function(User $data){
+                    $btn = '<a href="generate-pdf/'.$data->id.'" class="btn btn-sm btn-info">View</a>';
+                    return $btn; 
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.customer.report');
+    }
 
+    public function getplannedPayments(Request $request)
+    {
+        
+         if ($request->ajax()) {
+            $plannedPayments=PlannedPayment::all();
+            return Datatables::of($plannedPayments)->addIndexColumn()
+            ->addColumn('name', function($row){
+                $name = User::where('id',$row->customer_id)->first()->name;
+                return $name;
+            })
+            ->rawColumns(['name'])
+            ->make('true');
+        }
+         return view('admin.customer.plannedPayments');
+    }
+
+        //  fputcsv($handle, [   
+        //     "Name",
+        //     "statementPrice",
+        //     'start',
+        //     'end',
+        //     'AccountNumber',
+        //     'AthorityNumber'
+        // ]);
+
+        // //adding the data from the array
+        // foreach ($resultant as $each_user) {
+        //     fputcsv($handle, [
+        //         $each_user['id'],
+        //         $each_user['statementPrice'],
+        //         $each_user['start'],
+        //         $each_user['end'],
+        //         $each_user['account_number'],
+        //         $each_user['athority_number']
+        //     ]);
+
+        // }
     public function getCsv($start,$end){
         $startDate=$start;
         $endDate=$end;
@@ -155,26 +222,72 @@ class SaleController extends Controller
 
         //adding the first row
         fputcsv($handle, [
-            "Name",
-            "statementPrice",
-            'start',
-            'end',
-            'AccountNumber',
-            'AthorityNumber'
+            
+            "Record Type ",
+            "Other Party Bank Account Number",
+            'Transaction code',
+            'Transaction Amount',
+            'Other Party Name',
+            'Other Party Code',
+            'Other Party Reference',
+            'Other Party Alpha Reference',
+            'Your Name',
+            'Your Code',
+            'Your Reference',
+            'Your Particulars',
         ]);
-
+        fputcsv($handle, [
+            1,
+            '',
+            '',
+            '',
+            Setting::where('name','Debit_Authority_Number')->first()->value,
+            6,
+            50929,
+            '50923',
+             '',
+             Setting::where('name','Debit_Authority_Number')->first()->value,
+             '',
+             '',
+        ]);
+        $total =0;
+        $count =0;
         //adding the data from the array
         foreach ($resultant as $each_user) {
+           
+            $count +=1;
             fputcsv($handle, [
-                $each_user['id'],
-                $each_user['statementPrice'],
-                $each_user['start'],
-                $each_user['end'],
+                2,
                 $each_user['account_number'],
-                $each_user['athority_number']
+                 00,
+                $each_user['statementPrice'],
+                $each_user['name'],
+                $each_user['athority_number'],
+                'Monthly DD',
+                 '',
+                 'ACME INC',
+                 '',
+                 'Monthly DD',
+                 "",
             ]);
+           
+            $total += $each_user['statementPrice'];
 
         }
+        fputcsv($handle, [
+            3,
+            Setting::where('name','Debit_Authority_Number')->first()->value,
+             $count,
+             $total,
+            '',
+            '',
+             '',
+             '',
+             '',
+             '',
+             '',
+             '',
+        ]);
         fclose($handle);
 
         //download command
@@ -185,16 +298,6 @@ class SaleController extends Controller
     {
         $products = Product::all();
         $users = User::role('Customer')->get(); 
-        // $orders = $users->map(function ($p) {
-        //     $p->productscount = ProductOrder::where('user_id', $p->id)->latest()->get()->groupBy(function ($date) {
-        //         return Carbon::parse($date->updated_at)->startOfWeek()->format('d-m-Y');
-        //     });
-        //     if($p->productscount->isNotEmpty())
-        //      return $p;
-        //      else
-        //       return 0;
-        // });
-        // dd($orders);  
         $supper =array();
         foreach ($users as $key => $value) {
             $userName =$value->name;
@@ -250,18 +353,83 @@ class SaleController extends Controller
                  array_push($supper,$resultant);
         }    
     
-       
-      
-        
-         
-        //    $pro=ProductOrder::join('products','products.id','product_orders.product_id')
-        //                  ->join('users','users.id','product_orders.user_id')
-        //                  ->select('users.name as userName', DB::raw('SUM(product_orders.quantity * products.price) as carton'))
-        //                  ->groupBy('userName')
-        //                   ->get()->toArray();
-        //                   dd($pro);
+
 
                
       return view('admin.customer.customerOwingReport',compact('supper'));
+    }
+    public function getplannedcsv()
+    {
+        // $plannedPayments=PlannedPayment::orderBy('date','desc')->groupBy(function($data){
+        //     return $data->date;
+        // })->get();
+        // dd($plannedPayments);
+      
+        //   dd("hjdjd");
+        $headers = array(
+            'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-Disposition' => 'attachment; filename=download.csv',
+            'Expires' => '0',
+            'Pragma' => 'public',
+        );
+
+
+        //I am storing the csv file in public >> files folder. So that why I am creating files folder
+        if (!File::exists(public_path()."/files")) {
+            File::makeDirectory(public_path() . "/files");
+        }
+
+        //creating the download file
+        $filename =  public_path("files/download.csv");
+        $handle = fopen($filename, 'w');
+
+        //adding the first row
+        fputcsv($handle, [
+            
+            "Export",
+            "Date",
+            'Total',
+            'Customer',
+            'Amount',
+        ]);
+        $total =0;
+        $count =0;
+        //adding the data from the array
+        
+            $plannedPayments= DB::table('planned_payments')->select(DB::raw('sum(amount) as amount'),'date')
+            ->groupBy('date')->orderBy('date','desc')->get()->toArray();
+            $array1 =array();
+            foreach ($plannedPayments as $st) {
+                $planned=PlannedPayment::where('date',$st->date)->get()->toArray();
+                    foreach($planned as $key => $value) {
+                        $name=User::where('id',$value['customer_id'])->first()->name;
+                      
+                       if(!in_array($st->date,$array1))
+                       {
+                        array_push($array1,$st->date);
+                       }
+                       else
+                       {
+                        $st->date='';
+                        $st->amount='';
+                       }
+                        fputcsv($handle, [
+                            'CSV File',
+                            $st->date,
+                            $st->amount,
+                            $name,
+                            $value['amount'],
+                        ]);             
+                    }
+                
+            }
+
+        
+       
+        fclose($handle);
+
+        //download command
+        return Response::download($filename, "download.csv", $headers);
     }
 }

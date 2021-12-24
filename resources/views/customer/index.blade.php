@@ -411,9 +411,9 @@
             </div>
         </div>
         @php
-        $footervalue= \App\Models\Setting::whereName('Cutt Off Time')->value('footer_value');
+        $footervalue= \App\Models\Setting::whereName('Footer_Value')->first();
         @endphp
-        <h4 style="margin-left: 30%;">{{ $footervalue }}</h4>
+        <h4 style="margin-left: 30%;">{{ $footervalue->value }}</h4>
     </div>
 @endsection 
 @section('scripts')
