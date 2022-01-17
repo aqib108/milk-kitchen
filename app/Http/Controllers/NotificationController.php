@@ -183,6 +183,8 @@ class NotificationController extends Controller
                      ->select('products.name as name',DB::raw('SUM(casual_orders.quantity) as quantity'))
                      ->groupBy('name')
                      ->get();
+
+                dd($products);
                      $receiverId=session()->get('customerReceivingId');
         return view('admin.driver.delivery_docket',compact('customer','products','receiverId'));
       }

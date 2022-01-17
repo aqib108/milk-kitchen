@@ -13,10 +13,11 @@
         ->where('start',$start)->where('end',$end)->get();
            $name=App\Models\User::whereId($id)->first()->name;
            $plannedPayments=App\Models\PlannedPayment::whereCustomerId($id)->get();
+           $subt =$paidd->sum('amount');
      @endphp
      <div>
             <div class="text-center">
-                <h2 class="heading-wrapper">Statement Fiancials Week({{$start}} -- {{$end}})</h2>
+                <h2 class="heading-wrapper">Statement Financials Week({{$start}} -- {{$end}})</h2>
             </div>
         </div>
      <section class="content-header allign-center">
@@ -33,11 +34,11 @@
                       <label for="">Name</label>
                       <input type="text" value="{{$name}}" class="form-control" disabled>
                   <label for="" class="control-label">Total Payment</label>
-                  <input type="text" value="{{$total-$paidd->sum('amount')}}"  class="form-control" disabled>
-                  <label for="" class="control-label">Allocate Payment</label>
+                  <input type="text" value="{{round(($total-$subt),2)}}"  class="form-control" disabled>
+                  <label for="" class="control-label">Assign Payment</label>
                   <input type="hidden" name="start" value="{{$start}}">
                   <input type="hidden" name="end" value="{{$end}}">
-                  <input type="hidden" name="customerId" value="{{$id}}">
+                  <input type="hidden" name="customerId" value="{{$id}}" required>
                   <input type="text"  name="amount" class="form-control mb-3">
                    <input type="submit" value="submit" class="form-control button" style="background-color: #94d60a;">
                   </div>
@@ -65,7 +66,7 @@
                                 
                                 </td>
                                 <td>
-                                  {{$total}}
+                                  {{round($total,2)}}
                                 </td> 
                             </tr>
                             
@@ -101,7 +102,6 @@
                                         <td>
                                             <!-- <a href="#" class="button bt-danger" data-time="{{date($p->updated_at->format('H:i:s'))}}"  data-date="{{date($p->updated_at->format('Y-m-d'))}}" data-customer ="{{$id}}">Reversal</a> -->
                                         </td>
-                                    
                                     </tr>
                                 @endforeach
                                 @foreach($plannedPayments as $p)
@@ -114,7 +114,7 @@
                                         {{$p->date}}
                                         </td>
                                         @php $t += ($p->amount); @endphp
-                                        <td >
+                                        <td>
                                         {{$p->amount}}
                                         </td>
                                         <td>
@@ -147,7 +147,7 @@
                                 Balance Owing
                                 </td>
                                 <td>
-                                 {{$t+$v}}                             
+                                 {{round(($total-$v),2)}}                             
                                 </td> 
                             </tr>
                             <tr>   
@@ -167,7 +167,7 @@
                                 Unplanned Balance
                                 </td>
                                 <td>
-                                 {{$v}}                             
+                                 {{round(($total-$v-$t),2)}}                             
                                 </td> 
                             </tr>
                 </tbody>

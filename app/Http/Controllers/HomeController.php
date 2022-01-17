@@ -88,9 +88,9 @@ class HomeController extends Controller
                             $products[] =$value1; 
                         }
                     }
-
+                 
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($user,$deliveryRegion){
-            $q->userDetail($user,$deliveryRegion);
+            $q->userDetail1($user,$deliveryRegion);
         }])->get();
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($user,$deliveryRegion){
             $q->userDetail($user,$deliveryRegion);
@@ -123,6 +123,7 @@ class HomeController extends Controller
             $data = ProductOrder::updateOrCreate([
                 'user_id'    => Auth::id(),
                 'region_name'  => $request->region,
+                'zone_name'  => $request->zone,
                 'day_id'     => $request->day_id,
                 'product_id' => $request->product_id],[
                 'quantity' => $request->qnty,

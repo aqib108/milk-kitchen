@@ -43,7 +43,7 @@
                                      })
                                     ->when('end',function($q) use($value){
                                         return $q->where('end',$value['end']);
-                                    })->get();
+                                    })->whereReversed(0)->get();
                                     $paid=$t->sum('amount');
                                      if($t->isNotEmpty())
                                      {
@@ -53,15 +53,14 @@
                                      {
                                          $date = '00-00-0000';
                                      }
-                                    $owingPrice=$totalprice-$paid;
-                                  
+                                    $owingPrice=round($totalprice-$paid,2);
                                 @endphp
                                 </td>
         
                                 <td>
                                     @php
                                        
-                                        echo '$'.$totalprice;
+                                        echo '$'.round($totalprice,2);
                                     @endphp
                                 </td>
                                 <!-- @if(auth()->user()->hasRole('Admin')) -->

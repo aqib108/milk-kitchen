@@ -171,97 +171,128 @@ class AdminController extends Controller
             $warehouse = Warehouse::whereId(request()->id)->first();
         else
             $warehouse = Warehouse::first();
-        // $data = User::role('Driver')->where('status', 1)
-        //     ->join('assign_warehouses', 'assign_warehouses.user_id', 'users.id')
-        //     ->where('warehouse_id', $warehouse->id)
-        //     ->select('users.name as driverName', 'users.id as id')
-        //     ->get();
-        $data = [];
-        $products = CustomerDetail::join('zones', 'zones.name', 'customer_details.delivery_zone')
-            ->join('regions', 'regions.name', 'customer_details.delivery_region')
-            ->where(['regions.warehouse_id' => $warehouse->id])
-            ->select('customer_details.user_id', 'zones.name', 'zones.id as zoneId', 'regions.id')
-            ->get()->map(function ($value) use ($data,$currentday) {
-            
-                $pr = ProductOrder::where('user_id', $value->user_id)->where('day_id',$currentday)
-                    ->get();
-                foreach ($pr as $key => $p) {
-                    $data['quantity'] = $pr->sum('quantity');
-                    $data['user_id'] = $p->user_id;
-                    $data['zone'] = $value->name;
-                    $data['zoneId'] = $value->zoneId;
-                    $data['userName'] = $p->user->name;
-                }
-                return $data;
-            });
+         $arr = [];
+         $products =[];
+           $region=Region::whereWarehouseId($warehouse->id)->get();
+          foreach ($region as $key => $value) {
+              $data=ProductOrder::join('regions','regions.name','product_orders.region_name')
+              ->join('zones','zones.name','product_orders.zone_name')
+              ->select('product_orders.zone_name as zoneName',DB::raw('sum(product_orders.quantity) as carton'))
+              ->groupBy('zoneName')
+              ->where('regions.id',$value->id)
+              ->get();
+            //   dd($data);
+            foreach ($data as $key => $value) {
+                // dump($value->zoneName);
+                   $arr= [
+                                        'zoneName' => $value->zoneName,
+                                        'carton'   => $value->carton,
+                    ];
+                    array_push($products,$arr);
+            }
+            // dd("dkkdk");
+            //   $data=ProductOrder::whereRegionName($value->name)->get();
+           
+                   
+          }
+        //   dd($products);
 
         $zones = Zone::whereStatus(1)->get();
-        $orders = array();
-        $ark = array();
-        foreach ($products as $p) {
-            $quantity = 0;
-            $flag = 0;
-            if (isset($p['user_id'])) {
-                $user_id = $p['user_id'];
-                $userName = $p['userName'];
-                $userZone = $p['zone'];
-                $zoneId = $p['zoneId'];
-                $userDetails = CustomerDetail::where('user_id', $p['user_id'])->first();
-                $userAddress = $userDetails->delivery_address_1;
-                $userRegion = $userDetails->delivery_region;
-                $quantity = $quantity + $p['quantity'];
-            }
-            if (isset($user_id)) {
-                if (!in_array($userName, $ark)) {
-                    array_push($ark, $userName);
-                    $orders[] = array(
-                        'user_id' => $user_id,
-                        'userName' => $userName,
-                        'userAddress' => $userAddress,
-                        'userRegion' => $userRegion,
-                        'userZone' =>   $userZone,
-                        'qty' => $quantity,
-                        'assign_driver' => $this->searchdriver($zoneId)
-                    );
-                }
-            }
-        }
+   
         return response()->json([
-            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'zones', 'date', 'orders', 'warehouse', 'data'))->render(), 200, ['Content-Type' => 'application/json']
+            'html' => view('admin.customer.getrunPicklist', compact('current_day', 'zones','warehouse', 'date','products'))->render(), 200, ['Content-Type' => 'application/json']
         ]);
     }
-    public function batchPickists($id)
+    public function batchPickists($zone)
     {
         $day = date('N', strtotime(date('Y-m-d')));
-        $products = Region::leftjoin('customer_details', 'customer_details.delivery_region', 'regions.name')
-            ->where('regions.warehouse_id', $id)
-            ->select('customer_details.user_id')
-            ->get()->map(function ($value) use ($day) {
-                $p = ProductOrder::leftjoin('products', 'products.id', 'product_orders.product_id')
-                    ->where(['product_orders.user_id' => $value->user_id, 'product_orders.day_id' => $day])
-                    // ->select('products.name as name', DB::raw('SUM(product_orders.quantity) as carton'))
-                    // ->groupBy('name')
-                    ->select('products.name as name', 'product_orders.quantity as carton', 'product_orders.user_id as userId','product_orders.user_id as userId')
-                    ->get();
-                return $p;
-            });
-            // return view('admin.customer.forpdfnew',compact('products'));
-            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products'))->setPaper('a4', 'porttrait');
+        $arr = [];
+        $namearr=[];
+        $users =[];
+             $products=Product::join('product_orders','product_orders.product_id','products.id')
+             ->select('products.name as name','product_orders.user_id as userId',DB::raw('sum(product_orders.quantity) as quantity'))
+             ->where('product_orders.zone_name',$zone)
+             ->groupBy('name','userId')
+             ->get();
+             foreach ($products as $key => $value) {
+                $arr=[
+                             'userId' => $value['userId'],
+                        ];  
+                        if(!in_array($arr['userId'],$namearr))
+                        {
+                            array_push($namearr,$arr['userId']);
+                            array_push($users,$arr);
+                        }  
+             }
+            // return view('admin.customer.forpdfnew',compact('products','users'));
+            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('products','users'))->setPaper('a4', 'porttrait');
             return  $pdf->download('statement.pdf');
-        // foreach ($product1 as $key => $products) {
-         
-        //     if (!empty($products)) {
-          
-        //         $customer = CustomerDetail::whereUserId($products[$key]['userId'])->get();
-        //         //   return view('admin.customer.forpdfnew',compact('customer','products'));
-        //         $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.forpdfnew', compact('customer', 'products'))->setPaper('a4', 'porttrait');
-        //          return  $pdf->download('statement.pdf');
-        //         //    return view('admin.customer.picklist',compact('customer','products')); 
-        //     }
-            
-        // }
     }
+    public function deliverySchedulePrint($zone)
+    {
+        $products=CustomerDetail::join('product_orders','product_orders.user_id','customer_details.user_id')
+        ->select('product_orders.user_id as id',DB::raw('sum(product_orders.quantity) as carton'))
+        ->where('product_orders.zone_name',$zone)
+        ->groupBy('id')
+        ->get();
+        $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.deliverySchedulePrint', compact('products','zone'))->setPaper('a4', 'porttrait');
+        return  $pdf->download('statement.pdf');
+    //   return view('admin.customer.deliverySchedulePrint',compact('products','zone'));
+    }
+    public function runPicklistPrint($zone)
+    {
+        $arr = [];
+        $namearr=[];
+        $products =[];
+             $products=Product::join('product_orders','product_orders.product_id','products.id')
+             ->select('products.name as name',DB::raw('sum(product_orders.quantity) as carton'))
+             ->where('product_orders.zone_name',$zone)
+             ->groupBy('name')
+             ->get();
+            $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.picklistPrint', compact('products','zone'))->setPaper('a4', 'porttrait');
+            return  $pdf->download('statement.pdf');
+            // return view('admin.customer.picklistPrint',compact('products','zone'));
+    }
+   public function runPicklistView($zone)
+   {
+    $arr = [];
+    $namearr=[];
+    $products =[];
+    //   $region=Region::whereWarehouseId($id)->get();
 
+    //  foreach ($region as $key => $value) {
+         $products=Product::join('product_orders','product_orders.product_id','products.id')
+         ->select('products.name as name',DB::raw('sum(product_orders.quantity) as carton'))
+         ->where('product_orders.zone_name',$zone)
+         ->groupBy('name')
+         ->get();
+        //  foreach ($data as $key => $value) {
+        //      $arr=[
+        //          'name' => $value['pname'],
+        //           'carton'=>$value['quantity'],
+        //     ];  
+        //     if(!in_array($arr['name'],$namearr))
+        //     {
+        //         array_push($namearr,$arr['name']);
+        //         array_push($products,$arr);
+        //     }  
+        //     else
+        //     {
+        //         foreach ($products as $key => $value) {
+        //             if($value['name'] == $arr['name'])
+        //             {
+        //                 $products[$key]['carton']=$value['carton'] +$arr['carton'];
+        //             }
+        //         }
+        //     }
+        //  }                           
+    //  }
+    //  dd("dkdk");
+        //   dd($products);
+        // $pdf = PDF::setOptions(['images' => true, 'debugCss' => true, 'isPhpEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.customer.picklistPrint', compact('products','zone'))->setPaper('a4', 'porttrait');
+        // return  $pdf->download('statement.pdf');
+        return view('admin.customer.picklistPrint',compact('products','zone'));
+}
      public function purchasingHistory($id)
      {
         $currentWeek = date('W');
@@ -274,47 +305,7 @@ class AdminController extends Controller
             });
             return $p;                
         });
-        // foreach ($orders as $key => $value) {
-        //     $productId =$value->id;
-        //     foreach ($value->productscount as $key => $value) {
-        //          dump($value->sum('quantity'));
-        //          dump($key);
-        //          dump($productId);
-        //     }
-        // }
-        // dd("djjdfj");
-        // $orders = ProductOrder::where('user_id',$id )->get()->groupBy(function($date) {
-        //     return Carbon::parse($date->updated_at)->format('W');
-        //    });
-//         $array1=array();
-//         $array2=array();
-//         $resultant=array();
-//         $statementvalue=0;
-//         foreach ($orders as $key => $value) {
-//          $productName= $value->name;
-//             foreach ($value->productscount as $key => $value1) {    
-//                 $date = Carbon::parse($key);
-//              $start = $date->startOfWeek()->format('d-m-Y h:i'); // 2016-10-17 00:00:00.000000
-//              $end = $date->endOfWeek()->format('d-m-Y h:i');
-//                 $regionName=$value1->first()->region_name;
-//                      $statementvalue=$value1->sum('quantity');
-//                      $array2= [
-//                         // 'start' => $start,
-//                         // 'end'   => $end,
-//                         'key'   => $key,
-//                          'product' =>$productName,
-//                          'quantity' => $statementvalue,
-//                      ];
-//                      array_push($resultant,$array2);       
-//             }
-        
-//         }   
 
-//         foreach($resultant as $val){
-            
-//         }
-        
-//    dd($resultant);
          return view('admin.customer.purchasingHistory',compact('orders','currentWeek','pastWeek'));
      }
      public function allocatePayment($id,$name,$price,$start,$end)

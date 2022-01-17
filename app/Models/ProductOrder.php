@@ -14,7 +14,8 @@ class ProductOrder extends Model
         'product_id',
         'day_id',
         'quantity',
-        'region_name'
+        'region_name',
+        'zone_name',
     ];
 
     public function product()
@@ -42,7 +43,7 @@ class ProductOrder extends Model
     }
     public function scopeUserDetail1($query,$id,$name)
     {
-        return $query->where(['user_id'=> $id,'region_name'=>$name]);
+        return $query->where('user_id',$id)->where('region_name',$name);
     }
     public function scopeDeleteOld($query)
     {

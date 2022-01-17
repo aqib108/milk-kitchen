@@ -62,20 +62,23 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/masterPicklist', 'AdminController@masterPicklist')->name('masterPicklist');
         Route::match(['GET','POST'],'/getmasterPicklist','AdminController@getmasterPicklist')->name('getmasterPicklist');
         Route::get('/runPicklist','AdminController@runPicklist')->name('runPicklist');  
-        Route::get('/batchPickists/{id?}','AdminController@batchPickists')->name('batchPickists');  
+        Route::get('/batchPickists/{zoneName?}','AdminController@batchPickists')->name('batchPickists');  
         Route::get('/getWarehouses','UserManagementController@getWarehouses')->name('getWarehouses');  
         Route::match(['GET','POST'],'/getrunPicklist','AdminController@getrunPicklist')->name('getrunPicklist');
+        Route::get('/runPicklistPrint/{zoneName?}','AdminController@runPicklistPrint')->name('runPicklistPrint');
+        Route::get('/runPicklistView/{zoneName?}','AdminController@runPicklistView')->name('runPicklistView');
+        Route::get('/deliverySchedulePrint/{zoneName?}','AdminController@deliverySchedulePrint')->name('deliverySchedulePrint');
         Route::any('/select-customer', 'AdminController@selectCustomer')->name('selectCustomer');  
         Route::get('/customer-purchasing/{id}','AdminController@purchasingHistory')->name('customerPurchasing');
         Route::get('/allocate-payment/{id}/{name}/{qnty}/{start}/{end}','AdminController@allocatePayment')->name('allocatePayment');
         Route::post('/saveAllocatePayment','AdminController@saveAllocatePayment')->name('saveAllocatePayment');
-        Route::group(['as' => 'admin.'], function () {
+        Route::group(['as' => 'admin.','middleware' => ['role:Admin']], function () {
             Route::match(['get', 'post'], '/setting', 'AdminController@setting')->name('setting');
             Route::get('/reset-password', 'AdminController@resetPassword')->name('reset-password');
             Route::post('/check-password', 'AdminController@checkPassword')->name('check-password');
             Route::post('/update-password', 'AdminController@updatePassword')->name('update-password');
         });
-        Route::group(['prefix' => 'users'], function (){
+        Route::group(['prefix' => 'users','middleware' => ['role:Admin']], function (){
             Route::post('/checkEmail','UserManagementController@checkEmail')->name('user.checkEmail');
             Route::get('/','UserManagementController@users')->name('user.index');
             Route::get('/create','UserManagementController@addNewUser')->name('user.create');
@@ -84,14 +87,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}','UserManagementController@updateUser')->name('user.update');
             Route::post('/status', 'UserManagementController@status')->name('user.status');
         });
-        Route::group(['prefix' => 'permissions'], function (){
+        Route::group(['prefix' => 'permissions','middleware' => ['role:Admin']], function (){
             Route::get('/','UserManagementController@permissions')->name('permission.index');
             Route::post('/store','UserManagementController@createPermission')->name('permission.store');
             Route::get('/edit/{id}','UserManagementController@editPermission')->name('permission.edit');
             Route::post('/update/{id}','UserManagementController@updatePermission')->name('permission.update');
             Route::delete('/delete/{id}', 'UserManagementController@deletePermission');
         });
-        Route::group(['prefix' => 'roles'], function (){
+        Route::group(['prefix' => 'roles','middleware' => ['role:Admin']], function (){
             Route::get('/','UserManagementController@roles')->name('role.index');
             Route::post('/store','UserManagementController@createRole')->name('role.store');
             Route::get('/edit/{id}','UserManagementController@editRole')->name('role.edit');
@@ -100,12 +103,14 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => 'customer'], function (){
             Route::post('/checkEmail','CustomerController@checkEmail')->name('customer.checkEmail');
+            Route::group(['middleware' => ['role:Admin']], function (){
             Route::get('/','CustomerController@customers')->name('customer.index');
             Route::get('/create','CustomerController@newCustomerCreate')->name('customer.newCustomerCreate');
             Route::post('/store','CustomerController@createCustomer')->name('customer.store');
             Route::get('/view/{id}','CustomerController@viewCustomer')->name('customer.customerView');
             Route::get('/edit/{id}','CustomerController@editCustomer')->name('customer.customerEdit');
             Route::post('/update/{id}','CustomerController@updateCustomer')->name('customer.update');
+            });
             Route::get('/report','CustomerController@customerReport')->name('customer.customerReport');
             Route::delete('/customerDelete/{id}','CustomerController@deleteCustomer');
             Route::get('/customerReport','CustomerController@reports')->name('customer.customer-report');
@@ -120,7 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/edit-delivery-orders/{id}','CustomerController@editDeliveryOrders')->name('customer.edit-delivery-orders');
             Route::get('/statement2/pdf/{id}/{start}/{end}/{region}', 'CustomerController@statementPrint')->name('customer.statementPdf');
         });
-        Route::group(['prefix' => 'customer-group'], function (){
+        Route::group(['prefix' => 'customer-group','middleware' => ['role:Admin']], function (){
 
             Route::get('/','CustomerGroupController@customerGroup')->name('customer-group.index');
             Route::post('/store','CustomerGroupController@store')->name('customer-group.storeGroup');
@@ -129,7 +134,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}','CustomerGroupController@editGroup');
             Route::post('/update/{id}','CustomerGroupController@updateGroup');
         });
-        Route::group(['prefix' => 'warehouse'], function (){
+        Route::group(['prefix' => 'warehouse','middleware' => ['role:Admin']], function (){
             Route::get('/','WareHouseController@index')->name('warehouse.index');
             Route::post('/store','WareHouseController@store')->name('warehouse.store');
             Route::get('/edit/{id}','WareHouseController@edit')->name('warehouse.edit');
@@ -150,7 +155,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/shedule','ZoneController@sheduleZone')->name('zone.shedule');
         Route::post('/sheduleChange','ZoneController@sheduleChange')->name('zone.sheduleChange');
         
-        Route::group(['prefix' => 'product'], function (){
+        Route::group(['prefix' => 'product','middleware' => ['role:Admin']], function (){
             Route::get('/','ProductController@index')->name('product.index');
             Route::get('/create','ProductController@create')->name('product.create');
             Route::post('/store','ProductController@store')->name('product.store');
@@ -173,7 +178,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/','OrderController@index')->name('order.index');
             Route::get('/detail/{id}','OrderController@show')->name('order.detail');
         });
-        Route::group(['prefix' => 'weekelySales'], function (){
+        Route::group(['prefix' => 'weekelySales','middleware' => ['role:Admin']], function (){
             Route::get('/','SaleController@weekelySales')->name('sale.index');
             Route::get('/getplannedPayments','SaleController@getplannedPayments')->name('getplannedPayments');
             Route::get('/getplannedcsv','SaleController@getplannedcsv')->name('getplannedcsv');
