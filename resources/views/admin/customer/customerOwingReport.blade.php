@@ -7,7 +7,7 @@
     <div class="container">
         <div>
             <div class="text-center">
-                <h2 class="heading-wrapper">Statement Fiancials</h2>
+                <h2 class="heading-wrapper">Customer Owing Report</h2>
             </div>
         </div>
         <div class="table-responsive">
@@ -37,7 +37,7 @@
                                      })
                                     ->when('end',function($q) use($res){
                                         return $q->where('end',$res['end1']);
-                                    })->get();
+                                    })->whereReversed(0)->get();
                                     $paid=$t->sum('amount');
                                     $totalprice =$totalprice1-$paid;
                             @endphp
@@ -54,7 +54,7 @@
                                  {{$res['start']}} - {{$res['end']}}
                                 </td>
                                 <td>
-                                  {{$totalprice}}
+                                  {{round($totalprice,2)}}
                                 </td> 
                                 @php
                                 $planned=App\Models\AllocatePayment::where('customerId',$res['userId'])->whereReversed(0)
@@ -64,7 +64,7 @@
                                   {{$planned}}
                                 </td> 
                                 <td>
-                                  <a href="{{route('customer.financial-statement',['id'=>$res['userId'],'total' => $totalprice,'start'=> $res['start1'],'end'=> $res['end1']])}}">allocatte Payment</a>
+                                  <a href="{{route('customer.financial-statement',['id'=>$res['userId'],'total' => $totalprice,'start'=> $res['start1'],'end'=> $res['end1']])}}"><b>Assign Payment / Manager</b></a>
                                 </td> 
                             </tr>
                             @endforeach

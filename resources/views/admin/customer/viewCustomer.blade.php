@@ -452,7 +452,9 @@
         $(document).ready(function()
         {
             var region_name ='';
+            var zone_name ='';
             region_name =`<?php echo $customerDetail->delivery_region ?? '' ;?>`;
+            zone_name =`<?php echo $customerDetail->delivery_zone ?? '' ;?>`;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -541,6 +543,7 @@
                             'day_id': day_id,
                             'product_id': product_id,
                             'region' : region_name,
+                            'zone' : zone_name,
                             'qnty': qnty
                         },
                         url: "{{route('admin.customer-orders',$customer->id)}}",
@@ -593,6 +596,7 @@
                             'day_id': day_id,
                             'product_id': product_id,
                             'region' : region_name,
+                            'zone' : zone_name,
                             'qnty': qnty
                         },
                         url: "{{route('admin.standing-orders',$customer->id)}}",

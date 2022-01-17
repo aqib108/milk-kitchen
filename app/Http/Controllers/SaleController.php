@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\AllocatePayment;
+use App\Models\CustomerDetail;
 use App\Models\PlannedPayment;
 use File;
 use Illuminate\Support\Carbon;
@@ -300,7 +301,7 @@ class SaleController extends Controller
         $users = User::role('Customer')->get(); 
         $supper =array();
         foreach ($users as $key => $value) {
-            $userName =$value->name;
+            $userName=CustomerDetail::whereUserId($value->id)->first()->delivery_name;
             $userId = $value->id;
             $orders = $products->map(function ($p) use($value) {   
                 $p->productscount = ProductOrder::where('product_id',$p->id)->where('user_id',$value->id)

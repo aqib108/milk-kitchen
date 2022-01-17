@@ -150,10 +150,10 @@ class CustomerController extends Controller
         $ZoneID = Zone::where('name',$customerDetail->delivery_zone ?? '')->first();
         $deliveryZoneDay =  DB::table('delivery_schedule_zones')->where('zone_id',$ZoneID->id ?? '')->where('status',1)->pluck('day_id','day_id');
         //this Weekend 
+       
         $weekDays = WeekDay::with(['WeekDay' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail1($customerID,$deliveryRegion);
         }])->get();
-        
         $WeekDayForStandingOrder = WeekDay::with(['WeekDayForStandingOrder' => function($q) use ($customerID,$deliveryRegion){
             $q->userDetail($customerID,$deliveryRegion);
         }])->get();
@@ -424,6 +424,7 @@ class CustomerController extends Controller
                 'user_id'    => $customer->id,
                 'day_id'     => $request->day_id,
                 'region_name'  => $request->region,
+                'zone_name'  => $request->zone,
                 'product_id' => $request->product_id],[
                 'quantity' => $request->qnty,
             ]);
@@ -461,6 +462,7 @@ class CustomerController extends Controller
                 'user_id'    => $customer->id,
                 'day_id'     => $request->day_id,
                 'region_name'  => $request->region,
+                'zone_name'  => $request->zone,
                 'product_id' => $request->product_id],[
                 'quantity' => $request->qnty,
             ]);

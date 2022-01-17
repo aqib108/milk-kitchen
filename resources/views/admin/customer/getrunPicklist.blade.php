@@ -1,8 +1,8 @@
-<div class="col-lg-12">
+<!-- <div class="col-lg-12">
     <h2 class="heading-tbl">Warehouses Picklist</h2><h2 class="heading-tbl text-right">
     <button style="background-color: #94d60a; color :white"> <a href="{{ route('batchPickists',['id'=>$warehouse->id]) }}"> Print Picklists</a>  </button>  
     </h2>
-</div> <br>
+</div> <br> -->
 
 <div class="row">
     <div class="col-md-4">
@@ -12,23 +12,6 @@
         </div>
     </div>
     <div class="col-md-4">
-        <!-- <div class="warehouse border text-center">
-            <h3 class="table-th-wrapper">Assigned By Driver</h3>
-            <p>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
-                    <select class="form-control" name="assigned_driver" id="assigned_driver_id" disabled onchange="assignByDriver(this.value)">
-                        <option selected disabled style="text-align: center;">-- Assigned By Driver --</option>
-                        @foreach ($data as $driver)
-                        <option value="{{$driver->id}}">{{$driver->driverName}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2"></div>
-            </div>
-            </p>
-        </div> -->
     </div>
     <div class="col-md-4">
         <div class="warehouse border text-center">
@@ -42,94 +25,38 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="table-th-wrapper" scope="col">CUSTOMER</th>
-                    <th class="table-th-wrapper" scope="col">ADRESS</th>
-                    <th class="table-th-wrapper" scope="col">SUBRUB</th>
-                    <th class="table-th-wrapper" scope="col">CARTONS</th>
-                    <th class="table-th-wrapper" scope="col">Assign By Driver</th>
+                    <!-- <th class="table-th-wrapper" scope="col">CUSTOMER</th>
+                    <th class="table-th-wrapper" scope="col">ADRESS</th> -->
+                    <th class="table-th-wrapper" scope="col">Run</th>
+                    <th class="table-th-wrapper" scope="col">Carton #</th>
+                    <th class="table-th-wrapper" scope="col">Delivery #</th>
+                    <th class="table-th-wrapper" scope="col">Picklist</th>
+                    <th class="table-th-wrapper" scope="col">Del Schedule</th>
+                    <th class="table-th-wrapper" scope="col">Packing Slips</th>
                 </tr>
             </thead>
             <tbody class="week-container-tbl">
-                @php 
-                $arr =array();
-                @endphp
-                @if(!empty($orders))
-                @foreach($zones as $zone)
-                @foreach($orders as $customer)
+              @if(isset($products))
+               @foreach($products as $product)
+               <tr>
+                    <td>{{$product['zoneName']}}</td>
+                    <td>{{$product['carton']}}</td>
+                    <td></td>
+                    <td>
+                    <a href="{{route('runPicklistView',['zoneName'=>$product['zoneName']])}}">
+                                   <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{{route('runPicklistPrint',['zoneName'=>$product['zoneName']])}}">
+                                   <i class="fa fa-print" aria-hidden="true"></i></a>
+                                </td><td>
+                                <a href="{{route('deliverySchedulePrint',['zoneName'=>$product['zoneName']])}}">
+                                   <i class="fa fa-print" aria-hidden="true"></i></a>
+                                </td><td>
+                                <a href="{{ route('batchPickists',['zoneName'=>$product['zoneName']]) }}">
+                                   <i class="fa fa-print" aria-hidden="true"></i></a>
+                                </td>
 
-                @if(!empty($customer))
-              
-                @if($zone->name == $customer['userZone'])
-
-             
-                    
-                 
-                 <!-- @if(!in_array($zone->name,$arr)) -->
-               
-              <tr>
-                  <td>
-                  <div class="table-td-wrapper row"   scope="row">
-                    <h4>{{$zone->name}}</h>
-                    @php
-                    array_push($arr,$zone->name);
-                    @endphp
-                    </div>
-                  </td>
-              </tr>
-     
-                <!-- @else
-                   <tr>
-                   <td>
-                   <div class="table-td-wrapper row"   scope="row">
-                     <h4>{{$zone->name}}</h>
-                     
-                     </div>
-                   </td>
-               </tr>
-          @endif -->
-                <tr>
-              
-                    <td class="table-td-wrapper" scope="row">
-                  
-                        <div class="row">
-
-                            <!-- @if($customer['assign_driver'] != false)
-                            <div class="col-md-4" style="margin-bottom: 23px;">
-
-                            </div>
-                            @else
-                            <div class="col-md-4" style="margin-bottom: 23px;">
-                                <input type="checkbox" class="form-check-input abcd customer-{{$customer['user_id']}}" data-target="customer-{{$customer['user_id']}}" onclick="checkBox('{{$customer['user_id']}}');" name="customer[]" value="{{$customer['user_id']}}">
-                            </div>
-                            @endif -->
-                            <div class="col-md-4" style="text-align: center;">
-                                {{$customer['userName']}}
-                            </div>
-                        </div>
-                    </td>
-                    <td>{{$customer['userAddress']}}</td>
-                    <td>{{$customer['userRegion']}}</td>
-                    <td>{{$customer['qty']}}</td>
-                    <td>{{$customer['assign_driver']}}</td>
-                    <!-- @if($customer['assign_driver'] != false)
-                    <td>{{$customer['assign_driver']}}</td>
-                    @else
-                    <td>-- --</td>
-                    @endif -->
                 </tr>
-                @endif
-               
-                @else
-                <tr>
-                    <td class="alert alert-danger" colspan="5" role="alert">
-                        <div>
-                            No Result(s) Found !
-                        </div>
-                    </td>
-                </tr>
-                @endif
-                @endforeach
-                @endforeach
+               @endforeach
                 @else
                 <tr>
                     <td class="alert alert-danger" colspan="5" role="alert">
@@ -144,14 +71,6 @@
     </div>
 </div>
 <script>
-    // function checkBox(customer_id) {
-    //     var customer_id =
-    //         $("input[name='customer[]']:checked").map(function() {
-    //             return $(this).val();
-    //         }).get();
-    //     $("#assigned_driver_id").removeAttr('disabled');
-
-    // }
 
     function assignByDriver(driver_id) {
         var customer_id =

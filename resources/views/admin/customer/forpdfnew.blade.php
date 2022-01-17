@@ -11,15 +11,12 @@
    
 </head>
 <body>
-@foreach($products as $key=>$product)
-
-        @if($product->isNotEmpty())
-
+    @foreach($users as $user)
         @php
-        $id=$product->first()->userId;
-        $customer = App\Models\CustomerDetail::whereUserId($id)->first();
+        $customer = App\Models\CustomerDetail::whereUserId($user['userId'])->first();
         $total=0;
         @endphp
+  
             <section style="background-color: #757170; padding: 6px 0; height:60px !important;">
                 <div class="">
                     <div class="flex-wraper" style="display:flex;
@@ -29,7 +26,7 @@
                         align-self: center;
                     ">
                         <div>
-                            <img src="{{asset('images/logo.png')}}" style="width: 200px; height:50px;" class="img-fluid" alt="">
+                            <img src="{{asset('images/logo.png')}}" style="width: 200px; height:50px; background-color:grey" class="img-fluid" alt="">
                         </div>
                         <div style="position: relative; float: right;">
                             <h2 class="heading-one-banner" style=" margin: 0px; margin-top: 16px; font-size: 20px; color: #ffffff;
@@ -37,9 +34,8 @@
                             font-size: 24px;
                             color: #ffffff;
                             font-weight: 700;
-                            text-align: center;
+                            text-align: left;
                             text-transform: uppercase;
-                            margin: 0px 20px;
                             ">FOOD SERVICE PORTAL</h2>
                         </div>
                         
@@ -59,73 +55,14 @@
                             margin: 0px;    
                             font-weight: 700;
                             font-family: 'Roboto-Bold';
-                            text-align: center;">INVOICE / STATEMENT</h2>
+                            text-align: center;">DELIVERY DOCKET</h2>
                         </div>
                         <div>
-                        <div class="form-container pt-4">
+                        <div class="form-container pt-4" style="background-color: white;">
                             <div class="row">
-                                <div class="main-container border-riht-clr">
+                                <div class="main-container border-riht-clr col-lg-6">
                                     <div>
-                                        <h2 class="heading-inner-top">
-                                            @isset($customer->business_name)
-                                            {{ $customer->business_name }}
-                                            @endisset
-                                        </h2>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Address 1:
-                                                <span>@isset($customer->business_address_1){{ $customer->business_address_1 }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Address 2:
-                                                <span>@isset($customer->business_address_2){{ $customer->business_address_2 }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Suburb:
-                                                <span>@isset($customer->business_country){{ $customer->business_country }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                City:
-                                                <span>@isset($customer->business_city){{ $customer->business_city }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Region:
-                                                <span>@isset($customer->business_region){{ $customer->business_region }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Phone No:
-                                                <span>@isset($customer->business_phone_no){{ $customer->business_phone_no }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Email:
-                                                <span>@isset($customer->business_email){{ $customer->business_email }}@endisset</span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="label-wrapper-custm">
-                                                Contact No:
-                                                <span>@isset($customer->business_contact_no){{ $customer->business_contact_no }}@endisset</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div>
-                                        <h2 class="heading-inner-top">
+                                    <h2 class="heading-inner-top">
                                             @isset($customer->delivery_name){{ $customer->delivery_name }}@endisset
                                         </h2>
                                     </div>
@@ -180,6 +117,29 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-6">
+                                    <div>
+                                       
+                                        <h2 class="heading-inner-top">
+                                            @isset($customer->business_name)
+                                            {{ $customer->business_name }}
+                                            @endisset
+                                        </h2>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Date: <span>{{date('Y-m-d')}}</span>
+                                            </p>
+
+                                        </div>
+                                        <div>
+                                            <p class="label-wrapper-custm">
+                                                Invoice Number: <span>33030400923</span>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                   
+                                </div>
                             </div>
                             <div class="row mb-40-wrapper text-center">
                                 <div class="col-lg-12">
@@ -203,8 +163,8 @@
                 <div class="col-lg-12">
                     <h2 class="heading-tbl" style="margin-left: 10px;">Delivery Items</h2>
                 </div>
-                <div class="col-lg-4">
-                    <div class="table-responsive">
+                
+                    <div class="table-responsive" style="width: 100%">
                         <table class="table table-bordered mb-0" style="position: relative; left: 3%;">
                         <thead>
                                         <tr>
@@ -213,26 +173,28 @@
                                         </tr>
                                     </thead>
                                     <tbody class="week-container-tbl">
-                                        @foreach ($product as $product1)
+                                        @foreach ($products as $product1)
+                                        @if($user['userId'] == $product1['userId'])
                                         <tr class="week_days_1">
-                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important; width: 175px; text-align:center;">
+                                            <td class="table-td-wrapper" scope="row" style="background-color: white !important; width: 375px; text-align:center;">
                                                 {{ $product1['name'] }}
                                             </td>
-                                            <td style="background-color: white !important; width: 175px; text-align:center;">
+                                            <td style="background-color: white !important; width: 375px; text-align:center;">
                                                 <div class="quantity">
-                                                    {{ $product1['carton'] }}
+                                                    {{ $product1['quantity'] }}
                                                 </div>
-                                                @php $total =$total + $product1['carton'] ; @endphp
+                                                @php $total =$total + $product1['quantity'] ; @endphp
 
                                             </td>
                                         </tr>
+                                         @endif
                                         @endforeach
                                     </tbody>
                         </table>
                         <table class="table table-bordered mb-0 weekly_standing_order" style="margin-left: 50px;" >
                             <tbody class="week-container-tbl">
                                 <tr>
-                                    <th style="width: 222px; text-align: center;">Total Carton</th>
+                                    <th style="width: 375px; text-align: center;">Total Carton</th>
                                     <td id="total_ctns">
                                         {{$total}}
                                     </td>
@@ -240,19 +202,18 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+             
                 <div class="col-lg-4 col-sm-4 text-center">
-                    <p class="custom-border-1 xxxx" style="text-align: center; position: relative;  margin-left:20px;">Received in full</p>
-                    
+                    <p class="custom-border-1 xxxx" style="text-align: center; position: relative;  margin-left:20px; margin-top:10%;">Received in full</p>  
                 </div>
 
                 <div class="col-lg-4 col-sm-4" style="position: relative; float: right; margin-top: -80px;">
-                    <!-- {!! QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer->id])) !!} -->
-                    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(150)->generate(route('qr.driverScan',['id'=>$customer->id])))!!}" style="position: relative; margin-top:-140px;"  class="img-fluid" alt="">
+                    <!-- {!! QrCode::size(150)->generate(route('qr.driverScan',['id'=>$customer->id ?? 3])) !!} -->
+                    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(150)->generate(route('qr.driverScan',['id'=>$customer->id ?? 3])))!!}" style="position: relative; margin-top:2%;"  class="img-fluid" alt="">
                 </div>
             </div>
-    @endif
-        @endforeach  
+    
+   @endforeach    
 
 
         <style>
@@ -277,9 +238,9 @@
   content: '';
   display: block;
   position: relative;
-  width: 10%;
+  width: 40%;
   border: 2px solid #00756c;
-  left: 51%;
+  left: 30%;
 
   margin-top: -0px; }
             .main-container{
